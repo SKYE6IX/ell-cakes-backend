@@ -7,4 +7,5 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   }
+  // "include": ["env.d.ts"]
 }

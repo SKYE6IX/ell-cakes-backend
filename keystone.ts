@@ -1,29 +1,37 @@
-// Welcome to Keystone!
-//
-// This file is what Keystone uses as the entry-point to your headless backend
-//
-// Keystone imports the default export of this file, expecting a Keystone configuration object
-//   you can find out more at https://keystonejs.com/docs/apis/config
-
 import { config } from "@keystone-6/core";
-
-// to keep this file tidy, we define our schema in a different file
+import dotenv from "dotenv";
+dotenv.config();
 import { lists } from "./schema";
-
-// authentication is configured separately here too, but you might move this elsewhere
-// when you write your list-level access control functions, as they typically rely on session data
 import { withAuth, session } from "./auth";
+
+const {
+  YC_S3_KEY_ID,
+  YC_S3_SECRET_KEY,
+  YC_S3_BUCKET,
+  YC_S3_REGION,
+  YC_S3_PRIVATE_ENDPOINT,
+} = process.env;
 
 export default withAuth(
   config({
     db: {
-      // we're using sqlite for the fastest startup experience
-      //   for more information on what database might be appropriate for you
-      //   see https://keystonejs.com/docs/guides/choosing-a-database#title
-      provider: "sqlite",
-      url: "file:./keystone.db",
+      provider: "postgresql",
+      url: process.env.DATABASE_URL,
+      idField: { kind: "uuid" },
     },
     lists,
     session,
+    storage: {
+      yc_s3_image: {
+        kind: "s3",
+        type: "image",
+        bucketName: YC_S3_BUCKET,
+        region: YC_S3_REGION,
+        accessKeyId: YC_S3_KEY_ID,
+        secretAccessKey: YC_S3_SECRET_KEY,
+        endpoint: YC_S3_PRIVATE_ENDPOINT,
+        acl: "public-read",
+      },
+    },
   })
 );

@@ -6,9 +6,10 @@ type User {
   name: String
   email: String
   password: PasswordState
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
   createdAt: DateTime
+  lastLogin: DateTime
+  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddressWhereUniqueInput): [Address!]
+  addressesCount(where: AddressWhereInput! = {}): Int
 }
 
 type PasswordState {
@@ -29,8 +30,9 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
-  posts: PostManyRelationFilter
   createdAt: DateTimeNullableFilter
+  lastLogin: DateTimeNullableFilter
+  addresses: AddressManyRelationFilter
 }
 
 input IDFilter {
@@ -55,7 +57,13 @@ input StringFilter {
   contains: String
   startsWith: String
   endsWith: String
+  mode: QueryMode
   not: NestedStringFilter
+}
+
+enum QueryMode {
+  default
+  insensitive
 }
 
 input NestedStringFilter {
@@ -72,12 +80,6 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
-input PostManyRelationFilter {
-  every: PostWhereInput
-  some: PostWhereInput
-  none: PostWhereInput
-}
-
 input DateTimeNullableFilter {
   equals: DateTime
   in: [DateTime!]
@@ -89,11 +91,18 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
+input AddressManyRelationFilter {
+  every: AddressWhereInput
+  some: AddressWhereInput
+  none: AddressWhereInput
+}
+
 input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
   email: OrderDirection
   createdAt: OrderDirection
+  lastLogin: OrderDirection
 }
 
 enum OrderDirection {
@@ -105,15 +114,16 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForUpdateInput
   createdAt: DateTime
+  lastLogin: DateTime
+  addresses: AddressRelateToManyForUpdateInput
 }
 
-input PostRelateToManyForUpdateInput {
-  disconnect: [PostWhereUniqueInput!]
-  set: [PostWhereUniqueInput!]
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
+input AddressRelateToManyForUpdateInput {
+  disconnect: [AddressWhereUniqueInput!]
+  set: [AddressWhereUniqueInput!]
+  create: [AddressCreateInput!]
+  connect: [AddressWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -125,58 +135,51 @@ input UserCreateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForCreateInput
   createdAt: DateTime
+  lastLogin: DateTime
+  addresses: AddressRelateToManyForCreateInput
 }
 
-input PostRelateToManyForCreateInput {
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
+input AddressRelateToManyForCreateInput {
+  create: [AddressCreateInput!]
+  connect: [AddressWhereUniqueInput!]
 }
 
-type Post {
+type Address {
   id: ID!
-  title: String
-  content: Post_content_Document
-  author: User
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
+  user: User
+  street: String
+  city: String
+  postalCode: String
 }
 
-type Post_content_Document {
-  document(hydrateRelationships: Boolean! = false): JSON!
-}
-
-input PostWhereUniqueInput {
+input AddressWhereUniqueInput {
   id: ID
 }
 
-input PostWhereInput {
-  AND: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  NOT: [PostWhereInput!]
+input AddressWhereInput {
+  AND: [AddressWhereInput!]
+  OR: [AddressWhereInput!]
+  NOT: [AddressWhereInput!]
   id: IDFilter
-  title: StringFilter
-  author: UserWhereInput
-  tags: TagManyRelationFilter
+  user: UserWhereInput
+  street: StringFilter
+  city: StringFilter
+  postalCode: StringFilter
 }
 
-input TagManyRelationFilter {
-  every: TagWhereInput
-  some: TagWhereInput
-  none: TagWhereInput
-}
-
-input PostOrderByInput {
+input AddressOrderByInput {
   id: OrderDirection
-  title: OrderDirection
+  street: OrderDirection
+  city: OrderDirection
+  postalCode: OrderDirection
 }
 
-input PostUpdateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForUpdateInput
-  tags: TagRelateToManyForUpdateInput
+input AddressUpdateInput {
+  user: UserRelateToOneForUpdateInput
+  street: String
+  city: String
+  postalCode: String
 }
 
 input UserRelateToOneForUpdateInput {
@@ -185,23 +188,16 @@ input UserRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input TagRelateToManyForUpdateInput {
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
+input AddressUpdateArgs {
+  where: AddressWhereUniqueInput!
+  data: AddressUpdateInput!
 }
 
-input PostUpdateArgs {
-  where: PostWhereUniqueInput!
-  data: PostUpdateInput!
-}
-
-input PostCreateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForCreateInput
-  tags: TagRelateToManyForCreateInput
+input AddressCreateInput {
+  user: UserRelateToOneForCreateInput
+  street: String
+  city: String
+  postalCode: String
 }
 
 input UserRelateToOneForCreateInput {
@@ -209,49 +205,485 @@ input UserRelateToOneForCreateInput {
   connect: UserWhereUniqueInput
 }
 
-input TagRelateToManyForCreateInput {
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-type Tag {
+type Product {
   id: ID!
+  category: Category
   name: String
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
+  slug: String
+  description: String
+  weight: Decimal
+  price: Decimal
+  images(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
+  imagesCount(where: ProductImageWhereInput! = {}): Int
+  isAvailable: Boolean
+  stockQuantity: Int
+  lifeShelf: Int
+  ingredients: String
+  badge: String
+  isFeatured: Boolean
+  heroLabel: String
+  variants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVariantWhereUniqueInput): [ProductVariant!]
+  variantsCount(where: ProductVariantWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
-input TagWhereUniqueInput {
+scalar Decimal
+
+input ProductWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input ProductWhereInput {
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+  id: IDFilter
+  category: CategoryWhereInput
+  name: StringFilter
+  slug: StringFilter
+  description: StringFilter
+  weight: DecimalNullableFilter
+  price: DecimalFilter
+  images: ProductImageManyRelationFilter
+  isAvailable: BooleanFilter
+  stockQuantity: IntFilter
+  lifeShelf: IntFilter
+  ingredients: StringFilter
+  badge: StringNullableFilter
+  isFeatured: BooleanFilter
+  heroLabel: StringFilter
+  variants: ProductVariantManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input DecimalNullableFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: DecimalNullableFilter
+}
+
+input DecimalFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: DecimalFilter
+}
+
+input ProductImageManyRelationFilter {
+  every: ProductImageWhereInput
+  some: ProductImageWhereInput
+  none: ProductImageWhereInput
+}
+
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
+}
+
+input ProductVariantManyRelationFilter {
+  every: ProductVariantWhereInput
+  some: ProductVariantWhereInput
+  none: ProductVariantWhereInput
+}
+
+input ProductOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+  description: OrderDirection
+  weight: OrderDirection
+  price: OrderDirection
+  isAvailable: OrderDirection
+  stockQuantity: OrderDirection
+  lifeShelf: OrderDirection
+  ingredients: OrderDirection
+  badge: OrderDirection
+  isFeatured: OrderDirection
+  heroLabel: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ProductUpdateInput {
+  category: CategoryRelateToOneForUpdateInput
+  name: String
+  slug: String
+  description: String
+  weight: Decimal
+  price: Decimal
+  images: ProductImageRelateToManyForUpdateInput
+  isAvailable: Boolean
+  stockQuantity: Int
+  lifeShelf: Int
+  ingredients: String
+  badge: String
+  isFeatured: Boolean
+  heroLabel: String
+  variants: ProductVariantRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CategoryRelateToOneForUpdateInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ProductImageRelateToManyForUpdateInput {
+  disconnect: [ProductImageWhereUniqueInput!]
+  set: [ProductImageWhereUniqueInput!]
+  create: [ProductImageCreateInput!]
+  connect: [ProductImageWhereUniqueInput!]
+}
+
+input ProductVariantRelateToManyForUpdateInput {
+  disconnect: [ProductVariantWhereUniqueInput!]
+  set: [ProductVariantWhereUniqueInput!]
+  create: [ProductVariantCreateInput!]
+  connect: [ProductVariantWhereUniqueInput!]
+}
+
+input ProductUpdateArgs {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateInput!
+}
+
+input ProductCreateInput {
+  category: CategoryRelateToOneForCreateInput
+  name: String
+  slug: String
+  description: String
+  weight: Decimal
+  price: Decimal
+  images: ProductImageRelateToManyForCreateInput
+  isAvailable: Boolean
+  stockQuantity: Int
+  lifeShelf: Int
+  ingredients: String
+  badge: String
+  isFeatured: Boolean
+  heroLabel: String
+  variants: ProductVariantRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CategoryRelateToOneForCreateInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
+}
+
+input ProductImageRelateToManyForCreateInput {
+  create: [ProductImageCreateInput!]
+  connect: [ProductImageWhereUniqueInput!]
+}
+
+input ProductVariantRelateToManyForCreateInput {
+  create: [ProductVariantCreateInput!]
+  connect: [ProductVariantWhereUniqueInput!]
+}
+
+type ProductImage {
+  id: ID!
+  image: ImageFieldOutput
+  altText: String
+}
+
+type ImageFieldOutput {
+  id: ID!
+  filesize: Int!
+  width: Int!
+  height: Int!
+  extension: ImageExtension!
+  url: String!
+}
+
+enum ImageExtension {
+  jpg
+  png
+  webp
+  gif
+}
+
+input ProductImageWhereUniqueInput {
   id: ID
 }
 
-input TagWhereInput {
-  AND: [TagWhereInput!]
-  OR: [TagWhereInput!]
-  NOT: [TagWhereInput!]
+input ProductImageWhereInput {
+  AND: [ProductImageWhereInput!]
+  OR: [ProductImageWhereInput!]
+  NOT: [ProductImageWhereInput!]
+  id: IDFilter
+  altText: StringFilter
+}
+
+input ProductImageOrderByInput {
+  id: OrderDirection
+  altText: OrderDirection
+}
+
+input ProductImageUpdateInput {
+  image: ImageFieldInput
+  altText: String
+}
+
+input ImageFieldInput {
+  upload: Upload!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input ProductImageUpdateArgs {
+  where: ProductImageWhereUniqueInput!
+  data: ProductImageUpdateInput!
+}
+
+input ProductImageCreateInput {
+  image: ImageFieldInput
+  altText: String
+}
+
+type ProductVariant {
+  id: ID!
+  product: Product
+  weight: Decimal
+  price: Decimal
+  stockQuantity: Int
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductVariantWhereUniqueInput {
+  id: ID
+}
+
+input ProductVariantWhereInput {
+  AND: [ProductVariantWhereInput!]
+  OR: [ProductVariantWhereInput!]
+  NOT: [ProductVariantWhereInput!]
+  id: IDFilter
+  product: ProductWhereInput
+  weight: DecimalFilter
+  price: DecimalFilter
+  stockQuantity: IntFilter
+  isAvailable: BooleanFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ProductVariantOrderByInput {
+  id: OrderDirection
+  weight: OrderDirection
+  price: OrderDirection
+  stockQuantity: OrderDirection
+  isAvailable: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ProductVariantUpdateInput {
+  product: ProductRelateToOneForUpdateInput
+  weight: Decimal
+  price: Decimal
+  stockQuantity: Int
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToOneForUpdateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ProductVariantUpdateArgs {
+  where: ProductVariantWhereUniqueInput!
+  data: ProductVariantUpdateInput!
+}
+
+input ProductVariantCreateInput {
+  product: ProductRelateToOneForCreateInput
+  weight: Decimal
+  price: Decimal
+  stockQuantity: Int
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToOneForCreateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+}
+
+type Topping {
+  id: ID!
+  name: String
+  description: String
+  price: Decimal
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ToppingWhereUniqueInput {
+  id: ID
+}
+
+input ToppingWhereInput {
+  AND: [ToppingWhereInput!]
+  OR: [ToppingWhereInput!]
+  NOT: [ToppingWhereInput!]
   id: IDFilter
   name: StringFilter
-  posts: PostManyRelationFilter
+  description: StringFilter
+  price: DecimalNullableFilter
+  isAvailable: BooleanFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
 }
 
-input TagOrderByInput {
+input ToppingOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  description: OrderDirection
+  price: OrderDirection
+  isAvailable: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
 }
 
-input TagUpdateInput {
+input ToppingUpdateInput {
   name: String
-  posts: PostRelateToManyForUpdateInput
+  description: String
+  price: Decimal
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
-input TagUpdateArgs {
-  where: TagWhereUniqueInput!
-  data: TagUpdateInput!
+input ToppingUpdateArgs {
+  where: ToppingWhereUniqueInput!
+  data: ToppingUpdateInput!
 }
 
-input TagCreateInput {
+input ToppingCreateInput {
   name: String
-  posts: PostRelateToManyForCreateInput
+  description: String
+  price: Decimal
+  isAvailable: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Category {
+  id: ID!
+  name: String
+  slug: String
+  parent: Category
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
+}
+
+input CategoryWhereUniqueInput {
+  id: ID
+  slug: String
+}
+
+input CategoryWhereInput {
+  AND: [CategoryWhereInput!]
+  OR: [CategoryWhereInput!]
+  NOT: [CategoryWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  slug: StringFilter
+  parent: CategoryWhereInput
+  products: ProductManyRelationFilter
+}
+
+input ProductManyRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
+}
+
+input CategoryOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  slug: OrderDirection
+}
+
+input CategoryUpdateInput {
+  name: String
+  slug: String
+  parent: CategoryRelateToOneForUpdateInput
+  products: ProductRelateToManyForUpdateInput
+}
+
+input ProductRelateToManyForUpdateInput {
+  disconnect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
+input CategoryUpdateArgs {
+  where: CategoryWhereUniqueInput!
+  data: CategoryUpdateInput!
+}
+
+input CategoryCreateInput {
+  name: String
+  slug: String
+  parent: CategoryRelateToOneForCreateInput
+  products: ProductRelateToManyForCreateInput
+}
+
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
 }
 
 """
@@ -266,18 +698,42 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createPost(data: PostCreateInput!): Post
-  createPosts(data: [PostCreateInput!]!): [Post]
-  updatePost(where: PostWhereUniqueInput!, data: PostUpdateInput!): Post
-  updatePosts(data: [PostUpdateArgs!]!): [Post]
-  deletePost(where: PostWhereUniqueInput!): Post
-  deletePosts(where: [PostWhereUniqueInput!]!): [Post]
-  createTag(data: TagCreateInput!): Tag
-  createTags(data: [TagCreateInput!]!): [Tag]
-  updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
-  updateTags(data: [TagUpdateArgs!]!): [Tag]
-  deleteTag(where: TagWhereUniqueInput!): Tag
-  deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
+  createAddress(data: AddressCreateInput!): Address
+  createAddresses(data: [AddressCreateInput!]!): [Address]
+  updateAddress(where: AddressWhereUniqueInput!, data: AddressUpdateInput!): Address
+  updateAddresses(data: [AddressUpdateArgs!]!): [Address]
+  deleteAddress(where: AddressWhereUniqueInput!): Address
+  deleteAddresses(where: [AddressWhereUniqueInput!]!): [Address]
+  createProduct(data: ProductCreateInput!): Product
+  createProducts(data: [ProductCreateInput!]!): [Product]
+  updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
+  updateProducts(data: [ProductUpdateArgs!]!): [Product]
+  deleteProduct(where: ProductWhereUniqueInput!): Product
+  deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
+  createProductImage(data: ProductImageCreateInput!): ProductImage
+  createProductImages(data: [ProductImageCreateInput!]!): [ProductImage]
+  updateProductImage(where: ProductImageWhereUniqueInput!, data: ProductImageUpdateInput!): ProductImage
+  updateProductImages(data: [ProductImageUpdateArgs!]!): [ProductImage]
+  deleteProductImage(where: ProductImageWhereUniqueInput!): ProductImage
+  deleteProductImages(where: [ProductImageWhereUniqueInput!]!): [ProductImage]
+  createProductVariant(data: ProductVariantCreateInput!): ProductVariant
+  createProductVariants(data: [ProductVariantCreateInput!]!): [ProductVariant]
+  updateProductVariant(where: ProductVariantWhereUniqueInput!, data: ProductVariantUpdateInput!): ProductVariant
+  updateProductVariants(data: [ProductVariantUpdateArgs!]!): [ProductVariant]
+  deleteProductVariant(where: ProductVariantWhereUniqueInput!): ProductVariant
+  deleteProductVariants(where: [ProductVariantWhereUniqueInput!]!): [ProductVariant]
+  createTopping(data: ToppingCreateInput!): Topping
+  createToppings(data: [ToppingCreateInput!]!): [Topping]
+  updateTopping(where: ToppingWhereUniqueInput!, data: ToppingUpdateInput!): Topping
+  updateToppings(data: [ToppingUpdateArgs!]!): [Topping]
+  deleteTopping(where: ToppingWhereUniqueInput!): Topping
+  deleteToppings(where: [ToppingWhereUniqueInput!]!): [Topping]
+  createCategory(data: CategoryCreateInput!): Category
+  createCategories(data: [CategoryCreateInput!]!): [Category]
+  updateCategory(where: CategoryWhereUniqueInput!, data: CategoryUpdateInput!): Category
+  updateCategories(data: [CategoryUpdateArgs!]!): [Category]
+  deleteCategory(where: CategoryWhereUniqueInput!): Category
+  deleteCategories(where: [CategoryWhereUniqueInput!]!): [Category]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -304,12 +760,24 @@ type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  post(where: PostWhereUniqueInput!): Post
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
-  tag(where: TagWhereUniqueInput!): Tag
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
+  address(where: AddressWhereUniqueInput!): Address
+  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddressWhereUniqueInput): [Address!]
+  addressesCount(where: AddressWhereInput! = {}): Int
+  product(where: ProductWhereUniqueInput!): Product
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
+  productImage(where: ProductImageWhereUniqueInput!): ProductImage
+  productImages(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
+  productImagesCount(where: ProductImageWhereInput! = {}): Int
+  productVariant(where: ProductVariantWhereUniqueInput!): ProductVariant
+  productVariants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVariantWhereUniqueInput): [ProductVariant!]
+  productVariantsCount(where: ProductVariantWhereInput! = {}): Int
+  topping(where: ToppingWhereUniqueInput!): Topping
+  toppings(where: ToppingWhereInput! = {}, orderBy: [ToppingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ToppingWhereUniqueInput): [Topping!]
+  toppingsCount(where: ToppingWhereInput! = {}): Int
+  category(where: CategoryWhereUniqueInput!): Category
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
@@ -402,11 +870,6 @@ enum KeystoneAdminUIFieldMetaItemViewFieldMode {
 enum KeystoneAdminUIFieldMetaItemViewFieldPosition {
   form
   sidebar
-}
-
-enum QueryMode {
-  default
-  insensitive
 }
 
 type KeystoneAdminUIFieldGroupMeta {

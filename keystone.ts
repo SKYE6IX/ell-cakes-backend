@@ -1,8 +1,9 @@
 import { config } from "@keystone-6/core";
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ override: true });
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
+import { customExtendResolvers } from "./custom-resolver";
 
 const {
   YC_S3_KEY_ID,
@@ -32,6 +33,9 @@ export default withAuth(
         endpoint: YC_S3_PRIVATE_ENDPOINT,
         acl: "public-read",
       },
+    },
+    graphql: {
+      extendGraphqlSchema: customExtendResolvers,
     },
   })
 );

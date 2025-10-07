@@ -1,22 +1,23 @@
-import { randomBytes } from "node:crypto";
 import { createAuth } from "@keystone-6/auth";
 import { statelessSessions } from "@keystone-6/core/session";
+import { sendResetPasswordTokenEmail } from "./lib/mail";
 
 const { withAuth } = createAuth({
   listKey: "User",
   identityField: "email",
   secretField: "password",
-  // this is a GraphQL query fragment for fetching what data will be attached to a context.session
-  //   this can be helpful for when you are writing your access control functions
-  //   you can find out more at https://keystonejs.com/docs/guides/auth-and-access-control
   sessionData: "role",
   initFirstItem: {
-    fields: ["name", "email", "password"],
+    fields: ["firstName", "lastName", "email", "password", "role"],
+  },
+  passwordResetLink: {
+    sendToken: async ({ itemId, identity, token, context }) => {
+      await sendResetPasswordTokenEmail({ to: identity, token: token });
+    },
+    tokensValidForMins: 60,
   },
 });
-
 const sessionMaxAge = 60 * 60 * 24 * 30;
-
 const session = statelessSessions({
   maxAge: sessionMaxAge,
   secret: process.env.SESSION_SECRET,

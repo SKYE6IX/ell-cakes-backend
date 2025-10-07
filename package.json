@@ -8,11 +8,16 @@
     "build": "keystone build"
   },
   "dependencies": {
+    "@graphql-tools/schema": "^10.0.25",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
     "dotenv": "^17.2.3",
     "iuliia": "^0.8.2",
+    "nodemailer": "^7.0.7",
     "typescript": "^5.5.0"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^7.0.2"
   }
 }

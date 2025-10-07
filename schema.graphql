@@ -3,13 +3,24 @@
 
 type User {
   id: ID!
-  name: String
+  firstName: String
+  lastName: String
   email: String
+  isEmailVerified: Boolean
+  emailVerificationToken: PasswordState
+  emailVerificationIssuedAt: DateTime
+  emailVerificationRedeemedAt: DateTime
+  phoneNumber: String
   password: PasswordState
+  passwordResetToken: PasswordState
+  passwordResetIssuedAt: DateTime
+  passwordResetRedeemedAt: DateTime
+  role: String
+  firstOrderDiscountEligible: Boolean
+  delivaryAddress(where: DelivaryAddressWhereInput! = {}, orderBy: [DelivaryAddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DelivaryAddressWhereUniqueInput): [DelivaryAddress!]
+  delivaryAddressCount(where: DelivaryAddressWhereInput! = {}): Int
   createdAt: DateTime
   lastLogin: DateTime
-  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddressWhereUniqueInput): [Address!]
-  addressesCount(where: AddressWhereInput! = {}): Int
 }
 
 type PasswordState {
@@ -21,6 +32,7 @@ scalar DateTime @specifiedBy(url: "https://datatracker.ietf.org/doc/html/rfc3339
 input UserWhereUniqueInput {
   id: ID
   email: String
+  phoneNumber: String
 }
 
 input UserWhereInput {
@@ -28,11 +40,22 @@ input UserWhereInput {
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
   id: IDFilter
-  name: StringFilter
+  firstName: StringFilter
+  lastName: StringFilter
   email: StringFilter
+  isEmailVerified: BooleanFilter
+  emailVerificationToken: PasswordFilter
+  emailVerificationIssuedAt: DateTimeNullableFilter
+  emailVerificationRedeemedAt: DateTimeNullableFilter
+  phoneNumber: StringFilter
+  passwordResetToken: PasswordFilter
+  passwordResetIssuedAt: DateTimeNullableFilter
+  passwordResetRedeemedAt: DateTimeNullableFilter
+  role: StringFilter
+  firstOrderDiscountEligible: BooleanFilter
+  delivaryAddress: DelivaryAddressManyRelationFilter
   createdAt: DateTimeNullableFilter
   lastLogin: DateTimeNullableFilter
-  addresses: AddressManyRelationFilter
 }
 
 input IDFilter {
@@ -80,6 +103,15 @@ input NestedStringFilter {
   not: NestedStringFilter
 }
 
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input PasswordFilter {
+  isSet: Boolean!
+}
+
 input DateTimeNullableFilter {
   equals: DateTime
   in: [DateTime!]
@@ -91,16 +123,25 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
-input AddressManyRelationFilter {
-  every: AddressWhereInput
-  some: AddressWhereInput
-  none: AddressWhereInput
+input DelivaryAddressManyRelationFilter {
+  every: DelivaryAddressWhereInput
+  some: DelivaryAddressWhereInput
+  none: DelivaryAddressWhereInput
 }
 
 input UserOrderByInput {
   id: OrderDirection
-  name: OrderDirection
+  firstName: OrderDirection
+  lastName: OrderDirection
   email: OrderDirection
+  isEmailVerified: OrderDirection
+  emailVerificationIssuedAt: OrderDirection
+  emailVerificationRedeemedAt: OrderDirection
+  phoneNumber: OrderDirection
+  passwordResetIssuedAt: OrderDirection
+  passwordResetRedeemedAt: OrderDirection
+  role: OrderDirection
+  firstOrderDiscountEligible: OrderDirection
   createdAt: OrderDirection
   lastLogin: OrderDirection
 }
@@ -111,19 +152,30 @@ enum OrderDirection {
 }
 
 input UserUpdateInput {
-  name: String
+  firstName: String
+  lastName: String
   email: String
+  isEmailVerified: Boolean
+  emailVerificationToken: String
+  emailVerificationIssuedAt: DateTime
+  emailVerificationRedeemedAt: DateTime
+  phoneNumber: String
   password: String
+  passwordResetToken: String
+  passwordResetIssuedAt: DateTime
+  passwordResetRedeemedAt: DateTime
+  role: String
+  firstOrderDiscountEligible: Boolean
+  delivaryAddress: DelivaryAddressRelateToManyForUpdateInput
   createdAt: DateTime
   lastLogin: DateTime
-  addresses: AddressRelateToManyForUpdateInput
 }
 
-input AddressRelateToManyForUpdateInput {
-  disconnect: [AddressWhereUniqueInput!]
-  set: [AddressWhereUniqueInput!]
-  create: [AddressCreateInput!]
-  connect: [AddressWhereUniqueInput!]
+input DelivaryAddressRelateToManyForUpdateInput {
+  disconnect: [DelivaryAddressWhereUniqueInput!]
+  set: [DelivaryAddressWhereUniqueInput!]
+  create: [DelivaryAddressCreateInput!]
+  connect: [DelivaryAddressWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -132,54 +184,69 @@ input UserUpdateArgs {
 }
 
 input UserCreateInput {
-  name: String
+  firstName: String
+  lastName: String
   email: String
+  isEmailVerified: Boolean
+  emailVerificationToken: String
+  emailVerificationIssuedAt: DateTime
+  emailVerificationRedeemedAt: DateTime
+  phoneNumber: String
   password: String
+  passwordResetToken: String
+  passwordResetIssuedAt: DateTime
+  passwordResetRedeemedAt: DateTime
+  role: String
+  firstOrderDiscountEligible: Boolean
+  delivaryAddress: DelivaryAddressRelateToManyForCreateInput
   createdAt: DateTime
   lastLogin: DateTime
-  addresses: AddressRelateToManyForCreateInput
 }
 
-input AddressRelateToManyForCreateInput {
-  create: [AddressCreateInput!]
-  connect: [AddressWhereUniqueInput!]
+input DelivaryAddressRelateToManyForCreateInput {
+  create: [DelivaryAddressCreateInput!]
+  connect: [DelivaryAddressWhereUniqueInput!]
 }
 
-type Address {
+type DelivaryAddress {
   id: ID!
   user: User
   street: String
   city: String
   postalCode: String
+  isDefault: Boolean
 }
 
-input AddressWhereUniqueInput {
+input DelivaryAddressWhereUniqueInput {
   id: ID
 }
 
-input AddressWhereInput {
-  AND: [AddressWhereInput!]
-  OR: [AddressWhereInput!]
-  NOT: [AddressWhereInput!]
+input DelivaryAddressWhereInput {
+  AND: [DelivaryAddressWhereInput!]
+  OR: [DelivaryAddressWhereInput!]
+  NOT: [DelivaryAddressWhereInput!]
   id: IDFilter
   user: UserWhereInput
   street: StringFilter
   city: StringFilter
   postalCode: StringFilter
+  isDefault: BooleanFilter
 }
 
-input AddressOrderByInput {
+input DelivaryAddressOrderByInput {
   id: OrderDirection
   street: OrderDirection
   city: OrderDirection
   postalCode: OrderDirection
+  isDefault: OrderDirection
 }
 
-input AddressUpdateInput {
+input DelivaryAddressUpdateInput {
   user: UserRelateToOneForUpdateInput
   street: String
   city: String
   postalCode: String
+  isDefault: Boolean
 }
 
 input UserRelateToOneForUpdateInput {
@@ -188,16 +255,17 @@ input UserRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input AddressUpdateArgs {
-  where: AddressWhereUniqueInput!
-  data: AddressUpdateInput!
+input DelivaryAddressUpdateArgs {
+  where: DelivaryAddressWhereUniqueInput!
+  data: DelivaryAddressUpdateInput!
 }
 
-input AddressCreateInput {
+input DelivaryAddressCreateInput {
   user: UserRelateToOneForCreateInput
   street: String
   city: String
   postalCode: String
+  isDefault: Boolean
 }
 
 input UserRelateToOneForCreateInput {
@@ -285,11 +353,6 @@ input ProductImageManyRelationFilter {
   every: ProductImageWhereInput
   some: ProductImageWhereInput
   none: ProductImageWhereInput
-}
-
-input BooleanFilter {
-  equals: Boolean
-  not: BooleanFilter
 }
 
 input IntFilter {
@@ -698,12 +761,12 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createAddress(data: AddressCreateInput!): Address
-  createAddresses(data: [AddressCreateInput!]!): [Address]
-  updateAddress(where: AddressWhereUniqueInput!, data: AddressUpdateInput!): Address
-  updateAddresses(data: [AddressUpdateArgs!]!): [Address]
-  deleteAddress(where: AddressWhereUniqueInput!): Address
-  deleteAddresses(where: [AddressWhereUniqueInput!]!): [Address]
+  createDelivaryAddress(data: DelivaryAddressCreateInput!): DelivaryAddress
+  createDelivaryAddresses(data: [DelivaryAddressCreateInput!]!): [DelivaryAddress]
+  updateDelivaryAddress(where: DelivaryAddressWhereUniqueInput!, data: DelivaryAddressUpdateInput!): DelivaryAddress
+  updateDelivaryAddresses(data: [DelivaryAddressUpdateArgs!]!): [DelivaryAddress]
+  deleteDelivaryAddress(where: DelivaryAddressWhereUniqueInput!): DelivaryAddress
+  deleteDelivaryAddresses(where: [DelivaryAddressWhereUniqueInput!]!): [DelivaryAddress]
   createProduct(data: ProductCreateInput!): Product
   createProducts(data: [ProductCreateInput!]!): [Product]
   updateProduct(where: ProductWhereUniqueInput!, data: ProductUpdateInput!): Product
@@ -737,6 +800,9 @@ type Mutation {
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
+  sendUserPasswordResetLink(email: String!): Boolean!
+  redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
+  verifyEmail(token: String!, email: String!): VerifyEmailResponse
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -751,18 +817,31 @@ type UserAuthenticationWithPasswordFailure {
 }
 
 input CreateInitialUserInput {
-  name: String
+  firstName: String
+  lastName: String
   email: String
   password: String
+  role: String
+}
+
+type RedeemUserPasswordResetTokenResult {
+  code: PasswordResetRedemptionErrorCode!
+  message: String!
+}
+
+enum PasswordResetRedemptionErrorCode {
+  FAILURE
+  TOKEN_EXPIRED
+  TOKEN_REDEEMED
 }
 
 type Query {
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   usersCount(where: UserWhereInput! = {}): Int
-  address(where: AddressWhereUniqueInput!): Address
-  addresses(where: AddressWhereInput! = {}, orderBy: [AddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AddressWhereUniqueInput): [Address!]
-  addressesCount(where: AddressWhereInput! = {}): Int
+  delivaryAddress(where: DelivaryAddressWhereUniqueInput!): DelivaryAddress
+  delivaryAddresses(where: DelivaryAddressWhereInput! = {}, orderBy: [DelivaryAddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DelivaryAddressWhereUniqueInput): [DelivaryAddress!]
+  delivaryAddressesCount(where: DelivaryAddressWhereInput! = {}): Int
   product(where: ProductWhereUniqueInput!): Product
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
@@ -780,9 +859,15 @@ type Query {
   categoriesCount(where: CategoryWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
+  validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult
 }
 
 union AuthenticatedItem = User
+
+type ValidateUserPasswordResetTokenResult {
+  code: PasswordResetRedemptionErrorCode!
+  message: String!
+}
 
 type KeystoneMeta {
   adminMeta: KeystoneAdminMeta!
@@ -913,4 +998,9 @@ type KeystoneAdminUISort {
 enum KeystoneAdminUISortDirection {
   ASC
   DESC
+}
+
+type VerifyEmailResponse {
+  status: Boolean
+  message: String
 }

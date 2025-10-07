@@ -12,22 +12,34 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(uuid()) @postgresql.Uuid
-  name      String    @default("")
-  email     String    @unique @default("")
-  password  String
-  createdAt DateTime? @default(now())
-  lastLogin DateTime?
-  addresses Address[] @relation("Address_user")
+  id                          String            @id @default(uuid()) @postgresql.Uuid
+  firstName                   String            @default("")
+  lastName                    String            @default("")
+  email                       String            @unique @default("")
+  isEmailVerified             Boolean           @default(false)
+  emailVerificationToken      String?
+  emailVerificationIssuedAt   DateTime?
+  emailVerificationRedeemedAt DateTime?
+  phoneNumber                 String            @unique @default("")
+  password                    String
+  passwordResetToken          String?
+  passwordResetIssuedAt       DateTime?
+  passwordResetRedeemedAt     DateTime?
+  role                        String            @default("CUSTOMER")
+  firstOrderDiscountEligible  Boolean           @default(true)
+  delivaryAddress             DelivaryAddress[] @relation("DelivaryAddress_user")
+  createdAt                   DateTime?         @default(now())
+  lastLogin                   DateTime?
 }
 
-model Address {
+model DelivaryAddress {
   id         String  @id @default(uuid()) @postgresql.Uuid
-  user       User?   @relation("Address_user", fields: [userId], references: [id])
+  user       User?   @relation("DelivaryAddress_user", fields: [userId], references: [id])
   userId     String? @map("user") @postgresql.Uuid
   street     String  @default("")
   city       String  @default("")
   postalCode String  @default("")
+  isDefault  Boolean @default(true)
 
   @@index([userId])
 }

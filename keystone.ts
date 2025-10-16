@@ -26,7 +26,17 @@ export default withAuth(
       yc_s3_image: {
         kind: "s3",
         type: "image",
-        bucketName: YC_S3_BUCKET,
+        bucketName: `${YC_S3_BUCKET}-images`,
+        region: YC_S3_REGION,
+        accessKeyId: YC_S3_KEY_ID,
+        secretAccessKey: YC_S3_SECRET_KEY,
+        endpoint: YC_S3_PRIVATE_ENDPOINT,
+        acl: "public-read",
+      },
+      yc_s3_files: {
+        kind: "s3",
+        type: "file",
+        bucketName: `${YC_S3_BUCKET}-files`,
         region: YC_S3_REGION,
         accessKeyId: YC_S3_KEY_ID,
         secretAccessKey: YC_S3_SECRET_KEY,

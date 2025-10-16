@@ -1,15 +1,14 @@
 import { list } from "@keystone-6/core";
 import {
-  relationship,
-  checkbox,
-  integer,
+  text,
   timestamp,
   decimal,
+  relationship,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
-export const ProductVariant = list({
+export const CustomizationOptionValue = list({
   access: {
     operation: {
       query: allowAll,
@@ -19,23 +18,16 @@ export const ProductVariant = list({
     },
   },
   fields: {
-    product: relationship({ ref: "Product.variants", many: false }),
-    price: decimal({
+    option: relationship({
+      ref: "CustomizationOption.customValues",
+      many: false,
+    }),
+    value: text({ defaultValue: undefined }),
+    extraPrice: decimal({
       precision: 10,
       scale: 2,
-      validation: { isRequired: true },
-    }),
-    pieces: integer({ defaultValue: undefined }),
-    weight: decimal({
-      precision: 3,
-      scale: 1,
       defaultValue: undefined,
     }),
-    stockQuantity: integer({
-      defaultValue: 0,
-      validation: { isRequired: true },
-    }),
-    isAvailable: checkbox({ defaultValue: true }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

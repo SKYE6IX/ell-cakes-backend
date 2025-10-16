@@ -1,5 +1,5 @@
 import { randomBytes } from "crypto";
-import { list } from "@keystone-6/core";
+import { list, graphql } from "@keystone-6/core";
 import {
   text,
   password,
@@ -7,15 +7,11 @@ import {
   relationship,
   select,
   checkbox,
+  virtual,
 } from "@keystone-6/core/fields";
-import {
-  isAdmin,
-  canReadProfile,
-  isAdminOrEditorOrCustomer,
-  isAdminOrEditor,
-  canUpdateProfile,
-} from "../access";
+import { allOperations, allowAll } from "@keystone-6/core/access";
 import { sendVerificationEmail } from "../lib/mail";
+import { isSignedIn as hasSession, permissions, rules } from "../access";
 
 const hiddenFieldConfig = {
   ui: {
@@ -28,21 +24,31 @@ const hiddenFieldConfig = {
 export const User = list({
   access: {
     operation: {
-      create: () => true,
-      query: isAdminOrEditorOrCustomer,
-      update: isAdminOrEditorOrCustomer,
-      delete: isAdmin,
+      ...allOperations(hasSession),
+      create: allowAll,
+      delete: permissions.canManageUsers,
     },
     filter: {
-      query: canReadProfile,
-    },
-    item: {
-      update: canUpdateProfile,
+      query: rules.canReadUser,
+      update: rules.canUpdateUser,
     },
   },
   fields: {
     firstName: text({ validation: { isRequired: true } }),
     lastName: text({ validation: { isRequired: true } }),
+    name: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item, args, context) {
+          const { firstName, lastName } = await context.query.User.findOne({
+            // @ts-expect-error "item" has unknow type
+            where: { id: item.id.toString() },
+            query: "firstName lastName",
+          });
+          return firstName + " " + lastName;
+        },
+      }),
+    }),
     email: text({
       validation: { isRequired: false },
       isIndexed: "unique",
@@ -56,6 +62,16 @@ export const User = list({
       validation: { isRequired: false },
     }),
     password: password({ validation: { isRequired: true } }),
+    role: select({
+      options: [
+        { label: "Admin", value: "ADMIN" },
+        { label: "Editor", value: "EDITOR" },
+        { label: "Customer", value: "CUSTOMER" },
+      ],
+      defaultValue: "CUSTOMER",
+      validation: { isRequired: true },
+      ui: { displayMode: "select" },
+    }),
     passwordResetToken: password({
       ...hiddenFieldConfig,
       access: () => false,
@@ -68,22 +84,11 @@ export const User = list({
       ...hiddenFieldConfig,
       access: () => false,
     }),
-    role: select({
-      options: [
-        { label: "Admin", value: "ADMIN" },
-        { label: "Editor", value: "EDITOR" },
-        { label: "Customer", value: "CUSTOMER" },
-      ],
-      defaultValue: "CUSTOMER",
-      validation: { isRequired: true },
-      ui: { displayMode: "select" },
-    }),
     firstOrderDiscountEligible: checkbox({
       defaultValue: true,
-      label: "Eligible for 10% off on first order",
+      label: "Eligible for 15% off on first order",
       access: {
-        read: isAdminOrEditorOrCustomer,
-        update: isAdminOrEditor,
+        update: permissions.canManageUsers,
       },
     }),
     delivaryAddress: relationship({ ref: "DelivaryAddress.user", many: true }),
@@ -96,6 +101,7 @@ export const User = list({
       },
     }),
     lastLogin: timestamp({
+      defaultValue: undefined,
       ui: {
         createView: {
           fieldMode: "hidden",

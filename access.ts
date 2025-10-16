@@ -1,59 +1,48 @@
-import { BaseItem } from "@keystone-6/core/types";
-
 export type Session = {
   itemId: string;
+  listKey: string;
   data: {
     role: "ADMIN" | "EDITOR" | "CUSTOMER";
   };
 };
 
-export const isAdmin = ({ session }: { session?: Session }) =>
-  session?.data.role === "ADMIN";
-
-export const isEditor = ({ session }: { session?: Session }) =>
-  session?.data.role === "EDITOR";
-
-export const isCustomer = ({ session }: { session?: Session }) =>
-  session?.data.role === "CUSTOMER";
-
-export const isAdminOrEditorOrCustomer = ({
-  session,
-}: {
+type AccessArgs = {
   session?: Session;
-}) => {
-  return (
-    isAdmin({ session }) || isEditor({ session }) || isCustomer({ session })
-  );
-};
-export const isAdminOrEditor = ({ session }: { session?: Session }) => {
-  return isAdmin({ session }) || isEditor({ session });
-};
-export const isAdminOrCustomer = ({ session }: { session?: Session }) => {
-  return isAdmin({ session }) || isCustomer({ session });
 };
 
-export const canReadProfile = ({ session }: { session?: Session }) => {
-  const otherUserId = session?.itemId;
-  if (session?.data.role === "ADMIN") return true;
-  return { id: { equals: otherUserId } };
+export const isSignedIn = ({ session }: AccessArgs) => !!session;
+
+export const permissions = {
+  // Admin is allow to manage users
+  canManageUsers: ({ session }: AccessArgs) => session?.data.role === "ADMIN",
+
+  canManageProduct: ({ session }: AccessArgs) =>
+    session?.data.role === "ADMIN" || session?.data.role === "EDITOR",
 };
 
-export const canUpdateProfile = ({
-  session,
-  item,
-}: {
-  session?: Session;
-  item: BaseItem;
-}) => {
-  return isAdmin({ session }) || session?.itemId === item.id;
-};
+export const rules = {
+  canReadUser: ({ session }: AccessArgs) => {
+    if (!session) return false;
+    // Admin can read all profile
+    if (session.data.role === "ADMIN") return true;
+    // Other roles are only allow to read their own profile
+    return { id: { equals: session.itemId } };
+  },
 
-export const canUpdateOrDeleteDeliveryAddress = ({
-  session,
-}: {
-  session?: Session;
-}) => {
-  const customerId = session?.itemId;
-  if (session?.data.role === "ADMIN") return true;
-  return { user: { id: { equals: customerId } } };
+  canUpdateUser: ({ session }: AccessArgs) => {
+    if (!session) return false;
+    // Admin can read all profile
+    if (session.data.role === "ADMIN") return true;
+    // Other roles are only allow to read their own profile
+    return { id: { equals: session.itemId } };
+  },
+
+  canManageDeliveryAddress: ({ session }: AccessArgs) => {
+    if (!session) return false;
+    // Admin or Editor can manage all delivery address
+    if (session.data.role === "ADMIN" || session.data.role === "EDITOR")
+      return true;
+    // Customer should only manage their own delivery address
+    return { user: { id: { equals: session.itemId } } };
+  },
 };

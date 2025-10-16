@@ -1,14 +1,44 @@
 import { list } from "@keystone-6/core";
-import { text, checkbox, timestamp, decimal } from "@keystone-6/core/fields";
+import { text, relationship, timestamp } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
+import { getTransliterationSlug } from "../lib/getTransliteration";
 
 export const Topping = list({
   access: allowAll,
   fields: {
-    name: text({ validation: { isRequired: true } }),
-    description: text(),
-    price: decimal({ precision: 10, scale: 2 }),
-    isAvailable: checkbox({ defaultValue: true }),
+    product: relationship({ ref: "Product.topping", many: false }),
+    name: text({ isIndexed: "unique", validation: { isRequired: true } }),
+    slug: text({
+      hooks: {
+        resolveInput: ({ resolvedData, operation, fieldKey }) => {
+          if (operation === "create") {
+            const { name } = resolvedData;
+            resolvedData.slug = getTransliterationSlug(name);
+            return resolvedData[fieldKey];
+          }
+          return resolvedData[fieldKey];
+        },
+      },
+      isIndexed: "unique",
+      ui: {
+        createView: { fieldMode: "hidden" },
+      },
+    }),
+    options: relationship({
+      ref: "ToppingOption.topping",
+      many: true,
+      ui: {
+        displayMode: "cards",
+        cardFields: ["weight", "pieces", "extraPrice"],
+        inlineCreate: {
+          fields: ["weight", "pieces", "extraPrice"],
+        },
+        inlineEdit: {
+          fields: ["weight", "pieces", "extraPrice"],
+        },
+        linkToItem: true,
+      },
+    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -20,8 +50,5 @@ export const Topping = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-  },
-  ui: {
-    isHidden: true,
   },
 });

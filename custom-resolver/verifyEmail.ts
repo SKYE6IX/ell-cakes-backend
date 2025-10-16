@@ -12,6 +12,7 @@ export const verifyEmail = async (
   if (!user || user.emailVerificationToken !== token) {
     throw new Error("Invalid token");
   }
+
   const issuedAt = user.emailVerificationIssuedAt;
   const expiration = 60 * 60 * 1000;
   if (issuedAt && new Date(issuedAt).getTime() + expiration < Date.now()) {

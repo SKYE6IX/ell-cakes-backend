@@ -1,22 +1,16 @@
 import { list } from "@keystone-6/core";
 import { text, relationship, checkbox } from "@keystone-6/core/fields";
-import {
-  isAdminOrCustomer,
-  isAdminOrEditorOrCustomer,
-  canUpdateOrDeleteDeliveryAddress,
-} from "../access";
+import { allOperations } from "@keystone-6/core/access";
+import { isSignedIn as hasSession, rules, permissions } from "../access";
 
 export const DelivaryAddress = list({
   access: {
     operation: {
-      create: isAdminOrCustomer,
-      query: isAdminOrEditorOrCustomer,
-      update: isAdminOrCustomer,
-      delete: isAdminOrCustomer,
+      ...allOperations(hasSession),
     },
     filter: {
-      update: canUpdateOrDeleteDeliveryAddress,
-      delete: canUpdateOrDeleteDeliveryAddress,
+      update: rules.canManageDeliveryAddress,
+      delete: rules.canManageDeliveryAddress,
     },
   },
   fields: {
@@ -25,5 +19,8 @@ export const DelivaryAddress = list({
     city: text({ validation: { isRequired: true } }),
     postalCode: text({ validation: { isRequired: true } }),
     isDefault: checkbox({ defaultValue: true }),
+  },
+  ui: {
+    isHidden: true,
   },
 });

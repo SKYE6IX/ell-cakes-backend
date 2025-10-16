@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "jsx": "react",
     "target": "esnext",
     "module": "commonjs",
     "strict": true,
@@ -7,5 +8,4 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   }
-  // "include": ["env.d.ts"]
 }

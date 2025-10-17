@@ -939,6 +939,7 @@ type CustomizationOptionValue {
   option: CustomizationOption
   value: String
   extraPrice: Decimal
+  optionConstraint: CustomizationOptionConstraint
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -955,6 +956,7 @@ input CustomizationOptionValueWhereInput {
   option: CustomizationOptionWhereInput
   value: StringFilter
   extraPrice: DecimalNullableFilter
+  optionConstraint: CustomizationOptionConstraintWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -971,6 +973,7 @@ input CustomizationOptionValueUpdateInput {
   option: CustomizationOptionRelateToOneForUpdateInput
   value: String
   extraPrice: Decimal
+  optionConstraint: CustomizationOptionConstraintRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -978,6 +981,12 @@ input CustomizationOptionValueUpdateInput {
 input CustomizationOptionRelateToOneForUpdateInput {
   create: CustomizationOptionCreateInput
   connect: CustomizationOptionWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CustomizationOptionConstraintRelateToOneForUpdateInput {
+  create: CustomizationOptionConstraintCreateInput
+  connect: CustomizationOptionConstraintWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -990,6 +999,7 @@ input CustomizationOptionValueCreateInput {
   option: CustomizationOptionRelateToOneForCreateInput
   value: String
   extraPrice: Decimal
+  optionConstraint: CustomizationOptionConstraintRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -997,6 +1007,11 @@ input CustomizationOptionValueCreateInput {
 input CustomizationOptionRelateToOneForCreateInput {
   create: CustomizationOptionCreateInput
   connect: CustomizationOptionWhereUniqueInput
+}
+
+input CustomizationOptionConstraintRelateToOneForCreateInput {
+  create: CustomizationOptionConstraintCreateInput
+  connect: CustomizationOptionConstraintWhereUniqueInput
 }
 
 type Topping {
@@ -1138,6 +1153,61 @@ input ToppingOptionCreateInput {
   updatedAt: DateTime
 }
 
+type CustomizationOptionConstraint {
+  id: ID!
+  optionValues(where: CustomizationOptionValueWhereInput! = {}, orderBy: [CustomizationOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionValueWhereUniqueInput): [CustomizationOptionValue!]
+  optionValuesCount(where: CustomizationOptionValueWhereInput! = {}): Int
+  key: String
+  value: Decimal
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CustomizationOptionConstraintWhereUniqueInput {
+  id: ID
+}
+
+input CustomizationOptionConstraintWhereInput {
+  AND: [CustomizationOptionConstraintWhereInput!]
+  OR: [CustomizationOptionConstraintWhereInput!]
+  NOT: [CustomizationOptionConstraintWhereInput!]
+  id: IDFilter
+  optionValues: CustomizationOptionValueManyRelationFilter
+  key: StringNullableFilter
+  value: DecimalNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CustomizationOptionConstraintOrderByInput {
+  id: OrderDirection
+  key: OrderDirection
+  value: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CustomizationOptionConstraintUpdateInput {
+  optionValues: CustomizationOptionValueRelateToManyForUpdateInput
+  key: String
+  value: Decimal
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CustomizationOptionConstraintUpdateArgs {
+  where: CustomizationOptionConstraintWhereUniqueInput!
+  data: CustomizationOptionConstraintUpdateInput!
+}
+
+input CustomizationOptionConstraintCreateInput {
+  optionValues: CustomizationOptionValueRelateToManyForCreateInput
+  key: String
+  value: Decimal
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -1210,6 +1280,12 @@ type Mutation {
   updateToppingOptions(data: [ToppingOptionUpdateArgs!]!): [ToppingOption]
   deleteToppingOption(where: ToppingOptionWhereUniqueInput!): ToppingOption
   deleteToppingOptions(where: [ToppingOptionWhereUniqueInput!]!): [ToppingOption]
+  createCustomizationOptionConstraint(data: CustomizationOptionConstraintCreateInput!): CustomizationOptionConstraint
+  createCustomizationOptionConstraints(data: [CustomizationOptionConstraintCreateInput!]!): [CustomizationOptionConstraint]
+  updateCustomizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!, data: CustomizationOptionConstraintUpdateInput!): CustomizationOptionConstraint
+  updateCustomizationOptionConstraints(data: [CustomizationOptionConstraintUpdateArgs!]!): [CustomizationOptionConstraint]
+  deleteCustomizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!): CustomizationOptionConstraint
+  deleteCustomizationOptionConstraints(where: [CustomizationOptionConstraintWhereUniqueInput!]!): [CustomizationOptionConstraint]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -1282,6 +1358,9 @@ type Query {
   toppingOption(where: ToppingOptionWhereUniqueInput!): ToppingOption
   toppingOptions(where: ToppingOptionWhereInput! = {}, orderBy: [ToppingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ToppingOptionWhereUniqueInput): [ToppingOption!]
   toppingOptionsCount(where: ToppingOptionWhereInput! = {}): Int
+  customizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!): CustomizationOptionConstraint
+  customizationOptionConstraints(where: CustomizationOptionConstraintWhereInput! = {}, orderBy: [CustomizationOptionConstraintOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionConstraintWhereUniqueInput): [CustomizationOptionConstraint!]
+  customizationOptionConstraintsCount(where: CustomizationOptionConstraintWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult

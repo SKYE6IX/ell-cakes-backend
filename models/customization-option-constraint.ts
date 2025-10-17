@@ -1,6 +1,6 @@
 import { list } from "@keystone-6/core";
 import {
-  text,
+  select,
   timestamp,
   decimal,
   relationship,
@@ -8,7 +8,7 @@ import {
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
-export const CustomizationOptionValue = list({
+export const CustomizationOptionConstraint = list({
   access: {
     operation: {
       query: allowAll,
@@ -18,30 +18,19 @@ export const CustomizationOptionValue = list({
     },
   },
   fields: {
-    option: relationship({
-      ref: "CustomizationOption.customValues",
-      many: false,
+    optionValues: relationship({
+      ref: "CustomizationOptionValue.optionConstraint",
+      many: true,
     }),
-    value: text({ defaultValue: undefined }),
-    extraPrice: decimal({
-      precision: 10,
-      scale: 2,
+    key: select({
+      options: [{ label: "Max Weight", value: "max_weight" }],
       defaultValue: undefined,
+      label: "Option Constraint",
     }),
-    optionConstraint: relationship({
-      ref: "CustomizationOptionConstraint.optionValues",
-      many: false,
-      ui: {
-        displayMode: "cards",
-        cardFields: ["key", "value"],
-        inlineCreate: {
-          fields: ["key", "value"],
-        },
-        inlineEdit: {
-          fields: ["key", "value"],
-        },
-        linkToItem: true,
-      },
+    value: decimal({
+      precision: 3,
+      scale: 1,
+      defaultValue: undefined,
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },

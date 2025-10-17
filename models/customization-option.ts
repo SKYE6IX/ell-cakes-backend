@@ -48,12 +48,12 @@ export const CustomizationOption = list({
       many: true,
       ui: {
         displayMode: "cards",
-        cardFields: ["value", "extraPrice"],
+        cardFields: ["value", "extraPrice", "optionConstraint"],
         inlineCreate: {
-          fields: ["value", "extraPrice"],
+          fields: ["value", "extraPrice", "optionConstraint"],
         },
         inlineEdit: {
-          fields: ["value", "extraPrice"],
+          fields: ["value", "extraPrice", "optionConstraint"],
         },
         linkToItem: true,
       },

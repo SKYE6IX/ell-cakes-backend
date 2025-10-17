@@ -139,15 +139,18 @@ model CustomizationOption {
 }
 
 model CustomizationOptionValue {
-  id         String               @id @default(uuid()) @postgresql.Uuid
-  option     CustomizationOption? @relation("CustomizationOptionValue_option", fields: [optionId], references: [id])
-  optionId   String?              @map("option") @postgresql.Uuid
-  value      String               @default("")
-  extraPrice Decimal?             @postgresql.Decimal(10, 2)
-  createdAt  DateTime?            @default(now())
-  updatedAt  DateTime?
+  id                 String                         @id @default(uuid()) @postgresql.Uuid
+  option             CustomizationOption?           @relation("CustomizationOptionValue_option", fields: [optionId], references: [id])
+  optionId           String?                        @map("option") @postgresql.Uuid
+  value              String                         @default("")
+  extraPrice         Decimal?                       @postgresql.Decimal(10, 2)
+  optionConstraint   CustomizationOptionConstraint? @relation("CustomizationOptionValue_optionConstraint", fields: [optionConstraintId], references: [id])
+  optionConstraintId String?                        @map("optionConstraint") @postgresql.Uuid
+  createdAt          DateTime?                      @default(now())
+  updatedAt          DateTime?
 
   @@index([optionId])
+  @@index([optionConstraintId])
 }
 
 model Topping {
@@ -171,4 +174,13 @@ model ToppingOption {
   updatedAt  DateTime?
 
   @@index([toppingId])
+}
+
+model CustomizationOptionConstraint {
+  id           String                     @id @default(uuid()) @postgresql.Uuid
+  optionValues CustomizationOptionValue[] @relation("CustomizationOptionValue_optionConstraint")
+  key          String?
+  value        Decimal?                   @postgresql.Decimal(3, 1)
+  createdAt    DateTime?                  @default(now())
+  updatedAt    DateTime?
 }

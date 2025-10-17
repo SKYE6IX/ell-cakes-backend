@@ -14,7 +14,21 @@ export const ProductCustomization = list({
   },
   fields: {
     product: relationship({ ref: "Product.customization", many: false }),
-    customOptions: relationship({ ref: "CustomizationOption", many: true }),
+    customOptions: relationship({
+      ref: "CustomizationOption",
+      many: true,
+      ui: {
+        displayMode: "cards",
+        cardFields: ["name", "customValues"],
+        inlineCreate: {
+          fields: ["name", "customValues"],
+        },
+        inlineEdit: {
+          fields: ["name", "customValues"],
+        },
+        linkToItem: true,
+      },
+    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

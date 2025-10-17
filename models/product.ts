@@ -51,22 +51,23 @@ export const Product = list({
         },
       },
       isIndexed: "unique",
+      validation: { isRequired: true },
       ui: {
         createView: { fieldMode: "hidden" },
       },
     }),
     description: text({ validation: { isRequired: true } }),
-    price: decimal({
+    basePrice: decimal({
       precision: 10,
       scale: 2,
       validation: { isRequired: true },
     }),
-    weight: decimal({
+    baseWeight: decimal({
       precision: 4,
       scale: 1,
       defaultValue: undefined,
     }),
-    pieces: integer({ defaultValue: undefined }),
+    basePieces: integer({ defaultValue: undefined }),
     carbonhydrate: decimal({
       precision: 4,
       scale: 1,

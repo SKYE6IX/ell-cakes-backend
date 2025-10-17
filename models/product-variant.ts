@@ -32,7 +32,7 @@ export const ProductVariant = list({
       defaultValue: undefined,
     }),
     stockQuantity: integer({
-      defaultValue: 0,
+      defaultValue: undefined,
       validation: { isRequired: true },
     }),
     isAvailable: checkbox({ defaultValue: true }),

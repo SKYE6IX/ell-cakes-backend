@@ -4,7 +4,7 @@ dotenv.config({ override: true });
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
-
+import { insertSeedData } from "./seed-data";
 const {
   YC_S3_KEY_ID,
   YC_S3_SECRET_KEY,
@@ -19,6 +19,12 @@ export default withAuth(
       provider: "postgresql",
       url: process.env.DATABASE_URL,
       idField: { kind: "uuid" },
+      onConnect: async (context) => {
+        console.log("Database connected");
+        if (process.argv.includes("--seed-data")) {
+          await insertSeedData(context);
+        }
+      },
     },
     lists,
     session,

@@ -6,7 +6,8 @@
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build",
-    "test": "jest"
+    "test": "jest",
+    "seed-data": "keystone dev --seed-data"
   },
   "dependencies": {
     "@graphql-tools/schema": "^10.0.25",

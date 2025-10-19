@@ -51,9 +51,9 @@ model Product {
   name             String                @default("")
   slug             String                @unique @default("")
   description      String                @default("")
-  price            Decimal               @postgresql.Decimal(10, 2)
-  weight           Decimal?              @postgresql.Decimal(4, 1)
-  pieces           Int?
+  basePrice        Decimal               @postgresql.Decimal(10, 2)
+  baseWeight       Decimal?              @postgresql.Decimal(4, 1)
+  basePieces       Int?
   carbonhydrate    Decimal?              @postgresql.Decimal(4, 1)
   calories         Decimal?              @postgresql.Decimal(4, 1)
   protein          Decimal?              @postgresql.Decimal(4, 1)
@@ -100,7 +100,7 @@ model ProductVariant {
   price         Decimal   @postgresql.Decimal(10, 2)
   pieces        Int?
   weight        Decimal?  @postgresql.Decimal(3, 1)
-  stockQuantity Int       @default(0)
+  stockQuantity Int
   isAvailable   Boolean   @default(true)
   createdAt     DateTime? @default(now())
   updatedAt     DateTime?
@@ -142,7 +142,7 @@ model CustomizationOptionValue {
   id                 String                         @id @default(uuid()) @postgresql.Uuid
   option             CustomizationOption?           @relation("CustomizationOptionValue_option", fields: [optionId], references: [id])
   optionId           String?                        @map("option") @postgresql.Uuid
-  value              String                         @default("")
+  name               String                         @default("")
   extraPrice         Decimal?                       @postgresql.Decimal(10, 2)
   optionConstraint   CustomizationOptionConstraint? @relation("CustomizationOptionValue_optionConstraint", fields: [optionConstraintId], references: [id])
   optionConstraintId String?                        @map("optionConstraint") @postgresql.Uuid
@@ -180,7 +180,8 @@ model CustomizationOptionConstraint {
   id           String                     @id @default(uuid()) @postgresql.Uuid
   optionValues CustomizationOptionValue[] @relation("CustomizationOptionValue_optionConstraint")
   key          String?
-  value        Decimal?                   @postgresql.Decimal(3, 1)
+  minValue     Decimal?                   @postgresql.Decimal(3, 1)
+  maxValue     Decimal?                   @postgresql.Decimal(3, 1)
   createdAt    DateTime?                  @default(now())
   updatedAt    DateTime?
 }

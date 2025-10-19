@@ -22,7 +22,7 @@ export const CustomizationOptionValue = list({
       ref: "CustomizationOption.customValues",
       many: false,
     }),
-    value: text({ defaultValue: undefined }),
+    name: text({ defaultValue: undefined }),
     extraPrice: decimal({
       precision: 10,
       scale: 2,
@@ -33,12 +33,12 @@ export const CustomizationOptionValue = list({
       many: false,
       ui: {
         displayMode: "cards",
-        cardFields: ["key", "value"],
+        cardFields: ["key", "minValue", "maxValue"],
         inlineCreate: {
-          fields: ["key", "value"],
+          fields: ["key", "minValue", "maxValue"],
         },
         inlineEdit: {
-          fields: ["key", "value"],
+          fields: ["key", "minValue", "maxValue"],
         },
         linkToItem: true,
       },

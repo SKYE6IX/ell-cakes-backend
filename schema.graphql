@@ -280,9 +280,9 @@ type Product {
   name: String
   slug: String
   description: String
-  price: Decimal
-  weight: Decimal
-  pieces: Int
+  basePrice: Decimal
+  baseWeight: Decimal
+  basePieces: Int
   carbonhydrate: Decimal
   calories: Decimal
   protein: Decimal
@@ -332,9 +332,9 @@ input ProductWhereInput {
   name: StringFilter
   slug: StringFilter
   description: StringFilter
-  price: DecimalFilter
-  weight: DecimalNullableFilter
-  pieces: IntNullableFilter
+  basePrice: DecimalFilter
+  baseWeight: DecimalNullableFilter
+  basePieces: IntNullableFilter
   carbonhydrate: DecimalNullableFilter
   calories: DecimalNullableFilter
   protein: DecimalNullableFilter
@@ -433,9 +433,9 @@ input ProductOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   description: OrderDirection
-  price: OrderDirection
-  weight: OrderDirection
-  pieces: OrderDirection
+  basePrice: OrderDirection
+  baseWeight: OrderDirection
+  basePieces: OrderDirection
   carbonhydrate: OrderDirection
   calories: OrderDirection
   protein: OrderDirection
@@ -459,9 +459,9 @@ input ProductUpdateInput {
   name: String
   slug: String
   description: String
-  price: Decimal
-  weight: Decimal
-  pieces: Int
+  basePrice: Decimal
+  baseWeight: Decimal
+  basePieces: Int
   carbonhydrate: Decimal
   calories: Decimal
   protein: Decimal
@@ -534,9 +534,9 @@ input ProductCreateInput {
   name: String
   slug: String
   description: String
-  price: Decimal
-  weight: Decimal
-  pieces: Int
+  basePrice: Decimal
+  baseWeight: Decimal
+  basePieces: Int
   carbonhydrate: Decimal
   calories: Decimal
   protein: Decimal
@@ -937,7 +937,7 @@ input CustomizationOptionValueRelateToManyForCreateInput {
 type CustomizationOptionValue {
   id: ID!
   option: CustomizationOption
-  value: String
+  name: String
   extraPrice: Decimal
   optionConstraint: CustomizationOptionConstraint
   createdAt: DateTime
@@ -954,7 +954,7 @@ input CustomizationOptionValueWhereInput {
   NOT: [CustomizationOptionValueWhereInput!]
   id: IDFilter
   option: CustomizationOptionWhereInput
-  value: StringFilter
+  name: StringFilter
   extraPrice: DecimalNullableFilter
   optionConstraint: CustomizationOptionConstraintWhereInput
   createdAt: DateTimeNullableFilter
@@ -963,7 +963,7 @@ input CustomizationOptionValueWhereInput {
 
 input CustomizationOptionValueOrderByInput {
   id: OrderDirection
-  value: OrderDirection
+  name: OrderDirection
   extraPrice: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
@@ -971,7 +971,7 @@ input CustomizationOptionValueOrderByInput {
 
 input CustomizationOptionValueUpdateInput {
   option: CustomizationOptionRelateToOneForUpdateInput
-  value: String
+  name: String
   extraPrice: Decimal
   optionConstraint: CustomizationOptionConstraintRelateToOneForUpdateInput
   createdAt: DateTime
@@ -997,7 +997,7 @@ input CustomizationOptionValueUpdateArgs {
 
 input CustomizationOptionValueCreateInput {
   option: CustomizationOptionRelateToOneForCreateInput
-  value: String
+  name: String
   extraPrice: Decimal
   optionConstraint: CustomizationOptionConstraintRelateToOneForCreateInput
   createdAt: DateTime
@@ -1158,7 +1158,8 @@ type CustomizationOptionConstraint {
   optionValues(where: CustomizationOptionValueWhereInput! = {}, orderBy: [CustomizationOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionValueWhereUniqueInput): [CustomizationOptionValue!]
   optionValuesCount(where: CustomizationOptionValueWhereInput! = {}): Int
   key: String
-  value: Decimal
+  minValue: Decimal
+  maxValue: Decimal
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1174,7 +1175,8 @@ input CustomizationOptionConstraintWhereInput {
   id: IDFilter
   optionValues: CustomizationOptionValueManyRelationFilter
   key: StringNullableFilter
-  value: DecimalNullableFilter
+  minValue: DecimalNullableFilter
+  maxValue: DecimalNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1182,7 +1184,8 @@ input CustomizationOptionConstraintWhereInput {
 input CustomizationOptionConstraintOrderByInput {
   id: OrderDirection
   key: OrderDirection
-  value: OrderDirection
+  minValue: OrderDirection
+  maxValue: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -1190,7 +1193,8 @@ input CustomizationOptionConstraintOrderByInput {
 input CustomizationOptionConstraintUpdateInput {
   optionValues: CustomizationOptionValueRelateToManyForUpdateInput
   key: String
-  value: Decimal
+  minValue: Decimal
+  maxValue: Decimal
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1203,7 +1207,8 @@ input CustomizationOptionConstraintUpdateArgs {
 input CustomizationOptionConstraintCreateInput {
   optionValues: CustomizationOptionValueRelateToManyForCreateInput
   key: String
-  value: Decimal
+  minValue: Decimal
+  maxValue: Decimal
   createdAt: DateTime
   updatedAt: DateTime
 }

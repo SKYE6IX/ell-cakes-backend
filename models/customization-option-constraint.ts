@@ -23,11 +23,16 @@ export const CustomizationOptionConstraint = list({
       many: true,
     }),
     key: select({
-      options: [{ label: "Max Weight", value: "max_weight" }],
+      options: [{ label: "Weight", value: "weight" }],
       defaultValue: undefined,
       label: "Option Constraint",
     }),
-    value: decimal({
+    minValue: decimal({
+      precision: 3,
+      scale: 1,
+      defaultValue: undefined,
+    }),
+    maxValue: decimal({
       precision: 3,
       scale: 1,
       defaultValue: undefined,

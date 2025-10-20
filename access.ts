@@ -18,6 +18,9 @@ export const permissions = {
 
   canManageProduct: ({ session }: AccessArgs) =>
     session?.data.role === "ADMIN" || session?.data.role === "EDITOR",
+
+  canManageOrder: ({ session }: AccessArgs) =>
+    session?.data.role === "ADMIN" || session?.data.role === "EDITOR",
 };
 
 export const rules = {
@@ -43,6 +46,17 @@ export const rules = {
     if (session.data.role === "ADMIN" || session.data.role === "EDITOR")
       return true;
     // Customer should only manage their own delivery address
+    return { user: { id: { equals: session.itemId } } };
+  },
+
+  canReadOrder: ({ session }: AccessArgs) => {
+    if (!session) return false;
+
+    // Admin or Editor can read all order history
+    if (session.data.role === "ADMIN" || session.data.role === "EDITOR")
+      return true;
+
+    // Customer should able to read order history
     return { user: { id: { equals: session.itemId } } };
   },
 };

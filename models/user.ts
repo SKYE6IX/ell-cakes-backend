@@ -92,6 +92,8 @@ export const User = list({
       },
     }),
     delivaryAddress: relationship({ ref: "DelivaryAddress.user", many: true }),
+    cart: relationship({ ref: "Cart.user" }),
+    orders: relationship({ ref: "Order.user", many: true }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

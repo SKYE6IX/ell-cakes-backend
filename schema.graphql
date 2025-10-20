@@ -20,6 +20,9 @@ type User {
   firstOrderDiscountEligible: Boolean
   delivaryAddress(where: DelivaryAddressWhereInput! = {}, orderBy: [DelivaryAddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DelivaryAddressWhereUniqueInput): [DelivaryAddress!]
   delivaryAddressCount(where: DelivaryAddressWhereInput! = {}): Int
+  cart: Cart
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
+  ordersCount(where: OrderWhereInput! = {}): Int
   createdAt: DateTime
   lastLogin: DateTime
 }
@@ -34,6 +37,7 @@ input UserWhereUniqueInput {
   id: ID
   email: String
   phoneNumber: String
+  cart: CartWhereUniqueInput
 }
 
 input UserWhereInput {
@@ -55,6 +59,8 @@ input UserWhereInput {
   passwordResetRedeemedAt: DateTimeNullableFilter
   firstOrderDiscountEligible: BooleanFilter
   delivaryAddress: DelivaryAddressManyRelationFilter
+  cart: CartWhereInput
+  orders: OrderManyRelationFilter
   createdAt: DateTimeNullableFilter
   lastLogin: DateTimeNullableFilter
 }
@@ -130,6 +136,12 @@ input DelivaryAddressManyRelationFilter {
   none: DelivaryAddressWhereInput
 }
 
+input OrderManyRelationFilter {
+  every: OrderWhereInput
+  some: OrderWhereInput
+  none: OrderWhereInput
+}
+
 input UserOrderByInput {
   id: OrderDirection
   firstName: OrderDirection
@@ -168,6 +180,8 @@ input UserUpdateInput {
   passwordResetRedeemedAt: DateTime
   firstOrderDiscountEligible: Boolean
   delivaryAddress: DelivaryAddressRelateToManyForUpdateInput
+  cart: CartRelateToOneForUpdateInput
+  orders: OrderRelateToManyForUpdateInput
   createdAt: DateTime
   lastLogin: DateTime
 }
@@ -177,6 +191,19 @@ input DelivaryAddressRelateToManyForUpdateInput {
   set: [DelivaryAddressWhereUniqueInput!]
   create: [DelivaryAddressCreateInput!]
   connect: [DelivaryAddressWhereUniqueInput!]
+}
+
+input CartRelateToOneForUpdateInput {
+  create: CartCreateInput
+  connect: CartWhereUniqueInput
+  disconnect: Boolean
+}
+
+input OrderRelateToManyForUpdateInput {
+  disconnect: [OrderWhereUniqueInput!]
+  set: [OrderWhereUniqueInput!]
+  create: [OrderCreateInput!]
+  connect: [OrderWhereUniqueInput!]
 }
 
 input UserUpdateArgs {
@@ -200,6 +227,8 @@ input UserCreateInput {
   passwordResetRedeemedAt: DateTime
   firstOrderDiscountEligible: Boolean
   delivaryAddress: DelivaryAddressRelateToManyForCreateInput
+  cart: CartRelateToOneForCreateInput
+  orders: OrderRelateToManyForCreateInput
   createdAt: DateTime
   lastLogin: DateTime
 }
@@ -207,6 +236,16 @@ input UserCreateInput {
 input DelivaryAddressRelateToManyForCreateInput {
   create: [DelivaryAddressCreateInput!]
   connect: [DelivaryAddressWhereUniqueInput!]
+}
+
+input CartRelateToOneForCreateInput {
+  create: CartCreateInput
+  connect: CartWhereUniqueInput
+}
+
+input OrderRelateToManyForCreateInput {
+  create: [OrderCreateInput!]
+  connect: [OrderWhereUniqueInput!]
 }
 
 type DelivaryAddress {
@@ -1210,6 +1249,359 @@ input CustomizationOptionConstraintCreateInput {
   updatedAt: DateTime
 }
 
+type Cart {
+  id: ID!
+  user: User
+  cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
+  cartItemsCount(where: CartItemWhereInput! = {}): Int
+  subTotalAmount: Decimal
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CartWhereUniqueInput {
+  id: ID
+  user: UserWhereUniqueInput
+}
+
+input CartWhereInput {
+  AND: [CartWhereInput!]
+  OR: [CartWhereInput!]
+  NOT: [CartWhereInput!]
+  id: IDFilter
+  user: UserWhereInput
+  cartItems: CartItemManyRelationFilter
+  subTotalAmount: DecimalNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CartItemManyRelationFilter {
+  every: CartItemWhereInput
+  some: CartItemWhereInput
+  none: CartItemWhereInput
+}
+
+input CartOrderByInput {
+  id: OrderDirection
+  subTotalAmount: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CartUpdateInput {
+  user: UserRelateToOneForUpdateInput
+  cartItems: CartItemRelateToManyForUpdateInput
+  subTotalAmount: Decimal
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CartItemRelateToManyForUpdateInput {
+  disconnect: [CartItemWhereUniqueInput!]
+  set: [CartItemWhereUniqueInput!]
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
+input CartUpdateArgs {
+  where: CartWhereUniqueInput!
+  data: CartUpdateInput!
+}
+
+input CartCreateInput {
+  user: UserRelateToOneForCreateInput
+  cartItems: CartItemRelateToManyForCreateInput
+  subTotalAmount: Decimal
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CartItemRelateToManyForCreateInput {
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
+type CartItem {
+  id: ID!
+  cart: Cart
+  product: Product
+  variant: ProductVariant
+  topping: Topping
+  quantity: Int
+  unitPrice: Decimal
+  totalPrice: Decimal
+  productSnapShot: JSON
+  variantSnapShot: JSON
+  customizationSnapShot: JSON
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input CartItemWhereUniqueInput {
+  id: ID
+}
+
+input CartItemWhereInput {
+  AND: [CartItemWhereInput!]
+  OR: [CartItemWhereInput!]
+  NOT: [CartItemWhereInput!]
+  id: IDFilter
+  cart: CartWhereInput
+  product: ProductWhereInput
+  variant: ProductVariantWhereInput
+  topping: ToppingWhereInput
+  quantity: IntNullableFilter
+  unitPrice: DecimalNullableFilter
+  totalPrice: DecimalNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input CartItemOrderByInput {
+  id: OrderDirection
+  quantity: OrderDirection
+  unitPrice: OrderDirection
+  totalPrice: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input CartItemUpdateInput {
+  cart: CartRelateToOneForUpdateInput
+  product: ProductRelateToOneForUpdateInput
+  variant: ProductVariantRelateToOneForUpdateInput
+  topping: ToppingRelateToOneForUpdateInput
+  quantity: Int
+  unitPrice: Decimal
+  totalPrice: Decimal
+  productSnapShot: JSON
+  variantSnapShot: JSON
+  customizationSnapShot: JSON
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductVariantRelateToOneForUpdateInput {
+  create: ProductVariantCreateInput
+  connect: ProductVariantWhereUniqueInput
+  disconnect: Boolean
+}
+
+input CartItemUpdateArgs {
+  where: CartItemWhereUniqueInput!
+  data: CartItemUpdateInput!
+}
+
+input CartItemCreateInput {
+  cart: CartRelateToOneForCreateInput
+  product: ProductRelateToOneForCreateInput
+  variant: ProductVariantRelateToOneForCreateInput
+  topping: ToppingRelateToOneForCreateInput
+  quantity: Int
+  unitPrice: Decimal
+  totalPrice: Decimal
+  productSnapShot: JSON
+  variantSnapShot: JSON
+  customizationSnapShot: JSON
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductVariantRelateToOneForCreateInput {
+  create: ProductVariantCreateInput
+  connect: ProductVariantWhereUniqueInput
+}
+
+type Order {
+  id: ID!
+  user: User
+  orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
+  orderItemsCount(where: OrderItemWhereInput! = {}): Int
+  orderNumber: String
+  shippingCost: Decimal
+  subTotalAmount: Decimal
+  totalAmount: Decimal
+  status: String
+  message: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderWhereUniqueInput {
+  id: ID
+  orderNumber: String
+}
+
+input OrderWhereInput {
+  AND: [OrderWhereInput!]
+  OR: [OrderWhereInput!]
+  NOT: [OrderWhereInput!]
+  id: IDFilter
+  user: UserWhereInput
+  orderItems: OrderItemManyRelationFilter
+  orderNumber: StringFilter
+  shippingCost: DecimalNullableFilter
+  subTotalAmount: DecimalNullableFilter
+  totalAmount: DecimalNullableFilter
+  status: StringNullableFilter
+  message: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input OrderItemManyRelationFilter {
+  every: OrderItemWhereInput
+  some: OrderItemWhereInput
+  none: OrderItemWhereInput
+}
+
+input OrderOrderByInput {
+  id: OrderDirection
+  orderNumber: OrderDirection
+  shippingCost: OrderDirection
+  subTotalAmount: OrderDirection
+  totalAmount: OrderDirection
+  status: OrderDirection
+  message: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input OrderUpdateInput {
+  user: UserRelateToOneForUpdateInput
+  orderItems: OrderItemRelateToManyForUpdateInput
+  orderNumber: String
+  shippingCost: Decimal
+  subTotalAmount: Decimal
+  totalAmount: Decimal
+  status: String
+  message: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderItemRelateToManyForUpdateInput {
+  disconnect: [OrderItemWhereUniqueInput!]
+  set: [OrderItemWhereUniqueInput!]
+  create: [OrderItemCreateInput!]
+  connect: [OrderItemWhereUniqueInput!]
+}
+
+input OrderUpdateArgs {
+  where: OrderWhereUniqueInput!
+  data: OrderUpdateInput!
+}
+
+input OrderCreateInput {
+  user: UserRelateToOneForCreateInput
+  orderItems: OrderItemRelateToManyForCreateInput
+  orderNumber: String
+  shippingCost: Decimal
+  subTotalAmount: Decimal
+  totalAmount: Decimal
+  status: String
+  message: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderItemRelateToManyForCreateInput {
+  create: [OrderItemCreateInput!]
+  connect: [OrderItemWhereUniqueInput!]
+}
+
+type OrderItem {
+  id: ID!
+  order: Order
+  product: Product
+  variant: ProductVariant
+  topping: Topping
+  quantity: Int
+  unitPrice: Decimal
+  totalPrice: Decimal
+  productSnapShot: JSON
+  variantSnapShot: JSON
+  customizationSnapShot: JSON
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderItemWhereUniqueInput {
+  id: ID
+}
+
+input OrderItemWhereInput {
+  AND: [OrderItemWhereInput!]
+  OR: [OrderItemWhereInput!]
+  NOT: [OrderItemWhereInput!]
+  id: IDFilter
+  order: OrderWhereInput
+  product: ProductWhereInput
+  variant: ProductVariantWhereInput
+  topping: ToppingWhereInput
+  quantity: IntNullableFilter
+  unitPrice: DecimalNullableFilter
+  totalPrice: DecimalNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input OrderItemOrderByInput {
+  id: OrderDirection
+  quantity: OrderDirection
+  unitPrice: OrderDirection
+  totalPrice: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input OrderItemUpdateInput {
+  order: OrderRelateToOneForUpdateInput
+  product: ProductRelateToOneForUpdateInput
+  variant: ProductVariantRelateToOneForUpdateInput
+  topping: ToppingRelateToOneForUpdateInput
+  quantity: Int
+  unitPrice: Decimal
+  totalPrice: Decimal
+  productSnapShot: JSON
+  variantSnapShot: JSON
+  customizationSnapShot: JSON
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderRelateToOneForUpdateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+  disconnect: Boolean
+}
+
+input OrderItemUpdateArgs {
+  where: OrderItemWhereUniqueInput!
+  data: OrderItemUpdateInput!
+}
+
+input OrderItemCreateInput {
+  order: OrderRelateToOneForCreateInput
+  product: ProductRelateToOneForCreateInput
+  variant: ProductVariantRelateToOneForCreateInput
+  topping: ToppingRelateToOneForCreateInput
+  quantity: Int
+  unitPrice: Decimal
+  totalPrice: Decimal
+  productSnapShot: JSON
+  variantSnapShot: JSON
+  customizationSnapShot: JSON
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderRelateToOneForCreateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -1288,6 +1680,30 @@ type Mutation {
   updateCustomizationOptionConstraints(data: [CustomizationOptionConstraintUpdateArgs!]!): [CustomizationOptionConstraint]
   deleteCustomizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!): CustomizationOptionConstraint
   deleteCustomizationOptionConstraints(where: [CustomizationOptionConstraintWhereUniqueInput!]!): [CustomizationOptionConstraint]
+  createCart(data: CartCreateInput!): Cart
+  createCarts(data: [CartCreateInput!]!): [Cart]
+  updateCart(where: CartWhereUniqueInput!, data: CartUpdateInput!): Cart
+  updateCarts(data: [CartUpdateArgs!]!): [Cart]
+  deleteCart(where: CartWhereUniqueInput!): Cart
+  deleteCarts(where: [CartWhereUniqueInput!]!): [Cart]
+  createCartItem(data: CartItemCreateInput!): CartItem
+  createCartItems(data: [CartItemCreateInput!]!): [CartItem]
+  updateCartItem(where: CartItemWhereUniqueInput!, data: CartItemUpdateInput!): CartItem
+  updateCartItems(data: [CartItemUpdateArgs!]!): [CartItem]
+  deleteCartItem(where: CartItemWhereUniqueInput!): CartItem
+  deleteCartItems(where: [CartItemWhereUniqueInput!]!): [CartItem]
+  createOrder(data: OrderCreateInput!): Order
+  createOrders(data: [OrderCreateInput!]!): [Order]
+  updateOrder(where: OrderWhereUniqueInput!, data: OrderUpdateInput!): Order
+  updateOrders(data: [OrderUpdateArgs!]!): [Order]
+  deleteOrder(where: OrderWhereUniqueInput!): Order
+  deleteOrders(where: [OrderWhereUniqueInput!]!): [Order]
+  createOrderItem(data: OrderItemCreateInput!): OrderItem
+  createOrderItems(data: [OrderItemCreateInput!]!): [OrderItem]
+  updateOrderItem(where: OrderItemWhereUniqueInput!, data: OrderItemUpdateInput!): OrderItem
+  updateOrderItems(data: [OrderItemUpdateArgs!]!): [OrderItem]
+  deleteOrderItem(where: OrderItemWhereUniqueInput!): OrderItem
+  deleteOrderItems(where: [OrderItemWhereUniqueInput!]!): [OrderItem]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -1363,6 +1779,18 @@ type Query {
   customizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!): CustomizationOptionConstraint
   customizationOptionConstraints(where: CustomizationOptionConstraintWhereInput! = {}, orderBy: [CustomizationOptionConstraintOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionConstraintWhereUniqueInput): [CustomizationOptionConstraint!]
   customizationOptionConstraintsCount(where: CustomizationOptionConstraintWhereInput! = {}): Int
+  cart(where: CartWhereUniqueInput!): Cart
+  carts(where: CartWhereInput! = {}, orderBy: [CartOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartWhereUniqueInput): [Cart!]
+  cartsCount(where: CartWhereInput! = {}): Int
+  cartItem(where: CartItemWhereUniqueInput!): CartItem
+  cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
+  cartItemsCount(where: CartItemWhereInput! = {}): Int
+  order(where: OrderWhereUniqueInput!): Order
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
+  ordersCount(where: OrderWhereInput! = {}): Int
+  orderItem(where: OrderItemWhereUniqueInput!): OrderItem
+  orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
+  orderItemsCount(where: OrderItemWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult

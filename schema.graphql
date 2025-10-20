@@ -860,8 +860,8 @@ input CustomizationOptionRelateToManyForCreateInput {
 
 type CustomizationOption {
   id: ID!
+  productCustomization: ProductCustomization
   name: String
-  slug: String
   customValues(where: CustomizationOptionValueWhereInput! = {}, orderBy: [CustomizationOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionValueWhereUniqueInput): [CustomizationOptionValue!]
   customValuesCount(where: CustomizationOptionValueWhereInput! = {}): Int
   createdAt: DateTime
@@ -871,7 +871,6 @@ type CustomizationOption {
 input CustomizationOptionWhereUniqueInput {
   id: ID
   name: String
-  slug: String
 }
 
 input CustomizationOptionWhereInput {
@@ -879,8 +878,8 @@ input CustomizationOptionWhereInput {
   OR: [CustomizationOptionWhereInput!]
   NOT: [CustomizationOptionWhereInput!]
   id: IDFilter
+  productCustomization: ProductCustomizationWhereInput
   name: StringNullableFilter
-  slug: StringFilter
   customValues: CustomizationOptionValueManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -895,14 +894,13 @@ input CustomizationOptionValueManyRelationFilter {
 input CustomizationOptionOrderByInput {
   id: OrderDirection
   name: OrderDirection
-  slug: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input CustomizationOptionUpdateInput {
+  productCustomization: ProductCustomizationRelateToOneForUpdateInput
   name: String
-  slug: String
   customValues: CustomizationOptionValueRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -921,8 +919,8 @@ input CustomizationOptionUpdateArgs {
 }
 
 input CustomizationOptionCreateInput {
+  productCustomization: ProductCustomizationRelateToOneForCreateInput
   name: String
-  slug: String
   customValues: CustomizationOptionValueRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime

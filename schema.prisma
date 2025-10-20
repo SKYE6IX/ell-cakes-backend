@@ -125,19 +125,21 @@ model Category {
 model ProductCustomization {
   id            String                @id @default(uuid()) @postgresql.Uuid
   product       Product?              @relation("Product_customization")
-  customOptions CustomizationOption[] @relation("ProductCustomization_customOptions")
+  customOptions CustomizationOption[] @relation("CustomizationOption_productCustomization")
   createdAt     DateTime?             @default(now())
   updatedAt     DateTime?
 }
 
 model CustomizationOption {
-  id                                      String                     @id @default(uuid()) @postgresql.Uuid
-  name                                    String?                    @unique
-  slug                                    String                     @unique @default("")
-  customValues                            CustomizationOptionValue[] @relation("CustomizationOptionValue_option")
-  createdAt                               DateTime?                  @default(now())
-  updatedAt                               DateTime?
-  from_ProductCustomization_customOptions ProductCustomization[]     @relation("ProductCustomization_customOptions")
+  id                     String                     @id @default(uuid()) @postgresql.Uuid
+  productCustomization   ProductCustomization?      @relation("CustomizationOption_productCustomization", fields: [productCustomizationId], references: [id])
+  productCustomizationId String?                    @map("productCustomization") @postgresql.Uuid
+  name                   String?                    @unique
+  customValues           CustomizationOptionValue[] @relation("CustomizationOptionValue_option")
+  createdAt              DateTime?                  @default(now())
+  updatedAt              DateTime?
+
+  @@index([productCustomizationId])
 }
 
 model CustomizationOptionValue {

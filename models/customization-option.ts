@@ -13,6 +13,9 @@ export const CustomizationOption = list({
     },
   },
   fields: {
+    productCustomization: relationship({
+      ref: "ProductCustomization.customOptions",
+    }),
     name: select({
       options: [
         { label: "Color", value: "COLOR" },
@@ -24,25 +27,6 @@ export const CustomizationOption = list({
       defaultValue: undefined,
       label: "Product Customization",
       isIndexed: "unique",
-    }),
-    slug: text({
-      isIndexed: "unique",
-      hooks: {
-        resolveInput: ({ resolvedData, operation, fieldKey }) => {
-          if (operation === "create") {
-            const { name } = resolvedData;
-            resolvedData.slug = name
-              .toLowerCase()
-              .replace(/\s+/g, "-")
-              .replace(/['"]/g, "");
-            return resolvedData[fieldKey];
-          }
-          return resolvedData[fieldKey];
-        },
-      },
-      ui: {
-        createView: { fieldMode: "hidden" },
-      },
     }),
     customValues: relationship({
       ref: "CustomizationOptionValue.option",

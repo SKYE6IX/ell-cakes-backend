@@ -15,7 +15,7 @@ export const ProductCustomization = list({
   fields: {
     product: relationship({ ref: "Product.customization", many: false }),
     customOptions: relationship({
-      ref: "CustomizationOption",
+      ref: "CustomizationOption.productCustomization",
       many: true,
       ui: {
         displayMode: "cards",

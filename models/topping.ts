@@ -51,4 +51,17 @@ export const Topping = list({
       },
     }),
   },
+  hooks: {
+    beforeOperation: {
+      delete: async ({ context, item }) => {
+        const topping = await context.query.Topping.findOne({
+          where: { id: item.id.toString() },
+          query: "id options { id }",
+        });
+        await context.query.ToppingOption.deleteMany({
+          where: topping.options.map((v: { id: any }) => ({ id: v.id })),
+        });
+      },
+    },
+  },
 });

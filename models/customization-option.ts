@@ -16,6 +16,7 @@ export const CustomizationOption = list({
     name: select({
       options: [
         { label: "Color", value: "COLOR" },
+        { label: "Candle", value: "CANDLE" },
         { label: "Shape", value: "SHAPE" },
         { label: "Inscription", value: "INSCRIPTION" },
         { label: "Photos", value: "PHOTOS" },
@@ -48,12 +49,12 @@ export const CustomizationOption = list({
       many: true,
       ui: {
         displayMode: "cards",
-        cardFields: ["name", "extraPrice", "optionConstraint"],
+        cardFields: ["value", "extraPrice", "optionConstraint"],
         inlineCreate: {
-          fields: ["name", "extraPrice", "optionConstraint"],
+          fields: ["value", "extraPrice", "optionConstraint"],
         },
         inlineEdit: {
-          fields: ["name", "extraPrice", "optionConstraint"],
+          fields: ["value", "extraPrice", "optionConstraint"],
         },
         linkToItem: true,
       },

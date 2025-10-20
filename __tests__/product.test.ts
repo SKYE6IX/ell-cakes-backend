@@ -8,7 +8,6 @@ import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
 import path from "path";
-import { Readable } from "stream";
 
 jest.mock("iuliia", () => ({
   translate: jest.fn((text) => text),
@@ -37,7 +36,6 @@ afterAll(async () => {
 beforeEach(async () => {
   await resetDatabase(container.getConnectionUri(), prismaSchemaPath);
 });
-
 describe("Product Model", () => {
   test("EDITOR can manage product", async () => {
     const editor = {
@@ -68,14 +66,13 @@ describe("Product Model", () => {
           images: { connect: { id: productImage.id } },
           name: "Fluffy Cake",
           description: "The best cake to ever grace this earth",
-          price: "333.00",
+          basePrice: "333.00",
           ingredients: "made with everything fluffy",
           stockQuantity: 10,
           lifeShelf: 3,
         },
         query: "id name lifeShelf stockQuantity",
       });
-
     expect(newProduct.name).toEqual("Fluffy Cake");
     expect(newProduct.lifeShelf).toBeGreaterThan(2);
     expect(newProduct.stockQuantity).toBeLessThan(20);
@@ -86,16 +83,15 @@ describe("Product Model", () => {
       .query.Product.updateOne({
         where: { id: newProduct.id },
         data: {
-          price: "150.00",
+          basePrice: "150.00",
           stockQuantity: 5,
         },
-        query: "id price stockQuantity",
+        query: "id basePrice stockQuantity",
       });
-
-    expect(updateProduct.price).toEqual("150.00");
+    expect(updateProduct.basePrice).toEqual("150.00");
     expect(updateProduct.stockQuantity).toBeLessThan(10);
 
-    // Updating Product
+    // Delete Product
     const deleteProduct = await context
       .withSession(editor)
       .query.Product.deleteOne({
@@ -124,7 +120,6 @@ describe("Product Model", () => {
         altText: "test",
       },
     });
-
     const category = await context
       .withSession(editor)
       .query.Category.createOne({
@@ -137,7 +132,7 @@ describe("Product Model", () => {
         images: { connect: { id: productImage.id } },
         name: "Fluffy Cake",
         description: "The best cake to ever grace this earth",
-        price: "333.00",
+        basePrice: "333.00",
         ingredients: "made with everything fluffy",
         stockQuantity: 10,
         lifeShelf: 3,
@@ -147,10 +142,10 @@ describe("Product Model", () => {
 
     const customerQuery = await context
       .withSession(customer)
-      .query.Product.findMany({ query: "id name price stockQuantity" });
+      .query.Product.findMany({ query: "id name basePrice stockQuantity" });
 
     expect(customerQuery[0].name).toEqual("Fluffy Cake");
-    expect(customerQuery[0].price).toEqual("333.00");
+    expect(customerQuery[0].basePrice).toEqual("333.00");
     expect(customerQuery[0].stockQuantity).toBeGreaterThan(5);
   });
 });

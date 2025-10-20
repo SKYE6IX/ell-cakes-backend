@@ -6,8 +6,8 @@
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build",
-    "test": "jest",
-    "seed-data": "keystone dev --seed-data"
+    "seed-data": "keystone dev --seed-data",
+    "test": "jest"
   },
   "dependencies": {
     "@graphql-tools/schema": "^10.0.25",
@@ -16,11 +16,13 @@
     "@keystone-6/fields-document": "^9.0.0",
     "dotenv": "^17.2.3",
     "iuliia": "^0.8.2",
+    "mime": "^4.1.0",
     "nodemailer": "^7.0.7",
     "typescript": "^5.5.0"
   },
   "devDependencies": {
     "@testcontainers/postgresql": "^11.7.1",
+    "@types/graphql-upload": "^17.0.0",
     "@types/jest": "^30.0.0",
     "@types/nodemailer": "^7.0.2",
     "jest": "^30.2.0",

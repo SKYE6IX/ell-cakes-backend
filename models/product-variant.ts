@@ -27,13 +27,9 @@ export const ProductVariant = list({
     }),
     pieces: integer({ defaultValue: undefined }),
     weight: decimal({
-      precision: 3,
+      precision: 4,
       scale: 1,
       defaultValue: undefined,
-    }),
-    stockQuantity: integer({
-      defaultValue: undefined,
-      validation: { isRequired: true },
     }),
     isAvailable: checkbox({ defaultValue: true }),
     createdAt: timestamp({

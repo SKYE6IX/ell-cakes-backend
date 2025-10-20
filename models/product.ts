@@ -41,7 +41,7 @@ export const Product = list({
     name: text({ validation: { isRequired: true } }),
     slug: text({
       hooks: {
-        resolveInput: ({ resolvedData, operation, fieldKey }) => {
+        resolveInput: ({ resolvedData, fieldKey, operation }) => {
           if (operation === "create") {
             const { name } = resolvedData;
             resolvedData.slug = getTransliterationSlug(name);
@@ -51,7 +51,6 @@ export const Product = list({
         },
       },
       isIndexed: "unique",
-      validation: { isRequired: true },
       ui: {
         createView: { fieldMode: "hidden" },
       },
@@ -69,21 +68,18 @@ export const Product = list({
     }),
     basePieces: integer({ defaultValue: undefined }),
     carbonhydrate: decimal({
-      precision: 4,
-      scale: 1,
+      precision: 5,
+      scale: 2,
     }),
     calories: decimal({
-      precision: 4,
-      scale: 1,
+      precision: 5,
+      scale: 2,
     }),
     protein: decimal({
-      precision: 4,
-      scale: 1,
+      precision: 5,
+      scale: 2,
     }),
-    fat: decimal({
-      precision: 4,
-      scale: 1,
-    }),
+    fat: decimal({ precision: 5, scale: 2 }),
     lifeShelf: integer({ validation: { isRequired: true } }),
     ingredients: text({ validation: { isRequired: true } }),
     stockQuantity: integer({ validation: { isRequired: true } }),
@@ -104,7 +100,7 @@ export const Product = list({
     isCategoryHero: checkbox({ defaultValue: false }),
     categoryHeroText: text({ defaultValue: undefined }),
     images: relationship({
-      ref: "ProductImage",
+      ref: "ProductImage.product",
       many: true,
       ui: {
         displayMode: "cards",
@@ -135,18 +131,12 @@ export const Product = list({
       many: true,
       ui: {
         displayMode: "cards",
-        cardFields: [
-          "weight",
-          "pieces",
-          "price",
-          "stockQuantity",
-          "isAvailable",
-        ],
+        cardFields: ["weight", "pieces", "price", "isAvailable"],
         inlineCreate: {
-          fields: ["weight", "pieces", "price", "stockQuantity", "isAvailable"],
+          fields: ["weight", "pieces", "price", "isAvailable"],
         },
         inlineEdit: {
-          fields: ["weight", "pieces", "price", "stockQuantity", "isAvailable"],
+          fields: ["weight", "pieces", "price", "isAvailable"],
         },
         linkToItem: true,
       },
@@ -183,6 +173,16 @@ export const Product = list({
     }),
   },
   hooks: {
+    resolveInput: {
+      create: ({ resolvedData }) => {
+        const { name } = resolvedData;
+        const slug = getTransliterationSlug(name);
+        return {
+          ...resolvedData,
+          slug: slug,
+        };
+      },
+    },
     beforeOperation: {
       delete: async ({ context, item }) => {
         const product = await context.query.Product.findOne({

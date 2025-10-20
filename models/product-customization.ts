@@ -41,9 +41,6 @@ export const ProductCustomization = list({
       },
     }),
   },
-  ui: {
-    isHidden: true,
-  },
   hooks: {
     beforeOperation: {
       delete: async ({ context, item }) => {
@@ -59,5 +56,8 @@ export const ProductCustomization = list({
         });
       },
     },
+  },
+  ui: {
+    isHidden: true,
   },
 });

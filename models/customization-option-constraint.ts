@@ -27,13 +27,14 @@ export const CustomizationOptionConstraint = list({
       defaultValue: undefined,
       label: "Option Constraint",
     }),
+    // Currently we only have weight contraint that depend on a value of shape
     minValue: decimal({
-      precision: 3,
+      precision: 4,
       scale: 1,
       defaultValue: undefined,
     }),
     maxValue: decimal({
-      precision: 3,
+      precision: 4,
       scale: 1,
       defaultValue: undefined,
     }),

@@ -1,5 +1,5 @@
 import { list } from "@keystone-6/core";
-import { text, image } from "@keystone-6/core/fields";
+import { text, image, relationship } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
@@ -13,6 +13,7 @@ export const ProductImage = list({
     },
   },
   fields: {
+    product: relationship({ ref: "Product.images" }),
     image: image({ storage: "yc_s3_image" }),
     altText: text(),
   },

@@ -4,7 +4,7 @@ dotenv.config({ override: true });
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
-import { insertSeedData } from "./seed-data";
+import { insertSeedData } from "./script";
 const {
   YC_S3_KEY_ID,
   YC_S3_SECRET_KEY,

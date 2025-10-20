@@ -54,10 +54,10 @@ model Product {
   basePrice        Decimal               @postgresql.Decimal(10, 2)
   baseWeight       Decimal?              @postgresql.Decimal(4, 1)
   basePieces       Int?
-  carbonhydrate    Decimal?              @postgresql.Decimal(4, 1)
-  calories         Decimal?              @postgresql.Decimal(4, 1)
-  protein          Decimal?              @postgresql.Decimal(4, 1)
-  fat              Decimal?              @postgresql.Decimal(4, 1)
+  carbonhydrate    Decimal?              @postgresql.Decimal(5, 2)
+  calories         Decimal?              @postgresql.Decimal(5, 2)
+  protein          Decimal?              @postgresql.Decimal(5, 2)
+  fat              Decimal?              @postgresql.Decimal(5, 2)
   lifeShelf        Int
   ingredients      String                @default("")
   stockQuantity    Int
@@ -68,7 +68,7 @@ model Product {
   homeHeroText     String                @default("")
   isCategoryHero   Boolean               @default(false)
   categoryHeroText String                @default("")
-  images           ProductImage[]        @relation("Product_images")
+  images           ProductImage[]        @relation("ProductImage_product")
   video_filesize   Int?
   video_filename   String?
   variants         ProductVariant[]      @relation("ProductVariant_product")
@@ -83,27 +83,29 @@ model Product {
 }
 
 model ProductImage {
-  id                  String    @id @default(uuid()) @postgresql.Uuid
-  image_id            String?
-  image_filesize      Int?
-  image_width         Int?
-  image_height        Int?
-  image_extension     String?
-  altText             String    @default("")
-  from_Product_images Product[] @relation("Product_images")
+  id              String   @id @default(uuid()) @postgresql.Uuid
+  product         Product? @relation("ProductImage_product", fields: [productId], references: [id])
+  productId       String?  @map("product") @postgresql.Uuid
+  image_id        String?
+  image_filesize  Int?
+  image_width     Int?
+  image_height    Int?
+  image_extension String?
+  altText         String   @default("")
+
+  @@index([productId])
 }
 
 model ProductVariant {
-  id            String    @id @default(uuid()) @postgresql.Uuid
-  product       Product?  @relation("ProductVariant_product", fields: [productId], references: [id])
-  productId     String?   @map("product") @postgresql.Uuid
-  price         Decimal   @postgresql.Decimal(10, 2)
-  pieces        Int?
-  weight        Decimal?  @postgresql.Decimal(3, 1)
-  stockQuantity Int
-  isAvailable   Boolean   @default(true)
-  createdAt     DateTime? @default(now())
-  updatedAt     DateTime?
+  id          String    @id @default(uuid()) @postgresql.Uuid
+  product     Product?  @relation("ProductVariant_product", fields: [productId], references: [id])
+  productId   String?   @map("product") @postgresql.Uuid
+  price       Decimal   @postgresql.Decimal(10, 2)
+  pieces      Int?
+  weight      Decimal?  @postgresql.Decimal(4, 1)
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime?
 
   @@index([productId])
 }
@@ -142,7 +144,7 @@ model CustomizationOptionValue {
   id                 String                         @id @default(uuid()) @postgresql.Uuid
   option             CustomizationOption?           @relation("CustomizationOptionValue_option", fields: [optionId], references: [id])
   optionId           String?                        @map("option") @postgresql.Uuid
-  name               String                         @default("")
+  value              String                         @default("")
   extraPrice         Decimal?                       @postgresql.Decimal(10, 2)
   optionConstraint   CustomizationOptionConstraint? @relation("CustomizationOptionValue_optionConstraint", fields: [optionConstraintId], references: [id])
   optionConstraintId String?                        @map("optionConstraint") @postgresql.Uuid
@@ -167,9 +169,9 @@ model ToppingOption {
   id         String    @id @default(uuid()) @postgresql.Uuid
   topping    Topping?  @relation("ToppingOption_topping", fields: [toppingId], references: [id])
   toppingId  String?   @map("topping") @postgresql.Uuid
-  weight     Decimal?  @postgresql.Decimal(3, 1)
+  weight     Decimal?  @postgresql.Decimal(5, 3)
   pieces     Int?
-  extraPrice Decimal   @postgresql.Decimal(10, 2)
+  extraPrice Decimal   @postgresql.Decimal(18, 4)
   createdAt  DateTime? @default(now())
   updatedAt  DateTime?
 
@@ -180,8 +182,8 @@ model CustomizationOptionConstraint {
   id           String                     @id @default(uuid()) @postgresql.Uuid
   optionValues CustomizationOptionValue[] @relation("CustomizationOptionValue_optionConstraint")
   key          String?
-  minValue     Decimal?                   @postgresql.Decimal(3, 1)
-  maxValue     Decimal?                   @postgresql.Decimal(3, 1)
+  minValue     Decimal?                   @postgresql.Decimal(4, 1)
+  maxValue     Decimal?                   @postgresql.Decimal(4, 1)
   createdAt    DateTime?                  @default(now())
   updatedAt    DateTime?
 }

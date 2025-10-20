@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">81.48% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/24</span>
+                <span class='fraction'>22/27</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>7/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">81.48% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/24</span>
+                <span class='fraction'>22/27</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -275,7 +275,8 @@
 <a name='L210'></a><a href='#L210'>210</a>
 <a name='L211'></a><a href='#L211'>211</a>
 <a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -393,9 +394,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -454,6 +452,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -530,7 +532,7 @@ export const Product = list({
     name: text({ validation: { isRequired: true } }),
     slug: text({
       hooks: {
-        resolveInput: ({ resolvedData, operation, fieldKey }) =&gt; {
+        resolveInput: ({ resolvedData, fieldKey, operation }) =&gt; {
           if (operation === "create") {
             const { name } = resolvedData;
             resolvedData.slug = getTransliterationSlug(name);
@@ -545,33 +547,30 @@ export const Product = list({
       },
     }),
     description: text({ validation: { isRequired: true } }),
-    price: decimal({
+    basePrice: decimal({
       precision: 10,
       scale: 2,
       validation: { isRequired: true },
     }),
-    weight: decimal({
+    baseWeight: decimal({
       precision: 4,
       scale: 1,
       defaultValue: undefined,
     }),
-    pieces: integer({ defaultValue: undefined }),
+    basePieces: integer({ defaultValue: undefined }),
     carbonhydrate: decimal({
-      precision: 4,
-      scale: 1,
+      precision: 5,
+      scale: 2,
     }),
     calories: decimal({
-      precision: 4,
-      scale: 1,
+      precision: 5,
+      scale: 2,
     }),
     protein: decimal({
-      precision: 4,
-      scale: 1,
+      precision: 5,
+      scale: 2,
     }),
-    fat: decimal({
-      precision: 4,
-      scale: 1,
-    }),
+    fat: decimal({ precision: 5, scale: 2 }),
     lifeShelf: integer({ validation: { isRequired: true } }),
     ingredients: text({ validation: { isRequired: true } }),
     stockQuantity: integer({ validation: { isRequired: true } }),
@@ -592,7 +591,7 @@ export const Product = list({
     isCategoryHero: checkbox({ defaultValue: false }),
     categoryHeroText: text({ defaultValue: undefined }),
     images: relationship({
-      ref: "ProductImage",
+      ref: "ProductImage.product",
       many: true,
       ui: {
         displayMode: "cards",
@@ -623,18 +622,12 @@ export const Product = list({
       many: true,
       ui: {
         displayMode: "cards",
-        cardFields: [
-          "weight",
-          "pieces",
-          "price",
-          "stockQuantity",
-          "isAvailable",
-        ],
+        cardFields: ["weight", "pieces", "price", "isAvailable"],
         inlineCreate: {
-          fields: ["weight", "pieces", "price", "stockQuantity", "isAvailable"],
+          fields: ["weight", "pieces", "price", "isAvailable"],
         },
         inlineEdit: {
-          fields: ["weight", "pieces", "price", "stockQuantity", "isAvailable"],
+          fields: ["weight", "pieces", "price", "isAvailable"],
         },
         linkToItem: true,
       },
@@ -671,6 +664,16 @@ export const Product = list({
     }),
   },
   hooks: {
+    resolveInput: {
+      create: ({ resolvedData }) =&gt; {
+        const { name } = resolvedData;
+        const slug = getTransliterationSlug(name);
+        return {
+          ...resolvedData,
+          slug: slug,
+        };
+      },
+    },
     beforeOperation: {
       delete: async ({ context, item }) =&gt; {
         const product = await context.query.Product.findOne({
@@ -706,7 +709,7 @@ export const Product = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-17T07:44:47.981Z
+                at 2025-10-20T07:57:39.799Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

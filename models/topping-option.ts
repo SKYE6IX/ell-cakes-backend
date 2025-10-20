@@ -12,14 +12,12 @@ export const ToppingOption = list({
   fields: {
     topping: relationship({ ref: "Topping.options", many: false }),
     weight: decimal({
-      precision: 3,
-      scale: 1,
+      precision: 5,
+      scale: 3,
       defaultValue: undefined,
     }),
     pieces: integer({ defaultValue: undefined }),
     extraPrice: decimal({
-      precision: 10,
-      scale: 2,
       validation: { isRequired: true },
     }),
     createdAt: timestamp({

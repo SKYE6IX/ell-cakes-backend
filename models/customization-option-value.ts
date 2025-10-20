@@ -22,7 +22,7 @@ export const CustomizationOptionValue = list({
       ref: "CustomizationOption.customValues",
       many: false,
     }),
-    name: text({ defaultValue: undefined }),
+    value: text({ defaultValue: undefined }),
     extraPrice: decimal({
       precision: 10,
       scale: 2,

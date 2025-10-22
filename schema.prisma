@@ -53,7 +53,7 @@ model Product {
   name                   String                @default("")
   slug                   String                @unique @default("")
   description            String                @default("")
-  basePrice              Decimal               @postgresql.Decimal(10, 2)
+  basePrice              Int
   baseWeight             Decimal?              @postgresql.Decimal(4, 1)
   basePieces             Int?
   carbonhydrate          Decimal?              @postgresql.Decimal(5, 2)
@@ -78,9 +78,9 @@ model Product {
   customizationId        String?               @unique @map("customization") @postgresql.Uuid
   topping                Topping?              @relation("Product_topping", fields: [toppingId], references: [id])
   toppingId              String?               @unique @map("topping") @postgresql.Uuid
+  cartItems              CartItem[]            @relation("CartItem_product")
   createdAt              DateTime?             @default(now())
   updatedAt              DateTime?
-  from_CartItem_product  CartItem[]            @relation("CartItem_product")
   from_OrderItem_product OrderItem[]           @relation("OrderItem_product")
 
   @@index([categoryId])
@@ -104,7 +104,7 @@ model ProductVariant {
   id                     String      @id @default(uuid()) @postgresql.Uuid
   product                Product?    @relation("ProductVariant_product", fields: [productId], references: [id])
   productId              String?     @map("product") @postgresql.Uuid
-  price                  Decimal     @postgresql.Decimal(10, 2)
+  price                  Int
   pieces                 Int?
   weight                 Decimal?    @postgresql.Decimal(4, 1)
   isAvailable            Boolean     @default(true)
@@ -153,7 +153,7 @@ model CustomizationOptionValue {
   option             CustomizationOption?           @relation("CustomizationOptionValue_option", fields: [optionId], references: [id])
   optionId           String?                        @map("option") @postgresql.Uuid
   value              String                         @default("")
-  extraPrice         Decimal?                       @postgresql.Decimal(10, 2)
+  extraPrice         Int?
   optionConstraint   CustomizationOptionConstraint? @relation("CustomizationOptionValue_optionConstraint", fields: [optionConstraintId], references: [id])
   optionConstraintId String?                        @map("optionConstraint") @postgresql.Uuid
   createdAt          DateTime?                      @default(now())
@@ -171,18 +171,18 @@ model Topping {
   options                ToppingOption[] @relation("ToppingOption_topping")
   createdAt              DateTime?       @default(now())
   updatedAt              DateTime?
-  from_CartItem_topping  CartItem[]      @relation("CartItem_topping")
   from_OrderItem_topping OrderItem[]     @relation("OrderItem_topping")
 }
 
 model ToppingOption {
-  id         String    @id @default(uuid()) @postgresql.Uuid
-  topping    Topping?  @relation("ToppingOption_topping", fields: [toppingId], references: [id])
-  toppingId  String?   @map("topping") @postgresql.Uuid
-  weight     Decimal?  @postgresql.Decimal(5, 3)
+  id         String     @id @default(uuid()) @postgresql.Uuid
+  topping    Topping?   @relation("ToppingOption_topping", fields: [toppingId], references: [id])
+  toppingId  String?    @map("topping") @postgresql.Uuid
+  cartItems  CartItem[] @relation("CartItem_topping")
+  weight     Decimal?   @postgresql.Decimal(5, 3)
   pieces     Int?
-  extraPrice Decimal   @postgresql.Decimal(18, 4)
-  createdAt  DateTime? @default(now())
+  extraPrice Int
+  createdAt  DateTime?  @default(now())
   updatedAt  DateTime?
 
   @@index([toppingId])
@@ -199,13 +199,13 @@ model CustomizationOptionConstraint {
 }
 
 model Cart {
-  id             String     @id @default(uuid()) @postgresql.Uuid
-  user           User?      @relation("Cart_user", fields: [userId], references: [id])
-  userId         String?    @unique @map("user") @postgresql.Uuid
-  cartItems      CartItem[] @relation("CartItem_cart")
-  subTotalAmount Decimal?   @postgresql.Decimal(10, 2)
-  createdAt      DateTime?  @default(now())
-  updatedAt      DateTime?
+  id        String     @id @default(uuid()) @postgresql.Uuid
+  user      User?      @relation("Cart_user", fields: [userId], references: [id])
+  userId    String?    @unique @map("user") @postgresql.Uuid
+  cartItems CartItem[] @relation("CartItem_cart")
+  subTotal  Int?
+  createdAt DateTime?  @default(now())
+  updatedAt DateTime?
 }
 
 model CartItem {
@@ -216,11 +216,11 @@ model CartItem {
   productId             String?         @map("product") @postgresql.Uuid
   variant               ProductVariant? @relation("CartItem_variant", fields: [variantId], references: [id])
   variantId             String?         @map("variant") @postgresql.Uuid
-  topping               Topping?        @relation("CartItem_topping", fields: [toppingId], references: [id])
+  topping               ToppingOption?  @relation("CartItem_topping", fields: [toppingId], references: [id])
   toppingId             String?         @map("topping") @postgresql.Uuid
   quantity              Int?            @default(1)
-  unitPrice             Decimal?        @postgresql.Decimal(10, 2)
-  totalPrice            Decimal?        @postgresql.Decimal(10, 2)
+  unitPrice             Int?
+  subTotal              Int?
   productSnapShot       Json?
   variantSnapShot       Json?
   customizationSnapShot Json?
@@ -261,8 +261,8 @@ model OrderItem {
   topping               Topping?        @relation("OrderItem_topping", fields: [toppingId], references: [id])
   toppingId             String?         @map("topping") @postgresql.Uuid
   quantity              Int?            @default(1)
-  unitPrice             Decimal?        @postgresql.Decimal(10, 2)
-  totalPrice            Decimal?        @postgresql.Decimal(10, 2)
+  unitPrice             Int?
+  totalPrice            Int?
   productSnapShot       Json?
   variantSnapShot       Json?
   customizationSnapShot Json?

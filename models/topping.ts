@@ -6,7 +6,7 @@ import { getTransliterationSlug } from "../lib/getTransliteration";
 export const Topping = list({
   access: allowAll,
   fields: {
-    product: relationship({ ref: "Product.topping", many: false }),
+    product: relationship({ ref: "Product.topping" }),
     name: text({ isIndexed: "unique", validation: { isRequired: true } }),
     slug: text({
       hooks: {

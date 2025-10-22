@@ -319,7 +319,7 @@ type Product {
   name: String
   slug: String
   description: String
-  basePrice: Decimal
+  basePrice: Int
   baseWeight: Decimal
   basePieces: Int
   carbonhydrate: Decimal
@@ -343,6 +343,8 @@ type Product {
   variantsCount(where: ProductVariantWhereInput! = {}): Int
   customization: ProductCustomization
   topping: Topping
+  cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
+  cartItemsCount(where: CartItemWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -371,7 +373,7 @@ input ProductWhereInput {
   name: StringFilter
   slug: StringFilter
   description: StringFilter
-  basePrice: DecimalFilter
+  basePrice: IntFilter
   baseWeight: DecimalNullableFilter
   basePieces: IntNullableFilter
   carbonhydrate: DecimalNullableFilter
@@ -392,19 +394,20 @@ input ProductWhereInput {
   variants: ProductVariantManyRelationFilter
   customization: ProductCustomizationWhereInput
   topping: ToppingWhereInput
+  cartItems: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
 
-input DecimalFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: DecimalFilter
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
 }
 
 input DecimalNullableFilter {
@@ -427,17 +430,6 @@ input IntNullableFilter {
   gt: Int
   gte: Int
   not: IntNullableFilter
-}
-
-input IntFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntFilter
 }
 
 input StringNullableFilter {
@@ -465,6 +457,12 @@ input ProductVariantManyRelationFilter {
   every: ProductVariantWhereInput
   some: ProductVariantWhereInput
   none: ProductVariantWhereInput
+}
+
+input CartItemManyRelationFilter {
+  every: CartItemWhereInput
+  some: CartItemWhereInput
+  none: CartItemWhereInput
 }
 
 input ProductOrderByInput {
@@ -498,7 +496,7 @@ input ProductUpdateInput {
   name: String
   slug: String
   description: String
-  basePrice: Decimal
+  basePrice: Int
   baseWeight: Decimal
   basePieces: Int
   carbonhydrate: Decimal
@@ -520,6 +518,7 @@ input ProductUpdateInput {
   variants: ProductVariantRelateToManyForUpdateInput
   customization: ProductCustomizationRelateToOneForUpdateInput
   topping: ToppingRelateToOneForUpdateInput
+  cartItems: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -563,6 +562,13 @@ input ToppingRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input CartItemRelateToManyForUpdateInput {
+  disconnect: [CartItemWhereUniqueInput!]
+  set: [CartItemWhereUniqueInput!]
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
 input ProductUpdateArgs {
   where: ProductWhereUniqueInput!
   data: ProductUpdateInput!
@@ -573,7 +579,7 @@ input ProductCreateInput {
   name: String
   slug: String
   description: String
-  basePrice: Decimal
+  basePrice: Int
   baseWeight: Decimal
   basePieces: Int
   carbonhydrate: Decimal
@@ -595,6 +601,7 @@ input ProductCreateInput {
   variants: ProductVariantRelateToManyForCreateInput
   customization: ProductCustomizationRelateToOneForCreateInput
   topping: ToppingRelateToOneForCreateInput
+  cartItems: CartItemRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -622,6 +629,11 @@ input ProductCustomizationRelateToOneForCreateInput {
 input ToppingRelateToOneForCreateInput {
   create: ToppingCreateInput
   connect: ToppingWhereUniqueInput
+}
+
+input CartItemRelateToManyForCreateInput {
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
 }
 
 type ProductImage {
@@ -700,7 +712,7 @@ input ProductRelateToOneForCreateInput {
 type ProductVariant {
   id: ID!
   product: Product
-  price: Decimal
+  price: Int
   pieces: Int
   weight: Decimal
   isAvailable: Boolean
@@ -718,7 +730,7 @@ input ProductVariantWhereInput {
   NOT: [ProductVariantWhereInput!]
   id: IDFilter
   product: ProductWhereInput
-  price: DecimalFilter
+  price: IntFilter
   pieces: IntNullableFilter
   weight: DecimalNullableFilter
   isAvailable: BooleanFilter
@@ -738,7 +750,7 @@ input ProductVariantOrderByInput {
 
 input ProductVariantUpdateInput {
   product: ProductRelateToOneForUpdateInput
-  price: Decimal
+  price: Int
   pieces: Int
   weight: Decimal
   isAvailable: Boolean
@@ -753,7 +765,7 @@ input ProductVariantUpdateArgs {
 
 input ProductVariantCreateInput {
   product: ProductRelateToOneForCreateInput
-  price: Decimal
+  price: Int
   pieces: Int
   weight: Decimal
   isAvailable: Boolean
@@ -974,7 +986,7 @@ type CustomizationOptionValue {
   id: ID!
   option: CustomizationOption
   value: String
-  extraPrice: Decimal
+  extraPrice: Int
   optionConstraint: CustomizationOptionConstraint
   createdAt: DateTime
   updatedAt: DateTime
@@ -991,7 +1003,7 @@ input CustomizationOptionValueWhereInput {
   id: IDFilter
   option: CustomizationOptionWhereInput
   value: StringFilter
-  extraPrice: DecimalNullableFilter
+  extraPrice: IntNullableFilter
   optionConstraint: CustomizationOptionConstraintWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1008,7 +1020,7 @@ input CustomizationOptionValueOrderByInput {
 input CustomizationOptionValueUpdateInput {
   option: CustomizationOptionRelateToOneForUpdateInput
   value: String
-  extraPrice: Decimal
+  extraPrice: Int
   optionConstraint: CustomizationOptionConstraintRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1034,7 +1046,7 @@ input CustomizationOptionValueUpdateArgs {
 input CustomizationOptionValueCreateInput {
   option: CustomizationOptionRelateToOneForCreateInput
   value: String
-  extraPrice: Decimal
+  extraPrice: Int
   optionConstraint: CustomizationOptionConstraintRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1133,9 +1145,11 @@ input ToppingOptionRelateToManyForCreateInput {
 type ToppingOption {
   id: ID!
   topping: Topping
+  cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
+  cartItemsCount(where: CartItemWhereInput! = {}): Int
   weight: Decimal
   pieces: Int
-  extraPrice: Decimal
+  extraPrice: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1150,9 +1164,10 @@ input ToppingOptionWhereInput {
   NOT: [ToppingOptionWhereInput!]
   id: IDFilter
   topping: ToppingWhereInput
+  cartItems: CartItemManyRelationFilter
   weight: DecimalNullableFilter
   pieces: IntNullableFilter
-  extraPrice: DecimalFilter
+  extraPrice: IntFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1168,9 +1183,10 @@ input ToppingOptionOrderByInput {
 
 input ToppingOptionUpdateInput {
   topping: ToppingRelateToOneForUpdateInput
+  cartItems: CartItemRelateToManyForUpdateInput
   weight: Decimal
   pieces: Int
-  extraPrice: Decimal
+  extraPrice: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1182,9 +1198,10 @@ input ToppingOptionUpdateArgs {
 
 input ToppingOptionCreateInput {
   topping: ToppingRelateToOneForCreateInput
+  cartItems: CartItemRelateToManyForCreateInput
   weight: Decimal
   pieces: Int
-  extraPrice: Decimal
+  extraPrice: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1254,7 +1271,7 @@ type Cart {
   user: User
   cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartItemsCount(where: CartItemWhereInput! = {}): Int
-  subTotalAmount: Decimal
+  subTotal: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1271,20 +1288,14 @@ input CartWhereInput {
   id: IDFilter
   user: UserWhereInput
   cartItems: CartItemManyRelationFilter
-  subTotalAmount: DecimalNullableFilter
+  subTotal: IntNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
 
-input CartItemManyRelationFilter {
-  every: CartItemWhereInput
-  some: CartItemWhereInput
-  none: CartItemWhereInput
-}
-
 input CartOrderByInput {
   id: OrderDirection
-  subTotalAmount: OrderDirection
+  subTotal: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -1292,16 +1303,9 @@ input CartOrderByInput {
 input CartUpdateInput {
   user: UserRelateToOneForUpdateInput
   cartItems: CartItemRelateToManyForUpdateInput
-  subTotalAmount: Decimal
+  subTotal: Int
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input CartItemRelateToManyForUpdateInput {
-  disconnect: [CartItemWhereUniqueInput!]
-  set: [CartItemWhereUniqueInput!]
-  create: [CartItemCreateInput!]
-  connect: [CartItemWhereUniqueInput!]
 }
 
 input CartUpdateArgs {
@@ -1312,14 +1316,9 @@ input CartUpdateArgs {
 input CartCreateInput {
   user: UserRelateToOneForCreateInput
   cartItems: CartItemRelateToManyForCreateInput
-  subTotalAmount: Decimal
+  subTotal: Int
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input CartItemRelateToManyForCreateInput {
-  create: [CartItemCreateInput!]
-  connect: [CartItemWhereUniqueInput!]
 }
 
 type CartItem {
@@ -1327,10 +1326,10 @@ type CartItem {
   cart: Cart
   product: Product
   variant: ProductVariant
-  topping: Topping
+  topping: ToppingOption
   quantity: Int
-  unitPrice: Decimal
-  totalPrice: Decimal
+  unitPrice: Int
+  subTotal: Int
   productSnapShot: JSON
   variantSnapShot: JSON
   customizationSnapShot: JSON
@@ -1350,10 +1349,10 @@ input CartItemWhereInput {
   cart: CartWhereInput
   product: ProductWhereInput
   variant: ProductVariantWhereInput
-  topping: ToppingWhereInput
+  topping: ToppingOptionWhereInput
   quantity: IntNullableFilter
-  unitPrice: DecimalNullableFilter
-  totalPrice: DecimalNullableFilter
+  unitPrice: IntNullableFilter
+  subTotal: IntNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1362,7 +1361,7 @@ input CartItemOrderByInput {
   id: OrderDirection
   quantity: OrderDirection
   unitPrice: OrderDirection
-  totalPrice: OrderDirection
+  subTotal: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -1371,10 +1370,10 @@ input CartItemUpdateInput {
   cart: CartRelateToOneForUpdateInput
   product: ProductRelateToOneForUpdateInput
   variant: ProductVariantRelateToOneForUpdateInput
-  topping: ToppingRelateToOneForUpdateInput
+  topping: ToppingOptionRelateToOneForUpdateInput
   quantity: Int
-  unitPrice: Decimal
-  totalPrice: Decimal
+  unitPrice: Int
+  subTotal: Int
   productSnapShot: JSON
   variantSnapShot: JSON
   customizationSnapShot: JSON
@@ -1388,6 +1387,12 @@ input ProductVariantRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input ToppingOptionRelateToOneForUpdateInput {
+  create: ToppingOptionCreateInput
+  connect: ToppingOptionWhereUniqueInput
+  disconnect: Boolean
+}
+
 input CartItemUpdateArgs {
   where: CartItemWhereUniqueInput!
   data: CartItemUpdateInput!
@@ -1397,10 +1402,10 @@ input CartItemCreateInput {
   cart: CartRelateToOneForCreateInput
   product: ProductRelateToOneForCreateInput
   variant: ProductVariantRelateToOneForCreateInput
-  topping: ToppingRelateToOneForCreateInput
+  topping: ToppingOptionRelateToOneForCreateInput
   quantity: Int
-  unitPrice: Decimal
-  totalPrice: Decimal
+  unitPrice: Int
+  subTotal: Int
   productSnapShot: JSON
   variantSnapShot: JSON
   customizationSnapShot: JSON
@@ -1411,6 +1416,11 @@ input CartItemCreateInput {
 input ProductVariantRelateToOneForCreateInput {
   create: ProductVariantCreateInput
   connect: ProductVariantWhereUniqueInput
+}
+
+input ToppingOptionRelateToOneForCreateInput {
+  create: ToppingOptionCreateInput
+  connect: ToppingOptionWhereUniqueInput
 }
 
 type Order {
@@ -1518,8 +1528,8 @@ type OrderItem {
   variant: ProductVariant
   topping: Topping
   quantity: Int
-  unitPrice: Decimal
-  totalPrice: Decimal
+  unitPrice: Int
+  totalPrice: Int
   productSnapShot: JSON
   variantSnapShot: JSON
   customizationSnapShot: JSON
@@ -1541,8 +1551,8 @@ input OrderItemWhereInput {
   variant: ProductVariantWhereInput
   topping: ToppingWhereInput
   quantity: IntNullableFilter
-  unitPrice: DecimalNullableFilter
-  totalPrice: DecimalNullableFilter
+  unitPrice: IntNullableFilter
+  totalPrice: IntNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1562,8 +1572,8 @@ input OrderItemUpdateInput {
   variant: ProductVariantRelateToOneForUpdateInput
   topping: ToppingRelateToOneForUpdateInput
   quantity: Int
-  unitPrice: Decimal
-  totalPrice: Decimal
+  unitPrice: Int
+  totalPrice: Int
   productSnapShot: JSON
   variantSnapShot: JSON
   customizationSnapShot: JSON
@@ -1588,8 +1598,8 @@ input OrderItemCreateInput {
   variant: ProductVariantRelateToOneForCreateInput
   topping: ToppingRelateToOneForCreateInput
   quantity: Int
-  unitPrice: Decimal
-  totalPrice: Decimal
+  unitPrice: Int
+  totalPrice: Int
   productSnapShot: JSON
   variantSnapShot: JSON
   customizationSnapShot: JSON
@@ -1710,6 +1720,8 @@ type Mutation {
   sendUserPasswordResetLink(email: String!): Boolean!
   redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
   verifyEmail(token: String!, email: String!): VerifyEmailResponse
+  addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String): Cart!
+  removeFromCart(cartItemId: String!, cartId: String): Cart!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -1937,4 +1949,9 @@ enum KeystoneAdminUISortDirection {
 type VerifyEmailResponse {
   status: Boolean
   message: String
+}
+
+input CustomizationInput {
+  keyId: String!
+  valueId: String!
 }

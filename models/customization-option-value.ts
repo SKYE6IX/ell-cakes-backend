@@ -2,7 +2,7 @@ import { list } from "@keystone-6/core";
 import {
   text,
   timestamp,
-  decimal,
+  integer,
   relationship,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
@@ -23,11 +23,7 @@ export const CustomizationOptionValue = list({
       many: false,
     }),
     value: text({ defaultValue: undefined }),
-    extraPrice: decimal({
-      precision: 10,
-      scale: 2,
-      defaultValue: undefined,
-    }),
+    extraPrice: integer({ defaultValue: undefined }),
     optionConstraint: relationship({
       ref: "CustomizationOptionConstraint.optionValues",
       many: false,

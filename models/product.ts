@@ -56,11 +56,7 @@ export const Product = list({
       },
     }),
     description: text({ validation: { isRequired: true } }),
-    basePrice: decimal({
-      precision: 10,
-      scale: 2,
-      validation: { isRequired: true },
-    }),
+    basePrice: integer({ validation: { isRequired: true } }),
     baseWeight: decimal({
       precision: 4,
       scale: 1,
@@ -158,8 +154,8 @@ export const Product = list({
     }),
     topping: relationship({
       ref: "Topping.product",
-      many: false,
     }),
+    cartItems: relationship({ ref: "CartItem.product", many: true }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -173,40 +169,25 @@ export const Product = list({
     }),
   },
   hooks: {
-    resolveInput: {
-      create: ({ resolvedData }) => {
-        const { name } = resolvedData;
-        const slug = getTransliterationSlug(name);
-        return {
-          ...resolvedData,
-          slug: slug,
-        };
-      },
-    },
     beforeOperation: {
       delete: async ({ context, item }) => {
         const product = await context.query.Product.findOne({
           where: { id: item.id.toString() },
           query: "id variants { id } images { id } customization { id }",
         });
-        await context.transaction(
-          async (tx) => {
-            await tx.query.ProductImage.deleteMany({
-              where: product.images.map((v: { id: any }) => ({ id: v.id })),
-            });
-            if (!!product.variants.length) {
-              await tx.query.ProductVariant.deleteMany({
-                where: product.variants.map((v: { id: any }) => ({ id: v.id })),
-              });
-            }
-            if (!!product.customization) {
-              await tx.query.ProductCustomization.deleteOne({
-                where: { id: product.customization.id },
-              });
-            }
-          },
-          { timeout: 10000 }
-        );
+        await context.query.ProductImage.deleteMany({
+          where: product.images.map((v: { id: any }) => ({ id: v.id })),
+        });
+        if (!!product.variants.length) {
+          await context.query.ProductVariant.deleteMany({
+            where: product.variants.map((v: { id: any }) => ({ id: v.id })),
+          });
+        }
+        if (!!product.customization) {
+          await context.query.ProductCustomization.deleteOne({
+            where: { id: product.customization.id },
+          });
+        }
       },
     },
   },

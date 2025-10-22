@@ -19,15 +19,20 @@ export const verifyEmail = async (
     throw new Error("Token expired");
   }
 
-  await context.db.User.updateOne({
-    where: { email: email },
-    data: {
-      isEmailVerified: true,
-      emailVerificationToken: null,
-      emailVerificationIssuedAt: null,
-      emailVerificationRedeemedAt: new Date(),
-    },
-  });
+  try {
+    await context.db.User.updateOne({
+      where: { email: email },
+      data: {
+        isEmailVerified: true,
+        emailVerificationToken: null,
+        emailVerificationIssuedAt: null,
+        emailVerificationRedeemedAt: new Date(),
+      },
+    });
+  } catch (error) {
+    // @ts-expect-error error has an unknow type
+    throw new Error(error.message);
+  }
 
   return {
     status: true,

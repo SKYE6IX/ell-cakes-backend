@@ -20,11 +20,7 @@ export const ProductVariant = list({
   },
   fields: {
     product: relationship({ ref: "Product.variants", many: false }),
-    price: decimal({
-      precision: 10,
-      scale: 2,
-      validation: { isRequired: true },
-    }),
+    price: integer({ validation: { isRequired: true } }),
     pieces: integer({ defaultValue: undefined }),
     weight: decimal({
       precision: 4,

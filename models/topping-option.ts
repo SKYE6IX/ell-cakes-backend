@@ -11,15 +11,14 @@ export const ToppingOption = list({
   access: allowAll,
   fields: {
     topping: relationship({ ref: "Topping.options", many: false }),
+    cartItems: relationship({ ref: "CartItem.topping", many: true }),
     weight: decimal({
       precision: 5,
       scale: 3,
       defaultValue: undefined,
     }),
     pieces: integer({ defaultValue: undefined }),
-    extraPrice: decimal({
-      validation: { isRequired: true },
-    }),
+    extraPrice: integer({ validation: { isRequired: true } }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

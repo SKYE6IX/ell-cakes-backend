@@ -3,7 +3,6 @@ import {
   relationship,
   integer,
   timestamp,
-  decimal,
   json,
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
@@ -26,14 +25,8 @@ export const OrderItem = list({
     variant: relationship({ ref: "ProductVariant" }),
     topping: relationship({ ref: "Topping" }),
     quantity: integer({ defaultValue: 1 }),
-    unitPrice: decimal({
-      precision: 10,
-      scale: 2,
-    }),
-    totalPrice: decimal({
-      precision: 10,
-      scale: 2,
-    }),
+    unitPrice: integer(),
+    totalPrice: integer(),
     productSnapShot: json(),
     variantSnapShot: json(),
     customizationSnapShot: json(),

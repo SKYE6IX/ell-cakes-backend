@@ -1,5 +1,5 @@
 import { list } from "@keystone-6/core";
-import { relationship, timestamp, decimal } from "@keystone-6/core/fields";
+import { relationship, timestamp, integer } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 
 export const Cart = list({
@@ -9,7 +9,7 @@ export const Cart = list({
   fields: {
     user: relationship({ ref: "User.cart" }),
     cartItems: relationship({ ref: "CartItem.cart", many: true }),
-    subTotalAmount: decimal({ precision: 10, scale: 2 }),
+    subTotal: integer(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -21,5 +21,18 @@ export const Cart = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+  },
+  hooks: {
+    beforeOperation: {
+      delete: async ({ context, item }) => {
+        const cart = await context.query.Cart.findOne({
+          where: { id: item.id.toString() },
+          query: "id cartItems { id }",
+        });
+        await context.query.CartItem.deleteMany({
+          where: cart.cartItems.map((v: { id: any }) => ({ id: v.id })),
+        });
+      },
+    },
   },
 });

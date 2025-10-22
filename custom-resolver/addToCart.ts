@@ -7,7 +7,7 @@ interface AddToCartArgs {
   variantId: string | null;
   customizations: { keyId: string; valueId: string }[] | null;
   toppingId: string | null;
-  cartId: string | null;
+  cartId: string;
 }
 export type CartWithItem = Prisma.CartGetPayload<{
   include: { cartItems: true };
@@ -19,6 +19,7 @@ export const addToCart = async (
   context: Context
 ) => {
   let cart: CartWithItem | null = null;
+
   const loggedInUser = context.session as Session;
 
   // If user is in session
@@ -61,42 +62,42 @@ export const addToCart = async (
 
   // Calculate amount for customization added if they have extra price
   let customizationsTotalAmount = 0;
-  const customizationSnapShot = customizations?.map((customize) => {
-    const customOption = product?.customization?.customOptions.find(
-      (opt) => opt.id === customize.keyId
-    );
-    const valueOption = customOption?.customValues.find(
-      (val) => val.id === customize.valueId
-    );
-    const extraPrice = valueOption?.extraPrice ?? 0;
-    // Add all the value extra price
-    customizationsTotalAmount += extraPrice;
-    return {
-      name: customOption?.name || "",
-      customValue: {
-        value: valueOption?.value || "",
-        extraPrice: valueOption?.extraPrice || 0,
-      },
-    };
-  });
+  const customizationSnapShot =
+    customizations?.map((customize) => {
+      const customOption = product?.customization?.customOptions.find(
+        (opt) => opt.id === customize.keyId
+      );
+      const valueOption = customOption?.customValues.find(
+        (val) => val.id === customize.valueId
+      );
+      const extraPrice = valueOption?.extraPrice ?? 0;
+      // Add all the value extra price
+      customizationsTotalAmount += extraPrice;
+      return {
+        name: customOption?.name || "",
+        customValue: {
+          value: valueOption?.value || "",
+          extraPrice: valueOption?.extraPrice || 0,
+        },
+      };
+    }) ?? null;
 
   // Get the current selected topping if user chose a topping is provided
-  const choosenTopping = product?.topping?.options.find(
+  const selectedTopping = product?.topping?.options.find(
     (topping) => topping.id === toppingId
   );
 
   // Check for existing cart-item
   const existCartItem = cart.cartItems.find((item) => {
     const sameProduct = item.productId === productId;
-    const sameVariant = item.variantId === variantId;
-    const sameTopping = item.toppingId === toppingId;
+    const sameVariant = (item.variantId ?? null) === (variantId ?? null);
+    const sameTopping = (item.toppingId ?? null) === (toppingId ?? null);
     const sameCustomization =
       JSON.stringify(item.customizationSnapShot) ===
       JSON.stringify(customizationSnapShot);
     return sameProduct && sameVariant && sameTopping && sameCustomization;
   });
 
-  console.log("Here is the exising cartItem", existCartItem);
   if (existCartItem) {
     const newQuantity = Number(existCartItem.quantity) + 1;
     await context.db.CartItem.updateOne({
@@ -109,7 +110,7 @@ export const addToCart = async (
   } else {
     // Calculate the unit price for a single product
     const basePrice = (productVariant?.price ?? product?.basePrice) || 0;
-    const toppingPrice = choosenTopping?.extraPrice || 0;
+    const toppingPrice = selectedTopping?.extraPrice || 0;
     const unitPrice = basePrice + customizationsTotalAmount + toppingPrice;
 
     // Create a new cart-item
@@ -118,7 +119,6 @@ export const addToCart = async (
       data: {
         cart: { connect: { id: cart.id } },
         product: { connect: { id: productId } },
-        ...(variantId && { variant: { connect: { id: variantId } } }),
         unitPrice: unitPrice,
         subTotal: unitPrice * 1,
         productSnapShot: {
@@ -126,13 +126,16 @@ export const addToCart = async (
           name: product?.name || "",
           basePrice: basePrice,
         },
-        variantSnapShot: {
-          id: productVariant?.id || "",
-          weight: productVariant?.weight?.toString() || "",
-          price: productVariant?.price || 0,
-        },
-        customizationSnapShot: customizationSnapShot,
-        ...(toppingId && { topping: { connect: { id: choosenTopping?.id } } }),
+        ...(variantId && {
+          variant: { connect: { id: variantId } },
+          variantSnapShot: {
+            id: productVariant?.id || "",
+            weight: productVariant?.weight?.toString() || "",
+            price: productVariant?.price || 0,
+          },
+        }),
+        ...(customizations && { customizationSnapShot: customizationSnapShot }),
+        ...(toppingId && { topping: { connect: { id: selectedTopping?.id } } }),
       },
     });
   }

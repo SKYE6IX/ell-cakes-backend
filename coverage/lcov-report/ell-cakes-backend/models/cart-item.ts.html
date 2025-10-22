@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for ell-cakes-backend/models/product-variant.ts</title>
+    <title>Code coverage report for ell-cakes-backend/models/cart-item.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> product-variant.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> cart-item.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -100,34 +100,16 @@
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a>
-<a name='L43'></a><a href='#L43'>43</a>
-<a name='L44'></a><a href='#L44'>44</a>
-<a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,33 +140,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { list } from "@keystone-6/core";
 import {
   relationship,
-  checkbox,
   integer,
   timestamp,
-  decimal,
+  json,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
-import { permissions } from "../access";
 &nbsp;
-export const ProductVariant = list({
+export const CartItem = list({
   access: {
-    operation: {
-      query: allowAll,
-      create: permissions.canManageProduct,
-      update: permissions.canManageProduct,
-      delete: permissions.canManageProduct,
-    },
+    operation: allowAll,
   },
   fields: {
-    product: relationship({ ref: "Product.variants", many: false }),
-    price: integer({ validation: { isRequired: true } }),
-    pieces: integer({ defaultValue: undefined }),
-    weight: decimal({
-      precision: 4,
-      scale: 1,
-      defaultValue: undefined,
-    }),
-    isAvailable: checkbox({ defaultValue: true }),
+    cart: relationship({ ref: "Cart.cartItems" }),
+    product: relationship({ ref: "Product.cartItems" }),
+    variant: relationship({ ref: "ProductVariant" }),
+    topping: relationship({ ref: "ToppingOption.cartItems" }),
+    quantity: integer({ defaultValue: 1 }),
+    unitPrice: integer(),
+    subTotal: integer(),
+    productSnapShot: json(),
+    variantSnapShot: json(),
+    customizationSnapShot: json(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -196,9 +172,6 @@ export const ProductVariant = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-  },
-  ui: {
-    isHidden: true,
   },
 });
 &nbsp;</pre></td></tr></table></pre>

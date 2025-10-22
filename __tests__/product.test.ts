@@ -66,7 +66,7 @@ describe("Product Model", () => {
           images: { connect: { id: productImage.id } },
           name: "Fluffy Cake",
           description: "The best cake to ever grace this earth",
-          basePrice: "333.00",
+          basePrice: 333,
           ingredients: "made with everything fluffy",
           stockQuantity: 10,
           lifeShelf: 3,
@@ -83,12 +83,12 @@ describe("Product Model", () => {
       .query.Product.updateOne({
         where: { id: newProduct.id },
         data: {
-          basePrice: "150.00",
+          basePrice: 150,
           stockQuantity: 5,
         },
         query: "id basePrice stockQuantity",
       });
-    expect(updateProduct.basePrice).toEqual("150.00");
+    expect(updateProduct.basePrice).toEqual(150);
     expect(updateProduct.stockQuantity).toBeLessThan(10);
 
     // Delete Product
@@ -132,7 +132,7 @@ describe("Product Model", () => {
         images: { connect: { id: productImage.id } },
         name: "Fluffy Cake",
         description: "The best cake to ever grace this earth",
-        basePrice: "333.00",
+        basePrice: 333,
         ingredients: "made with everything fluffy",
         stockQuantity: 10,
         lifeShelf: 3,
@@ -145,7 +145,7 @@ describe("Product Model", () => {
       .query.Product.findMany({ query: "id name basePrice stockQuantity" });
 
     expect(customerQuery[0].name).toEqual("Fluffy Cake");
-    expect(customerQuery[0].basePrice).toEqual("333.00");
+    expect(customerQuery[0].basePrice).toEqual(333);
     expect(customerQuery[0].stockQuantity).toBeGreaterThan(5);
   });
 });

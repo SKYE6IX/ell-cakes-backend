@@ -4,7 +4,7 @@ import type { CartWithItem } from "./addToCart";
 
 interface RemoveFromCartArgs {
   cartItemId: string;
-  cartId?: string;
+  cartId: string;
 }
 
 export const removeFromCart = async (
@@ -30,7 +30,6 @@ export const removeFromCart = async (
   // Throw an error and return the fuction immediatly
   if (cart === null) {
     throw new Error("This Cart doesn't exist anymore!");
-    return;
   }
 
   // If cart found, continue
@@ -53,7 +52,6 @@ export const removeFromCart = async (
       });
     }
   }
-
   // Recalculate the the total amount of cart-items
   await context.transaction(
     async (tx) => {

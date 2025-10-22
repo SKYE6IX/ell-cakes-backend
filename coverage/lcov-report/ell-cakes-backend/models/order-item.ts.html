@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for ell-cakes-backend/models/product-variant.ts</title>
+    <title>Code coverage report for ell-cakes-backend/models/order-item.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,7 +19,7 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> product-variant.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> order-item.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
@@ -108,10 +108,8 @@
 <a name='L43'></a><a href='#L43'>43</a>
 <a name='L44'></a><a href='#L44'>44</a>
 <a name='L45'></a><a href='#L45'>45</a>
-<a name='L46'></a><a href='#L46'>46</a>
-<a name='L47'></a><a href='#L47'>47</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L46'></a><a href='#L46'>46</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,33 +156,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { list } from "@keystone-6/core";
 import {
   relationship,
-  checkbox,
   integer,
   timestamp,
-  decimal,
+  json,
 } from "@keystone-6/core/fields";
-import { allowAll } from "@keystone-6/core/access";
-import { permissions } from "../access";
+import { allOperations } from "@keystone-6/core/access";
+import { isSignedIn as hasSession, permissions, rules } from "../access";
 &nbsp;
-export const ProductVariant = list({
+export const OrderItem = list({
   access: {
     operation: {
-      query: allowAll,
-      create: permissions.canManageProduct,
-      update: permissions.canManageProduct,
-      delete: permissions.canManageProduct,
+      ...allOperations(hasSession),
+    },
+    filter: {
+      query: rules.canReadOrder,
+      update: permissions.canManageOrder,
+      delete: permissions.canManageOrder,
     },
   },
   fields: {
-    product: relationship({ ref: "Product.variants", many: false }),
-    price: integer({ validation: { isRequired: true } }),
-    pieces: integer({ defaultValue: undefined }),
-    weight: decimal({
-      precision: 4,
-      scale: 1,
-      defaultValue: undefined,
-    }),
-    isAvailable: checkbox({ defaultValue: true }),
+    order: relationship({ ref: "Order.orderItems" }),
+    product: relationship({ ref: "Product" }),
+    variant: relationship({ ref: "ProductVariant" }),
+    topping: relationship({ ref: "Topping" }),
+    quantity: integer({ defaultValue: 1 }),
+    unitPrice: integer(),
+    totalPrice: integer(),
+    productSnapShot: json(),
+    variantSnapShot: json(),
+    customizationSnapShot: json(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -196,9 +196,6 @@ export const ProductVariant = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-  },
-  ui: {
-    isHidden: true,
   },
 });
 &nbsp;</pre></td></tr></table></pre>

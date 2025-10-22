@@ -18,8 +18,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     }   
     type Mutation {
         verifyEmail(token: String!, email: String!): VerifyEmailResponse
-        addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String): Cart!
-        removeFromCart(cartItemId: String!, cartId: String): Cart!
+        addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
+        removeFromCart(cartItemId: String!, cartId: String!): Cart!
     }  
     `,
     resolvers: {

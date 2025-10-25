@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for ell-cakes-backend/models/category.ts</title>
+    <title>Code coverage report for ell-cakes-backend/models/payment.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> category.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> payment.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.9% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/11</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/4</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.9% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/11</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -106,9 +106,13 @@
 <a name='L41'></a><a href='#L41'>41</a>
 <a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -132,58 +136,54 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { list } from "@keystone-6/core";
-import { text, relationship } from "@keystone-6/core/fields";
-import { allowAll } from "@keystone-6/core/access";
-import { getTransliterationSlug } from "../lib/getTransliteration";
-import { permissions } from "../access";
+import {
+  relationship,
+  timestamp,
+  text,
+  integer,
+} from "@keystone-6/core/fields";
+import { allOperations } from "@keystone-6/core/access";
+import { isSignedIn as hasSession } from "../access";
 &nbsp;
-export const Category = list({
+export const Payment = list({
   access: {
     operation: {
-      query: allowAll,
-      create: permissions.canManageProduct,
-      update: permissions.canManageProduct,
-      delete: permissions.canManageProduct,
+      ...allOperations(hasSession),
     },
   },
   fields: {
-    name: text({ validation: { isRequired: true } }),
-    slug: text({
-      isIndexed: "unique",
+    user: relationship({ ref: "User.payments" }),
+    order: relationship({ ref: "Order.payment" }),
+    paymentId: text({ isIndexed: "unique" }),
+    confirmationUrl: text(),
+    amount: text(),
+    method: text(),
+    status: text({ defaultValue: "pending" }),
+    paidAt: timestamp(),
+    createdAt: timestamp({
+      defaultValue: { kind: "now" },
       ui: {
         createView: { fieldMode: "hidden" },
       },
     }),
-    parent: relationship({ ref: "Category", many: false }),
-    products: relationship({ ref: "Product.category", many: true }),
+    updatedAt: timestamp({
+      ui: {
+        createView: { fieldMode: "hidden" },
+      },
+    }),
   },
-  hooks: {
-    resolveInput({ operation, resolvedData }) {
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (operation === "create") {
-        const { name } = resolvedData;
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (name) {
-          return {
-            ...resolvedData,
-            slug: getTransliterationSlug(name),
-          };
-        }
-      }
-<span class="cstat-no" title="statement not covered" >      return resolvedData;</span>
-    },
+  ui: {
+    isHidden: true,
   },
 });
 &nbsp;</pre></td></tr></table></pre>

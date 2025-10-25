@@ -56,6 +56,7 @@ export const addToCart = async (
       topping: { include: { options: true } },
     },
   });
+
   const productVariant = product?.variants.find(
     (variant) => variant.id === variantId
   );

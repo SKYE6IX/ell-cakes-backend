@@ -59,7 +59,6 @@ export const User = list({
     emailVerificationRedeemedAt: timestamp(hiddenFieldConfig),
     phoneNumber: text({
       isIndexed: "unique",
-      validation: { isRequired: false },
     }),
     password: password({ validation: { isRequired: true } }),
     role: select({
@@ -94,6 +93,7 @@ export const User = list({
     delivaryAddress: relationship({ ref: "DelivaryAddress.user", many: true }),
     cart: relationship({ ref: "Cart.user" }),
     orders: relationship({ ref: "Order.user", many: true }),
+    payments: relationship({ ref: "Payment.user", many: true }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

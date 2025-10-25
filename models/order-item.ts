@@ -23,13 +23,13 @@ export const OrderItem = list({
     order: relationship({ ref: "Order.orderItems" }),
     product: relationship({ ref: "Product" }),
     variant: relationship({ ref: "ProductVariant" }),
-    topping: relationship({ ref: "Topping" }),
     quantity: integer({ defaultValue: 1 }),
     unitPrice: integer(),
-    totalPrice: integer(),
+    subTotal: integer(),
     productSnapShot: json(),
     variantSnapShot: json(),
     customizationSnapShot: json(),
+    toppingSnapShot: json(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

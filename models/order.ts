@@ -3,8 +3,8 @@ import {
   relationship,
   timestamp,
   text,
-  decimal,
   select,
+  integer,
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
@@ -24,9 +24,9 @@ export const Order = list({
     user: relationship({ ref: "User.orders" }),
     orderItems: relationship({ ref: "OrderItem.order", many: true }),
     orderNumber: text({ isIndexed: "unique" }),
-    shippingCost: decimal({ precision: 10, scale: 2 }),
-    subTotalAmount: decimal({ precision: 10, scale: 2 }),
-    totalAmount: decimal({ precision: 10, scale: 2 }),
+    shippingCost: integer(),
+    subTotalAmount: integer(),
+    totalAmount: integer(),
     status: select({
       options: [
         { label: "Processing", value: "PROCESSING" },
@@ -36,6 +36,7 @@ export const Order = list({
       ],
       defaultValue: "PROCESSING",
     }),
+    payment: relationship({ ref: "Payment.order" }),
     message: text(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },

@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly GOOGLE_CLIENT_SECRET: string;
   readonly GOOGLE_REFRESH_TOKEN: string;
   readonly FRONTEND_URL: string;
+  readonly YOO_MONEY_SHOP_ID: string;
+  readonly YOO_MONEY_SECRET_ID: string;
 }
 declare global {
   namespace NodeJS {

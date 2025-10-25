@@ -14,6 +14,7 @@ import { Cart } from "./models/cart";
 import { CartItem } from "./models/cart-item";
 import { Order } from "./models/order";
 import { OrderItem } from "./models/order-item";
+import { Payment } from "./models/payment";
 
 export const lists = {
   User,
@@ -32,4 +33,5 @@ export const lists = {
   CartItem,
   Order,
   OrderItem,
+  Payment,
 };

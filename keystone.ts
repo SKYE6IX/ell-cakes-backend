@@ -1,10 +1,13 @@
 import { config } from "@keystone-6/core";
 import dotenv from "dotenv";
+import express from "express";
 dotenv.config({ override: true });
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
 import { insertSeedData } from "./script";
+import { confirmPayment } from "./custom-resolver/confirmPayment";
+
 const {
   YC_S3_KEY_ID,
   YC_S3_SECRET_KEY,
@@ -52,6 +55,17 @@ export default withAuth(
     },
     graphql: {
       extendGraphqlSchema: customExtendResolvers,
+    },
+    server: {
+      port: 8080,
+      extendExpressApp: (app, commonContext) => {
+        app.use(express.json());
+        app.post("/payment/payment-verification", async (req, res) => {
+          const context = await commonContext.withRequest(req, res);
+          await confirmPayment({ body: req.body, context: context });
+          res.send("ok").status(200);
+        });
+      },
     },
   })
 );

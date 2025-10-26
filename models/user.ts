@@ -1,5 +1,5 @@
 import { randomBytes } from "crypto";
-import { list, graphql } from "@keystone-6/core";
+import { list } from "@keystone-6/core";
 import {
   text,
   password,
@@ -7,9 +7,8 @@ import {
   relationship,
   select,
   checkbox,
-  virtual,
 } from "@keystone-6/core/fields";
-import { allOperations, allowAll } from "@keystone-6/core/access";
+import { allOperations } from "@keystone-6/core/access";
 import { sendVerificationEmail } from "../lib/mail";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 
@@ -97,24 +96,24 @@ export const User = list({
       },
     }),
   },
-  // hooks: {
-  //   // resolveInput: {
-  //   //   create: async ({ resolvedData }) => {
-  //   //     if (resolvedData.role === "CUSTOMER") {
-  //   //       const token = randomBytes(32).toString("hex");
-  //   //       const issuedAt = new Date();
-  //   //       await sendVerificationEmail({
-  //   //         to: resolvedData.email,
-  //   //         token: token,
-  //   //       });
-  //   //       return {
-  //   //         ...resolvedData,
-  //   //         emailVerificationToken: token,
-  //   //         emailVerificationIssuedAt: issuedAt,
-  //   //       };
-  //   //     }
-  //   //     return resolvedData;
-  //   //   },
-  //   // },
-  // },
+  hooks: {
+    resolveInput: {
+      create: async ({ resolvedData }) => {
+        if (resolvedData.role === "CUSTOMER") {
+          const token = randomBytes(32).toString("hex");
+          const issuedAt = new Date();
+          await sendVerificationEmail({
+            to: resolvedData.email,
+            token: token,
+          });
+          return {
+            ...resolvedData,
+            emailVerificationToken: token,
+            emailVerificationIssuedAt: issuedAt,
+          };
+        }
+        return resolvedData;
+      },
+    },
+  },
 });

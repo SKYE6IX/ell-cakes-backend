@@ -38,20 +38,20 @@ beforeEach(async () => {
 });
 
 describe("User Model", () => {
-  test("Create a new user", async () => {
+  test("new user are allowed to create account", async () => {
     // Arrange
-    const newUser = await context.db.User.createOne({
+    const sudoContext = context.sudo();
+    const newUser = await sudoContext.db.User.createOne({
       data: {
-        firstName: "John",
-        lastName: "Doe",
-        email: "jondoe@mail.com",
-        password: "secret-password",
-        phoneNumber: "12345672345",
+        name: "Jon",
+        email: "test@mail.com",
+        password: "12345678",
+        phoneNumber: "9988776699",
       },
     });
     // Assert
-    expect(newUser.firstName).toEqual("John");
-    expect(newUser.email).toEqual("jondoe@mail.com");
+    expect(newUser.name).toEqual("Jon");
+    expect(newUser.email).toEqual("test@mail.com");
     expect(newUser.role).toEqual("CUSTOMER");
     expect(newUser.password).toBeDefined();
     expect(sendVerificationEmail).toHaveBeenCalledTimes(1);
@@ -61,16 +61,15 @@ describe("User Model", () => {
 
   test("User can update their profile", async () => {
     // Arrange
-    const newUser = await context.db.User.createOne({
+    const sudoContext = context.sudo();
+    const newUser = await sudoContext.db.User.createOne({
       data: {
-        firstName: "John",
-        lastName: "Doe",
-        email: "jondoe@mail.com",
-        password: "secret-password",
-        phoneNumber: "12345672345",
+        name: "Jon",
+        email: "test@mail.com",
+        password: "12345678",
+        phoneNumber: "9988776699",
       },
     });
-
     // Act
     const userUpdate = await context
       .withSession({
@@ -80,11 +79,10 @@ describe("User Model", () => {
       })
       .db.User.updateOne({
         where: { id: newUser.id },
-        data: { lastName: "Don", phoneNumber: "999444666" },
+        data: { name: "Mike", phoneNumber: "999444666" },
       });
-
     // Assert
-    expect(userUpdate.lastName).toEqual("Don");
+    expect(userUpdate.name).toEqual("Mike");
     expect(userUpdate.phoneNumber).toEqual("999444666");
   });
 });

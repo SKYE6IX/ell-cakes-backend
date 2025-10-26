@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761398464330" clover="3.2.0">
-  <project timestamp="1761398464330" name="All files">
-    <metrics statements="417" coveredstatements="264" conditionals="145" coveredconditionals="65" methods="63" coveredmethods="26" elements="625" coveredelements="355" complexity="0" loc="417" ncloc="417" packages="5" files="31" classes="31"/>
+<coverage generated="1761477886042" clover="3.2.0">
+  <project timestamp="1761477886042" name="All files">
+    <metrics statements="448" coveredstatements="269" conditionals="157" coveredconditionals="64" methods="65" coveredmethods="26" elements="670" coveredelements="359" complexity="0" loc="448" ncloc="448" packages="5" files="34" classes="34"/>
     <package name="ell-cakes-backend">
       <metrics statements="65" coveredstatements="48" conditionals="26" coveredconditionals="9" methods="12" coveredmethods="5"/>
       <file name="access.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/access.ts">
@@ -83,7 +83,7 @@
       </file>
     </package>
     <package name="ell-cakes-backend.custom-resolver">
-      <metrics statements="125" coveredstatements="85" conditionals="85" coveredconditionals="42" methods="18" coveredmethods="10"/>
+      <metrics statements="158" coveredstatements="91" conditionals="97" coveredconditionals="42" methods="21" coveredmethods="10"/>
       <file name="addToCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/addToCart.ts">
         <metrics statements="42" coveredstatements="33" conditionals="51" coveredconditionals="32" methods="9" coveredmethods="4"/>
         <line num="16" count="4" type="stmt"/>
@@ -128,6 +128,19 @@
         <line num="151" count="4" type="stmt"/>
         <line num="154" count="4" type="stmt"/>
         <line num="164" count="4" type="stmt"/>
+      </file>
+      <file name="authorizedUserWithCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/authorizedUserWithCart.ts">
+        <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="42" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
       </file>
       <file name="checkOut.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/checkOut.ts">
         <metrics statements="30" coveredstatements="25" conditionals="12" coveredconditionals="6" methods="2" coveredmethods="2"/>
@@ -174,19 +187,48 @@
         <line num="15" count="0" type="stmt"/>
         <line num="17" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
+        <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
       </file>
       <file name="index.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/index.ts">
-        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="2" count="4" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
         <line num="4" count="4" type="stmt"/>
         <line num="5" count="4" type="stmt"/>
         <line num="6" count="4" type="stmt"/>
+        <line num="7" count="4" type="stmt"/>
         <line num="8" count="4" type="stmt"/>
-        <line num="9" count="8" type="stmt"/>
+        <line num="9" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
+        <line num="12" count="8" type="stmt"/>
+      </file>
+      <file name="registerUser.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/registerUser.ts">
+        <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+        <line num="21" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+      </file>
+      <file name="registerUserWithCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/registerUserWithCart.ts">
+        <metrics statements="10" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="26" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
       </file>
       <file name="removeFromCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/removeFromCart.ts">
         <metrics statements="21" coveredstatements="17" conditionals="8" coveredconditionals="4" methods="4" coveredmethods="3"/>
@@ -239,21 +281,21 @@
       </file>
       <file name="mail.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/lib/mail.ts">
         <metrics statements="15" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="3" count="3" type="stmt"/>
-        <line num="5" count="3" type="stmt"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="32" count="3" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="55" count="3" type="stmt"/>
+        <line num="55" count="2" type="stmt"/>
         <line num="62" count="0" type="stmt"/>
         <line num="63" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
       </file>
       <file name="paymentGateway.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/lib/paymentGateway.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -263,7 +305,7 @@
       </file>
     </package>
     <package name="ell-cakes-backend.models">
-      <metrics statements="137" coveredstatements="112" conditionals="22" coveredconditionals="14" methods="21" coveredmethods="9"/>
+      <metrics statements="135" coveredstatements="111" conditionals="22" coveredconditionals="13" methods="20" coveredmethods="9"/>
       <file name="cart-item.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/cart-item.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="4" type="stmt"/>
@@ -431,7 +473,7 @@
         <line num="62" count="0" type="stmt"/>
       </file>
       <file name="user.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/user.ts">
-        <metrics statements="19" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="5" coveredmethods="1"/>
+        <metrics statements="17" coveredstatements="13" conditionals="2" coveredconditionals="1" methods="4" coveredmethods="1"/>
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
@@ -440,17 +482,15 @@
         <line num="14" count="4" type="stmt"/>
         <line num="16" count="4" type="stmt"/>
         <line num="24" count="4" type="stmt"/>
-        <line num="43" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="76" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="117" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="118" count="2" type="stmt"/>
-        <line num="119" count="2" type="stmt"/>
-        <line num="120" count="2" type="stmt"/>
-        <line num="124" count="2" type="stmt"/>
-        <line num="130" count="1" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="103" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="104" count="3" type="stmt"/>
+        <line num="105" count="3" type="stmt"/>
+        <line num="106" count="3" type="stmt"/>
+        <line num="110" count="3" type="stmt"/>
+        <line num="116" count="0" type="stmt"/>
       </file>
     </package>
     <package name="ell-cakes-backend.script">

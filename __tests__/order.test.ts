@@ -14,6 +14,10 @@ jest.mock("iuliia", () => ({
   WIKIPEDIA: {},
 }));
 
+jest.mock("../lib/mail.ts", () => ({
+  sendVerificationEmail: jest.fn(async () => Promise.resolve()),
+}));
+
 const IMAGE = "postgres:16-alpine";
 const prismaSchemaPath = path.join(process.cwd(), "schema.prisma");
 const config = {
@@ -39,15 +43,14 @@ beforeEach(async () => {
 
 describe("Order and OrderItem Model and", () => {
   test("Only Sign in User can complete order", async () => {
-    const user = await context.query.User.createOne({
+    const sudoContext = context.sudo();
+    const user = await sudoContext.db.User.createOne({
       data: {
-        firstName: "Azeez",
-        lastName: "Wick",
-        email: "azeez@mail.com",
+        name: "Jon",
+        email: "test@mail.com",
         password: "12345678",
-        role: "ADMIN",
+        phoneNumber: "9988776699",
       },
-      query: "id role",
     });
     const sessison = {
       listKey: "User",
@@ -85,7 +88,6 @@ describe("Order and OrderItem Model and", () => {
           user: { connect: { id: sessison.itemId } },
         },
       });
-
     const checkOut = await context
       .withSession(sessison)
       .graphql.raw<{ checkOut: any }, {}>({

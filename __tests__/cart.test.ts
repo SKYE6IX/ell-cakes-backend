@@ -68,7 +68,6 @@ describe("cart and cart-item Model", () => {
         },
         query: "id name lifeShelf stockQuantity",
       });
-
     const cart = (await context.graphql.raw({
       query: `mutation AddToCart($productId: String!, $cartId: String!) {
         addToCart(productId: $productId, cartId: $cartId){

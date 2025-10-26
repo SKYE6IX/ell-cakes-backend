@@ -1866,7 +1866,9 @@ type Mutation {
   addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
   removeFromCart(cartItemId: String!, cartId: String!): Cart!
   checkOut(shippingCost: Int!, paymentMethod: String!, deliveryAddressId: String!, customerNote: String): Payment!
-  registerUser(name: String!, email: String!, password: String!, phoneNumber: String!): User!
+  registerUser(registerData: RegisterUserInput!): User!
+  registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
+  authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -2101,4 +2103,11 @@ type VerifyEmailResponse {
 input CustomizationInput {
   keyId: String!
   valueId: String!
+}
+
+input RegisterUserInput {
+  name: String!
+  email: String!
+  password: String!
+  phoneNumber: String!
 }

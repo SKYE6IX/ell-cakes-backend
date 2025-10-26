@@ -1,35 +1,27 @@
 import { Context } from ".keystone/types";
 
-interface RegisterUserArgs {
-  name: string;
+interface AuthorizedUserWithCartArgs {
   email: string;
   password: string;
-  phoneNumber: string;
+  cartId: string;
 }
 
-export const registerUser = async (
+export const authorizedUserWithCart = async (
   root: any,
-  { registerData }: { registerData: RegisterUserArgs },
+  { email, password, cartId }: AuthorizedUserWithCartArgs,
   context: Context
 ) => {
   const sudoContext = context.sudo();
-  // Check if USER with the email or phoneNumber already exist
-  const isUserExist = await sudoContext.db.User.findOne({
-    where: { email: registerData.email, phoneNumber: registerData.phoneNumber },
+
+  const existingCart = await sudoContext.db.Cart.findOne({
+    where: { id: cartId },
   });
 
-  if (isUserExist) {
-    throw new Error("User with this email and phone number already exist!");
+  if (!existingCart) {
+    throw new Error("Unable to login user, cart must exist!");
   }
 
-  // Create a new USER
-  const newUser = await sudoContext.db.User.createOne({
-    data: {
-      ...registerData,
-    },
-  });
-
-  // authorized USER if successfully created
+  // authorized USER
   const { data, errors } = await sudoContext.graphql.raw<
     { authenticateUserWithPassword: { item: { id: string } } },
     {}
@@ -45,11 +37,20 @@ export const registerUser = async (
        }
      }
     `,
-    variables: { email: newUser.email, password: registerData.password },
+    variables: { email: email, password: password },
   });
   if (errors) {
     throw new Error(errors[0].message);
   }
+  // Update the cart so it belong to the user
+  await sudoContext.db.Cart.updateOne({
+    where: {
+      id: existingCart.id,
+    },
+    data: {
+      user: { connect: { id: data?.authenticateUserWithPassword.item.id } },
+    },
+  });
   return await sudoContext.db.User.findOne({
     where: { id: data?.authenticateUserWithPassword.item.id },
   });

@@ -37,7 +37,8 @@ export const Order = list({
       defaultValue: "PROCESSING",
     }),
     payment: relationship({ ref: "Payment.order" }),
-    message: text(),
+    deliveryAddress: relationship({ ref: "DelivaryAddress.orders" }),
+    note: text(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

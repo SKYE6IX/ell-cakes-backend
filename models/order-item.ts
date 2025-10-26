@@ -42,4 +42,7 @@ export const OrderItem = list({
       },
     }),
   },
+  ui: {
+    isHidden: true,
+  },
 });

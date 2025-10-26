@@ -9,6 +9,8 @@ import type { Session } from "../access";
 interface CheckOutArgs {
   shippingCost: number;
   paymentMethod: "bank_card" | "sberbank" | "tinkoff_bank" | "sbp";
+  customerNote?: string;
+  deliveryAddressId: string;
 }
 
 export type CartWithItem = Prisma.CartGetPayload<{
@@ -19,7 +21,12 @@ export type CartWithItem = Prisma.CartGetPayload<{
 
 export const checkOut = async (
   root: any,
-  { shippingCost, paymentMethod }: CheckOutArgs,
+  {
+    shippingCost,
+    paymentMethod,
+    customerNote,
+    deliveryAddressId,
+  }: CheckOutArgs,
   context: Context
 ) => {
   const loggedInUser = context.session as Session;
@@ -29,7 +36,6 @@ export const checkOut = async (
     throw new Error("Only signed in user can perform this action!");
   }
   const yooMoney = await yooMoneyPaymentGateway();
-  // Generate unique ID for payment
 
   // We check if user has a pending pyament order!
   const pendingOrder = await context.prisma.order.findFirst({
@@ -40,7 +46,6 @@ export const checkOut = async (
     include: { payment: true },
   });
   if (pendingOrder) {
-    // If USER change their payment method, then we create a new payment
     const createPayLoad: ICreatePayment = {
       amount: {
         value: `${pendingOrder.totalAmount}`,
@@ -82,6 +87,8 @@ export const checkOut = async (
     query:
       "id subTotal cartItems { id quantity unitPrice subTotal product { id } productSnapShot variantSnapShot customizationSnapShot variant { id } topping { id weight extraPrice } }",
   });
+
+  // Reject with an error if User doesn't have a cart
   if (!cart) {
     throw new Error("User doesn't have open cart at the moment");
   }
@@ -129,14 +136,21 @@ export const checkOut = async (
     return item;
   });
 
+  const delivaryAddress = await context.db.DelivaryAddress.findOne({
+    where: { id: deliveryAddressId },
+  });
+
+  // Create a new ORDER
   const order = await context.db.Order.createOne({
     data: {
       user: { connect: { id: loggedInUser.itemId } },
+      deliveryAddress: { connect: { id: delivaryAddress?.id } },
       orderItems: { create: orderItems },
       orderNumber: orderNumber,
       subTotalAmount: cart.subTotal,
       totalAmount: totalAmount,
       shippingCost: shippingCost,
+      ...(customerNote && { note: customerNote }),
     },
   });
 
@@ -144,7 +158,8 @@ export const checkOut = async (
   await context.db.Cart.deleteOne({
     where: { id: cart.id },
   });
-  // Create a new Payment entity for the order
+
+  // Create a new Payment entity for the order and return it
   const payment = await context.db.Payment.createOne({
     data: {
       user: { connect: { id: loggedInUser.itemId } },

@@ -8,7 +8,7 @@ const { withAuth } = createAuth({
   secretField: "password",
   sessionData: "role",
   initFirstItem: {
-    fields: ["firstName", "lastName", "email", "password", "role"],
+    fields: ["name", "email", "password", "role"],
   },
   passwordResetLink: {
     sendToken: async ({ itemId, identity, token, context }) => {

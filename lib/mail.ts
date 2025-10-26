@@ -61,7 +61,6 @@ export async function sendResetPasswordTokenEmail({
 }) {
   try {
     const verificationUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${to}`;
-
     await transporter.sendMail({
       subject: "Password Reset Link",
       from: "azeezabioladev@gmail.com",

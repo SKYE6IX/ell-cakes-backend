@@ -17,7 +17,6 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
     if (!payment) {
       return;
     }
-
     if (payment.status === "succeeded") {
       await context.prisma.payment.update({
         where: { paymentId: payment.id },
@@ -25,6 +24,9 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           status: "succeeded",
         },
       });
+      // Set up a mail or sms sercie that will send email or sms about the order to the USER
+      // Use the payment ID to query the ORDER to get information about the order and the
+      // User.
     }
   } catch (error) {
     console.log(error);

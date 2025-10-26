@@ -25,7 +25,7 @@ export const User = list({
   access: {
     operation: {
       ...allOperations(hasSession),
-      create: allowAll,
+      create: permissions.canManageUsers,
       delete: permissions.canManageUsers,
     },
     filter: {
@@ -34,23 +34,9 @@ export const User = list({
     },
   },
   fields: {
-    firstName: text({ validation: { isRequired: true } }),
-    lastName: text({ validation: { isRequired: true } }),
-    name: virtual({
-      field: graphql.field({
-        type: graphql.String,
-        async resolve(item, args, context) {
-          const { firstName, lastName } = await context.query.User.findOne({
-            // @ts-expect-error "item" has unknow type
-            where: { id: item.id.toString() },
-            query: "firstName lastName",
-          });
-          return firstName + " " + lastName;
-        },
-      }),
-    }),
+    name: text({ validation: { isRequired: true } }),
     email: text({
-      validation: { isRequired: false },
+      validation: { isRequired: true },
       isIndexed: "unique",
     }),
     isEmailVerified: checkbox({ defaultValue: false }),
@@ -111,24 +97,24 @@ export const User = list({
       },
     }),
   },
-  hooks: {
-    resolveInput: {
-      create: async ({ resolvedData }) => {
-        if (resolvedData.role === "CUSTOMER") {
-          const token = randomBytes(32).toString("hex");
-          const issuedAt = new Date();
-          await sendVerificationEmail({
-            to: resolvedData.email,
-            token: token,
-          });
-          return {
-            ...resolvedData,
-            emailVerificationToken: token,
-            emailVerificationIssuedAt: issuedAt,
-          };
-        }
-        return resolvedData;
-      },
-    },
-  },
+  // hooks: {
+  //   // resolveInput: {
+  //   //   create: async ({ resolvedData }) => {
+  //   //     if (resolvedData.role === "CUSTOMER") {
+  //   //       const token = randomBytes(32).toString("hex");
+  //   //       const issuedAt = new Date();
+  //   //       await sendVerificationEmail({
+  //   //         to: resolvedData.email,
+  //   //         token: token,
+  //   //       });
+  //   //       return {
+  //   //         ...resolvedData,
+  //   //         emailVerificationToken: token,
+  //   //         emailVerificationIssuedAt: issuedAt,
+  //   //       };
+  //   //     }
+  //   //     return resolvedData;
+  //   //   },
+  //   // },
+  // },
 });

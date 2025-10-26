@@ -4,6 +4,7 @@ import { verifyEmail } from "./verifyEmail";
 import { addToCart } from "./addToCart";
 import { removeFromCart } from "./removeFromCart";
 import { checkOut } from "./checkOut";
+import { registerUser } from "./registerUser";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -21,7 +22,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         verifyEmail(token: String!, email: String!): VerifyEmailResponse
         addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
         removeFromCart(cartItemId: String!, cartId: String!): Cart!
-        checkOut(shippingCost: Int!, paymentMethod: String!): Payment!
+        checkOut(shippingCost: Int!, paymentMethod: String!, deliveryAddressId: String!, customerNote: String): Payment!
+        registerUser(name: String!, email: String!, password: String!, phoneNumber: String!): User!
     }
     `,
     resolvers: {
@@ -30,6 +32,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         addToCart,
         removeFromCart,
         checkOut,
+        registerUser,
       },
     },
   });

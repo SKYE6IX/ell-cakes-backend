@@ -34,4 +34,7 @@ export const CartItem = list({
       },
     }),
   },
+  ui: {
+    isHidden: true,
+  },
 });

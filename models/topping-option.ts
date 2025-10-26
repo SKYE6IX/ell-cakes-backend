@@ -31,4 +31,7 @@ export const ToppingOption = list({
       },
     }),
   },
+  ui: {
+    isHidden: true,
+  },
 });

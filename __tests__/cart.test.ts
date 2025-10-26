@@ -53,25 +53,12 @@ describe("cart and cart-item Model", () => {
       itemId: "1234567890",
       data: { role: "EDITOR" },
     };
-    const productImage = await context.prisma.ProductImage.create({
-      data: {
-        image_id: "stub_id",
-        image_extension: "jpg",
-        altText: "test",
-      },
-    });
-    const category = await context
-      .withSession(editor)
-      .query.Category.createOne({
-        data: { name: "cakes" },
-        query: "id",
-      });
     const newProduct = await context
       .withSession(editor)
       .query.Product.createOne({
         data: {
-          category: { connect: { id: category.id } },
-          images: { connect: { id: productImage.id } },
+          category: { create: { name: "cakes" } },
+          images: { create: { altText: "test" } },
           name: "Fluffy Cake",
           description: "The best cake to ever grace this earth",
           basePrice: 333,
@@ -111,25 +98,12 @@ describe("cart and cart-item Model", () => {
       itemId: "1234567890",
       data: { role: "EDITOR" },
     };
-    const productImage = await context.prisma.ProductImage.create({
-      data: {
-        image_id: "stub_id",
-        image_extension: "jpg",
-        altText: "test",
-      },
-    });
-    const category = await context
-      .withSession(editor)
-      .query.Category.createOne({
-        data: { name: "cakes" },
-        query: "id",
-      });
     const newProduct = await context
       .withSession(editor)
       .query.Product.createOne({
         data: {
-          category: { connect: { id: category.id } },
-          images: { connect: { id: productImage.id } },
+          category: { create: { name: "cakes" } },
+          images: { create: { altText: "test" } },
           name: "Fluffy Cake",
           description: "The best cake to ever grace this earth",
           basePrice: 333,

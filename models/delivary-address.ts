@@ -1,7 +1,7 @@
 import { list } from "@keystone-6/core";
 import { text, relationship, checkbox } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
-import { isSignedIn as hasSession, rules, permissions } from "../access";
+import { isSignedIn as hasSession, rules } from "../access";
 
 export const DelivaryAddress = list({
   access: {
@@ -14,11 +14,13 @@ export const DelivaryAddress = list({
     },
   },
   fields: {
-    user: relationship({ ref: "User.delivaryAddress", many: false }),
+    user: relationship({ ref: "User.delivaryAddress" }),
+    orders: relationship({ ref: "Order.deliveryAddress", many: true }),
     street: text({ validation: { isRequired: true } }),
-    city: text({ validation: { isRequired: true } }),
-    postalCode: text({ validation: { isRequired: true } }),
-    isDefault: checkbox({ defaultValue: true }),
+    apartmentNumber: text(),
+    floor: text(),
+    intercomCode: text(),
+    isDefault: checkbox(),
   },
   ui: {
     isHidden: true,

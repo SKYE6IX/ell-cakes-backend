@@ -54,27 +54,12 @@ describe("Order and OrderItem Model and", () => {
       itemId: user.id,
       data: { role: "ADMIN" },
     };
-    const productImage = await context.prisma.ProductImage.create({
-      data: {
-        image_id: "stub_id",
-        image_extension: "jpg",
-        altText: "test",
-      },
-    });
-
-    const category = await context
-      .withSession(sessison)
-      .query.Category.createOne({
-        data: { name: "cakes" },
-        query: "id",
-      });
-
     const newProduct = await context
       .withSession(sessison)
       .query.Product.createOne({
         data: {
-          category: { connect: { id: category.id } },
-          images: { connect: { id: productImage.id } },
+          category: { create: { name: "cakes" } },
+          images: { create: { altText: "test" } },
           name: "Fluffy Cake",
           description: "The best cake to ever grace this earth",
           basePrice: 333,
@@ -84,7 +69,6 @@ describe("Order and OrderItem Model and", () => {
         },
         query: "id name lifeShelf stockQuantity",
       });
-
     await context.withSession(sessison).graphql.raw({
       query: `mutation AddToCart($productId: String!, $cartId: String!) {
             addToCart(productId: $productId, cartId: $cartId){
@@ -93,16 +77,28 @@ describe("Order and OrderItem Model and", () => {
           }`,
       variables: { productId: newProduct.id, cartId: "" },
     });
+    const userAddress = await context
+      .withSession(sessison)
+      .db.DelivaryAddress.createOne({
+        data: {
+          street: "No 16, mock address",
+          user: { connect: { id: sessison.itemId } },
+        },
+      });
 
     const checkOut = await context
       .withSession(sessison)
       .graphql.raw<{ checkOut: any }, {}>({
-        query: `mutation CheckOut($shippingCost: Int!, $paymentMethod: String!) {
-            checkOut(shippingCost: $shippingCost, paymentMethod: $paymentMethod){
-             id status amount confirmationUrl method paymentId order { id }
+        query: `mutation CheckOut($shippingCost: Int!, $paymentMethod: String!, $deliveryAddressId: String!) {
+            checkOut(shippingCost: $shippingCost, deliveryAddressId: $deliveryAddressId, paymentMethod: $paymentMethod){
+             id status amount confirmationUrl method paymentId
             }
           }`,
-        variables: { shippingCost: 1000, paymentMethod: "bank_card" },
+        variables: {
+          shippingCost: 1000,
+          paymentMethod: "bank_card",
+          deliveryAddressId: userAddress.id,
+        },
       });
     expect(checkOut.data?.checkOut.status).toEqual("pending");
     expect(checkOut.data?.checkOut.method).toEqual("bank_card");

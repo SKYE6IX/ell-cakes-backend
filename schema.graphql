@@ -3,8 +3,6 @@
 
 type User {
   id: ID!
-  firstName: String
-  lastName: String
   name: String
   email: String
   isEmailVerified: Boolean
@@ -47,8 +45,7 @@ input UserWhereInput {
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
   id: IDFilter
-  firstName: StringFilter
-  lastName: StringFilter
+  name: StringFilter
   email: StringFilter
   isEmailVerified: BooleanFilter
   emailVerificationToken: PasswordFilter
@@ -153,8 +150,7 @@ input PaymentManyRelationFilter {
 
 input UserOrderByInput {
   id: OrderDirection
-  firstName: OrderDirection
-  lastName: OrderDirection
+  name: OrderDirection
   email: OrderDirection
   isEmailVerified: OrderDirection
   emailVerificationIssuedAt: OrderDirection
@@ -174,8 +170,7 @@ enum OrderDirection {
 }
 
 input UserUpdateInput {
-  firstName: String
-  lastName: String
+  name: String
   email: String
   isEmailVerified: Boolean
   emailVerificationToken: String
@@ -229,8 +224,7 @@ input UserUpdateArgs {
 }
 
 input UserCreateInput {
-  firstName: String
-  lastName: String
+  name: String
   email: String
   isEmailVerified: Boolean
   emailVerificationToken: String
@@ -274,9 +268,12 @@ input PaymentRelateToManyForCreateInput {
 type DelivaryAddress {
   id: ID!
   user: User
+  orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
+  ordersCount(where: OrderWhereInput! = {}): Int
   street: String
-  city: String
-  postalCode: String
+  apartmentNumber: String
+  floor: String
+  intercomCode: String
   isDefault: Boolean
 }
 
@@ -290,25 +287,30 @@ input DelivaryAddressWhereInput {
   NOT: [DelivaryAddressWhereInput!]
   id: IDFilter
   user: UserWhereInput
+  orders: OrderManyRelationFilter
   street: StringFilter
-  city: StringFilter
-  postalCode: StringFilter
+  apartmentNumber: StringFilter
+  floor: StringFilter
+  intercomCode: StringFilter
   isDefault: BooleanFilter
 }
 
 input DelivaryAddressOrderByInput {
   id: OrderDirection
   street: OrderDirection
-  city: OrderDirection
-  postalCode: OrderDirection
+  apartmentNumber: OrderDirection
+  floor: OrderDirection
+  intercomCode: OrderDirection
   isDefault: OrderDirection
 }
 
 input DelivaryAddressUpdateInput {
   user: UserRelateToOneForUpdateInput
+  orders: OrderRelateToManyForUpdateInput
   street: String
-  city: String
-  postalCode: String
+  apartmentNumber: String
+  floor: String
+  intercomCode: String
   isDefault: Boolean
 }
 
@@ -325,9 +327,11 @@ input DelivaryAddressUpdateArgs {
 
 input DelivaryAddressCreateInput {
   user: UserRelateToOneForCreateInput
+  orders: OrderRelateToManyForCreateInput
   street: String
-  city: String
-  postalCode: String
+  apartmentNumber: String
+  floor: String
+  intercomCode: String
   isDefault: Boolean
 }
 
@@ -1457,7 +1461,8 @@ type Order {
   totalAmount: Int
   status: String
   payment: Payment
-  message: String
+  deliveryAddress: DelivaryAddress
+  note: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1481,7 +1486,8 @@ input OrderWhereInput {
   totalAmount: IntNullableFilter
   status: StringNullableFilter
   payment: PaymentWhereInput
-  message: StringFilter
+  deliveryAddress: DelivaryAddressWhereInput
+  note: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1499,7 +1505,7 @@ input OrderOrderByInput {
   subTotalAmount: OrderDirection
   totalAmount: OrderDirection
   status: OrderDirection
-  message: OrderDirection
+  note: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -1513,7 +1519,8 @@ input OrderUpdateInput {
   totalAmount: Int
   status: String
   payment: PaymentRelateToOneForUpdateInput
-  message: String
+  deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
+  note: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1531,6 +1538,12 @@ input PaymentRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input DelivaryAddressRelateToOneForUpdateInput {
+  create: DelivaryAddressCreateInput
+  connect: DelivaryAddressWhereUniqueInput
+  disconnect: Boolean
+}
+
 input OrderUpdateArgs {
   where: OrderWhereUniqueInput!
   data: OrderUpdateInput!
@@ -1545,7 +1558,8 @@ input OrderCreateInput {
   totalAmount: Int
   status: String
   payment: PaymentRelateToOneForCreateInput
-  message: String
+  deliveryAddress: DelivaryAddressRelateToOneForCreateInput
+  note: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1558,6 +1572,11 @@ input OrderItemRelateToManyForCreateInput {
 input PaymentRelateToOneForCreateInput {
   create: PaymentCreateInput
   connect: PaymentWhereUniqueInput
+}
+
+input DelivaryAddressRelateToOneForCreateInput {
+  create: DelivaryAddressCreateInput
+  connect: DelivaryAddressWhereUniqueInput
 }
 
 type OrderItem {
@@ -1846,7 +1865,8 @@ type Mutation {
   verifyEmail(token: String!, email: String!): VerifyEmailResponse
   addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
   removeFromCart(cartItemId: String!, cartId: String!): Cart!
-  checkOut(shippingCost: Int!, paymentMethod: String!): Payment!
+  checkOut(shippingCost: Int!, paymentMethod: String!, deliveryAddressId: String!, customerNote: String): Payment!
+  registerUser(name: String!, email: String!, password: String!, phoneNumber: String!): User!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -1861,8 +1881,7 @@ type UserAuthenticationWithPasswordFailure {
 }
 
 input CreateInitialUserInput {
-  firstName: String
-  lastName: String
+  name: String
   email: String
   password: String
   role: String

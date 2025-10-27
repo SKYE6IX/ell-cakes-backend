@@ -11,7 +11,7 @@ const { withAuth } = createAuth({
     fields: ["name", "email", "password", "role"],
   },
   passwordResetLink: {
-    sendToken: async ({ itemId, identity, token, context }) => {
+    sendToken: async ({ identity, token }) => {
       await sendResetPasswordTokenEmail({ to: identity, token: token });
     },
     tokensValidForMins: 60,

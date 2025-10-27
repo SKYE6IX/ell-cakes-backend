@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761477886042" clover="3.2.0">
-  <project timestamp="1761477886042" name="All files">
+<coverage generated="1761478180878" clover="3.2.0">
+  <project timestamp="1761478180878" name="All files">
     <metrics statements="448" coveredstatements="269" conditionals="157" coveredconditionals="64" methods="65" coveredmethods="26" elements="670" coveredelements="359" complexity="0" loc="448" ncloc="448" packages="5" files="34" classes="34"/>
     <package name="ell-cakes-backend">
       <metrics statements="65" coveredstatements="48" conditionals="26" coveredconditionals="9" methods="12" coveredmethods="5"/>
@@ -477,20 +477,20 @@
         <line num="1" count="4" type="stmt"/>
         <line num="2" count="4" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
+        <line num="11" count="4" type="stmt"/>
         <line num="12" count="4" type="stmt"/>
         <line num="13" count="4" type="stmt"/>
-        <line num="14" count="4" type="stmt"/>
-        <line num="16" count="4" type="stmt"/>
-        <line num="24" count="4" type="stmt"/>
-        <line num="62" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
-        <line num="103" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="102" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="103" count="3" type="stmt"/>
         <line num="104" count="3" type="stmt"/>
         <line num="105" count="3" type="stmt"/>
-        <line num="106" count="3" type="stmt"/>
-        <line num="110" count="3" type="stmt"/>
-        <line num="116" count="0" type="stmt"/>
+        <line num="109" count="3" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
       </file>
     </package>
     <package name="ell-cakes-backend.script">

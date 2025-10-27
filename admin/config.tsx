@@ -1,9 +1,6 @@
-import React from "react";
+import type { AdminConfig } from "@keystone-6/core/types";
+import CustomLogo from "./components/CustomLogo";
 
-function CustomLogo() {
-  return <h1>Ell Cakes</h1>;
-}
-
-export const components = {
+export const components: AdminConfig["components"] = {
   Logo: CustomLogo,
 };

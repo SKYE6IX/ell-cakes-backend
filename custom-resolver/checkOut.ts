@@ -30,21 +30,24 @@ export const checkOut = async (
   context: Context
 ) => {
   const loggedInUser = context.session as Session;
-
   // Reject with error if USER isn't in session
   if (!loggedInUser) {
     throw new Error("Only signed in user can perform this action!");
   }
+  const user = await context.db.User.findOne({
+    where: { id: loggedInUser.itemId },
+  });
   const yooMoney = await yooMoneyPaymentGateway();
 
   // We check if user has a pending pyament order!
   const pendingOrder = await context.prisma.order.findFirst({
     where: {
-      userId: loggedInUser.itemId,
+      userId: user?.id,
       payment: { status: { equals: "pending" } },
     },
     include: { payment: true },
   });
+
   if (pendingOrder) {
     const createPayLoad: ICreatePayment = {
       amount: {
@@ -81,9 +84,10 @@ export const checkOut = async (
   const alphabet = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ";
   const nanoid = customAlphabet(alphabet, 8);
   const orderNumber = `ORD-${nanoid()}`;
+
   // Get the cart that belong to the current signin USER
   const cart = await context.query.Cart.findOne({
-    where: { user: { id: loggedInUser.itemId } },
+    where: { user: { id: user?.id } },
     query:
       "id subTotal cartItems { id quantity unitPrice subTotal product { id } productSnapShot variantSnapShot customizationSnapShot variant { id } topping { id weight extraPrice } }",
   });
@@ -112,6 +116,7 @@ export const checkOut = async (
 
   // Process payment for the transaction
   const processPayment = await yooMoney.createPayment(createPayLoad, uuidv4());
+
   // Create a new order-items and order
   const orderItems = cart.cartItems.map((cartItem: any) => {
     const item = {
@@ -136,7 +141,8 @@ export const checkOut = async (
     return item;
   });
 
-  const delivaryAddress = await context.db.DelivaryAddress.findOne({
+  //Connect the DeliveryAddress
+  const deliveryAddress = await context.db.DelivaryAddress.findOne({
     where: { id: deliveryAddressId },
   });
 
@@ -144,7 +150,7 @@ export const checkOut = async (
   const order = await context.db.Order.createOne({
     data: {
       user: { connect: { id: loggedInUser.itemId } },
-      deliveryAddress: { connect: { id: delivaryAddress?.id } },
+      deliveryAddress: { connect: { id: deliveryAddress?.id } },
       orderItems: { create: orderItems },
       orderNumber: orderNumber,
       subTotalAmount: cart.subTotal,

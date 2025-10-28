@@ -19,10 +19,12 @@ RUN chown -R node:node /app
 
 USER node
 
+RUN npm run build
+
 FROM base AS runner
 
 WORKDIR /app
 
 COPY --from=builder /app .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

@@ -56,6 +56,7 @@ export const registerUserWithCart = async (
     },
     data: {
       user: { connect: { id: data?.registerUser.id } },
+      updatedAt: new Date(),
     },
   });
 

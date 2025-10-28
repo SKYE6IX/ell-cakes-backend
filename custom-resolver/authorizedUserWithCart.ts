@@ -49,6 +49,7 @@ export const authorizedUserWithCart = async (
     },
     data: {
       user: { connect: { id: data?.authenticateUserWithPassword.item.id } },
+      updatedAt: new Date(),
     },
   });
   return await sudoContext.db.User.findOne({

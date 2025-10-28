@@ -31,6 +31,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         where: { paymentId: payment.id },
         data: {
           status: "succeeded",
+          updatedAt: new Date(),
         },
       });
       // Query the current Order

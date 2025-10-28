@@ -106,6 +106,7 @@ export const addToCart = async (
       data: {
         quantity: newQuantity,
         subTotal: Number(existCartItem.unitPrice) * newQuantity,
+        updatedAt: new Date(),
       },
     });
   } else {
@@ -155,6 +156,7 @@ export const addToCart = async (
         where: { id: cart.id },
         data: {
           subTotal: cartSubTotal,
+          updatedAt: new Date(),
         },
       });
     },

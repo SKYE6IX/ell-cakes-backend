@@ -74,6 +74,7 @@ export const checkOut = async (
         confirmationUrl: processPayment.confirmation.confirmation_url,
         method: processPayment?.payment_method.type,
         status: "pending",
+        updatedAt: new Date(),
       },
     });
   }

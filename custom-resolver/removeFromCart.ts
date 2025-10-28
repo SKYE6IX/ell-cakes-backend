@@ -48,6 +48,7 @@ export const removeFromCart = async (
         data: {
           quantity: updateQuantity,
           subTotal: Number(cartItemToRemoveOrReduce.unitPrice) * updateQuantity,
+          updatedAt: new Date(),
         },
       });
     }
@@ -68,6 +69,7 @@ export const removeFromCart = async (
         where: { id: cart.id },
         data: {
           subTotal: cartSubTotal,
+          updatedAt: new Date(),
         },
       });
     },

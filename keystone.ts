@@ -5,7 +5,6 @@ dotenv.config({ override: true });
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
-import { insertSeedData } from "./script";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
 import { getSecret } from "./lib/getSecret";
 
@@ -21,12 +20,6 @@ export default withAuth(
       provider: "postgresql",
       url: databaseUrl,
       idField: { kind: "uuid" },
-      onConnect: async (context) => {
-        console.log("Database connected");
-        if (process.argv.includes("--seed-data")) {
-          await insertSeedData(context);
-        }
-      },
     },
     lists,
     session,

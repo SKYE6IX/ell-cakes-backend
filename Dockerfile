@@ -8,10 +8,9 @@ FROM base AS builder
 
 WORKDIR /app
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --include=dev
+COPY package.json package-lock.json*  ./
+
+RUN npm ci
 
 COPY . .    
 
@@ -27,4 +26,4 @@ WORKDIR /app
 
 COPY --from=builder /app .
 
-CMD ["npm", "run", "start"]
+ENTRYPOINT ["npm", "run", "start"]

@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 
-ARG PLATFORM=linux/arm64
-
-FROM --platform=${PLATFORM} node:latest AS base
+FROM node:lts-alpine AS base
 
 FROM base AS builder
+
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 
@@ -21,6 +21,8 @@ USER node
 RUN npm run build
 
 FROM base AS runner
+
+RUN apk add --no-cache openssl
 
 WORKDIR /app
 

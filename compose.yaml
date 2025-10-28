@@ -2,6 +2,8 @@ services:
   server: 
     build: 
      context: .
+     platforms: 
+      - linux/arm64
      dockerfile: Dockerfile 
     environment: 
         DATABASE_URL_FILE: /run/secrets/database_url

@@ -25,7 +25,7 @@ export const CustomizationOption = list({
         { label: "Photos", value: "PHOTOS" },
       ],
       defaultValue: undefined,
-      label: "Product Customization",
+      label: "Название",
       isIndexed: "unique",
     }),
     customValues: relationship({
@@ -33,6 +33,9 @@ export const CustomizationOption = list({
       many: true,
       ui: {
         displayMode: "cards",
+        itemView: {
+          fieldMode: "read",
+        },
         cardFields: ["value", "extraPrice", "optionConstraint"],
         inlineCreate: {
           fields: ["value", "extraPrice", "optionConstraint"],
@@ -42,15 +45,22 @@ export const CustomizationOption = list({
         },
         linkToItem: true,
       },
+      label: "Варианты выбора",
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),
     updatedAt: timestamp({
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),

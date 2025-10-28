@@ -21,8 +21,19 @@ export const OrderItem = list({
   },
   fields: {
     order: relationship({ ref: "Order.orderItems" }),
-    product: relationship({ ref: "Product" }),
-    variant: relationship({ ref: "ProductVariant" }),
+    product: relationship({
+      ref: "Product",
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        displayMode: "cards",
+        cardFields: ["basePrice"],
+      },
+    }),
+    variant: relationship({
+      ref: "ProductVariant",
+    }),
     quantity: integer({ defaultValue: 1 }),
     unitPrice: integer(),
     subTotal: integer(),
@@ -33,11 +44,17 @@ export const OrderItem = list({
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),
     updatedAt: timestamp({
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),

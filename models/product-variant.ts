@@ -20,22 +20,29 @@ export const ProductVariant = list({
   },
   fields: {
     product: relationship({ ref: "Product.variants", many: false }),
-    price: integer({ validation: { isRequired: true } }),
-    pieces: integer({ defaultValue: undefined }),
+    price: integer({ validation: { isRequired: true }, label: "цена" }),
+    pieces: integer({ defaultValue: undefined, label: "порции" }),
     weight: decimal({
       precision: 4,
       scale: 1,
       defaultValue: undefined,
+      label: "вес",
     }),
-    isAvailable: checkbox({ defaultValue: true }),
+    isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),
     updatedAt: timestamp({
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),

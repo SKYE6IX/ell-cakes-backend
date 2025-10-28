@@ -30,20 +30,23 @@ model User {
   cart                        Cart?             @relation("Cart_user")
   orders                      Order[]           @relation("Order_user")
   payments                    Payment[]         @relation("Payment_user")
-  createdAt                   DateTime?         @default(now())
   lastLogin                   DateTime?
+  createdAt                   DateTime?         @default(now())
+  updatedAt                   DateTime?
 }
 
 model DelivaryAddress {
-  id              String  @id @default(uuid()) @postgresql.Uuid
-  user            User?   @relation("DelivaryAddress_user", fields: [userId], references: [id])
-  userId          String? @map("user") @postgresql.Uuid
-  orders          Order[] @relation("Order_deliveryAddress")
-  street          String  @default("")
-  apartmentNumber String  @default("")
-  floor           String  @default("")
-  intercomCode    String  @default("")
-  isDefault       Boolean @default(false)
+  id              String    @id @default(uuid()) @postgresql.Uuid
+  user            User?     @relation("DelivaryAddress_user", fields: [userId], references: [id])
+  userId          String?   @map("user") @postgresql.Uuid
+  orders          Order[]   @relation("Order_deliveryAddress")
+  street          String    @default("")
+  apartmentNumber String    @default("")
+  floor           String    @default("")
+  intercomCode    String    @default("")
+  isDefault       Boolean   @default(false)
+  createdAt       DateTime? @default(now())
+  updatedAt       DateTime?
 
   @@index([userId])
 }
@@ -125,6 +128,8 @@ model Category {
   parent               Category?  @relation("Category_parent", fields: [parentId], references: [id])
   parentId             String?    @map("parent") @postgresql.Uuid
   products             Product[]  @relation("Product_category")
+  createdAt            DateTime?  @default(now())
+  updatedAt            DateTime?
   from_Category_parent Category[] @relation("Category_parent")
 
   @@index([parentId])

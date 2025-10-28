@@ -70,14 +70,20 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           },
         ],
       };
-      const receipt = await yooMoney.createReceipt(
-        receiptPayload,
-        idempotence_key
-      );
+      // const receipt = await yooMoney.createReceipt(
+      //   receiptPayload,
+      //   idempotence_key
+      // );
       // console.log(receipt);
       // Set up a mail or sms sercie that will send email or sms about the order to the USER
       // Use the payment ID to query the ORDER to get information about the order and the
       // User.
+
+      // TODO:
+      // 1. Send receipt email to user after a successful payment
+      // 2. Create an order for Merchant CRM (Mobidel) using the values of all the order items.
+      // 3. Set up SMS for a new order notification for customer, so they know about their new ORDER
+      //
     }
   } catch (error) {
     console.log(error);

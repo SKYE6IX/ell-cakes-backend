@@ -22,8 +22,8 @@ export const CustomizationOptionValue = list({
       ref: "CustomizationOption.customValues",
       many: false,
     }),
-    value: text({ defaultValue: undefined }),
-    extraPrice: integer({ defaultValue: undefined }),
+    value: text({ defaultValue: undefined, label: "Значение" }),
+    extraPrice: integer({ defaultValue: undefined, label: "Доплата" }),
     optionConstraint: relationship({
       ref: "CustomizationOptionConstraint.optionValues",
       many: false,
@@ -38,15 +38,22 @@ export const CustomizationOptionValue = list({
         },
         linkToItem: true,
       },
+      label: "Ограничения выбора",
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),
     updatedAt: timestamp({
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),

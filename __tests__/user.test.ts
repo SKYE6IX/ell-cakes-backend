@@ -8,7 +8,6 @@ import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
 import path from "path";
-import { sendVerificationEmail } from "../lib/mail";
 
 const IMAGE = "postgres:16-alpine";
 const prismaSchemaPath = path.join(process.cwd(), "schema.prisma");
@@ -18,10 +17,6 @@ const config = {
 
 let container: StartedPostgreSqlContainer;
 let context: KeystoneContext<any>;
-
-jest.mock("../lib/mail.ts", () => ({
-  sendVerificationEmail: jest.fn(async () => Promise.resolve()),
-}));
 
 beforeAll(async () => {
   container = await new PostgreSqlContainer(IMAGE).start();
@@ -54,9 +49,6 @@ describe("User Model", () => {
     expect(newUser.email).toEqual("test@mail.com");
     expect(newUser.role).toEqual("CUSTOMER");
     expect(newUser.password).toBeDefined();
-    expect(sendVerificationEmail).toHaveBeenCalledTimes(1);
-    expect(newUser.emailVerificationIssuedAt).toBeDefined();
-    expect(newUser.emailVerificationToken).toBeDefined();
   });
 
   test("User can update their profile", async () => {

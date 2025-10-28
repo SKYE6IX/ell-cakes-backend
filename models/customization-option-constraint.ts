@@ -25,18 +25,20 @@ export const CustomizationOptionConstraint = list({
     key: select({
       options: [{ label: "Weight", value: "weight" }],
       defaultValue: undefined,
-      label: "Option Constraint",
+      label: "Параметр",
     }),
     // Currently we only have weight contraint that depend on a value of shape
     minValue: decimal({
       precision: 4,
       scale: 1,
       defaultValue: undefined,
+      label: "Минимальное значение",
     }),
     maxValue: decimal({
       precision: 4,
       scale: 1,
       defaultValue: undefined,
+      label: "Максимальное значение",
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },

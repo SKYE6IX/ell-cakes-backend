@@ -9,7 +9,6 @@ import {
   checkbox,
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
-import { sendVerificationEmail } from "../lib/mail";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 
 const hiddenFieldConfig = {
@@ -75,13 +74,48 @@ export const User = list({
         update: permissions.canManageUsers,
       },
     }),
-    delivaryAddress: relationship({ ref: "DelivaryAddress.user", many: true }),
-    cart: relationship({ ref: "Cart.user" }),
-    orders: relationship({ ref: "Order.user", many: true }),
-    payments: relationship({ ref: "Payment.user", many: true }),
-    createdAt: timestamp({
-      defaultValue: { kind: "now" },
+    delivaryAddress: relationship({
+      ref: "DelivaryAddress.user",
+      many: true,
       ui: {
+        itemView: {
+          fieldMode: "hidden",
+        },
+        createView: {
+          fieldMode: "hidden",
+        },
+      },
+    }),
+    cart: relationship({
+      ref: "Cart.user",
+      ui: {
+        itemView: {
+          fieldMode: "hidden",
+        },
+        createView: {
+          fieldMode: "hidden",
+        },
+      },
+    }),
+    orders: relationship({
+      ref: "Order.user",
+      many: true,
+      ui: {
+        itemView: {
+          fieldMode: "hidden",
+        },
+        createView: {
+          fieldMode: "hidden",
+        },
+      },
+    }),
+    payments: relationship({
+      ref: "Payment.user",
+      many: true,
+      ui: {
+        itemView: {
+          fieldMode: "hidden",
+        },
         createView: {
           fieldMode: "hidden",
         },
@@ -90,30 +124,58 @@ export const User = list({
     lastLogin: timestamp({
       defaultValue: undefined,
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: {
           fieldMode: "hidden",
         },
       },
     }),
-  },
-  hooks: {
-    resolveInput: {
-      create: async ({ resolvedData }) => {
-        if (resolvedData.role === "CUSTOMER") {
-          const token = randomBytes(32).toString("hex");
-          const issuedAt = new Date();
-          await sendVerificationEmail({
-            to: resolvedData.email,
-            token: token,
-          });
-          return {
-            ...resolvedData,
-            emailVerificationToken: token,
-            emailVerificationIssuedAt: issuedAt,
-          };
-        }
-        return resolvedData;
+    createdAt: timestamp({
+      defaultValue: { kind: "now" },
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        createView: { fieldMode: "hidden" },
       },
+    }),
+    updatedAt: timestamp({
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+    }),
+  },
+  // hooks: {
+  //   resolveInput: {
+  //     create: async ({ resolvedData }) => {
+  //       if (resolvedData.role === "CUSTOMER") {
+  //         const token = randomBytes(32).toString("hex");
+  //         const issuedAt = new Date();
+  //         await sendVerificationEmail({
+  //           to: resolvedData.email,
+  //           token: token,
+  //         });
+  //         return {
+  //           ...resolvedData,
+  //           emailVerificationToken: token,
+  //           emailVerificationIssuedAt: issuedAt,
+  //         };
+  //       }
+  //       return resolvedData;
+  //     },
+  //   },
+  // },
+  ui: {
+    isHidden: ({ session }) => {
+      if (session.data.role === "ADMIN") {
+        return false;
+      }
+      return true;
     },
   },
 });

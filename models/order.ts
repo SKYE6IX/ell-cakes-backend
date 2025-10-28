@@ -1,10 +1,11 @@
-import { list } from "@keystone-6/core";
+import { list, graphql } from "@keystone-6/core";
 import {
   relationship,
   timestamp,
   text,
   select,
   integer,
+  virtual,
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
@@ -21,12 +22,56 @@ export const Order = list({
     },
   },
   fields: {
-    user: relationship({ ref: "User.orders" }),
-    orderItems: relationship({ ref: "OrderItem.order", many: true }),
-    orderNumber: text({ isIndexed: "unique" }),
-    shippingCost: integer(),
-    subTotalAmount: integer(),
-    totalAmount: integer(),
+    user: relationship({
+      ref: "User.orders",
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        displayMode: "cards",
+        cardFields: ["name", "email", "phoneNumber"],
+      },
+    }),
+    orderItems: relationship({
+      ref: "OrderItem.order",
+      many: true,
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        displayMode: "cards",
+        cardFields: ["product", "variant", "quantity", "unitPrice", "subTotal"],
+      },
+    }),
+    orderNumber: text({
+      isIndexed: "unique",
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+      },
+    }),
+    shippingCost: integer({
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+      },
+    }),
+    subTotalAmount: integer({
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+      },
+    }),
+    totalAmount: integer({
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+      },
+    }),
     status: select({
       options: [
         { label: "Processing", value: "PROCESSING" },
@@ -36,17 +81,47 @@ export const Order = list({
       ],
       defaultValue: "PROCESSING",
     }),
-    payment: relationship({ ref: "Payment.order" }),
-    deliveryAddress: relationship({ ref: "DelivaryAddress.orders" }),
-    note: text(),
+    payment: relationship({
+      ref: "Payment.order",
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        displayMode: "cards",
+        cardFields: ["status"],
+      },
+    }),
+    deliveryAddress: relationship({
+      ref: "DelivaryAddress.orders",
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        displayMode: "cards",
+        cardFields: ["street", "apartmentNumber", "floor", "intercomCode"],
+      },
+    }),
+    note: text({
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+      },
+    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),
     updatedAt: timestamp({
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),

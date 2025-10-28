@@ -7,6 +7,10 @@ interface RegisterUserArgs {
   phoneNumber: string;
 }
 
+// TODO:
+// 1. Set up SMS verification so has to confirm USER are real and not a bot
+// 2. Instead of verifyEmail, we set up verifyUserBySMS.
+
 export const registerUser = async (
   root: any,
   { registerData }: { registerData: RegisterUserArgs },
@@ -28,7 +32,6 @@ export const registerUser = async (
       ...registerData,
     },
   });
-
   // authorized USER if successfully created
   const { data, errors } = await sudoContext.graphql.raw<
     { authenticateUserWithPassword: { item: { id: string } } },
@@ -50,6 +53,7 @@ export const registerUser = async (
   if (errors) {
     throw new Error(errors[0].message);
   }
+
   return await sudoContext.db.User.findOne({
     where: { id: data?.authenticateUserWithPassword.item.id },
   });

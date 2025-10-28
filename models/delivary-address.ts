@@ -1,5 +1,10 @@
 import { list } from "@keystone-6/core";
-import { text, relationship, checkbox } from "@keystone-6/core/fields";
+import {
+  text,
+  relationship,
+  checkbox,
+  timestamp,
+} from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, rules } from "../access";
 
@@ -21,7 +26,25 @@ export const DelivaryAddress = list({
     floor: text(),
     intercomCode: text(),
     isDefault: checkbox(),
+    createdAt: timestamp({
+      defaultValue: { kind: "now" },
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+    }),
+    updatedAt: timestamp({
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+    }),
   },
+
   ui: {
     isHidden: true,
   },

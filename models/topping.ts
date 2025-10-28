@@ -6,8 +6,12 @@ import { getTransliterationSlug } from "../lib/getTransliteration";
 export const Topping = list({
   access: allowAll,
   fields: {
-    product: relationship({ ref: "Product.topping" }),
-    name: text({ isIndexed: "unique", validation: { isRequired: true } }),
+    product: relationship({ ref: "Product.topping", label: "продукт" }),
+    name: text({
+      isIndexed: "unique",
+      validation: { isRequired: true },
+      label: "Название",
+    }),
     slug: text({
       hooks: {
         resolveInput: ({ resolvedData, operation, fieldKey }) => {
@@ -21,6 +25,9 @@ export const Topping = list({
       },
       isIndexed: "unique",
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),
@@ -38,15 +45,22 @@ export const Topping = list({
         },
         linkToItem: true,
       },
+      label: "Доступные варианты",
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),
     updatedAt: timestamp({
       ui: {
+        itemView: {
+          fieldMode: "read",
+        },
         createView: { fieldMode: "hidden" },
       },
     }),

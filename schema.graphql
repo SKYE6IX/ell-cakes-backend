@@ -23,8 +23,9 @@ type User {
   ordersCount(where: OrderWhereInput! = {}): Int
   payments(where: PaymentWhereInput! = {}, orderBy: [PaymentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PaymentWhereUniqueInput): [Payment!]
   paymentsCount(where: PaymentWhereInput! = {}): Int
-  createdAt: DateTime
   lastLogin: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type PasswordState {
@@ -61,8 +62,9 @@ input UserWhereInput {
   cart: CartWhereInput
   orders: OrderManyRelationFilter
   payments: PaymentManyRelationFilter
-  createdAt: DateTimeNullableFilter
   lastLogin: DateTimeNullableFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
 }
 
 input IDFilter {
@@ -160,8 +162,9 @@ input UserOrderByInput {
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
   firstOrderDiscountEligible: OrderDirection
-  createdAt: OrderDirection
   lastLogin: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
 }
 
 enum OrderDirection {
@@ -187,8 +190,9 @@ input UserUpdateInput {
   cart: CartRelateToOneForUpdateInput
   orders: OrderRelateToManyForUpdateInput
   payments: PaymentRelateToManyForUpdateInput
-  createdAt: DateTime
   lastLogin: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input DelivaryAddressRelateToManyForUpdateInput {
@@ -241,8 +245,9 @@ input UserCreateInput {
   cart: CartRelateToOneForCreateInput
   orders: OrderRelateToManyForCreateInput
   payments: PaymentRelateToManyForCreateInput
-  createdAt: DateTime
   lastLogin: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input DelivaryAddressRelateToManyForCreateInput {
@@ -275,6 +280,8 @@ type DelivaryAddress {
   floor: String
   intercomCode: String
   isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input DelivaryAddressWhereUniqueInput {
@@ -293,6 +300,8 @@ input DelivaryAddressWhereInput {
   floor: StringFilter
   intercomCode: StringFilter
   isDefault: BooleanFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
 }
 
 input DelivaryAddressOrderByInput {
@@ -302,6 +311,8 @@ input DelivaryAddressOrderByInput {
   floor: OrderDirection
   intercomCode: OrderDirection
   isDefault: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
 }
 
 input DelivaryAddressUpdateInput {
@@ -312,6 +323,8 @@ input DelivaryAddressUpdateInput {
   floor: String
   intercomCode: String
   isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input UserRelateToOneForUpdateInput {
@@ -333,6 +346,8 @@ input DelivaryAddressCreateInput {
   floor: String
   intercomCode: String
   isDefault: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input UserRelateToOneForCreateInput {
@@ -807,6 +822,8 @@ type Category {
   parent: Category
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input CategoryWhereUniqueInput {
@@ -823,6 +840,8 @@ input CategoryWhereInput {
   slug: StringFilter
   parent: CategoryWhereInput
   products: ProductManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
 }
 
 input ProductManyRelationFilter {
@@ -835,6 +854,8 @@ input CategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
 }
 
 input CategoryUpdateInput {
@@ -842,6 +863,8 @@ input CategoryUpdateInput {
   slug: String
   parent: CategoryRelateToOneForUpdateInput
   products: ProductRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input ProductRelateToManyForUpdateInput {
@@ -861,6 +884,8 @@ input CategoryCreateInput {
   slug: String
   parent: CategoryRelateToOneForCreateInput
   products: ProductRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input ProductRelateToManyForCreateInput {

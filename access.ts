@@ -27,7 +27,8 @@ export const rules = {
   canReadUser: ({ session }: AccessArgs) => {
     if (!session) return false;
     // Admin can read all profile
-    if (session.data.role === "ADMIN") return true;
+    if (session.data.role === "ADMIN" || session.data.role === "EDITOR")
+      return true;
     // Other roles are only allow to read their own profile
     return { id: { equals: session.itemId } };
   },

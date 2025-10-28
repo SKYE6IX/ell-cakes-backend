@@ -1,0 +1,41 @@
+services: 
+  server: 
+    build: 
+     context: .
+     dockerfile: Dockerfile 
+    environment: 
+        DATABASE_URL_FILE: /run/secrets/database_url
+        YC_S3_KEY_ID_FILE: /run/secrets/yc_s3_key_id
+        YC_S3_SECRET_KEY_FILE: /run/secrets/yc_s3_secret_key
+        YC_S3_BUCKET: ell-cake
+        YC_S3_REGION: ru-central1
+        YC_S3_PRIVATE_ENDPOINT: https://storage.yandexcloud.net
+        SESSION_SECRET_FILE: /run/secrets/session_secret
+        FRONTEND_URL: http://localhost:3000
+        YOO_MONEY_SHOP_ID_FILE: /run/secrets/yoo_money_shop_id
+        YOO_MONEY_SECRET_ID_FILE: /run/secrets/yoo_money_secret_id
+        
+    secrets: 
+      - database_url
+      - yc_s3_key_id
+      - yc_s3_secret_key
+      - session_secret
+      - yoo_money_shop_id
+      - yoo_money_secret_id
+
+    ports:
+    - 8080:8080  
+
+secrets: 
+  database_url: 
+    file: ./secrets/database_url.txt
+  yc_s3_key_id: 
+    file: ./secrets/yc_s3_key_id.txt
+  yc_s3_secret_key: 
+    file: ./secrets/yc_s3_secret_key.txt
+  session_secret:
+    file: ./secrets/session_secret.txt
+  yoo_money_shop_id: 
+    file: ./secrets/yoo_money_shop_id.txt
+  yoo_money_secret_id: 
+    file: ./secrets/yoo_money_secret_id.txt

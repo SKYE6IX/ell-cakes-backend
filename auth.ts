@@ -1,6 +1,9 @@
 import { createAuth } from "@keystone-6/auth";
 import { statelessSessions } from "@keystone-6/core/session";
 import { sendResetPasswordTokenEmail } from "./lib/mail";
+import { getSecret } from "./lib/getSecret";
+
+const sessionSecret = getSecret("SESSION_SECRET");
 
 const { withAuth } = createAuth({
   listKey: "User",
@@ -20,7 +23,7 @@ const { withAuth } = createAuth({
 const sessionMaxAge = 60 * 60 * 24 * 30;
 const session = statelessSessions({
   maxAge: sessionMaxAge,
-  secret: process.env.SESSION_SECRET,
+  secret: sessionSecret,
 });
 
 export { withAuth, session };

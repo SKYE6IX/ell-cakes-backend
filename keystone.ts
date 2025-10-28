@@ -7,20 +7,19 @@ import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
 import { insertSeedData } from "./script";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
+import { getSecret } from "./lib/getSecret";
 
-const {
-  YC_S3_KEY_ID,
-  YC_S3_SECRET_KEY,
-  YC_S3_BUCKET,
-  YC_S3_REGION,
-  YC_S3_PRIVATE_ENDPOINT,
-} = process.env;
+const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT } = process.env;
+
+const databaseUrl = getSecret("DATABASE_URL");
+const ycS3KeyId = getSecret("YC_S3_KEY_ID");
+const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
 
 export default withAuth(
   config({
     db: {
       provider: "postgresql",
-      url: process.env.DATABASE_URL,
+      url: databaseUrl,
       idField: { kind: "uuid" },
       onConnect: async (context) => {
         console.log("Database connected");
@@ -37,8 +36,8 @@ export default withAuth(
         type: "image",
         bucketName: `${YC_S3_BUCKET}-images`,
         region: YC_S3_REGION,
-        accessKeyId: YC_S3_KEY_ID,
-        secretAccessKey: YC_S3_SECRET_KEY,
+        accessKeyId: ycS3KeyId,
+        secretAccessKey: ycS3SecretId,
         endpoint: YC_S3_PRIVATE_ENDPOINT,
         acl: "public-read",
       },
@@ -47,8 +46,8 @@ export default withAuth(
         type: "file",
         bucketName: `${YC_S3_BUCKET}-files`,
         region: YC_S3_REGION,
-        accessKeyId: YC_S3_KEY_ID,
-        secretAccessKey: YC_S3_SECRET_KEY,
+        accessKeyId: ycS3KeyId,
+        secretAccessKey: ycS3SecretId,
         endpoint: YC_S3_PRIVATE_ENDPOINT,
         acl: "public-read",
       },

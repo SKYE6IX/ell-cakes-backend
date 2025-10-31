@@ -1,16 +1,13 @@
-import { list, graphql } from "@keystone-6/core";
+import { list } from "@keystone-6/core";
 import {
   relationship,
   timestamp,
   text,
   select,
   integer,
-  virtual,
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
-
-// Mobidel Order ID 1334748748
 
 export const Order = list({
   access: {

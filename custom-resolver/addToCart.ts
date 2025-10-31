@@ -57,6 +57,7 @@ export const addToCart = async (
     },
   });
 
+  // Filter out the variant USER chose if provided
   const productVariant = product?.variants.find(
     (variant) => variant.id === variantId
   );
@@ -83,7 +84,7 @@ export const addToCart = async (
       };
     }) ?? null;
 
-  // Get the current selected topping if user chose a topping is provided
+  // Get the selected topping if user chose a topping
   const selectedTopping = product?.topping?.options.find(
     (topping) => topping.id === toppingId
   );
@@ -152,7 +153,8 @@ export const addToCart = async (
         (sum, item) => sum + Number(item.subTotal),
         0
       );
-      await tx.prisma.cart.update({
+      // Update the total amount of the cart-item to the cart
+      await tx.db.Cart.updateOne({
         where: { id: cart.id },
         data: {
           subTotal: cartSubTotal,

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/12</span>
+                <span class='fraction'>10/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/12</span>
+                <span class='fraction'>10/16</span>
             </div>
         
             
@@ -244,18 +244,29 @@
 <a name='L179'></a><a href='#L179'>179</a>
 <a name='L180'></a><a href='#L180'>180</a>
 <a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L182'></a><a href='#L182'>182</a>
+<a name='L183'></a><a href='#L183'>183</a>
+<a name='L184'></a><a href='#L184'>184</a>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -400,6 +411,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -407,8 +419,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -425,8 +440,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { randomBytes } from "crypto";
-import { list } from "@keystone-6/core";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { list } from "@keystone-6/core";
 import {
   text,
   password,
@@ -437,6 +456,8 @@ import {
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
+import { Context } from ".keystone/types";
 &nbsp;
 const hiddenFieldConfig = {
   ui: {
@@ -464,14 +485,14 @@ export const User = list({
       validation: { isRequired: true },
       isIndexed: "unique",
     }),
-    isEmailVerified: checkbox({ defaultValue: false }),
-    emailVerificationToken: password(hiddenFieldConfig),
-    emailVerificationIssuedAt: timestamp(hiddenFieldConfig),
-    emailVerificationRedeemedAt: timestamp(hiddenFieldConfig),
+    password: password({ validation: { isRequired: true } }),
     phoneNumber: text({
       isIndexed: "unique",
     }),
-    password: password({ validation: { isRequired: true } }),
+    isPhoneNumberVerified: checkbox({ defaultValue: false }),
+    phoneNumberToken: password(hiddenFieldConfig),
+    phoneNumberVerificationIssuedAt: timestamp(hiddenFieldConfig),
+    phoneNumberVerificationRedeemedAt: timestamp(hiddenFieldConfig),
     role: select({
       options: [
         { label: "Admin", value: "ADMIN" },
@@ -577,26 +598,30 @@ export const User = list({
       },
     }),
   },
-  // hooks: {
-  //   resolveInput: {
-  //     create: async ({ resolvedData }) =&gt; {
-  //       if (resolvedData.role === "CUSTOMER") {
-  //         const token = randomBytes(32).toString("hex");
-  //         const issuedAt = new Date();
-  //         await sendVerificationEmail({
-  //           to: resolvedData.email,
-  //           token: token,
-  //         });
-  //         return {
-  //           ...resolvedData,
-  //           emailVerificationToken: token,
-  //           emailVerificationIssuedAt: issuedAt,
-  //         };
-  //       }
-  //       return resolvedData;
-  //     },
-  //   },
-  // },
+&nbsp;
+  hooks: {
+    afterOperation: {
+      create: async ({ item, context }) =&gt; {
+        await issueVerificationToken({
+          userId: item.id.toString(),
+          context: context as unknown as Context,
+        });
+      },
+      update: async ({ inputData, originalItem, context }) =&gt; {
+        // Check if USER passed in a new phone number
+        // and verify it isn't the same as the existing one they had
+        if (
+          inputData.phoneNumber &amp;&amp;
+          inputData.phoneNumber !== originalItem.phoneNumber
+        ) {
+          await issueVerificationToken({
+            userId: originalItem.id.toString(),
+            context: context as unknown as Context,
+          });
+        }
+      },
+    },
+  },
   ui: {
     isHidden: <span class="fstat-no" title="function not covered" >({</span> session }) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (session.data.role === "ADMIN") {</span>
@@ -606,6 +631,11 @@ export const User = list({
     },
   },
 });
+&nbsp;
+// Cases where issue of token to verify USER neew to be created:
+// 1. When user create an account ✅
+// 2. When user update their account, and they updated phone number too ✅
+// 3. The token expire and they need resend the token ✅
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -613,7 +643,7 @@ export const User = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-28T14:24:53.441Z
+                at 2025-10-31T07:27:10.463Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

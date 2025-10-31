@@ -39,7 +39,6 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         where: { payment: { id: updatePayment.id } },
         query: `id orderNumber totalAmount orderItems {id quantity subTotal product { name } } user { name email phoneNumber }`,
       })) as OrderWithOrderDetails;
-
       // Send a receipt to USER about their payment
       const idempotence_key = uuidv4();
       const receiptPayload: ICreateReceipt = {
@@ -78,13 +77,13 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       // );
       // console.log(receipt);
 
-      // Set up a mail or sms sercie that will send email or sms about the order to the USER
+      // Set up a mail or sms service that will send email or sms about the order to the USER
       // Use the payment ID to query the ORDER to get information about the order and the
-      // User.
+      // User information.
 
       // TODO:
       // 1. Send receipt email to user after a successful payment
-      // 2. Create an order for Merchant CRM (Mobidel) using the values of all the order items.
+      // 2. Create an order for Merchant CRM (Mobidel?) using the values of all the order items.
       // ::::: 1. We need to update the order model, so we can store the ID of the Mobidel order
       // :::::  we've just created.
       // ::::: 2. Send an order details email to her by connecting email with nodemailer.

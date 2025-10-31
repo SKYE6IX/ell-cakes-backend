@@ -151,7 +151,6 @@ export const User = list({
       },
     }),
   },
-
   hooks: {
     afterOperation: {
       create: async ({ item, context }) => {
@@ -184,8 +183,3 @@ export const User = list({
     },
   },
 });
-
-// Cases where issue of token to verify USER neew to be created:
-// 1. When user create an account ✅
-// 2. When user update their account, and they updated phone number too ✅
-// 3. The token expire and they need resend the token ✅

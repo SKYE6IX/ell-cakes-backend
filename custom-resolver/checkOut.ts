@@ -34,9 +34,11 @@ export const checkOut = async (
   if (!loggedInUser) {
     throw new Error("Only signed in user can perform this action!");
   }
+
   const user = await context.db.User.findOne({
     where: { id: loggedInUser.itemId },
   });
+
   const yooMoney = await yooMoneyPaymentGateway();
 
   // We check if user has a pending pyament order!
@@ -67,6 +69,7 @@ export const checkOut = async (
       createPayLoad,
       uuidv4()
     );
+
     return await context.db.Payment.updateOne({
       where: { id: pendingOrder.payment?.id },
       data: {
@@ -130,7 +133,9 @@ export const checkOut = async (
         variant: { connect: { id: cartItem.variant.id } },
         variantSnapShot: cartItem.variantSnapShot,
       }),
-      customizationSnapShot: cartItem.customizationSnapShot,
+      ...(cartItem.customizationSnapShot && {
+        customizationSnapShot: cartItem.customizationSnapShot,
+      }),
       ...(cartItem.topping && {
         toppingSnapShot: {
           id: cartItem.topping.id,
@@ -161,7 +166,7 @@ export const checkOut = async (
     },
   });
 
-  // Cleanup the cart
+  // Clean up the cart
   await context.db.Cart.deleteOne({
     where: { id: cart.id },
   });

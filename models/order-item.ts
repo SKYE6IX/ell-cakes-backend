@@ -34,7 +34,7 @@ export const OrderItem = list({
     variant: relationship({
       ref: "ProductVariant",
     }),
-    quantity: integer({ defaultValue: 1 }),
+    quantity: integer(),
     unitPrice: integer(),
     subTotal: integer(),
     productSnapShot: json(),

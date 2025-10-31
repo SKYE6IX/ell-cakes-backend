@@ -269,7 +269,7 @@ model OrderItem {
   productId             String?         @map("product") @postgresql.Uuid
   variant               ProductVariant? @relation("OrderItem_variant", fields: [variantId], references: [id])
   variantId             String?         @map("variant") @postgresql.Uuid
-  quantity              Int?            @default(1)
+  quantity              Int?
   unitPrice             Int?
   subTotal              Int?
   productSnapShot       Json?

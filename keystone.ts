@@ -8,7 +8,8 @@ import { customExtendResolvers } from "./custom-resolver";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
 import { getSecret } from "./lib/getSecret";
 
-const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT } = process.env;
+const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
+  process.env;
 
 const databaseUrl = getSecret("DATABASE_URL");
 const ycS3KeyId = getSecret("YC_S3_KEY_ID");
@@ -49,6 +50,7 @@ export default withAuth(
       extendGraphqlSchema: customExtendResolvers,
     },
     server: {
+      cors: { origin: [FRONTEND_URL], credentials: true },
       port: 8080,
       extendExpressApp: (app, commonContext) => {
         app.use(express.json());

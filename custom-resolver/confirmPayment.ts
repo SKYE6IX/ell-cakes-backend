@@ -70,24 +70,23 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           },
         ],
       };
-
       // const receipt = await yooMoney.createReceipt(
       //   receiptPayload,
       //   idempotence_key
       // );
       // console.log(receipt);
 
-      // Set up a mail or sms service that will send email or sms about the order to the USER
+      // TODO:
+      // Set up sms service that will send sms about the order to the USER
       // Use the payment ID to query the ORDER to get information about the order and the
       // User information.
 
-      // TODO:
-      // 1. Send receipt email to user after a successful payment
-      // 2. Create an order for Merchant CRM (Mobidel?) using the values of all the order items.
-      // ::::: 1. We need to update the order model, so we can store the ID of the Mobidel order
+      // 1. Send receipt email to user after a successful payment(Through Yookassa set up)
+
+      // 2. Create an order for Merchant CRM using the values of all the order items.
+      // ::::: 1. We need to update the order model, so we can store the ID of CRM order ID
       // :::::  we've just created.
-      // ::::: 2. Send an order details email to her by connecting email with nodemailer.
-      // 3. Set up SMS for a new order notification for customer, so they know about their new ORDER
+      // ::::: 2. Another option is to send and order details to merchant email with the help of nodemailer.
     }
   } catch (error) {
     console.log(error);

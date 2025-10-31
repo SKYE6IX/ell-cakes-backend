@@ -13,7 +13,6 @@ export const issueVerificationToken = async ({
   const token = nanoid();
 
   console.log("Here is newly created token: -> ", token);
-
   const issuedAt = new Date();
   try {
     await sudoContext.db.User.updateOne({
@@ -26,6 +25,8 @@ export const issueVerificationToken = async ({
         updatedAt: issuedAt,
       },
     });
+    // TODO:
+    // 1. Set up SMS service that will send the token to the USER phone number
   } catch (error) {
     console.log(error);
     throw new Error("Error happened while trying to issued a token!");

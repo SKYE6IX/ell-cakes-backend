@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1761897599505" clover="3.2.0">
-  <project timestamp="1761897599506" name="All files">
+<coverage generated="1761900386841" clover="3.2.0">
+  <project timestamp="1761900386841" name="All files">
     <metrics statements="425" coveredstatements="289" conditionals="159" coveredconditionals="70" methods="63" coveredmethods="29" elements="647" coveredelements="388" complexity="0" loc="425" ncloc="425" packages="4" files="36" classes="36"/>
     <package name="ell-cakes-backend">
       <metrics statements="68" coveredstatements="54" conditionals="26" coveredconditionals="10" methods="11" coveredmethods="5"/>
@@ -199,8 +199,8 @@
         <line num="43" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="54" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
         <line num="93" count="0" type="stmt"/>
-        <line num="94" count="0" type="stmt"/>
       </file>
       <file name="index.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/index.ts">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -325,11 +325,11 @@
         <line num="12" count="4" type="stmt"/>
         <line num="13" count="4" type="stmt"/>
         <line num="15" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
         <line num="17" count="4" type="stmt"/>
         <line num="18" count="4" type="stmt"/>
-        <line num="19" count="4" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
         <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
       </file>
       <file name="mail.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/lib/mail.ts">
         <metrics statements="15" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>

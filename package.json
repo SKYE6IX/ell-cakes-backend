@@ -6,7 +6,7 @@
     "dev": "keystone dev",
     "start": "keystone start",
     "build": "keystone build",
-    "seed-data": "keystone dev --seed-data",
+    "seed": "tsx ./script",
     "test": "jest"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "@types/nodemailer": "^7.0.2",
     "jest": "^30.2.0",
     "ts-jest": "^29.4.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6"
   }
 }

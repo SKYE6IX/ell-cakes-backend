@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.89% </span>
+                <span class="strong">73.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/19</span>
+                <span class='fraction'>14/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.89% </span>
+                <span class="strong">73.68% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/19</span>
+                <span class='fraction'>14/19</span>
             </div>
         
             
@@ -126,15 +126,7 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -144,24 +136,16 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -212,29 +196,21 @@ dotenv.config({ override: true });
 import { lists } from "./schema";
 import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
-import { insertSeedData } from "./script";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
+import { getSecret } from "./lib/getSecret";
 &nbsp;
-const {
-  YC_S3_KEY_ID,
-  YC_S3_SECRET_KEY,
-  YC_S3_BUCKET,
-  YC_S3_REGION,
-  YC_S3_PRIVATE_ENDPOINT,
-} = process.env;
+const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT } = process.env;
+&nbsp;
+const databaseUrl = getSecret("DATABASE_URL");
+const ycS3KeyId = getSecret("YC_S3_KEY_ID");
+const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
 &nbsp;
 export default withAuth(
   config({
     db: {
       provider: "postgresql",
-      url: process.env.DATABASE_URL,
+      url: databaseUrl,
       idField: { kind: "uuid" },
-      onConnect: <span class="fstat-no" title="function not covered" >async </span>(context) =&gt; {
-<span class="cstat-no" title="statement not covered" >        console.log("Database connected");</span>
-<span class="cstat-no" title="statement not covered" >        if (process.argv.includes("--seed-data")) {</span>
-<span class="cstat-no" title="statement not covered" >          await insertSeedData(context);</span>
-        }
-      },
     },
     lists,
     session,
@@ -244,8 +220,8 @@ export default withAuth(
         type: "image",
         bucketName: `${YC_S3_BUCKET}-images`,
         region: YC_S3_REGION,
-        accessKeyId: YC_S3_KEY_ID,
-        secretAccessKey: YC_S3_SECRET_KEY,
+        accessKeyId: ycS3KeyId,
+        secretAccessKey: ycS3SecretId,
         endpoint: YC_S3_PRIVATE_ENDPOINT,
         acl: "public-read",
       },
@@ -254,8 +230,8 @@ export default withAuth(
         type: "file",
         bucketName: `${YC_S3_BUCKET}-files`,
         region: YC_S3_REGION,
-        accessKeyId: YC_S3_KEY_ID,
-        secretAccessKey: YC_S3_SECRET_KEY,
+        accessKeyId: ycS3KeyId,
+        secretAccessKey: ycS3SecretId,
         endpoint: YC_S3_PRIVATE_ENDPOINT,
         acl: "public-read",
       },
@@ -283,7 +259,7 @@ export default withAuth(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-10-28T07:56:13.014Z
+                at 2025-10-28T14:24:53.441Z
             </div>
         <script src="../prettify.js"></script>
         <script>

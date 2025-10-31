@@ -1,4 +1,3 @@
-import { randomBytes } from "crypto";
 import { list } from "@keystone-6/core";
 import {
   text,
@@ -10,6 +9,8 @@ import {
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
+import { Context } from ".keystone/types";
 
 const hiddenFieldConfig = {
   ui: {
@@ -37,14 +38,14 @@ export const User = list({
       validation: { isRequired: true },
       isIndexed: "unique",
     }),
-    isEmailVerified: checkbox({ defaultValue: false }),
-    emailVerificationToken: password(hiddenFieldConfig),
-    emailVerificationIssuedAt: timestamp(hiddenFieldConfig),
-    emailVerificationRedeemedAt: timestamp(hiddenFieldConfig),
+    password: password({ validation: { isRequired: true } }),
     phoneNumber: text({
       isIndexed: "unique",
     }),
-    password: password({ validation: { isRequired: true } }),
+    isPhoneNumberVerified: checkbox({ defaultValue: false }),
+    phoneNumberToken: password(hiddenFieldConfig),
+    phoneNumberVerificationIssuedAt: timestamp(hiddenFieldConfig),
+    phoneNumberVerificationRedeemedAt: timestamp(hiddenFieldConfig),
     role: select({
       options: [
         { label: "Admin", value: "ADMIN" },
@@ -150,26 +151,30 @@ export const User = list({
       },
     }),
   },
-  // hooks: {
-  //   resolveInput: {
-  //     create: async ({ resolvedData }) => {
-  //       if (resolvedData.role === "CUSTOMER") {
-  //         const token = randomBytes(32).toString("hex");
-  //         const issuedAt = new Date();
-  //         await sendVerificationEmail({
-  //           to: resolvedData.email,
-  //           token: token,
-  //         });
-  //         return {
-  //           ...resolvedData,
-  //           emailVerificationToken: token,
-  //           emailVerificationIssuedAt: issuedAt,
-  //         };
-  //       }
-  //       return resolvedData;
-  //     },
-  //   },
-  // },
+
+  hooks: {
+    afterOperation: {
+      create: async ({ item, context }) => {
+        await issueVerificationToken({
+          userId: item.id.toString(),
+          context: context as unknown as Context,
+        });
+      },
+      update: async ({ inputData, originalItem, context }) => {
+        // Check if USER passed in a new phone number
+        // and verify it isn't the same as the existing one they had
+        if (
+          inputData.phoneNumber &&
+          inputData.phoneNumber !== originalItem.phoneNumber
+        ) {
+          await issueVerificationToken({
+            userId: originalItem.id.toString(),
+            context: context as unknown as Context,
+          });
+        }
+      },
+    },
+  },
   ui: {
     isHidden: ({ session }) => {
       if (session.data.role === "ADMIN") {
@@ -179,3 +184,8 @@ export const User = list({
     },
   },
 });
+
+// Cases where issue of token to verify USER neew to be created:
+// 1. When user create an account ✅
+// 2. When user update their account, and they updated phone number too ✅
+// 3. The token expire and they need resend the token ✅

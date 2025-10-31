@@ -3,6 +3,15 @@ import { text, relationship, timestamp } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
 
+// SKU
+
+// Berries:
+// 4kg -> 500 => SKU:3333
+// 5kg -> 1000 => SKU: 444
+
+// Inscription-> "ADAMS"
+// Images-> url
+
 export const Topping = list({
   access: allowAll,
   fields: {

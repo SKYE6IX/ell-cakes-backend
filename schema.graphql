@@ -5,12 +5,12 @@ type User {
   id: ID!
   name: String
   email: String
-  isEmailVerified: Boolean
-  emailVerificationToken: PasswordState
-  emailVerificationIssuedAt: DateTime
-  emailVerificationRedeemedAt: DateTime
-  phoneNumber: String
   password: PasswordState
+  phoneNumber: String
+  isPhoneNumberVerified: Boolean
+  phoneNumberToken: PasswordState
+  phoneNumberVerificationIssuedAt: DateTime
+  phoneNumberVerificationRedeemedAt: DateTime
   role: String
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
@@ -48,11 +48,11 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
-  isEmailVerified: BooleanFilter
-  emailVerificationToken: PasswordFilter
-  emailVerificationIssuedAt: DateTimeNullableFilter
-  emailVerificationRedeemedAt: DateTimeNullableFilter
   phoneNumber: StringFilter
+  isPhoneNumberVerified: BooleanFilter
+  phoneNumberToken: PasswordFilter
+  phoneNumberVerificationIssuedAt: DateTimeNullableFilter
+  phoneNumberVerificationRedeemedAt: DateTimeNullableFilter
   role: StringFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
@@ -154,10 +154,10 @@ input UserOrderByInput {
   id: OrderDirection
   name: OrderDirection
   email: OrderDirection
-  isEmailVerified: OrderDirection
-  emailVerificationIssuedAt: OrderDirection
-  emailVerificationRedeemedAt: OrderDirection
   phoneNumber: OrderDirection
+  isPhoneNumberVerified: OrderDirection
+  phoneNumberVerificationIssuedAt: OrderDirection
+  phoneNumberVerificationRedeemedAt: OrderDirection
   role: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
@@ -175,12 +175,12 @@ enum OrderDirection {
 input UserUpdateInput {
   name: String
   email: String
-  isEmailVerified: Boolean
-  emailVerificationToken: String
-  emailVerificationIssuedAt: DateTime
-  emailVerificationRedeemedAt: DateTime
-  phoneNumber: String
   password: String
+  phoneNumber: String
+  isPhoneNumberVerified: Boolean
+  phoneNumberToken: String
+  phoneNumberVerificationIssuedAt: DateTime
+  phoneNumberVerificationRedeemedAt: DateTime
   role: String
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
@@ -230,12 +230,12 @@ input UserUpdateArgs {
 input UserCreateInput {
   name: String
   email: String
-  isEmailVerified: Boolean
-  emailVerificationToken: String
-  emailVerificationIssuedAt: DateTime
-  emailVerificationRedeemedAt: DateTime
-  phoneNumber: String
   password: String
+  phoneNumber: String
+  isPhoneNumberVerified: Boolean
+  phoneNumberToken: String
+  phoneNumberVerificationIssuedAt: DateTime
+  phoneNumberVerificationRedeemedAt: DateTime
   role: String
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
@@ -1887,7 +1887,8 @@ type Mutation {
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
   sendUserPasswordResetLink(email: String!): Boolean!
   redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
-  verifyEmail(token: String!, email: String!): VerifyEmailResponse
+  verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
+  resendVerificationToken(phoneNumber: String!): String!
   addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
   removeFromCart(cartItemId: String!, cartId: String!): Cart!
   checkOut(shippingCost: Int!, paymentMethod: String!, deliveryAddressId: String!, customerNote: String): Payment!
@@ -2120,7 +2121,7 @@ enum KeystoneAdminUISortDirection {
   DESC
 }
 
-type VerifyEmailResponse {
+type VerifyUserByPhoneNumberResponse {
   status: Boolean
   message: String
 }

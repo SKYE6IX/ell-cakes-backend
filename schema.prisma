@@ -12,27 +12,27 @@ generator client {
 }
 
 model User {
-  id                          String            @id @default(uuid()) @postgresql.Uuid
-  name                        String            @default("")
-  email                       String            @unique @default("")
-  isEmailVerified             Boolean           @default(false)
-  emailVerificationToken      String?
-  emailVerificationIssuedAt   DateTime?
-  emailVerificationRedeemedAt DateTime?
-  phoneNumber                 String            @unique @default("")
-  password                    String
-  role                        String            @default("CUSTOMER")
-  passwordResetToken          String?
-  passwordResetIssuedAt       DateTime?
-  passwordResetRedeemedAt     DateTime?
-  firstOrderDiscountEligible  Boolean           @default(true)
-  delivaryAddress             DelivaryAddress[] @relation("DelivaryAddress_user")
-  cart                        Cart?             @relation("Cart_user")
-  orders                      Order[]           @relation("Order_user")
-  payments                    Payment[]         @relation("Payment_user")
-  lastLogin                   DateTime?
-  createdAt                   DateTime?         @default(now())
-  updatedAt                   DateTime?
+  id                                String            @id @default(uuid()) @postgresql.Uuid
+  name                              String            @default("")
+  email                             String            @unique @default("")
+  password                          String
+  phoneNumber                       String            @unique @default("")
+  isPhoneNumberVerified             Boolean           @default(false)
+  phoneNumberToken                  String?
+  phoneNumberVerificationIssuedAt   DateTime?
+  phoneNumberVerificationRedeemedAt DateTime?
+  role                              String            @default("CUSTOMER")
+  passwordResetToken                String?
+  passwordResetIssuedAt             DateTime?
+  passwordResetRedeemedAt           DateTime?
+  firstOrderDiscountEligible        Boolean           @default(true)
+  delivaryAddress                   DelivaryAddress[] @relation("DelivaryAddress_user")
+  cart                              Cart?             @relation("Cart_user")
+  orders                            Order[]           @relation("Order_user")
+  payments                          Payment[]         @relation("Payment_user")
+  lastLogin                         DateTime?
+  createdAt                         DateTime?         @default(now())
+  updatedAt                         DateTime?
 }
 
 model DelivaryAddress {

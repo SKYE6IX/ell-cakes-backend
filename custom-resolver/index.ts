@@ -1,18 +1,19 @@
 import type { GraphQLSchema } from "graphql";
 import { mergeSchemas } from "@graphql-tools/schema";
-import { verifyEmail } from "./verifyEmail";
+import { verifyUserByPhoneNumber } from "./verifyUserByPhoneNumber";
 import { addToCart } from "./addToCart";
 import { removeFromCart } from "./removeFromCart";
 import { checkOut } from "./checkOut";
 import { registerUser } from "./registerUser";
 import { registerUserWithCart } from "./registerUserWithCart";
 import { authorizedUserWithCart } from "./authorizedUserWithCart";
+import { resendVerificationToken } from "./resendVerificationToken";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
     schemas: [baseSchema],
     typeDefs: `
-    type VerifyEmailResponse {
+    type VerifyUserByPhoneNumberResponse {
       status: Boolean
       message: String
     }   
@@ -27,7 +28,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
      phoneNumber: String!
     }  
     type Mutation {
-        verifyEmail(token: String!, email: String!): VerifyEmailResponse
+        verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
+        resendVerificationToken(phoneNumber: String!): String!
         addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
         removeFromCart(cartItemId: String!, cartId: String!): Cart!
         checkOut(shippingCost: Int!, paymentMethod: String!, deliveryAddressId: String!, customerNote: String): Payment!
@@ -38,7 +40,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     `,
     resolvers: {
       Mutation: {
-        verifyEmail,
+        verifyUserByPhoneNumber,
+        resendVerificationToken,
         addToCart,
         removeFromCart,
         checkOut,

@@ -39,6 +39,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         where: { payment: { id: updatePayment.id } },
         query: `id orderNumber totalAmount orderItems {id quantity subTotal product { name } } user { name email phoneNumber }`,
       })) as OrderWithOrderDetails;
+
       // Send a receipt to USER about their payment
       const idempotence_key = uuidv4();
       const receiptPayload: ICreateReceipt = {
@@ -70,6 +71,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           },
         ],
       };
+
       // const receipt = await yooMoney.createReceipt(
       //   receiptPayload,
       //   idempotence_key

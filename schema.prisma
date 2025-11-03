@@ -147,7 +147,7 @@ model CustomizationOption {
   id                     String                     @id @default(uuid()) @postgresql.Uuid
   productCustomization   ProductCustomization?      @relation("CustomizationOption_productCustomization", fields: [productCustomizationId], references: [id])
   productCustomizationId String?                    @map("productCustomization") @postgresql.Uuid
-  name                   String?                    @unique
+  name                   String?
   customValues           CustomizationOptionValue[] @relation("CustomizationOptionValue_option")
   createdAt              DateTime?                  @default(now())
   updatedAt              DateTime?

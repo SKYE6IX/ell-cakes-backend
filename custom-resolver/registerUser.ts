@@ -9,7 +9,6 @@ interface RegisterUserArgs {
 
 // TODO:
 // 1. Set up SMS verification so has to confirm USER are real and not a bot
-// 2. Instead of verifyEmail, we set up verifyUserBySMS.
 
 export const registerUser = async (
   root: any,
@@ -17,6 +16,8 @@ export const registerUser = async (
   context: Context
 ) => {
   const sudoContext = context.sudo();
+
+  // sudoContext.prisma.product.cre
   // Check if USER with the email or phoneNumber already exist
   const isUserExist = await sudoContext.db.User.findOne({
     where: { email: registerData.email, phoneNumber: registerData.phoneNumber },

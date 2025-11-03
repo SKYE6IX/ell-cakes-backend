@@ -973,7 +973,6 @@ type CustomizationOption {
 
 input CustomizationOptionWhereUniqueInput {
   id: ID
-  name: String
 }
 
 input CustomizationOptionWhereInput {

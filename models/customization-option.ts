@@ -26,7 +26,6 @@ export const CustomizationOption = list({
       ],
       defaultValue: undefined,
       label: "Название",
-      isIndexed: "unique",
     }),
     customValues: relationship({
       ref: "CustomizationOptionValue.option",

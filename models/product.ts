@@ -142,17 +142,6 @@ export const Product = list({
         },
         linkToItem: true,
       },
-      hooks: {
-        validate: {
-          create: async ({ resolvedData, fieldKey, addValidationError }) => {
-            if (!resolvedData[fieldKey] || !resolvedData[fieldKey].connect) {
-              addValidationError(
-                `The ${fieldKey} field must be set to valid Images.`
-              );
-            }
-          },
-        },
-      },
     }),
     video: file({ storage: "yc_s3_files", label: "видео" }),
     variants: relationship({

@@ -6,7 +6,6 @@ import {
   integer,
   select,
   timestamp,
-  decimal,
   file,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
@@ -59,44 +58,75 @@ export const Product = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-    description: text({ validation: { isRequired: true }, label: "описание" }),
-    basePrice: integer({
+    baseDescription: text({
       validation: { isRequired: true },
-      label: "базовая цена",
+      label: "Базовое описание",
     }),
-    baseWeight: decimal({
-      precision: 4,
-      scale: 1,
-      defaultValue: undefined,
-      label: "базовый вес",
+    variantType: select({
+      label: "Выберите тип варианта",
+      options: [
+        {
+          label: "Вес",
+          value: "weight",
+        },
+        {
+          label: "Количество",
+          value: "pieces",
+        },
+        {
+          label: "Состав",
+          value: "composition",
+        },
+      ],
     }),
-    basePieces: integer({
-      defaultValue: undefined,
-      label: "количество порций",
-    }),
-    carbonhydrate: decimal({
-      precision: 5,
-      scale: 2,
-      label: "углеводы",
-    }),
-    calories: decimal({
-      precision: 5,
-      scale: 2,
-      label: "калории",
-    }),
-    protein: decimal({
-      precision: 5,
-      scale: 2,
-      label: "белки",
-    }),
-    fat: decimal({ precision: 5, scale: 2, label: "жиры" }),
-    lifeShelf: integer({
-      validation: { isRequired: true },
-      label: "срок хранения",
-    }),
-    ingredients: text({
-      validation: { isRequired: true },
-      label: "ингредиенты",
+    fillings: relationship({
+      label: "Начинки",
+      ref: "ProductFilling.product",
+      many: true,
+      ui: {
+        displayMode: "cards",
+        cardFields: [
+          "name",
+          "description",
+          "carbonhydrate",
+          "calories",
+          "protein",
+          "fat",
+          "ingredients",
+          "lifeShelf",
+          "image_icon",
+          "variants",
+        ],
+        inlineCreate: {
+          fields: [
+            "name",
+            "description",
+            "carbonhydrate",
+            "calories",
+            "protein",
+            "fat",
+            "ingredients",
+            "lifeShelf",
+            "image_icon",
+            "variants",
+          ],
+        },
+        inlineEdit: {
+          fields: [
+            "name",
+            "description",
+            "carbonhydrate",
+            "calories",
+            "protein",
+            "fat",
+            "ingredients",
+            "lifeShelf",
+            "image_icon",
+            "variants",
+          ],
+        },
+        linkToItem: true,
+      },
     }),
     stockQuantity: integer({
       validation: { isRequired: true },
@@ -105,10 +135,10 @@ export const Product = list({
     isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
     badge: select({
       options: [
-        { label: "New", value: "NEW" },
-        { label: "Hit", value: "HIT" },
-        { label: "Best Seller", value: "BEST_SELLER" },
-        { label: "Sale", value: "SALE" },
+        { label: "Новинка", value: "NEW" },
+        { label: "Хит", value: "HIT" },
+        { label: "Лидер продаж", value: "BEST_SELLER" },
+        { label: "Скидка", value: "SALE" },
       ],
       defaultValue: undefined,
       label: "значок",
@@ -144,22 +174,6 @@ export const Product = list({
       },
     }),
     video: file({ storage: "yc_s3_files", label: "видео" }),
-    variants: relationship({
-      ref: "ProductVariant.product",
-      many: true,
-      label: "варианты",
-      ui: {
-        displayMode: "cards",
-        cardFields: ["weight", "pieces", "price", "isAvailable"],
-        inlineCreate: {
-          fields: ["weight", "pieces", "price", "isAvailable"],
-        },
-        inlineEdit: {
-          fields: ["weight", "pieces", "price", "isAvailable"],
-        },
-        linkToItem: true,
-      },
-    }),
     customization: relationship({
       ref: "ProductCustomization.product",
       many: false,
@@ -213,17 +227,16 @@ export const Product = list({
       delete: async ({ context, item }) => {
         const product = await context.query.Product.findOne({
           where: { id: item.id.toString() },
-          query: "id variants { id } images { id } customization { id }",
+          query:
+            "id variants { id } images { id } customization { id } fillings { id }",
         });
         await context.query.ProductImage.deleteMany({
           where: product.images.map((v: { id: any }) => ({ id: v.id })),
         });
-        if (!!product.variants.length) {
-          await context.query.ProductVariant.deleteMany({
-            where: product.variants.map((v: { id: any }) => ({ id: v.id })),
-          });
-        }
-        if (!!product.customization) {
+        await context.query.ProductFilling.deleteMany({
+          where: product.fillings.map((v: { id: any }) => ({ id: v.id })),
+        });
+        if (product.customization) {
           await context.query.ProductCustomization.deleteOne({
             where: { id: product.customization.id },
           });

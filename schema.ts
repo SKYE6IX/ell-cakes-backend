@@ -1,4 +1,5 @@
 import { Product } from "./models/product";
+import { ProductFilling } from "./models/productFilling";
 import { User } from "./models/user";
 import { ProductImage } from "./models/product-image";
 import { ProductVariant } from "./models/product-variant";
@@ -9,7 +10,6 @@ import { CustomizationOption } from "./models/customization-option";
 import { CustomizationOptionValue } from "./models/customization-option-value";
 import { Topping } from "./models/topping";
 import { ToppingOption } from "./models/topping-option";
-import { CustomizationOptionConstraint } from "./models/customization-option-constraint";
 import { Cart } from "./models/cart";
 import { CartItem } from "./models/cart-item";
 import { Order } from "./models/order";
@@ -20,6 +20,7 @@ export const lists = {
   User,
   DelivaryAddress,
   Product,
+  ProductFilling,
   ProductImage,
   ProductVariant,
   Category,
@@ -28,7 +29,6 @@ export const lists = {
   CustomizationOptionValue,
   Topping,
   ToppingOption,
-  CustomizationOptionConstraint,
   Cart,
   CartItem,
   Order,

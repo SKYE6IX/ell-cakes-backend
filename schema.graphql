@@ -360,16 +360,10 @@ type Product {
   category: Category
   name: String
   slug: String
-  description: String
-  basePrice: Int
-  baseWeight: Decimal
-  basePieces: Int
-  carbonhydrate: Decimal
-  calories: Decimal
-  protein: Decimal
-  fat: Decimal
-  lifeShelf: Int
-  ingredients: String
+  baseDescription: String
+  variantType: String
+  fillings(where: ProductFillingWhereInput! = {}, orderBy: [ProductFillingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductFillingWhereUniqueInput): [ProductFilling!]
+  fillingsCount(where: ProductFillingWhereInput! = {}): Int
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
@@ -381,8 +375,6 @@ type Product {
   images(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
   imagesCount(where: ProductImageWhereInput! = {}): Int
   video: FileFieldOutput
-  variants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVariantWhereUniqueInput): [ProductVariant!]
-  variantsCount(where: ProductVariantWhereInput! = {}): Int
   customization: ProductCustomization
   topping: Topping
   cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
@@ -390,8 +382,6 @@ type Product {
   createdAt: DateTime
   updatedAt: DateTime
 }
-
-scalar Decimal
 
 type FileFieldOutput {
   filename: String!
@@ -414,16 +404,9 @@ input ProductWhereInput {
   category: CategoryWhereInput
   name: StringFilter
   slug: StringFilter
-  description: StringFilter
-  basePrice: IntFilter
-  baseWeight: DecimalNullableFilter
-  basePieces: IntNullableFilter
-  carbonhydrate: DecimalNullableFilter
-  calories: DecimalNullableFilter
-  protein: DecimalNullableFilter
-  fat: DecimalNullableFilter
-  lifeShelf: IntFilter
-  ingredients: StringFilter
+  baseDescription: StringFilter
+  variantType: StringNullableFilter
+  fillings: ProductFillingManyRelationFilter
   stockQuantity: IntFilter
   isAvailable: BooleanFilter
   badge: StringNullableFilter
@@ -433,45 +416,11 @@ input ProductWhereInput {
   isCategoryHero: BooleanFilter
   categoryHeroText: StringFilter
   images: ProductImageManyRelationFilter
-  variants: ProductVariantManyRelationFilter
   customization: ProductCustomizationWhereInput
   topping: ToppingWhereInput
   cartItems: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
-}
-
-input IntFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntFilter
-}
-
-input DecimalNullableFilter {
-  equals: Decimal
-  in: [Decimal!]
-  notIn: [Decimal!]
-  lt: Decimal
-  lte: Decimal
-  gt: Decimal
-  gte: Decimal
-  not: DecimalNullableFilter
-}
-
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntNullableFilter
 }
 
 input StringNullableFilter {
@@ -489,16 +438,27 @@ input StringNullableFilter {
   not: StringNullableFilter
 }
 
+input ProductFillingManyRelationFilter {
+  every: ProductFillingWhereInput
+  some: ProductFillingWhereInput
+  none: ProductFillingWhereInput
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
 input ProductImageManyRelationFilter {
   every: ProductImageWhereInput
   some: ProductImageWhereInput
   none: ProductImageWhereInput
-}
-
-input ProductVariantManyRelationFilter {
-  every: ProductVariantWhereInput
-  some: ProductVariantWhereInput
-  none: ProductVariantWhereInput
 }
 
 input CartItemManyRelationFilter {
@@ -511,16 +471,8 @@ input ProductOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
-  description: OrderDirection
-  basePrice: OrderDirection
-  baseWeight: OrderDirection
-  basePieces: OrderDirection
-  carbonhydrate: OrderDirection
-  calories: OrderDirection
-  protein: OrderDirection
-  fat: OrderDirection
-  lifeShelf: OrderDirection
-  ingredients: OrderDirection
+  baseDescription: OrderDirection
+  variantType: OrderDirection
   stockQuantity: OrderDirection
   isAvailable: OrderDirection
   badge: OrderDirection
@@ -537,16 +489,9 @@ input ProductUpdateInput {
   category: CategoryRelateToOneForUpdateInput
   name: String
   slug: String
-  description: String
-  basePrice: Int
-  baseWeight: Decimal
-  basePieces: Int
-  carbonhydrate: Decimal
-  calories: Decimal
-  protein: Decimal
-  fat: Decimal
-  lifeShelf: Int
-  ingredients: String
+  baseDescription: String
+  variantType: String
+  fillings: ProductFillingRelateToManyForUpdateInput
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
@@ -557,7 +502,6 @@ input ProductUpdateInput {
   categoryHeroText: String
   images: ProductImageRelateToManyForUpdateInput
   video: FileFieldInput
-  variants: ProductVariantRelateToManyForUpdateInput
   customization: ProductCustomizationRelateToOneForUpdateInput
   topping: ToppingRelateToOneForUpdateInput
   cartItems: CartItemRelateToManyForUpdateInput
@@ -569,6 +513,13 @@ input CategoryRelateToOneForUpdateInput {
   create: CategoryCreateInput
   connect: CategoryWhereUniqueInput
   disconnect: Boolean
+}
+
+input ProductFillingRelateToManyForUpdateInput {
+  disconnect: [ProductFillingWhereUniqueInput!]
+  set: [ProductFillingWhereUniqueInput!]
+  create: [ProductFillingCreateInput!]
+  connect: [ProductFillingWhereUniqueInput!]
 }
 
 input ProductImageRelateToManyForUpdateInput {
@@ -584,13 +535,6 @@ input FileFieldInput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
-
-input ProductVariantRelateToManyForUpdateInput {
-  disconnect: [ProductVariantWhereUniqueInput!]
-  set: [ProductVariantWhereUniqueInput!]
-  create: [ProductVariantCreateInput!]
-  connect: [ProductVariantWhereUniqueInput!]
-}
 
 input ProductCustomizationRelateToOneForUpdateInput {
   create: ProductCustomizationCreateInput
@@ -620,16 +564,9 @@ input ProductCreateInput {
   category: CategoryRelateToOneForCreateInput
   name: String
   slug: String
-  description: String
-  basePrice: Int
-  baseWeight: Decimal
-  basePieces: Int
-  carbonhydrate: Decimal
-  calories: Decimal
-  protein: Decimal
-  fat: Decimal
-  lifeShelf: Int
-  ingredients: String
+  baseDescription: String
+  variantType: String
+  fillings: ProductFillingRelateToManyForCreateInput
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
@@ -640,7 +577,6 @@ input ProductCreateInput {
   categoryHeroText: String
   images: ProductImageRelateToManyForCreateInput
   video: FileFieldInput
-  variants: ProductVariantRelateToManyForCreateInput
   customization: ProductCustomizationRelateToOneForCreateInput
   topping: ToppingRelateToOneForCreateInput
   cartItems: CartItemRelateToManyForCreateInput
@@ -653,14 +589,14 @@ input CategoryRelateToOneForCreateInput {
   connect: CategoryWhereUniqueInput
 }
 
+input ProductFillingRelateToManyForCreateInput {
+  create: [ProductFillingCreateInput!]
+  connect: [ProductFillingWhereUniqueInput!]
+}
+
 input ProductImageRelateToManyForCreateInput {
   create: [ProductImageCreateInput!]
   connect: [ProductImageWhereUniqueInput!]
-}
-
-input ProductVariantRelateToManyForCreateInput {
-  create: [ProductVariantCreateInput!]
-  connect: [ProductVariantWhereUniqueInput!]
 }
 
 input ProductCustomizationRelateToOneForCreateInput {
@@ -678,12 +614,25 @@ input CartItemRelateToManyForCreateInput {
   connect: [CartItemWhereUniqueInput!]
 }
 
-type ProductImage {
+type ProductFilling {
   id: ID!
   product: Product
-  image: ImageFieldOutput
-  altText: String
+  variants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVariantWhereUniqueInput): [ProductVariant!]
+  variantsCount(where: ProductVariantWhereInput! = {}): Int
+  name: String
+  description: String
+  carbonhydrate: Decimal
+  calories: Decimal
+  protein: Decimal
+  fat: Decimal
+  ingredients: String
+  lifeShelf: Int
+  image_icon: ImageFieldOutput
+  createdAt: DateTime
+  updatedAt: DateTime
 }
+
+scalar Decimal
 
 type ImageFieldOutput {
   id: ID!
@@ -699,6 +648,131 @@ enum ImageExtension {
   png
   webp
   gif
+}
+
+input ProductFillingWhereUniqueInput {
+  id: ID
+}
+
+input ProductFillingWhereInput {
+  AND: [ProductFillingWhereInput!]
+  OR: [ProductFillingWhereInput!]
+  NOT: [ProductFillingWhereInput!]
+  id: IDFilter
+  product: ProductWhereInput
+  variants: ProductVariantManyRelationFilter
+  name: StringFilter
+  description: StringFilter
+  carbonhydrate: DecimalNullableFilter
+  calories: DecimalNullableFilter
+  protein: DecimalNullableFilter
+  fat: DecimalNullableFilter
+  ingredients: StringFilter
+  lifeShelf: IntFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ProductVariantManyRelationFilter {
+  every: ProductVariantWhereInput
+  some: ProductVariantWhereInput
+  none: ProductVariantWhereInput
+}
+
+input DecimalNullableFilter {
+  equals: Decimal
+  in: [Decimal!]
+  notIn: [Decimal!]
+  lt: Decimal
+  lte: Decimal
+  gt: Decimal
+  gte: Decimal
+  not: DecimalNullableFilter
+}
+
+input ProductFillingOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  description: OrderDirection
+  carbonhydrate: OrderDirection
+  calories: OrderDirection
+  protein: OrderDirection
+  fat: OrderDirection
+  ingredients: OrderDirection
+  lifeShelf: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ProductFillingUpdateInput {
+  product: ProductRelateToOneForUpdateInput
+  variants: ProductVariantRelateToManyForUpdateInput
+  name: String
+  description: String
+  carbonhydrate: Decimal
+  calories: Decimal
+  protein: Decimal
+  fat: Decimal
+  ingredients: String
+  lifeShelf: Int
+  image_icon: ImageFieldInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToOneForUpdateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
+input ProductVariantRelateToManyForUpdateInput {
+  disconnect: [ProductVariantWhereUniqueInput!]
+  set: [ProductVariantWhereUniqueInput!]
+  create: [ProductVariantCreateInput!]
+  connect: [ProductVariantWhereUniqueInput!]
+}
+
+input ImageFieldInput {
+  upload: Upload!
+}
+
+input ProductFillingUpdateArgs {
+  where: ProductFillingWhereUniqueInput!
+  data: ProductFillingUpdateInput!
+}
+
+input ProductFillingCreateInput {
+  product: ProductRelateToOneForCreateInput
+  variants: ProductVariantRelateToManyForCreateInput
+  name: String
+  description: String
+  carbonhydrate: Decimal
+  calories: Decimal
+  protein: Decimal
+  fat: Decimal
+  ingredients: String
+  lifeShelf: Int
+  image_icon: ImageFieldInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ProductRelateToOneForCreateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+}
+
+input ProductVariantRelateToManyForCreateInput {
+  create: [ProductVariantCreateInput!]
+  connect: [ProductVariantWhereUniqueInput!]
+}
+
+type ProductImage {
+  id: ID!
+  product: Product
+  image: ImageFieldOutput
+  altText: String
 }
 
 input ProductImageWhereUniqueInput {
@@ -725,16 +799,6 @@ input ProductImageUpdateInput {
   altText: String
 }
 
-input ProductRelateToOneForUpdateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
-  disconnect: Boolean
-}
-
-input ImageFieldInput {
-  upload: Upload!
-}
-
 input ProductImageUpdateArgs {
   where: ProductImageWhereUniqueInput!
   data: ProductImageUpdateInput!
@@ -746,17 +810,14 @@ input ProductImageCreateInput {
   altText: String
 }
 
-input ProductRelateToOneForCreateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
-}
-
 type ProductVariant {
   id: ID!
-  product: Product
-  price: Int
+  filling: ProductFilling
+  composition: JSON
   pieces: Int
   weight: Decimal
+  price: Int
+  serving: Int
   isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
@@ -771,33 +832,54 @@ input ProductVariantWhereInput {
   OR: [ProductVariantWhereInput!]
   NOT: [ProductVariantWhereInput!]
   id: IDFilter
-  product: ProductWhereInput
-  price: IntFilter
+  filling: ProductFillingWhereInput
   pieces: IntNullableFilter
   weight: DecimalNullableFilter
+  price: IntFilter
+  serving: IntNullableFilter
   isAvailable: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
 
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
 input ProductVariantOrderByInput {
   id: OrderDirection
-  price: OrderDirection
   pieces: OrderDirection
   weight: OrderDirection
+  price: OrderDirection
+  serving: OrderDirection
   isAvailable: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input ProductVariantUpdateInput {
-  product: ProductRelateToOneForUpdateInput
-  price: Int
+  filling: ProductFillingRelateToOneForUpdateInput
+  composition: JSON
   pieces: Int
   weight: Decimal
+  price: Int
+  serving: Int
   isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input ProductFillingRelateToOneForUpdateInput {
+  create: ProductFillingCreateInput
+  connect: ProductFillingWhereUniqueInput
+  disconnect: Boolean
 }
 
 input ProductVariantUpdateArgs {
@@ -806,13 +888,20 @@ input ProductVariantUpdateArgs {
 }
 
 input ProductVariantCreateInput {
-  product: ProductRelateToOneForCreateInput
-  price: Int
+  filling: ProductFillingRelateToOneForCreateInput
+  composition: JSON
   pieces: Int
   weight: Decimal
+  price: Int
+  serving: Int
   isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input ProductFillingRelateToOneForCreateInput {
+  create: ProductFillingCreateInput
+  connect: ProductFillingWhereUniqueInput
 }
 
 type Category {
@@ -1038,7 +1127,6 @@ type CustomizationOptionValue {
   option: CustomizationOption
   value: String
   extraPrice: Int
-  optionConstraint: CustomizationOptionConstraint
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1055,7 +1143,6 @@ input CustomizationOptionValueWhereInput {
   option: CustomizationOptionWhereInput
   value: StringFilter
   extraPrice: IntNullableFilter
-  optionConstraint: CustomizationOptionConstraintWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1072,7 +1159,6 @@ input CustomizationOptionValueUpdateInput {
   option: CustomizationOptionRelateToOneForUpdateInput
   value: String
   extraPrice: Int
-  optionConstraint: CustomizationOptionConstraintRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1080,12 +1166,6 @@ input CustomizationOptionValueUpdateInput {
 input CustomizationOptionRelateToOneForUpdateInput {
   create: CustomizationOptionCreateInput
   connect: CustomizationOptionWhereUniqueInput
-  disconnect: Boolean
-}
-
-input CustomizationOptionConstraintRelateToOneForUpdateInput {
-  create: CustomizationOptionConstraintCreateInput
-  connect: CustomizationOptionConstraintWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -1098,7 +1178,6 @@ input CustomizationOptionValueCreateInput {
   option: CustomizationOptionRelateToOneForCreateInput
   value: String
   extraPrice: Int
-  optionConstraint: CustomizationOptionConstraintRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1106,11 +1185,6 @@ input CustomizationOptionValueCreateInput {
 input CustomizationOptionRelateToOneForCreateInput {
   create: CustomizationOptionCreateInput
   connect: CustomizationOptionWhereUniqueInput
-}
-
-input CustomizationOptionConstraintRelateToOneForCreateInput {
-  create: CustomizationOptionConstraintCreateInput
-  connect: CustomizationOptionConstraintWhereUniqueInput
 }
 
 type Topping {
@@ -1253,66 +1327,6 @@ input ToppingOptionCreateInput {
   weight: Decimal
   pieces: Int
   extraPrice: Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-type CustomizationOptionConstraint {
-  id: ID!
-  optionValues(where: CustomizationOptionValueWhereInput! = {}, orderBy: [CustomizationOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionValueWhereUniqueInput): [CustomizationOptionValue!]
-  optionValuesCount(where: CustomizationOptionValueWhereInput! = {}): Int
-  key: String
-  minValue: Decimal
-  maxValue: Decimal
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CustomizationOptionConstraintWhereUniqueInput {
-  id: ID
-}
-
-input CustomizationOptionConstraintWhereInput {
-  AND: [CustomizationOptionConstraintWhereInput!]
-  OR: [CustomizationOptionConstraintWhereInput!]
-  NOT: [CustomizationOptionConstraintWhereInput!]
-  id: IDFilter
-  optionValues: CustomizationOptionValueManyRelationFilter
-  key: StringNullableFilter
-  minValue: DecimalNullableFilter
-  maxValue: DecimalNullableFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input CustomizationOptionConstraintOrderByInput {
-  id: OrderDirection
-  key: OrderDirection
-  minValue: OrderDirection
-  maxValue: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input CustomizationOptionConstraintUpdateInput {
-  optionValues: CustomizationOptionValueRelateToManyForUpdateInput
-  key: String
-  minValue: Decimal
-  maxValue: Decimal
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CustomizationOptionConstraintUpdateArgs {
-  where: CustomizationOptionConstraintWhereUniqueInput!
-  data: CustomizationOptionConstraintUpdateInput!
-}
-
-input CustomizationOptionConstraintCreateInput {
-  optionValues: CustomizationOptionValueRelateToManyForCreateInput
-  key: String
-  minValue: Decimal
-  maxValue: Decimal
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1797,6 +1811,12 @@ type Mutation {
   updateProducts(data: [ProductUpdateArgs!]!): [Product]
   deleteProduct(where: ProductWhereUniqueInput!): Product
   deleteProducts(where: [ProductWhereUniqueInput!]!): [Product]
+  createProductFilling(data: ProductFillingCreateInput!): ProductFilling
+  createProductFillings(data: [ProductFillingCreateInput!]!): [ProductFilling]
+  updateProductFilling(where: ProductFillingWhereUniqueInput!, data: ProductFillingUpdateInput!): ProductFilling
+  updateProductFillings(data: [ProductFillingUpdateArgs!]!): [ProductFilling]
+  deleteProductFilling(where: ProductFillingWhereUniqueInput!): ProductFilling
+  deleteProductFillings(where: [ProductFillingWhereUniqueInput!]!): [ProductFilling]
   createProductImage(data: ProductImageCreateInput!): ProductImage
   createProductImages(data: [ProductImageCreateInput!]!): [ProductImage]
   updateProductImage(where: ProductImageWhereUniqueInput!, data: ProductImageUpdateInput!): ProductImage
@@ -1845,12 +1865,6 @@ type Mutation {
   updateToppingOptions(data: [ToppingOptionUpdateArgs!]!): [ToppingOption]
   deleteToppingOption(where: ToppingOptionWhereUniqueInput!): ToppingOption
   deleteToppingOptions(where: [ToppingOptionWhereUniqueInput!]!): [ToppingOption]
-  createCustomizationOptionConstraint(data: CustomizationOptionConstraintCreateInput!): CustomizationOptionConstraint
-  createCustomizationOptionConstraints(data: [CustomizationOptionConstraintCreateInput!]!): [CustomizationOptionConstraint]
-  updateCustomizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!, data: CustomizationOptionConstraintUpdateInput!): CustomizationOptionConstraint
-  updateCustomizationOptionConstraints(data: [CustomizationOptionConstraintUpdateArgs!]!): [CustomizationOptionConstraint]
-  deleteCustomizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!): CustomizationOptionConstraint
-  deleteCustomizationOptionConstraints(where: [CustomizationOptionConstraintWhereUniqueInput!]!): [CustomizationOptionConstraint]
   createCart(data: CartCreateInput!): Cart
   createCarts(data: [CartCreateInput!]!): [Cart]
   updateCart(where: CartWhereUniqueInput!, data: CartUpdateInput!): Cart
@@ -1935,6 +1949,9 @@ type Query {
   product(where: ProductWhereUniqueInput!): Product
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  productFilling(where: ProductFillingWhereUniqueInput!): ProductFilling
+  productFillings(where: ProductFillingWhereInput! = {}, orderBy: [ProductFillingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductFillingWhereUniqueInput): [ProductFilling!]
+  productFillingsCount(where: ProductFillingWhereInput! = {}): Int
   productImage(where: ProductImageWhereUniqueInput!): ProductImage
   productImages(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
   productImagesCount(where: ProductImageWhereInput! = {}): Int
@@ -1959,9 +1976,6 @@ type Query {
   toppingOption(where: ToppingOptionWhereUniqueInput!): ToppingOption
   toppingOptions(where: ToppingOptionWhereInput! = {}, orderBy: [ToppingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ToppingOptionWhereUniqueInput): [ToppingOption!]
   toppingOptionsCount(where: ToppingOptionWhereInput! = {}): Int
-  customizationOptionConstraint(where: CustomizationOptionConstraintWhereUniqueInput!): CustomizationOptionConstraint
-  customizationOptionConstraints(where: CustomizationOptionConstraintWhereInput! = {}, orderBy: [CustomizationOptionConstraintOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionConstraintWhereUniqueInput): [CustomizationOptionConstraint!]
-  customizationOptionConstraintsCount(where: CustomizationOptionConstraintWhereInput! = {}): Int
   cart(where: CartWhereUniqueInput!): Cart
   carts(where: CartWhereInput! = {}, orderBy: [CartOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartWhereUniqueInput): [Cart!]
   cartsCount(where: CartWhereInput! = {}): Int

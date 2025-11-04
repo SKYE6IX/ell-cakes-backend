@@ -24,22 +24,6 @@ export const CustomizationOptionValue = list({
     }),
     value: text({ defaultValue: undefined, label: "Значение" }),
     extraPrice: integer({ defaultValue: undefined, label: "Доплата" }),
-    optionConstraint: relationship({
-      ref: "CustomizationOptionConstraint.optionValues",
-      many: false,
-      ui: {
-        displayMode: "cards",
-        cardFields: ["key", "minValue", "maxValue"],
-        inlineCreate: {
-          fields: ["key", "minValue", "maxValue"],
-        },
-        inlineEdit: {
-          fields: ["key", "minValue", "maxValue"],
-        },
-        linkToItem: true,
-      },
-      label: "Ограничения выбора",
-    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

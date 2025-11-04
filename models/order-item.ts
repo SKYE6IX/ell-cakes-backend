@@ -23,13 +23,6 @@ export const OrderItem = list({
     order: relationship({ ref: "Order.orderItems" }),
     product: relationship({
       ref: "Product",
-      ui: {
-        itemView: {
-          fieldMode: "read",
-        },
-        displayMode: "cards",
-        cardFields: ["basePrice"],
-      },
     }),
     variant: relationship({
       ref: "ProductVariant",

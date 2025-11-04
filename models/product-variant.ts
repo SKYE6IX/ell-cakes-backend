@@ -5,6 +5,7 @@ import {
   integer,
   timestamp,
   decimal,
+  json,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
@@ -19,8 +20,14 @@ export const ProductVariant = list({
     },
   },
   fields: {
-    product: relationship({ ref: "Product.variants", many: false }),
-    price: integer({ validation: { isRequired: true }, label: "цена" }),
+    filling: relationship({ ref: "ProductFilling.variants", many: false }),
+    composition: json({
+      label: "Смешанные кексы",
+      defaultValue: {
+        cupcakeType: "",
+        quantity: 0,
+      },
+    }),
     pieces: integer({ defaultValue: undefined, label: "порции" }),
     weight: decimal({
       precision: 4,
@@ -28,6 +35,8 @@ export const ProductVariant = list({
       defaultValue: undefined,
       label: "вес",
     }),
+    price: integer({ validation: { isRequired: true }, label: "цена" }),
+    serving: integer(),
     isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },

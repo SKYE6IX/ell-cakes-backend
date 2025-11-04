@@ -35,12 +35,12 @@ export const CustomizationOption = list({
         itemView: {
           fieldMode: "read",
         },
-        cardFields: ["value", "extraPrice", "optionConstraint"],
+        cardFields: ["value", "extraPrice"],
         inlineCreate: {
-          fields: ["value", "extraPrice", "optionConstraint"],
+          fields: ["value", "extraPrice"],
         },
         inlineEdit: {
-          fields: ["value", "extraPrice", "optionConstraint"],
+          fields: ["value", "extraPrice"],
         },
         linkToItem: true,
       },

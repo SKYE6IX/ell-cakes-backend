@@ -21,22 +21,6 @@ export const ProductFilling = list({
   },
   fields: {
     product: relationship({ ref: "Product.fillings" }),
-    variants: relationship({
-      label: "Вариант продукта",
-      ref: "ProductVariant.filling",
-      many: true,
-      ui: {
-        displayMode: "cards",
-        cardFields: ["composition", "weight", "pieces", "price", "isAvailable"],
-        inlineCreate: {
-          fields: ["composition", "weight", "pieces", "price", "isAvailable"],
-        },
-        inlineEdit: {
-          fields: ["composition", "weight", "pieces", "price", "isAvailable"],
-        },
-        linkToItem: true,
-      },
-    }),
     name: text({ validation: { isRequired: true }, label: "Название" }),
     description: text({ validation: { isRequired: true }, label: "описание" }),
     carbonhydrate: decimal({
@@ -64,6 +48,36 @@ export const ProductFilling = list({
       label: "срок хранения",
     }),
     image_icon: image({ storage: "yc_s3_image", label: "Иконка" }),
+    attribute: relationship({
+      ref: "Attribute.productFilling",
+      ui: {
+        displayMode: "cards",
+        cardFields: ["name", "productAttributes"],
+        inlineCreate: {
+          fields: ["name", "productAttributes"],
+        },
+        inlineEdit: {
+          fields: ["name", "productAttributes"],
+        },
+        linkToItem: true,
+      },
+    }),
+    variants: relationship({
+      label: "Вариант продукта",
+      ref: "ProductVariant.filling",
+      many: true,
+      ui: {
+        displayMode: "cards",
+        cardFields: ["weight", "pieces", "price", "isAvailable"],
+        inlineCreate: {
+          fields: ["weight", "pieces", "price", "isAvailable"],
+        },
+        inlineEdit: {
+          fields: ["weight", "pieces", "price", "isAvailable"],
+        },
+        linkToItem: true,
+      },
+    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -87,12 +101,15 @@ export const ProductFilling = list({
       delete: async ({ context, item }) => {
         const productFilling = await context.query.ProductFilling.findOne({
           where: { id: item.id.toString() },
-          query: "id variants { id }",
+          query: "id variants { id } attribute { id }",
         });
         await context.query.ProductVariant.deleteMany({
-          where: productFilling.variants.map((v: { id: any }) => ({
+          where: productFilling.variants.map((v: { id: string }) => ({
             id: v.id,
           })),
+        });
+        await context.query.Attribute.deleteOne({
+          where: { id: productFilling.attribute.id },
         });
       },
     },

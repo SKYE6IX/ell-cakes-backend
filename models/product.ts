@@ -62,6 +62,23 @@ export const Product = list({
       validation: { isRequired: true },
       label: "Базовое описание",
     }),
+    type: select({
+      label: "Выберите тип торта",
+      options: [
+        {
+          label: "Торт",
+          value: "cake",
+        },
+        {
+          label: "Капкейки",
+          value: "cupcake",
+        },
+        {
+          label: "Капкейки Микс",
+          value: "mixed_box",
+        },
+      ],
+    }),
     variantType: select({
       label: "Выберите тип варианта",
       options: [
@@ -72,10 +89,6 @@ export const Product = list({
         {
           label: "Количество",
           value: "pieces",
-        },
-        {
-          label: "Состав",
-          value: "composition",
         },
       ],
     }),
@@ -95,6 +108,7 @@ export const Product = list({
           "ingredients",
           "lifeShelf",
           "image_icon",
+          "attribute",
           "variants",
         ],
         inlineCreate: {
@@ -108,6 +122,7 @@ export const Product = list({
             "ingredients",
             "lifeShelf",
             "image_icon",
+            "attribute",
             "variants",
           ],
         },
@@ -122,6 +137,7 @@ export const Product = list({
             "ingredients",
             "lifeShelf",
             "image_icon",
+            "attribute",
             "variants",
           ],
         },
@@ -144,19 +160,7 @@ export const Product = list({
       label: "значок",
     }),
     isFeatured: checkbox({ defaultValue: false, label: "популярный товар" }),
-    isHomeHero: checkbox({ defaultValue: false, label: "на главной странице" }),
-    homeHeroText: text({
-      defaultValue: undefined,
-      label: "текст на главной странице",
-    }),
-    isCategoryHero: checkbox({
-      defaultValue: false,
-      label: "в категории на баннере",
-    }),
-    categoryHeroText: text({
-      defaultValue: undefined,
-      label: "текст баннера категории",
-    }),
+
     images: relationship({
       ref: "ProductImage.product",
       many: true,
@@ -173,6 +177,7 @@ export const Product = list({
         linkToItem: true,
       },
     }),
+
     video: file({ storage: "yc_s3_files", label: "видео" }),
     customization: relationship({
       ref: "ProductCustomization.product",
@@ -190,6 +195,7 @@ export const Product = list({
         linkToItem: true,
       },
     }),
+
     topping: relationship({
       ref: "Topping.product",
       label: "топпинг",

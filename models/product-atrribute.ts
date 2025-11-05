@@ -1,15 +1,9 @@
 import { list } from "@keystone-6/core";
-import {
-  relationship,
-  checkbox,
-  integer,
-  timestamp,
-  decimal,
-} from "@keystone-6/core/fields";
+import { relationship, timestamp, text } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
-export const ProductVariant = list({
+export const ProductAttribute = list({
   access: {
     operation: {
       query: allowAll,
@@ -19,17 +13,9 @@ export const ProductVariant = list({
     },
   },
   fields: {
-    filling: relationship({ ref: "ProductFilling.variants", many: false }),
-    pieces: integer({ defaultValue: undefined, label: "порции" }),
-    weight: decimal({
-      precision: 4,
-      scale: 1,
-      defaultValue: undefined,
-      label: "вес",
-    }),
-    price: integer({ validation: { isRequired: true }, label: "цена" }),
-    serving: integer(),
-    isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
+    attribute: relationship({ ref: "Attribute.productAttributes" }),
+    product: relationship({ ref: "Product" }),
+    value: text({ validation: { isRequired: true } }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

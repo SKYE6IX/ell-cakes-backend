@@ -1,5 +1,7 @@
 import { Product } from "./models/product";
-import { ProductFilling } from "./models/productFilling";
+import { ProductFilling } from "./models/product-filling";
+import { Attribute } from "./models/attribute";
+import { ProductAttribute } from "./models/product-atrribute";
 import { User } from "./models/user";
 import { ProductImage } from "./models/product-image";
 import { ProductVariant } from "./models/product-variant";
@@ -15,12 +17,16 @@ import { CartItem } from "./models/cart-item";
 import { Order } from "./models/order";
 import { OrderItem } from "./models/order-item";
 import { Payment } from "./models/payment";
+import { ProductHomeBanner } from "./models/product-home-banner";
+import { ProductCategoryBanner } from "./models/product-category-banner";
 
 export const lists = {
   User,
   DelivaryAddress,
   Product,
   ProductFilling,
+  Attribute,
+  ProductAttribute,
   ProductImage,
   ProductVariant,
   Category,
@@ -34,4 +40,6 @@ export const lists = {
   Order,
   OrderItem,
   Payment,
+  ProductHomeBanner,
+  ProductCategoryBanner,
 };

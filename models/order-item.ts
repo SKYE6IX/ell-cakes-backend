@@ -21,19 +21,14 @@ export const OrderItem = list({
   },
   fields: {
     order: relationship({ ref: "Order.orderItems" }),
-    product: relationship({
-      ref: "Product",
-    }),
-    variant: relationship({
-      ref: "ProductVariant",
-    }),
+    product: relationship({ ref: "Product" }),
+    variant: relationship({ ref: "ProductVariant" }),
+    toppingOption: relationship({ ref: "ToppingOption" }),
+    compositionSnapShot: json(),
+    customizationSnapShot: json(),
     quantity: integer(),
     unitPrice: integer(),
     subTotal: integer(),
-    productSnapShot: json(),
-    variantSnapShot: json(),
-    customizationSnapShot: json(),
-    toppingSnapShot: json(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

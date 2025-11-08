@@ -19,7 +19,7 @@ export const ProductVariant = list({
     },
   },
   fields: {
-    filling: relationship({ ref: "ProductFilling.variants", many: false }),
+    filling: relationship({ ref: "ProductFilling.variants" }),
     pieces: integer({ defaultValue: undefined, label: "порции" }),
     weight: decimal({
       precision: 4,

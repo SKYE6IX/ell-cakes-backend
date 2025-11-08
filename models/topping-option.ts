@@ -11,18 +11,6 @@ export const ToppingOption = list({
   access: allowAll,
   fields: {
     topping: relationship({ ref: "Topping.options", many: false }),
-    cartItems: relationship({
-      ref: "CartItem.topping",
-      many: true,
-      ui: {
-        itemView: {
-          fieldMode: "hidden",
-        },
-        createView: {
-          fieldMode: "hidden",
-        },
-      },
-    }),
     weight: decimal({
       precision: 5,
       scale: 3,

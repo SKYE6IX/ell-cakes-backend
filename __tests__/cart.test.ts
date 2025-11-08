@@ -60,35 +60,56 @@ describe("cart and cart-item Model", () => {
           category: { create: { name: "cakes" } },
           images: { create: { altText: "test" } },
           name: "Fluffy Cake",
-          description: "The best cake to ever grace this earth",
-          basePrice: 333,
-          ingredients: "made with everything fluffy",
+          baseDescription: "The best cake to ever grace this earth",
+          type: "cake",
+          variantType: "weight",
           stockQuantity: 10,
-          lifeShelf: 3,
+          fillings: {
+            create: {
+              name: "Fluffy",
+
+              description: "fluffy description",
+              ingredients: "made with everything fluffy",
+              lifeShelf: 3,
+              variants: {
+                create: { weight: "2.5", price: 300, serving: 5 },
+              },
+            },
+          },
         },
-        query: "id name lifeShelf stockQuantity",
+        query:
+          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
       });
+
     const cart = (await context.graphql.raw({
-      query: `mutation AddToCart($productId: String!, $cartId: String!) {
-        addToCart(productId: $productId, cartId: $cartId){
-         id subTotal cartItems { id quantity }
-        }
-      }`,
-      variables: { productId: newProduct.id, cartId: "" },
+      query: `mutation AddToCart($variantId: String!) {
+         addToCart(variantId: $variantId) {
+          id subTotal cartItems { id quantity }
+         }
+       }
+      `,
+      variables: {
+        variantId: newProduct.fillings[0].variants[0].id,
+      },
     })) as GraphQLResponse<CartWithItem>;
 
-    expect(cart.data.addToCart.subTotal).toEqual(333);
+    expect(cart.data.addToCart.subTotal).toEqual(300);
     expect(cart.data.addToCart.cartItems[0].quantity).toEqual(1);
-    const updatedCart = (await context.graphql.raw({
-      query: `mutation AddToCart($productId: String!, $cartId: String!) {
-        addToCart(productId: $productId, cartId: $cartId){
-         id subTotal cartItems { id quantity }
-        }
-      }`,
-      variables: { productId: newProduct.id, cartId: cart.data.addToCart.id },
+
+    const updateCart = (await context.graphql.raw({
+      query: `mutation AddToCart($variantId: String!, $cartId: String) {
+         addToCart(variantId: $variantId, cartId: $cartId) {
+          id subTotal cartItems { id quantity }
+         }
+       }
+      `,
+      variables: {
+        variantId: newProduct.fillings[0].variants[0].id,
+        cartId: cart.data.addToCart.id,
+      },
     })) as GraphQLResponse<CartWithItem>;
-    expect(updatedCart.data.addToCart.cartItems[0].quantity).toEqual(2);
-    expect(updatedCart.data.addToCart.subTotal).toEqual(333 * 2);
+    expect(updateCart.data.addToCart.cartItems[0].quantity).toEqual(2);
+    expect(updateCart.data.addToCart.subTotal).toEqual(300 * 2);
   });
 
   test("Remove item from cart", async () => {
@@ -104,35 +125,51 @@ describe("cart and cart-item Model", () => {
           category: { create: { name: "cakes" } },
           images: { create: { altText: "test" } },
           name: "Fluffy Cake",
-          description: "The best cake to ever grace this earth",
-          basePrice: 333,
-          ingredients: "made with everything fluffy",
+          baseDescription: "The best cake to ever grace this earth",
+          type: "cake",
+          variantType: "weight",
           stockQuantity: 10,
-          lifeShelf: 3,
+          fillings: {
+            create: {
+              name: "Fluffy",
+
+              description: "fluffy description",
+              ingredients: "made with everything fluffy",
+              lifeShelf: 3,
+              variants: {
+                create: { weight: "2.5", price: 300, serving: 5 },
+              },
+            },
+          },
         },
-        query: "id name lifeShelf stockQuantity",
+        query:
+          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
       });
 
-    const cart = (await context.graphql.raw({
-      query: `mutation AddToCart($productId: String!, $cartId: String!) {
-        addToCart(productId: $productId, cartId: $cartId){
-         id subTotal cartItems { id quantity }
-        }
-      }`,
-      variables: { productId: newProduct.id, cartId: "" },
+    const addToCart = (await context.graphql.raw({
+      query: `mutation AddToCart($variantId: String!) {
+         addToCart(variantId: $variantId) {
+          id subTotal cartItems { id quantity }
+         }
+       }
+      `,
+      variables: {
+        variantId: newProduct.fillings[0].variants[0].id,
+      },
     })) as GraphQLResponse<CartWithItem>;
 
     const removeCart = (await context.graphql.raw({
       query: `mutation RemoveFromCart($cartItemId: String!, $cartId: String!) {
-        removeFromCart(cartItemId: $cartItemId, cartId: $cartId){
-         id subTotal cartItems { id }
-        }
-      }`,
+          removeFromCart(cartItemId: $cartItemId, cartId: $cartId){
+           id subTotal cartItems { id }
+          }
+        }`,
       variables: {
-        cartItemId: cart.data.addToCart.cartItems[0].id,
-        cartId: cart.data.addToCart.id,
+        cartItemId: addToCart.data.addToCart.cartItems[0].id,
+        cartId: addToCart.data.addToCart.id,
       },
     })) as GraphQLResponse<CartWithItem>;
+
     expect(removeCart.data.removeFromCart.cartItems.length).toEqual(0);
     expect(removeCart.data.removeFromCart.subTotal).toEqual(0);
   });

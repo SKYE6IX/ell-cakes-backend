@@ -16,23 +16,31 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     type VerifyUserByPhoneNumberResponse {
       status: Boolean
       message: String
-    }   
-    input CustomizationInput {
-      keyId: String!
-      valueId: String!
-    }
+    }  
+
     input RegisterUserInput {
      name: String!
      email: String!
      password: String!
      phoneNumber: String!
-    }  
+    }
+
+    input CustomizationInput {
+      keyId: String!
+      valueId: String!
+    }
+
+    input CompositionOptionInput {
+      productId: String!
+      quantity: Int!
+    }
+
     type Mutation {
         verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
         resendVerificationToken(phoneNumber: String!): String!
-        addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
+        addToCart(variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String, cartId: String): Cart!
         removeFromCart(cartItemId: String!, cartId: String!): Cart!
-        checkOut(shippingCost: Int!, paymentMethod: String!, deliveryAddressId: String!, customerNote: String): Payment!
+        checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
         registerUser(registerData: RegisterUserInput!): User!
         registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
         authorizedUserWithCart(email: String!, password: String!, cartId: String): User!

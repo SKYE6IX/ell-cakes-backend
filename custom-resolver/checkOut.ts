@@ -5,19 +5,27 @@ import { customAlphabet } from "nanoid";
 import { Context } from ".keystone/types";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
 import type { Session } from "../access";
+import type { JSONValue } from "@keystone-6/core/types";
 
 interface CheckOutArgs {
+  deliveryAddressId: string;
   shippingCost: number;
   paymentMethod: "bank_card" | "sberbank" | "tinkoff_bank" | "sbp";
   customerNote?: string;
-  deliveryAddressId: string;
 }
 
-export type CartWithItem = Prisma.CartGetPayload<{
+type CartWithItem = Prisma.CartGetPayload<{
   include: {
-    cartItems: { include: { variant: true; topping: true; product: true } };
+    cartItems: {
+      include: { product: true; variant: true; toppingOption: true };
+    };
   };
 }>;
+
+export enum PaymentStatus {
+  PENDING = "pending",
+  SUCCEEDED = "succeeded",
+}
 
 export const checkOut = async (
   root: any,
@@ -30,22 +38,19 @@ export const checkOut = async (
   context: Context
 ) => {
   const loggedInUser = context.session as Session;
+
   // Reject with error if USER isn't in session
   if (!loggedInUser) {
     throw new Error("Only signed in user can perform this action!");
   }
-
-  const user = await context.db.User.findOne({
-    where: { id: loggedInUser.itemId },
-  });
 
   const yooMoney = await yooMoneyPaymentGateway();
 
   // We check if user has a pending pyament order!
   const pendingOrder = await context.prisma.order.findFirst({
     where: {
-      userId: user?.id,
-      payment: { status: { equals: "pending" } },
+      userId: loggedInUser.itemId,
+      payment: { status: { equals: PaymentStatus.PENDING } },
     },
     include: { payment: true },
   });
@@ -69,14 +74,13 @@ export const checkOut = async (
       createPayLoad,
       uuidv4()
     );
-
     return await context.db.Payment.updateOne({
       where: { id: pendingOrder.payment?.id },
       data: {
         paymentId: processPayment.id,
         confirmationUrl: processPayment.confirmation.confirmation_url,
         method: processPayment?.payment_method.type,
-        status: "pending",
+        status: PaymentStatus.PENDING,
         updatedAt: new Date(),
       },
     });
@@ -90,11 +94,14 @@ export const checkOut = async (
   const orderNumber = `ORD-${nanoid()}`;
 
   // Get the cart that belong to the current signin USER
-  const cart = await context.query.Cart.findOne({
-    where: { user: { id: user?.id } },
-    query:
-      "id subTotal cartItems { id quantity unitPrice subTotal product { id } productSnapShot variantSnapShot customizationSnapShot variant { id } topping { id weight extraPrice } }",
-  });
+  const cart = (await context.query.Cart.findOne({
+    where: { user: { id: loggedInUser.itemId } },
+    query: `
+      id
+      subTotal
+      cartItems { id quantity unitPrice subTotal compositionSnapShot customizationSnapShot product { id } variant { id } toppingOption { id } }
+    `,
+  })) as CartWithItem;
 
   // Reject with an error if User doesn't have a cart
   if (!cart) {
@@ -122,32 +129,27 @@ export const checkOut = async (
   const processPayment = await yooMoney.createPayment(createPayLoad, uuidv4());
 
   // Create a new order-items and order
-  const orderItems = cart.cartItems.map((cartItem: any) => {
+  const orderItems = cart.cartItems.map((cartItem) => {
     const item = {
-      product: { connect: { id: cartItem.product.id } },
-      productSnapShot: cartItem.productSnapShot,
+      product: { connect: { id: cartItem.product?.id } },
+      variant: { connect: { id: cartItem.variant?.id } },
       quantity: cartItem.quantity,
       unitPrice: cartItem.unitPrice,
       subTotal: cartItem.subTotal,
-      ...(cartItem.variant && {
-        variant: { connect: { id: cartItem.variant.id } },
-        variantSnapShot: cartItem.variantSnapShot,
+      ...(cartItem.toppingOption && {
+        toppingOption: { connect: { id: cartItem.toppingOption.id } },
+      }),
+      ...(cartItem.compositionSnapShot && {
+        compositionSnapShot: cartItem.compositionSnapShot as JSONValue,
       }),
       ...(cartItem.customizationSnapShot && {
-        customizationSnapShot: cartItem.customizationSnapShot,
-      }),
-      ...(cartItem.topping && {
-        toppingSnapShot: {
-          id: cartItem.topping.id,
-          weight: cartItem.topping.weight,
-          extraPrice: cartItem.topping.extraPrice,
-        },
+        customizationSnapShot: cartItem.customizationSnapShot as JSONValue,
       }),
     };
     return item;
   });
 
-  //Connect the DeliveryAddress
+  // Get the seleceted delivery address for user
   const deliveryAddress = await context.db.DelivaryAddress.findOne({
     where: { id: deliveryAddressId },
   });
@@ -180,8 +182,9 @@ export const checkOut = async (
       confirmationUrl: processPayment?.confirmation.confirmation_url,
       amount: processPayment?.amount.value,
       method: processPayment?.payment_method.type,
-      status: "pending",
+      status: PaymentStatus.PENDING,
     },
   });
+
   return payment;
 };

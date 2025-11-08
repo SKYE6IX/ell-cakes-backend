@@ -17,7 +17,6 @@ export const registerUser = async (
 ) => {
   const sudoContext = context.sudo();
 
-  // sudoContext.prisma.product.cre
   // Check if USER with the email or phoneNumber already exist
   const isUserExist = await sudoContext.db.User.findOne({
     where: { email: registerData.email, phoneNumber: registerData.phoneNumber },

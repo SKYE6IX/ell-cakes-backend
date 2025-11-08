@@ -78,6 +78,7 @@ export const Product = list({
           value: "mixed_box",
         },
       ],
+      validation: { isRequired: true },
     }),
     variantType: select({
       label: "Выберите тип варианта",
@@ -91,6 +92,7 @@ export const Product = list({
           value: "pieces",
         },
       ],
+      validation: { isRequired: true },
     }),
     fillings: relationship({
       label: "Начинки",
@@ -145,8 +147,8 @@ export const Product = list({
       },
     }),
     stockQuantity: integer({
-      validation: { isRequired: true },
       label: "количество на складе",
+      validation: { isRequired: true },
     }),
     isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
     badge: select({
@@ -160,7 +162,6 @@ export const Product = list({
       label: "значок",
     }),
     isFeatured: checkbox({ defaultValue: false, label: "популярный товар" }),
-
     images: relationship({
       ref: "ProductImage.product",
       many: true,
@@ -177,7 +178,6 @@ export const Product = list({
         linkToItem: true,
       },
     }),
-
     video: file({ storage: "yc_s3_files", label: "видео" }),
     customization: relationship({
       ref: "ProductCustomization.product",
@@ -195,20 +195,9 @@ export const Product = list({
         linkToItem: true,
       },
     }),
-
     topping: relationship({
       ref: "Topping.product",
       label: "топпинг",
-    }),
-    cartItems: relationship({
-      ref: "CartItem.product",
-      many: true,
-      ui: {
-        itemView: {
-          fieldMode: "hidden",
-        },
-        createView: { fieldMode: "hidden" },
-      },
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
@@ -233,8 +222,7 @@ export const Product = list({
       delete: async ({ context, item }) => {
         const product = await context.query.Product.findOne({
           where: { id: item.id.toString() },
-          query:
-            "id variants { id } images { id } customization { id } fillings { id }",
+          query: "id images { id } customization { id } fillings { id }",
         });
         await context.query.ProductImage.deleteMany({
           where: product.images.map((v: { id: any }) => ({ id: v.id })),

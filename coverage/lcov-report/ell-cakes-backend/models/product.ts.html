@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.26% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>18/23</span>
+                <span class='fraction'>18/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/14</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.26% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/23</span>
+                <span class='fraction'>18/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -304,13 +304,8 @@
 <a name='L239'></a><a href='#L239'>239</a>
 <a name='L240'></a><a href='#L240'>240</a>
 <a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L242'></a><a href='#L242'>242</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -455,8 +450,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -540,9 +534,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -561,7 +553,6 @@ import {
   integer,
   select,
   timestamp,
-  decimal,
   file,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
@@ -614,74 +605,110 @@ export const Product = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-    description: text({ validation: { isRequired: true }, label: "описание" }),
-    basePrice: integer({
+    baseDescription: text({
       validation: { isRequired: true },
-      label: "базовая цена",
+      label: "Базовое описание",
     }),
-    baseWeight: decimal({
-      precision: 4,
-      scale: 1,
-      defaultValue: undefined,
-      label: "базовый вес",
-    }),
-    basePieces: integer({
-      defaultValue: undefined,
-      label: "количество порций",
-    }),
-    carbonhydrate: decimal({
-      precision: 5,
-      scale: 2,
-      label: "углеводы",
-    }),
-    calories: decimal({
-      precision: 5,
-      scale: 2,
-      label: "калории",
-    }),
-    protein: decimal({
-      precision: 5,
-      scale: 2,
-      label: "белки",
-    }),
-    fat: decimal({ precision: 5, scale: 2, label: "жиры" }),
-    lifeShelf: integer({
+    type: select({
+      label: "Выберите тип торта",
+      options: [
+        {
+          label: "Торт",
+          value: "cake",
+        },
+        {
+          label: "Капкейки",
+          value: "cupcake",
+        },
+        {
+          label: "Капкейки Микс",
+          value: "mixed_box",
+        },
+      ],
       validation: { isRequired: true },
-      label: "срок хранения",
     }),
-    ingredients: text({
+    variantType: select({
+      label: "Выберите тип варианта",
+      options: [
+        {
+          label: "Вес",
+          value: "weight",
+        },
+        {
+          label: "Количество",
+          value: "pieces",
+        },
+      ],
       validation: { isRequired: true },
-      label: "ингредиенты",
+    }),
+    fillings: relationship({
+      label: "Начинки",
+      ref: "ProductFilling.product",
+      many: true,
+      ui: {
+        displayMode: "cards",
+        cardFields: [
+          "name",
+          "description",
+          "carbonhydrate",
+          "calories",
+          "protein",
+          "fat",
+          "ingredients",
+          "lifeShelf",
+          "image_icon",
+          "attribute",
+          "variants",
+        ],
+        inlineCreate: {
+          fields: [
+            "name",
+            "description",
+            "carbonhydrate",
+            "calories",
+            "protein",
+            "fat",
+            "ingredients",
+            "lifeShelf",
+            "image_icon",
+            "attribute",
+            "variants",
+          ],
+        },
+        inlineEdit: {
+          fields: [
+            "name",
+            "description",
+            "carbonhydrate",
+            "calories",
+            "protein",
+            "fat",
+            "ingredients",
+            "lifeShelf",
+            "image_icon",
+            "attribute",
+            "variants",
+          ],
+        },
+        linkToItem: true,
+      },
     }),
     stockQuantity: integer({
-      validation: { isRequired: true },
       label: "количество на складе",
+      validation: { isRequired: true },
     }),
     isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
     badge: select({
       options: [
-        { label: "New", value: "NEW" },
-        { label: "Hit", value: "HIT" },
-        { label: "Best Seller", value: "BEST_SELLER" },
-        { label: "Sale", value: "SALE" },
+        { label: "Новинка", value: "NEW" },
+        { label: "Хит", value: "HIT" },
+        { label: "Лидер продаж", value: "BEST_SELLER" },
+        { label: "Скидка", value: "SALE" },
       ],
       defaultValue: undefined,
       label: "значок",
     }),
     isFeatured: checkbox({ defaultValue: false, label: "популярный товар" }),
-    isHomeHero: checkbox({ defaultValue: false, label: "на главной странице" }),
-    homeHeroText: text({
-      defaultValue: undefined,
-      label: "текст на главной странице",
-    }),
-    isCategoryHero: checkbox({
-      defaultValue: false,
-      label: "в категории на баннере",
-    }),
-    categoryHeroText: text({
-      defaultValue: undefined,
-      label: "текст баннера категории",
-    }),
     images: relationship({
       ref: "ProductImage.product",
       many: true,
@@ -697,35 +724,8 @@ export const Product = list({
         },
         linkToItem: true,
       },
-      hooks: {
-        validate: {
-          create: async ({ resolvedData, fieldKey, addValidationError }) =&gt; {
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (!resolvedData[fieldKey] || !resolvedData[fieldKey].connect) {
-<span class="cstat-no" title="statement not covered" >              addValidationError(</span>
-                `The ${fieldKey} field must be set to valid Images.`
-              );
-            }
-          },
-        },
-      },
     }),
     video: file({ storage: "yc_s3_files", label: "видео" }),
-    variants: relationship({
-      ref: "ProductVariant.product",
-      many: true,
-      label: "варианты",
-      ui: {
-        displayMode: "cards",
-        cardFields: ["weight", "pieces", "price", "isAvailable"],
-        inlineCreate: {
-          fields: ["weight", "pieces", "price", "isAvailable"],
-        },
-        inlineEdit: {
-          fields: ["weight", "pieces", "price", "isAvailable"],
-        },
-        linkToItem: true,
-      },
-    }),
     customization: relationship({
       ref: "ProductCustomization.product",
       many: false,
@@ -745,16 +745,6 @@ export const Product = list({
     topping: relationship({
       ref: "Topping.product",
       label: "топпинг",
-    }),
-    cartItems: relationship({
-      ref: "CartItem.product",
-      many: true,
-      ui: {
-        itemView: {
-          fieldMode: "hidden",
-        },
-        createView: { fieldMode: "hidden" },
-      },
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
@@ -779,17 +769,15 @@ export const Product = list({
       delete: async ({ context, item }) =&gt; {
         const product = await context.query.Product.findOne({
           where: { id: item.id.toString() },
-          query: "id variants { id } images { id } customization { id }",
+          query: "id images { id } customization { id } fillings { id }",
         });
         await context.query.ProductImage.deleteMany({
           where: product.images.map((v: { id: any }) =&gt; ({ id: v.id })),
         });
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!!product.variants.length) {
-<span class="cstat-no" title="statement not covered" >          await context.query.ProductVariant.deleteMany({</span>
-            where: product.variants.map(<span class="fstat-no" title="function not covered" >(v</span>: { id: any }) =&gt; (<span class="cstat-no" title="statement not covered" >{ id: v.id })</span>),
-          });
-        }
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!!product.customization) {
+        await context.query.ProductFilling.deleteMany({
+          where: product.fillings.map((v: { id: any }) =&gt; ({ id: v.id })),
+        });
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (product.customization) {
 <span class="cstat-no" title="statement not covered" >          await context.query.ProductCustomization.deleteOne({</span>
             where: { id: product.customization.id },
           });
@@ -805,7 +793,7 @@ export const Product = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-01T12:52:37.053Z
+                at 2025-11-08T13:45:43.534Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

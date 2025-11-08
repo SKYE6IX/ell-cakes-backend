@@ -103,14 +103,18 @@ export const ProductFilling = list({
           where: { id: item.id.toString() },
           query: "id variants { id } attribute { id }",
         });
-        await context.query.ProductVariant.deleteMany({
-          where: productFilling.variants.map((v: { id: string }) => ({
-            id: v.id,
-          })),
-        });
-        await context.query.Attribute.deleteOne({
-          where: { id: productFilling.attribute.id },
-        });
+        if (productFilling.variants) {
+          await context.query.ProductVariant.deleteMany({
+            where: productFilling.variants.map((v: { id: string }) => ({
+              id: v.id,
+            })),
+          });
+        }
+        if (productFilling.attribute) {
+          await context.query.Attribute.deleteOne({
+            where: { id: productFilling.attribute.id },
+          });
+        }
       },
     },
   },

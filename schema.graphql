@@ -374,8 +374,6 @@ type Product {
   video: FileFieldOutput
   customization: ProductCustomization
   topping: Topping
-  cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
-  cartItemsCount(where: CartItemWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -402,8 +400,8 @@ input ProductWhereInput {
   name: StringFilter
   slug: StringFilter
   baseDescription: StringFilter
-  type: StringNullableFilter
-  variantType: StringNullableFilter
+  type: StringFilter
+  variantType: StringFilter
   fillings: ProductFillingManyRelationFilter
   stockQuantity: IntFilter
   isAvailable: BooleanFilter
@@ -412,24 +410,8 @@ input ProductWhereInput {
   images: ProductImageManyRelationFilter
   customization: ProductCustomizationWhereInput
   topping: ToppingWhereInput
-  cartItems: CartItemManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: StringNullableFilter
 }
 
 input ProductFillingManyRelationFilter {
@@ -449,16 +431,25 @@ input IntFilter {
   not: IntFilter
 }
 
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
+}
+
 input ProductImageManyRelationFilter {
   every: ProductImageWhereInput
   some: ProductImageWhereInput
   none: ProductImageWhereInput
-}
-
-input CartItemManyRelationFilter {
-  every: CartItemWhereInput
-  some: CartItemWhereInput
-  none: CartItemWhereInput
 }
 
 input ProductOrderByInput {
@@ -492,7 +483,6 @@ input ProductUpdateInput {
   video: FileFieldInput
   customization: ProductCustomizationRelateToOneForUpdateInput
   topping: ToppingRelateToOneForUpdateInput
-  cartItems: CartItemRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -536,13 +526,6 @@ input ToppingRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input CartItemRelateToManyForUpdateInput {
-  disconnect: [CartItemWhereUniqueInput!]
-  set: [CartItemWhereUniqueInput!]
-  create: [CartItemCreateInput!]
-  connect: [CartItemWhereUniqueInput!]
-}
-
 input ProductUpdateArgs {
   where: ProductWhereUniqueInput!
   data: ProductUpdateInput!
@@ -564,7 +547,6 @@ input ProductCreateInput {
   video: FileFieldInput
   customization: ProductCustomizationRelateToOneForCreateInput
   topping: ToppingRelateToOneForCreateInput
-  cartItems: CartItemRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -592,11 +574,6 @@ input ProductCustomizationRelateToOneForCreateInput {
 input ToppingRelateToOneForCreateInput {
   create: ToppingCreateInput
   connect: ToppingWhereUniqueInput
-}
-
-input CartItemRelateToManyForCreateInput {
-  create: [CartItemCreateInput!]
-  connect: [CartItemWhereUniqueInput!]
 }
 
 type ProductFilling {
@@ -1394,8 +1371,6 @@ input ToppingOptionRelateToManyForCreateInput {
 type ToppingOption {
   id: ID!
   topping: Topping
-  cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
-  cartItemsCount(where: CartItemWhereInput! = {}): Int
   weight: Decimal
   pieces: Int
   extraPrice: Int
@@ -1413,7 +1388,6 @@ input ToppingOptionWhereInput {
   NOT: [ToppingOptionWhereInput!]
   id: IDFilter
   topping: ToppingWhereInput
-  cartItems: CartItemManyRelationFilter
   weight: DecimalNullableFilter
   pieces: IntNullableFilter
   extraPrice: IntFilter
@@ -1432,7 +1406,6 @@ input ToppingOptionOrderByInput {
 
 input ToppingOptionUpdateInput {
   topping: ToppingRelateToOneForUpdateInput
-  cartItems: CartItemRelateToManyForUpdateInput
   weight: Decimal
   pieces: Int
   extraPrice: Int
@@ -1447,7 +1420,6 @@ input ToppingOptionUpdateArgs {
 
 input ToppingOptionCreateInput {
   topping: ToppingRelateToOneForCreateInput
-  cartItems: CartItemRelateToManyForCreateInput
   weight: Decimal
   pieces: Int
   extraPrice: Int
@@ -1482,6 +1454,12 @@ input CartWhereInput {
   updatedAt: DateTimeNullableFilter
 }
 
+input CartItemManyRelationFilter {
+  every: CartItemWhereInput
+  some: CartItemWhereInput
+  none: CartItemWhereInput
+}
+
 input CartOrderByInput {
   id: OrderDirection
   subTotal: OrderDirection
@@ -1497,6 +1475,13 @@ input CartUpdateInput {
   updatedAt: DateTime
 }
 
+input CartItemRelateToManyForUpdateInput {
+  disconnect: [CartItemWhereUniqueInput!]
+  set: [CartItemWhereUniqueInput!]
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
 input CartUpdateArgs {
   where: CartWhereUniqueInput!
   data: CartUpdateInput!
@@ -1510,18 +1495,22 @@ input CartCreateInput {
   updatedAt: DateTime
 }
 
+input CartItemRelateToManyForCreateInput {
+  create: [CartItemCreateInput!]
+  connect: [CartItemWhereUniqueInput!]
+}
+
 type CartItem {
   id: ID!
   cart: Cart
   product: Product
   variant: ProductVariant
-  topping: ToppingOption
+  toppingOption: ToppingOption
+  compositionSnapShot: JSON
+  customizationSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
-  productSnapShot: JSON
-  variantSnapShot: JSON
-  customizationSnapShot: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1538,7 +1527,7 @@ input CartItemWhereInput {
   cart: CartWhereInput
   product: ProductWhereInput
   variant: ProductVariantWhereInput
-  topping: ToppingOptionWhereInput
+  toppingOption: ToppingOptionWhereInput
   quantity: IntNullableFilter
   unitPrice: IntNullableFilter
   subTotal: IntNullableFilter
@@ -1559,13 +1548,12 @@ input CartItemUpdateInput {
   cart: CartRelateToOneForUpdateInput
   product: ProductRelateToOneForUpdateInput
   variant: ProductVariantRelateToOneForUpdateInput
-  topping: ToppingOptionRelateToOneForUpdateInput
+  toppingOption: ToppingOptionRelateToOneForUpdateInput
+  compositionSnapShot: JSON
+  customizationSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
-  productSnapShot: JSON
-  variantSnapShot: JSON
-  customizationSnapShot: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1591,13 +1579,12 @@ input CartItemCreateInput {
   cart: CartRelateToOneForCreateInput
   product: ProductRelateToOneForCreateInput
   variant: ProductVariantRelateToOneForCreateInput
-  topping: ToppingOptionRelateToOneForCreateInput
+  toppingOption: ToppingOptionRelateToOneForCreateInput
+  compositionSnapShot: JSON
+  customizationSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
-  productSnapShot: JSON
-  variantSnapShot: JSON
-  customizationSnapShot: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1746,13 +1733,12 @@ type OrderItem {
   order: Order
   product: Product
   variant: ProductVariant
+  toppingOption: ToppingOption
+  compositionSnapShot: JSON
+  customizationSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
-  productSnapShot: JSON
-  variantSnapShot: JSON
-  customizationSnapShot: JSON
-  toppingSnapShot: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1769,6 +1755,7 @@ input OrderItemWhereInput {
   order: OrderWhereInput
   product: ProductWhereInput
   variant: ProductVariantWhereInput
+  toppingOption: ToppingOptionWhereInput
   quantity: IntNullableFilter
   unitPrice: IntNullableFilter
   subTotal: IntNullableFilter
@@ -1789,13 +1776,12 @@ input OrderItemUpdateInput {
   order: OrderRelateToOneForUpdateInput
   product: ProductRelateToOneForUpdateInput
   variant: ProductVariantRelateToOneForUpdateInput
+  toppingOption: ToppingOptionRelateToOneForUpdateInput
+  compositionSnapShot: JSON
+  customizationSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
-  productSnapShot: JSON
-  variantSnapShot: JSON
-  customizationSnapShot: JSON
-  toppingSnapShot: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1815,13 +1801,12 @@ input OrderItemCreateInput {
   order: OrderRelateToOneForCreateInput
   product: ProductRelateToOneForCreateInput
   variant: ProductVariantRelateToOneForCreateInput
+  toppingOption: ToppingOptionRelateToOneForCreateInput
+  compositionSnapShot: JSON
+  customizationSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
-  productSnapShot: JSON
-  variantSnapShot: JSON
-  customizationSnapShot: JSON
-  toppingSnapShot: JSON
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -2152,9 +2137,9 @@ type Mutation {
   redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
   verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
   resendVerificationToken(phoneNumber: String!): String!
-  addToCart(productId: String!, variantId: String, customizations: [CustomizationInput!], toppingId: String, cartId: String!): Cart!
+  addToCart(variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String, cartId: String): Cart!
   removeFromCart(cartItemId: String!, cartId: String!): Cart!
-  checkOut(shippingCost: Int!, paymentMethod: String!, deliveryAddressId: String!, customerNote: String): Payment!
+  checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
   registerUser(registerData: RegisterUserInput!): User!
   registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
   authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
@@ -2401,14 +2386,19 @@ type VerifyUserByPhoneNumberResponse {
   message: String
 }
 
-input CustomizationInput {
-  keyId: String!
-  valueId: String!
-}
-
 input RegisterUserInput {
   name: String!
   email: String!
   password: String!
   phoneNumber: String!
+}
+
+input CustomizationInput {
+  keyId: String!
+  valueId: String!
+}
+
+input CompositionOptionInput {
+  productId: String!
+  quantity: Int!
 }

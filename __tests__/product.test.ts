@@ -51,17 +51,30 @@ describe("Product Model", () => {
           category: { create: { name: "cakes" } },
           images: { create: { altText: "test" } },
           name: "Fluffy Cake",
-          description: "The best cake to ever grace this earth",
-          basePrice: 333,
-          ingredients: "made with everything fluffy",
+          baseDescription: "The best cake to ever grace this earth",
+          type: "cake",
+          variantType: "weight",
           stockQuantity: 10,
-          lifeShelf: 3,
+          fillings: {
+            create: {
+              name: "Fluffy",
+              description: "fluffy description",
+              ingredients: "made with everything fluffy",
+              lifeShelf: 3,
+              variants: { create: { weight: "2.5", price: 300, serving: 5 } },
+            },
+          },
         },
-        query: "id name lifeShelf stockQuantity",
+        query:
+          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
       });
     expect(newProduct.name).toEqual("Fluffy Cake");
-    expect(newProduct.lifeShelf).toBeGreaterThan(2);
-    expect(newProduct.stockQuantity).toBeLessThan(20);
+    expect(newProduct.type).toEqual("cake");
+    expect(newProduct.variantType).toEqual("weight");
+    expect(newProduct.fillings[0].name).toEqual("Fluffy");
+    expect(newProduct.fillings[0].variants[0].weight).toEqual("2.5");
+    expect(newProduct.fillings[0].variants[0].price).toEqual(300);
+    expect(newProduct.fillings[0].variants[0].serving).toEqual(5);
 
     // Updating Product
     const updateProduct = await context
@@ -69,13 +82,23 @@ describe("Product Model", () => {
       .query.Product.updateOne({
         where: { id: newProduct.id },
         data: {
-          basePrice: 150,
           stockQuantity: 5,
         },
-        query: "id basePrice stockQuantity",
+        query: "id stockQuantity fillings { variants { id } }",
       });
-    expect(updateProduct.basePrice).toEqual(150);
-    expect(updateProduct.stockQuantity).toBeLessThan(10);
+
+    const updateProductVariant = await context
+      .withSession(editor)
+      .query.ProductVariant.updateOne({
+        where: { id: newProduct.fillings[0].variants[0].id },
+        data: {
+          price: 600,
+        },
+        query: "id price",
+      });
+
+    expect(updateProduct.stockQuantity).toEqual(5);
+    expect(updateProductVariant.price).toEqual(600);
 
     // Delete Product
     const deleteProduct = await context
@@ -103,21 +126,35 @@ describe("Product Model", () => {
         category: { create: { name: "cakes" } },
         images: { create: { altText: "test" } },
         name: "Fluffy Cake",
-        description: "The best cake to ever grace this earth",
-        basePrice: 333,
-        ingredients: "made with everything fluffy",
+        baseDescription: "The best cake to ever grace this earth",
+        type: "cake",
+        variantType: "weight",
         stockQuantity: 10,
-        lifeShelf: 3,
+        fillings: {
+          create: {
+            name: "Fluffy",
+            description: "fluffy description",
+            ingredients: "made with everything fluffy",
+            lifeShelf: 3,
+            variants: { create: { weight: "2.5", price: 300, serving: 5 } },
+          },
+        },
       },
-      query: "id name lifeShelf stockQuantity",
     });
 
     const customerQuery = await context
       .withSession(customer)
-      .query.Product.findMany({ query: "id name basePrice stockQuantity" });
+      .query.Product.findMany({
+        query:
+          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
+      });
 
     expect(customerQuery[0].name).toEqual("Fluffy Cake");
-    expect(customerQuery[0].basePrice).toEqual(333);
-    expect(customerQuery[0].stockQuantity).toBeGreaterThan(5);
+    expect(customerQuery[0].type).toEqual("cake");
+    expect(customerQuery[0].variantType).toEqual("weight");
+    expect(customerQuery[0].fillings[0].name).toEqual("Fluffy");
+    expect(customerQuery[0].fillings[0].variants[0].weight).toEqual("2.5");
+    expect(customerQuery[0].fillings[0].variants[0].price).toEqual(300);
+    expect(customerQuery[0].fillings[0].variants[0].serving).toEqual(5);
   });
 });

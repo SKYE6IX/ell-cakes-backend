@@ -581,6 +581,7 @@ type ProductFilling {
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
   name: String
+  slug: String
   description: String
   carbonhydrate: Decimal
   calories: Decimal
@@ -588,6 +589,7 @@ type ProductFilling {
   fat: Decimal
   ingredients: String
   lifeShelf: Int
+  stockQuantity: Int
   image_icon: ImageFieldOutput
   attribute: Attribute
   variants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVariantWhereUniqueInput): [ProductVariant!]
@@ -616,6 +618,7 @@ enum ImageExtension {
 
 input ProductFillingWhereUniqueInput {
   id: ID
+  slug: String
   attribute: AttributeWhereUniqueInput
 }
 
@@ -626,6 +629,7 @@ input ProductFillingWhereInput {
   id: IDFilter
   products: ProductManyRelationFilter
   name: StringFilter
+  slug: StringFilter
   description: StringFilter
   carbonhydrate: DecimalNullableFilter
   calories: DecimalNullableFilter
@@ -633,6 +637,7 @@ input ProductFillingWhereInput {
   fat: DecimalNullableFilter
   ingredients: StringFilter
   lifeShelf: IntFilter
+  stockQuantity: IntFilter
   attribute: AttributeWhereInput
   variants: ProductVariantManyRelationFilter
   createdAt: DateTimeNullableFilter
@@ -665,6 +670,7 @@ input ProductVariantManyRelationFilter {
 input ProductFillingOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  slug: OrderDirection
   description: OrderDirection
   carbonhydrate: OrderDirection
   calories: OrderDirection
@@ -672,6 +678,7 @@ input ProductFillingOrderByInput {
   fat: OrderDirection
   ingredients: OrderDirection
   lifeShelf: OrderDirection
+  stockQuantity: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -679,6 +686,7 @@ input ProductFillingOrderByInput {
 input ProductFillingUpdateInput {
   products: ProductRelateToManyForUpdateInput
   name: String
+  slug: String
   description: String
   carbonhydrate: Decimal
   calories: Decimal
@@ -686,6 +694,7 @@ input ProductFillingUpdateInput {
   fat: Decimal
   ingredients: String
   lifeShelf: Int
+  stockQuantity: Int
   image_icon: ImageFieldInput
   attribute: AttributeRelateToOneForUpdateInput
   variants: ProductVariantRelateToManyForUpdateInput
@@ -725,6 +734,7 @@ input ProductFillingUpdateArgs {
 input ProductFillingCreateInput {
   products: ProductRelateToManyForCreateInput
   name: String
+  slug: String
   description: String
   carbonhydrate: Decimal
   calories: Decimal
@@ -732,6 +742,7 @@ input ProductFillingCreateInput {
   fat: Decimal
   ingredients: String
   lifeShelf: Int
+  stockQuantity: Int
   image_icon: ImageFieldInput
   attribute: AttributeRelateToOneForCreateInput
   variants: ProductVariantRelateToManyForCreateInput

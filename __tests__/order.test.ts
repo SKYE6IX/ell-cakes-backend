@@ -93,6 +93,7 @@ describe("Order and OrderItem Model and", () => {
               description: "fluffy description",
               ingredients: "made with everything fluffy",
               lifeShelf: 3,
+              stockQuantity: 10,
               variants: {
                 create: { weight: "2.5", price: 3000, serving: 5 },
               },

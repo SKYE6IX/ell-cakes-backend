@@ -9,6 +9,7 @@ import {
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
+import { getTransliterationSlug } from "../lib/getTransliteration";
 
 export const ProductFilling = list({
   access: {
@@ -22,6 +23,25 @@ export const ProductFilling = list({
   fields: {
     products: relationship({ ref: "Product.fillings", many: true }),
     name: text({ validation: { isRequired: true }, label: "Название" }),
+    slug: text({
+      hooks: {
+        resolveInput: ({ resolvedData, fieldKey, operation }) => {
+          if (operation === "create") {
+            const { name } = resolvedData;
+            resolvedData.slug = getTransliterationSlug(name);
+            return resolvedData[fieldKey];
+          }
+          return resolvedData[fieldKey];
+        },
+      },
+      isIndexed: "unique",
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+    }),
     description: text({ validation: { isRequired: true }, label: "описание" }),
     carbonhydrate: decimal({
       precision: 5,
@@ -46,6 +66,10 @@ export const ProductFilling = list({
     lifeShelf: integer({
       validation: { isRequired: true },
       label: "срок хранения",
+    }),
+    stockQuantity: integer({
+      label: "количество на складе",
+      validation: { isRequired: true },
     }),
     image_icon: image({ storage: "yc_s3_image", label: "Иконка" }),
     attribute: relationship({
@@ -103,7 +127,6 @@ export const ProductFilling = list({
           where: { id: item.id.toString() },
           query: "id variants { id } attribute { id }",
         });
-
         if (productFilling.variants) {
           await context.query.ProductVariant.deleteMany({
             where: productFilling.variants.map((v: { id: string }) => ({
@@ -111,7 +134,6 @@ export const ProductFilling = list({
             })),
           });
         }
-
         if (productFilling.attribute) {
           await context.query.Attribute.deleteOne({
             where: { id: productFilling.attribute.id },

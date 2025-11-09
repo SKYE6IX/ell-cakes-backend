@@ -65,7 +65,7 @@ export const CustomizationOption = list({
     }),
   },
   ui: {
-    isHidden: true,
+    isHidden: !permissions.canManageAll,
   },
   hooks: {
     beforeOperation: {

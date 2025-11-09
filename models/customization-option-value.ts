@@ -43,6 +43,6 @@ export const CustomizationOptionValue = list({
     }),
   },
   ui: {
-    isHidden: true,
+    isHidden: !permissions.canManageAll,
   },
 });

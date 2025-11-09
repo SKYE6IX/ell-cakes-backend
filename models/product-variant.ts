@@ -49,6 +49,6 @@ export const ProductVariant = list({
     }),
   },
   ui: {
-    isHidden: true,
+    isHidden: !permissions.canManageAll,
   },
 });

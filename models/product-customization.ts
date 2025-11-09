@@ -65,6 +65,6 @@ export const ProductCustomization = list({
     },
   },
   ui: {
-    isHidden: true,
+    isHidden: !permissions.canManageAll,
   },
 });

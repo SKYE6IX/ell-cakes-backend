@@ -13,6 +13,8 @@ type AccessArgs = {
 export const isSignedIn = ({ session }: AccessArgs) => !!session;
 
 export const permissions = {
+  canManageAll: ({ session }: AccessArgs) => session?.data.role === "ADMIN",
+
   // Admin is allow to manage users
   canManageUsers: ({ session }: AccessArgs) => session?.data.role === "ADMIN",
 

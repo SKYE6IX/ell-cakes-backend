@@ -69,6 +69,7 @@ describe("cart and cart-item Model", () => {
               name: "Fluffy",
               description: "fluffy description",
               ingredients: "made with everything fluffy",
+              stockQuantity: 10,
               lifeShelf: 3,
               variants: {
                 create: { weight: "2.5", price: 300, serving: 5 },
@@ -133,6 +134,7 @@ describe("cart and cart-item Model", () => {
               name: "Fluffy",
               description: "fluffy description",
               ingredients: "made with everything fluffy",
+              stockQuantity: 10,
               lifeShelf: 3,
               variants: {
                 create: { weight: "2.5", price: 300, serving: 5 },

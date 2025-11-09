@@ -3,5 +3,5 @@ node_modules
 keystone.db
 *.log
 *.env
-script
+data
 secrets

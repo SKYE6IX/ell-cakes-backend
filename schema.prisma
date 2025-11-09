@@ -87,6 +87,7 @@ model ProductFilling {
   id                   String           @id @default(uuid()) @postgresql.Uuid
   products             Product[]        @relation("Product_fillings")
   name                 String           @default("")
+  slug                 String           @unique @default("")
   description          String           @default("")
   carbonhydrate        Decimal?         @postgresql.Decimal(5, 2)
   calories             Decimal?         @postgresql.Decimal(5, 2)
@@ -94,6 +95,7 @@ model ProductFilling {
   fat                  Decimal?         @postgresql.Decimal(5, 2)
   ingredients          String           @default("")
   lifeShelf            Int
+  stockQuantity        Int
   image_icon_id        String?
   image_icon_filesize  Int?
   image_icon_width     Int?

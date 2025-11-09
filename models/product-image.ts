@@ -18,6 +18,6 @@ export const ProductImage = list({
     altText: text(),
   },
   ui: {
-    isHidden: true,
+    isHidden: !permissions.canManageAll,
   },
 });

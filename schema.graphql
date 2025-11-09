@@ -578,7 +578,8 @@ input ToppingRelateToOneForCreateInput {
 
 type ProductFilling {
   id: ID!
-  product: Product
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
   name: String
   description: String
   carbonhydrate: Decimal
@@ -623,7 +624,7 @@ input ProductFillingWhereInput {
   OR: [ProductFillingWhereInput!]
   NOT: [ProductFillingWhereInput!]
   id: IDFilter
-  product: ProductWhereInput
+  products: ProductManyRelationFilter
   name: StringFilter
   description: StringFilter
   carbonhydrate: DecimalNullableFilter
@@ -636,6 +637,12 @@ input ProductFillingWhereInput {
   variants: ProductVariantManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+}
+
+input ProductManyRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
 }
 
 input DecimalNullableFilter {
@@ -670,7 +677,7 @@ input ProductFillingOrderByInput {
 }
 
 input ProductFillingUpdateInput {
-  product: ProductRelateToOneForUpdateInput
+  products: ProductRelateToManyForUpdateInput
   name: String
   description: String
   carbonhydrate: Decimal
@@ -686,10 +693,11 @@ input ProductFillingUpdateInput {
   updatedAt: DateTime
 }
 
-input ProductRelateToOneForUpdateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
-  disconnect: Boolean
+input ProductRelateToManyForUpdateInput {
+  disconnect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
 }
 
 input ImageFieldInput {
@@ -715,7 +723,7 @@ input ProductFillingUpdateArgs {
 }
 
 input ProductFillingCreateInput {
-  product: ProductRelateToOneForCreateInput
+  products: ProductRelateToManyForCreateInput
   name: String
   description: String
   carbonhydrate: Decimal
@@ -731,9 +739,9 @@ input ProductFillingCreateInput {
   updatedAt: DateTime
 }
 
-input ProductRelateToOneForCreateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
 }
 
 input AttributeRelateToOneForCreateInput {
@@ -870,6 +878,12 @@ input ProductAttributeUpdateInput {
   updatedAt: DateTime
 }
 
+input ProductRelateToOneForUpdateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
 input ProductAttributeUpdateArgs {
   where: ProductAttributeWhereUniqueInput!
   data: ProductAttributeUpdateInput!
@@ -881,6 +895,11 @@ input ProductAttributeCreateInput {
   value: String
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input ProductRelateToOneForCreateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
 }
 
 type ProductImage {
@@ -1034,12 +1053,6 @@ input CategoryWhereInput {
   updatedAt: DateTimeNullableFilter
 }
 
-input ProductManyRelationFilter {
-  every: ProductWhereInput
-  some: ProductWhereInput
-  none: ProductWhereInput
-}
-
 input CategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -1057,13 +1070,6 @@ input CategoryUpdateInput {
   updatedAt: DateTime
 }
 
-input ProductRelateToManyForUpdateInput {
-  disconnect: [ProductWhereUniqueInput!]
-  set: [ProductWhereUniqueInput!]
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
-}
-
 input CategoryUpdateArgs {
   where: CategoryWhereUniqueInput!
   data: CategoryUpdateInput!
@@ -1076,11 +1082,6 @@ input CategoryCreateInput {
   products: ProductRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input ProductRelateToManyForCreateInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
 }
 
 type ProductCustomization {

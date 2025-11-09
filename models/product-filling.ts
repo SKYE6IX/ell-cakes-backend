@@ -20,7 +20,7 @@ export const ProductFilling = list({
     },
   },
   fields: {
-    product: relationship({ ref: "Product.fillings" }),
+    products: relationship({ ref: "Product.fillings", many: true }),
     name: text({ validation: { isRequired: true }, label: "Название" }),
     description: text({ validation: { isRequired: true }, label: "описание" }),
     carbonhydrate: decimal({
@@ -117,8 +117,5 @@ export const ProductFilling = list({
         }
       },
     },
-  },
-  ui: {
-    isHidden: true,
   },
 });

@@ -60,7 +60,7 @@ model Product {
   baseDescription                    String                  @default("")
   type                               String
   variantType                        String
-  fillings                           ProductFilling[]        @relation("ProductFilling_product")
+  fillings                           ProductFilling[]        @relation("Product_fillings")
   stockQuantity                      Int
   isAvailable                        Boolean                 @default(true)
   badge                              String?
@@ -85,8 +85,7 @@ model Product {
 
 model ProductFilling {
   id                   String           @id @default(uuid()) @postgresql.Uuid
-  product              Product?         @relation("ProductFilling_product", fields: [productId], references: [id])
-  productId            String?          @map("product") @postgresql.Uuid
+  products             Product[]        @relation("Product_fillings")
   name                 String           @default("")
   description          String           @default("")
   carbonhydrate        Decimal?         @postgresql.Decimal(5, 2)
@@ -104,8 +103,6 @@ model ProductFilling {
   variants             ProductVariant[] @relation("ProductVariant_filling")
   createdAt            DateTime?        @default(now())
   updatedAt            DateTime?
-
-  @@index([productId])
 }
 
 model Attribute {

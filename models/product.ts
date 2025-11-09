@@ -79,6 +79,9 @@ export const Product = list({
         },
       ],
       validation: { isRequired: true },
+      ui: {
+        displayMode: "segmented-control",
+      },
     }),
     variantType: select({
       label: "Выберите тип варианта",
@@ -93,10 +96,13 @@ export const Product = list({
         },
       ],
       validation: { isRequired: true },
+      ui: {
+        displayMode: "segmented-control",
+      },
     }),
     fillings: relationship({
       label: "Начинки",
-      ref: "ProductFilling.product",
+      ref: "ProductFilling.products",
       many: true,
       ui: {
         displayMode: "cards",

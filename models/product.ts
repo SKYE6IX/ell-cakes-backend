@@ -230,12 +230,11 @@ export const Product = list({
           where: { id: item.id.toString() },
           query: "id images { id } customization { id } fillings { id }",
         });
+
         await context.query.ProductImage.deleteMany({
           where: product.images.map((v: { id: any }) => ({ id: v.id })),
         });
-        await context.query.ProductFilling.deleteMany({
-          where: product.fillings.map((v: { id: any }) => ({ id: v.id })),
-        });
+
         if (product.customization) {
           await context.query.ProductCustomization.deleteOne({
             where: { id: product.customization.id },

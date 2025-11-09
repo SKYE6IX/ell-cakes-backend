@@ -90,7 +90,6 @@ describe("Order and OrderItem Model and", () => {
           fillings: {
             create: {
               name: "Fluffy",
-
               description: "fluffy description",
               ingredients: "made with everything fluffy",
               lifeShelf: 3,
@@ -103,17 +102,20 @@ describe("Order and OrderItem Model and", () => {
         query:
           "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
       });
+
     await context.withSession(mockSession).graphql.raw({
-      query: `mutation AddToCart($variantId: String!) {
-         addToCart(variantId: $variantId) {
-          id subTotal cartItems { id quantity }
-         }
-       }
-      `,
+      query: `mutation AddToCart($productId: String!, $variantId: String!) {
+               addToCart(productId: $productId, variantId: $variantId) {
+                id subTotal cartItems { id quantity }
+               }
+             }
+            `,
       variables: {
+        productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
       },
     });
+
     const userAddress = await context
       .withSession(mockSession)
       .db.DelivaryAddress.createOne({
@@ -122,6 +124,7 @@ describe("Order and OrderItem Model and", () => {
           user: { connect: { id: mockSession.itemId } },
         },
       });
+
     const checkOut = await context
       .withSession(mockSession)
       .graphql.raw<{ checkOut: any }, {}>({
@@ -136,6 +139,7 @@ describe("Order and OrderItem Model and", () => {
           paymentMethod: "bank_card",
         },
       });
+
     expect(checkOut.data?.checkOut.status).toEqual("pending");
     expect(checkOut.data?.checkOut.method).toEqual("bank_card");
     expect(checkOut.data?.checkOut.amount).toEqual("3000");

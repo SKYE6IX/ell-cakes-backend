@@ -103,6 +103,7 @@ export const ProductFilling = list({
           where: { id: item.id.toString() },
           query: "id variants { id } attribute { id }",
         });
+
         if (productFilling.variants) {
           await context.query.ProductVariant.deleteMany({
             where: productFilling.variants.map((v: { id: string }) => ({
@@ -110,6 +111,7 @@ export const ProductFilling = list({
             })),
           });
         }
+
         if (productFilling.attribute) {
           await context.query.Attribute.deleteOne({
             where: { id: productFilling.attribute.id },

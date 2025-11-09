@@ -3,6 +3,7 @@ import { Context } from ".keystone/types";
 import type { Session } from "../access";
 
 interface AddToCartArgs {
+  productId: string;
   variantId: string;
   customizations: { keyId: string; valueId: string }[] | null;
   compositionOptions: { productId: string; quantity: number }[] | null;
@@ -17,7 +18,7 @@ export type ProductVariant = Prisma.ProductVariantGetPayload<{
   include: {
     filling: {
       include: {
-        product: {
+        products: {
           include: {
             customization: {
               include: { customOptions: { include: { customValues: true } } };
@@ -33,6 +34,7 @@ export type ProductVariant = Prisma.ProductVariantGetPayload<{
 export const addToCart = async (
   root: any,
   {
+    productId,
     variantId,
     customizations,
     compositionOptions,
@@ -79,7 +81,7 @@ export const addToCart = async (
      filling { 
       id
       name
-      product {
+      products {
        id
        name
        customization { id customOptions { id name customValues { id value extraPrice } } }
@@ -89,16 +91,20 @@ export const addToCart = async (
     `,
   })) as ProductVariant;
 
+  // We find the current product inside the filling using it's ID
+  const product = productVariant.filling?.products.find(
+    (product) => product.id === productId
+  );
+
   // Check if user added customization and calculate the
   // one with extra price and return a snapShot of it.
   let customizationsTotalAmount = 0;
   let customizationSnapShot = null;
   if (customizations) {
     customizationSnapShot = customizations?.map((customization) => {
-      const customOption =
-        productVariant.filling?.product?.customization?.customOptions.find(
-          (option) => option.id === customization.keyId
-        );
+      const customOption = product?.customization?.customOptions.find(
+        (option) => option.id === customization.keyId
+      );
       const valueOption = customOption?.customValues.find(
         (value) => value.id === customization.valueId
       );
@@ -127,6 +133,7 @@ export const addToCart = async (
 
   // Check for existing cart-item
   const existCartItem = cart.cartItems.find((item) => {
+    const sameProduct = item.productId === productId;
     const sameVariant = item.variantId === variantId;
     const sameTopping = item.toppingOptionId === (toppingOptionId ?? null);
     const sameCompositionOptions =
@@ -136,7 +143,11 @@ export const addToCart = async (
       JSON.stringify(item.customizationSnapShot) ===
       JSON.stringify(customizationSnapShot);
     return (
-      sameVariant && sameTopping && sameCompositionOptions && sameCustomization
+      sameProduct &&
+      sameVariant &&
+      sameTopping &&
+      sameCompositionOptions &&
+      sameCustomization
     );
   });
 
@@ -152,10 +163,9 @@ export const addToCart = async (
     });
   } else {
     // Check if user select topping option and get the price
-    const selectedTopping =
-      productVariant.filling?.product?.topping?.options.find(
-        (toppingOption) => toppingOption.id === toppingOptionId
-      );
+    const selectedTopping = product?.topping?.options.find(
+      (toppingOption) => toppingOption.id === toppingOptionId
+    );
     // Calculate the unit price for a single product
     const toppingPrice = selectedTopping?.extraPrice ?? 0;
     const basePrice = productVariant.price;
@@ -164,7 +174,7 @@ export const addToCart = async (
       data: {
         cart: { connect: { id: cart.id } },
         variant: { connect: { id: productVariant.id } },
-        product: { connect: { id: productVariant.filling?.product?.id } },
+        product: { connect: { id: product?.id } },
         unitPrice: unitPrice,
         subTotal: unitPrice * 1,
         ...(compositionOptions && { compositionSnapShot: compositionSnapShot }),

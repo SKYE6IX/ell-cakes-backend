@@ -67,7 +67,6 @@ describe("cart and cart-item Model", () => {
           fillings: {
             create: {
               name: "Fluffy",
-
               description: "fluffy description",
               ingredients: "made with everything fluffy",
               lifeShelf: 3,
@@ -80,30 +79,30 @@ describe("cart and cart-item Model", () => {
         query:
           "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
       });
-
     const cart = (await context.graphql.raw({
-      query: `mutation AddToCart($variantId: String!) {
-         addToCart(variantId: $variantId) {
+      query: `mutation AddToCart($productId: String!, $variantId: String!) {
+         addToCart(productId: $productId, variantId: $variantId) {
           id subTotal cartItems { id quantity }
          }
        }
       `,
       variables: {
+        productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
       },
     })) as GraphQLResponse<CartWithItem>;
-
     expect(cart.data.addToCart.subTotal).toEqual(300);
     expect(cart.data.addToCart.cartItems[0].quantity).toEqual(1);
 
     const updateCart = (await context.graphql.raw({
-      query: `mutation AddToCart($variantId: String!, $cartId: String) {
-         addToCart(variantId: $variantId, cartId: $cartId) {
+      query: `mutation AddToCart($productId: String!, $variantId: String!, $cartId: String) {
+         addToCart(productId: $productId, variantId: $variantId, cartId: $cartId) {
           id subTotal cartItems { id quantity }
          }
        }
       `,
       variables: {
+        productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
         cartId: cart.data.addToCart.id,
       },
@@ -132,7 +131,6 @@ describe("cart and cart-item Model", () => {
           fillings: {
             create: {
               name: "Fluffy",
-
               description: "fluffy description",
               ingredients: "made with everything fluffy",
               lifeShelf: 3,
@@ -147,13 +145,14 @@ describe("cart and cart-item Model", () => {
       });
 
     const addToCart = (await context.graphql.raw({
-      query: `mutation AddToCart($variantId: String!) {
-         addToCart(variantId: $variantId) {
+      query: `mutation AddToCart($productId: String!, $variantId: String!) {
+         addToCart(productId: $productId, variantId: $variantId) {
           id subTotal cartItems { id quantity }
          }
        }
       `,
       variables: {
+        productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
       },
     })) as GraphQLResponse<CartWithItem>;

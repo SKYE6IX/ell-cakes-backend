@@ -38,7 +38,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     type Mutation {
         verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
         resendVerificationToken(phoneNumber: String!): String!
-        addToCart(variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String, cartId: String): Cart!
+        addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String, cartId: String): Cart!
         removeFromCart(cartItemId: String!, cartId: String!): Cart!
         checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
         registerUser(registerData: RegisterUserInput!): User!

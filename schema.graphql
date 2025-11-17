@@ -2406,7 +2406,7 @@ input RegisterUserInput {
 }
 
 input CustomizationInput {
-  keyId: String!
+  optionId: String!
   valueId: String!
 }
 

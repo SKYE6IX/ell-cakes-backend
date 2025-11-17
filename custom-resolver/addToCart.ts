@@ -5,7 +5,7 @@ import type { Session } from "../access";
 interface AddToCartArgs {
   productId: string;
   variantId: string;
-  customizations: { keyId: string; valueId: string }[] | null;
+  customizations: { optionId: string; valueId: string }[] | null;
   compositionOptions: { productId: string; quantity: number }[] | null;
   toppingOptionId: string | null;
   cartId: string | null;
@@ -103,7 +103,7 @@ export const addToCart = async (
   if (customizations) {
     customizationSnapShot = customizations?.map((customization) => {
       const customOption = product?.customization?.customOptions.find(
-        (option) => option.id === customization.keyId
+        (option) => option.id === customization.optionId
       );
       const valueOption = customOption?.customValues.find(
         (value) => value.id === customization.valueId

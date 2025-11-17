@@ -32,6 +32,7 @@ export const registerUser = async (
       ...registerData,
     },
   });
+
   // authorized USER if successfully created
   const { data, errors } = await sudoContext.graphql.raw<
     { authenticateUserWithPassword: { item: { id: string } } },
@@ -50,6 +51,7 @@ export const registerUser = async (
     `,
     variables: { email: newUser.email, password: registerData.password },
   });
+
   if (errors) {
     throw new Error(errors[0].message);
   }

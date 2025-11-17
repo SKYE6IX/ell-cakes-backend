@@ -26,7 +26,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     }
 
     input CustomizationInput {
-      keyId: String!
+      optionId: String!
       valueId: String!
     }
 

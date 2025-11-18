@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for ell-cakes-backend/models/cart.ts</title>
+    <title>Code coverage report for ell-cakes-backend/models/order-image.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> cart.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/models</a> order-image.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -103,10 +103,10 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -131,12 +131,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,44 +144,43 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { list } from "@keystone-6/core";
-import { relationship, timestamp, integer } from "@keystone-6/core/fields";
-import { allowAll } from "@keystone-6/core/access";
+import { relationship, timestamp, text, image } from "@keystone-6/core/fields";
+import { allOperations } from "@keystone-6/core/access";
+import { isSignedIn as hasSession, permissions, rules } from "../access";
 &nbsp;
-export const Cart = list({
+export const OrderImage = list({
   access: {
-    operation: allowAll,
+    operation: {
+      ...allOperations(hasSession),
+    },
+    filter: {
+      query: rules.canReadOrder,
+      update: permissions.canManageOrder,
+      delete: permissions.canManageOrder,
+    },
   },
   fields: {
-    user: relationship({ ref: "User.cart" }),
-    cartItems: relationship({ ref: "CartItem.cart", many: true }),
-    subTotal: integer(),
+    order: relationship({ ref: "Order.orderImages" }),
+    image: image({ storage: "yc_s3_order_images" }),
+    altText: text(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
-        createView: { fieldMode: "hidden" },
+        itemView: {
+          fieldMode: "read",
+        },
       },
     }),
     updatedAt: timestamp({
       ui: {
-        createView: { fieldMode: "hidden" },
+        itemView: {
+          fieldMode: "read",
+        },
       },
     }),
   },
-  hooks: {
-    beforeOperation: {
-      delete: async ({ context, item }) =&gt; {
-        const cart = await context.query.Cart.findOne({
-          where: { id: item.id.toString() },
-          query: "id cartItems { id }",
-        });
-        await context.query.CartItem.deleteMany({
-          where: cart.cartItems.map((v: { id: any }) =&gt; ({ id: v.id })),
-        });
-      },
-    },
-  },
   ui: {
-    isHidden: true,
+    isHidden: !permissions.canManageAll,
   },
 });
 &nbsp;</pre></td></tr></table></pre>

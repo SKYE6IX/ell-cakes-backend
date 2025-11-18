@@ -8,6 +8,7 @@ import { registerUser } from "./registerUser";
 import { registerUserWithCart } from "./registerUserWithCart";
 import { authorizedUserWithCart } from "./authorizedUserWithCart";
 import { resendVerificationToken } from "./resendVerificationToken";
+import { uploadImageCustomization } from "./uploadImageCustomization";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -28,6 +29,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     input CustomizationInput {
       optionId: String!
       valueId: String!
+      inscriptionText: String
+      imageId: String
     }
 
     input CompositionOptionInput {
@@ -44,6 +47,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         registerUser(registerData: RegisterUserInput!): User!
         registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
         authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
+        uploadImageCustomization(files: [Upload!]!): [OrderImage!]!
     }
     `,
     resolvers: {
@@ -56,6 +60,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         registerUser,
         registerUserWithCart,
         authorizedUserWithCart,
+        uploadImageCustomization,
       },
     },
   });

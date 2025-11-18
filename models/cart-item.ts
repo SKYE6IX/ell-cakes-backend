@@ -17,7 +17,7 @@ export const CartItem = list({
     variant: relationship({ ref: "ProductVariant" }),
     toppingOption: relationship({ ref: "ToppingOption" }),
     compositionSnapShot: json(), // We store the a snapshot of the composition to verify if user chose something diffrent
-    customizationSnapShot: json(), // Here is all about the customization the user provided along with the extra prices
+    customizationsSnapShot: json(), // Here is all about the customization the user provided along with the extra prices
     quantity: integer({ defaultValue: 1 }),
     unitPrice: integer(), // Unit price serve as the amount of the product + the customization/topping
     subTotal: integer(), // Subtotal price serve as the total amount of the unitPrice * quantity (For a single cart-item)

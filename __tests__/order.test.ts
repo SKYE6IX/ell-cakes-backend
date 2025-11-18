@@ -99,14 +99,29 @@ describe("Order and OrderItem Model and", () => {
               },
             },
           },
+          customization: {
+            create: {
+              customOptions: {
+                create: {
+                  name: "CANDLE",
+                  customValues: {
+                    create: {
+                      value: "5",
+                      extraPrice: 100,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         query:
-          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
+          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } }",
       });
 
     await context.withSession(mockSession).graphql.raw({
-      query: `mutation AddToCart($productId: String!, $variantId: String!) {
-               addToCart(productId: $productId, variantId: $variantId) {
+      query: `mutation AddToCart($productId: String!, $variantId: String!, $customizations: [CustomizationInput!]) {
+               addToCart(productId: $productId, variantId: $variantId, customizations: $customizations) {
                 id subTotal cartItems { id quantity }
                }
              }
@@ -114,6 +129,15 @@ describe("Order and OrderItem Model and", () => {
       variables: {
         productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
+        customizations: [
+          {
+            optionId: newProduct.customization.customOptions[0].id,
+            valueId:
+              newProduct.customization.customOptions[0].customValues[0].id,
+            inscriptionText: null,
+            imageId: null,
+          },
+        ],
       },
     });
 
@@ -130,7 +154,7 @@ describe("Order and OrderItem Model and", () => {
       .withSession(mockSession)
       .graphql.raw<{ checkOut: any }, {}>({
         query: `mutation CheckOut($deliveryAddressId: String!, $shippingCost: Int!, $paymentMethod: String!) {
-              checkOut(shippingCost: $shippingCost, deliveryAddressId: $deliveryAddressId, paymentMethod: $paymentMethod){
+              checkOut(shippingCost: $shippingCost, deliveryAddressId: $deliveryAddressId, paymentMethod: $paymentMethod) {
                id status amount confirmationUrl method paymentId
               }
             }`,
@@ -140,6 +164,8 @@ describe("Order and OrderItem Model and", () => {
           paymentMethod: "bank_card",
         },
       });
+    console.log("Here error", checkOut.errors);
+    console.log("Here payment deatils", checkOut.data?.checkOut);
 
     expect(checkOut.data?.checkOut.status).toEqual("pending");
     expect(checkOut.data?.checkOut.method).toEqual("bank_card");

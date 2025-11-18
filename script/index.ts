@@ -220,6 +220,7 @@ async function main() {
     for (const fileName of imageFiles) {
       const imagePath = path.join(imageFolder, fileName);
       const mimeType = (await sharp(imagePath).metadata()).format;
+
       const imageData = {
         createReadStream: () => createReadStream(imagePath),
         filename: fileName,

@@ -76,13 +76,29 @@ describe("cart and cart-item Model", () => {
               },
             },
           },
+          customization: {
+            create: {
+              customOptions: {
+                create: {
+                  name: "CANDLE",
+                  customValues: {
+                    create: {
+                      value: "5",
+                      extraPrice: 100,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
         query:
-          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
+          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } } ",
       });
+
     const cart = (await context.graphql.raw({
-      query: `mutation AddToCart($productId: String!, $variantId: String!) {
-         addToCart(productId: $productId, variantId: $variantId) {
+      query: `mutation AddToCart($productId: String!, $variantId: String!, $customizations: [CustomizationInput!]) {
+         addToCart(productId: $productId, variantId: $variantId, customizations: $customizations) {
           id subTotal cartItems { id quantity }
          }
        }
@@ -90,14 +106,24 @@ describe("cart and cart-item Model", () => {
       variables: {
         productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
+        customizations: [
+          {
+            optionId: newProduct.customization.customOptions[0].id,
+            valueId:
+              newProduct.customization.customOptions[0].customValues[0].id,
+            inscriptionText: null,
+            imageId: null,
+          },
+        ],
       },
     })) as GraphQLResponse<CartWithItem>;
-    expect(cart.data.addToCart.subTotal).toEqual(300);
+
+    expect(cart.data.addToCart.subTotal).toEqual(400);
     expect(cart.data.addToCart.cartItems[0].quantity).toEqual(1);
 
     const updateCart = (await context.graphql.raw({
-      query: `mutation AddToCart($productId: String!, $variantId: String!, $cartId: String) {
-         addToCart(productId: $productId, variantId: $variantId, cartId: $cartId) {
+      query: `mutation AddToCart($productId: String!, $variantId: String!, $cartId: String, $customizations: [CustomizationInput!]) {
+         addToCart(productId: $productId, variantId: $variantId, cartId: $cartId, customizations: $customizations ) {
           id subTotal cartItems { id quantity }
          }
        }
@@ -106,10 +132,19 @@ describe("cart and cart-item Model", () => {
         productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
         cartId: cart.data.addToCart.id,
+        customizations: [
+          {
+            optionId: newProduct.customization.customOptions[0].id,
+            valueId:
+              newProduct.customization.customOptions[0].customValues[0].id,
+            inscriptionText: null,
+            imageId: null,
+          },
+        ],
       },
     })) as GraphQLResponse<CartWithItem>;
     expect(updateCart.data.addToCart.cartItems[0].quantity).toEqual(2);
-    expect(updateCart.data.addToCart.subTotal).toEqual(300 * 2);
+    expect(updateCart.data.addToCart.subTotal).toEqual(400 * 2);
   });
 
   test("Remove item from cart", async () => {

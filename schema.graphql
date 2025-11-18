@@ -1519,7 +1519,7 @@ type CartItem {
   variant: ProductVariant
   toppingOption: ToppingOption
   compositionSnapShot: JSON
-  customizationSnapShot: JSON
+  customizationsSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1562,7 +1562,7 @@ input CartItemUpdateInput {
   variant: ProductVariantRelateToOneForUpdateInput
   toppingOption: ToppingOptionRelateToOneForUpdateInput
   compositionSnapShot: JSON
-  customizationSnapShot: JSON
+  customizationsSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1593,7 +1593,7 @@ input CartItemCreateInput {
   variant: ProductVariantRelateToOneForCreateInput
   toppingOption: ToppingOptionRelateToOneForCreateInput
   compositionSnapShot: JSON
-  customizationSnapShot: JSON
+  customizationsSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1624,6 +1624,8 @@ type Order {
   payment: Payment
   deliveryAddress: DelivaryAddress
   note: String
+  orderImages(where: OrderImageWhereInput! = {}, orderBy: [OrderImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderImageWhereUniqueInput): [OrderImage!]
+  orderImagesCount(where: OrderImageWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1649,6 +1651,7 @@ input OrderWhereInput {
   payment: PaymentWhereInput
   deliveryAddress: DelivaryAddressWhereInput
   note: StringFilter
+  orderImages: OrderImageManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1657,6 +1660,12 @@ input OrderItemManyRelationFilter {
   every: OrderItemWhereInput
   some: OrderItemWhereInput
   none: OrderItemWhereInput
+}
+
+input OrderImageManyRelationFilter {
+  every: OrderImageWhereInput
+  some: OrderImageWhereInput
+  none: OrderImageWhereInput
 }
 
 input OrderOrderByInput {
@@ -1682,6 +1691,7 @@ input OrderUpdateInput {
   payment: PaymentRelateToOneForUpdateInput
   deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
   note: String
+  orderImages: OrderImageRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1705,6 +1715,13 @@ input DelivaryAddressRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
+input OrderImageRelateToManyForUpdateInput {
+  disconnect: [OrderImageWhereUniqueInput!]
+  set: [OrderImageWhereUniqueInput!]
+  create: [OrderImageCreateInput!]
+  connect: [OrderImageWhereUniqueInput!]
+}
+
 input OrderUpdateArgs {
   where: OrderWhereUniqueInput!
   data: OrderUpdateInput!
@@ -1721,6 +1738,7 @@ input OrderCreateInput {
   payment: PaymentRelateToOneForCreateInput
   deliveryAddress: DelivaryAddressRelateToOneForCreateInput
   note: String
+  orderImages: OrderImageRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1740,6 +1758,11 @@ input DelivaryAddressRelateToOneForCreateInput {
   connect: DelivaryAddressWhereUniqueInput
 }
 
+input OrderImageRelateToManyForCreateInput {
+  create: [OrderImageCreateInput!]
+  connect: [OrderImageWhereUniqueInput!]
+}
+
 type OrderItem {
   id: ID!
   order: Order
@@ -1747,7 +1770,7 @@ type OrderItem {
   variant: ProductVariant
   toppingOption: ToppingOption
   compositionSnapShot: JSON
-  customizationSnapShot: JSON
+  customizationsSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1790,7 +1813,7 @@ input OrderItemUpdateInput {
   variant: ProductVariantRelateToOneForUpdateInput
   toppingOption: ToppingOptionRelateToOneForUpdateInput
   compositionSnapShot: JSON
-  customizationSnapShot: JSON
+  customizationsSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1815,7 +1838,7 @@ input OrderItemCreateInput {
   variant: ProductVariantRelateToOneForCreateInput
   toppingOption: ToppingOptionRelateToOneForCreateInput
   compositionSnapShot: JSON
-  customizationSnapShot: JSON
+  customizationsSnapShot: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -2010,6 +2033,58 @@ input ProductCategoryBannerCreateInput {
   updatedAt: DateTime
 }
 
+type OrderImage {
+  id: ID!
+  order: Order
+  image: ImageFieldOutput
+  altText: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderImageWhereUniqueInput {
+  id: ID
+}
+
+input OrderImageWhereInput {
+  AND: [OrderImageWhereInput!]
+  OR: [OrderImageWhereInput!]
+  NOT: [OrderImageWhereInput!]
+  id: IDFilter
+  order: OrderWhereInput
+  altText: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input OrderImageOrderByInput {
+  id: OrderDirection
+  altText: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input OrderImageUpdateInput {
+  order: OrderRelateToOneForUpdateInput
+  image: ImageFieldInput
+  altText: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderImageUpdateArgs {
+  where: OrderImageWhereUniqueInput!
+  data: OrderImageUpdateInput!
+}
+
+input OrderImageCreateInput {
+  order: OrderRelateToOneForCreateInput
+  image: ImageFieldInput
+  altText: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2142,6 +2217,12 @@ type Mutation {
   updateProductCategoryBanners(data: [ProductCategoryBannerUpdateArgs!]!): [ProductCategoryBanner]
   deleteProductCategoryBanner(where: ProductCategoryBannerWhereUniqueInput!): ProductCategoryBanner
   deleteProductCategoryBanners(where: [ProductCategoryBannerWhereUniqueInput!]!): [ProductCategoryBanner]
+  createOrderImage(data: OrderImageCreateInput!): OrderImage
+  createOrderImages(data: [OrderImageCreateInput!]!): [OrderImage]
+  updateOrderImage(where: OrderImageWhereUniqueInput!, data: OrderImageUpdateInput!): OrderImage
+  updateOrderImages(data: [OrderImageUpdateArgs!]!): [OrderImage]
+  deleteOrderImage(where: OrderImageWhereUniqueInput!): OrderImage
+  deleteOrderImages(where: [OrderImageWhereUniqueInput!]!): [OrderImage]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2155,6 +2236,7 @@ type Mutation {
   registerUser(registerData: RegisterUserInput!): User!
   registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
   authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
+  uploadImageCustomization(files: [Upload!]!): [OrderImage!]!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -2250,6 +2332,9 @@ type Query {
   productCategoryBanner(where: ProductCategoryBannerWhereUniqueInput!): ProductCategoryBanner
   productCategoryBanners(where: ProductCategoryBannerWhereInput! = {}, orderBy: [ProductCategoryBannerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductCategoryBannerWhereUniqueInput): [ProductCategoryBanner!]
   productCategoryBannersCount(where: ProductCategoryBannerWhereInput! = {}): Int
+  orderImage(where: OrderImageWhereUniqueInput!): OrderImage
+  orderImages(where: OrderImageWhereInput! = {}, orderBy: [OrderImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderImageWhereUniqueInput): [OrderImage!]
+  orderImagesCount(where: OrderImageWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult
@@ -2408,6 +2493,8 @@ input RegisterUserInput {
 input CustomizationInput {
   optionId: String!
   valueId: String!
+  inscriptionText: String
+  imageId: String
 }
 
 input CompositionOptionInput {

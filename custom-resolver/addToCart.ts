@@ -1,14 +1,30 @@
 import { Prisma } from "@prisma/client";
+import isEqual from "lodash/isEqual";
 import { Context } from ".keystone/types";
 import type { Session } from "../access";
 
+type CustomizationValue = {
+  optionId: string;
+  valueId: string;
+  inscriptionText: string | null;
+  imagesId: string[] | null;
+};
+export interface CustomizationSnapshot {
+  name: string;
+  customValue: {
+    value: string;
+    extraPrice: number;
+    inscriptionText: string | null;
+    imagesId: string[] | null;
+  };
+}
 interface AddToCartArgs {
   productId: string;
   variantId: string;
-  customizations: { optionId: string; valueId: string }[] | null;
+  cartId: string | null;
+  customizations: CustomizationValue[] | null;
   compositionOptions: { productId: string; quantity: number }[] | null;
   toppingOptionId: string | null;
-  cartId: string | null;
 }
 export type CartWithItem = Prisma.CartGetPayload<{
   include: { cartItems: true };
@@ -99,9 +115,9 @@ export const addToCart = async (
   // Check if user added customization and calculate the
   // one with extra price and return a snapShot of it.
   let customizationsTotalAmount = 0;
-  let customizationSnapShot = null;
+  let customizationsSnapShot = null;
   if (customizations) {
-    customizationSnapShot = customizations?.map((customization) => {
+    customizationsSnapShot = customizations?.map((customization) => {
       const customOption = product?.customization?.customOptions.find(
         (option) => option.id === customization.optionId
       );
@@ -115,6 +131,8 @@ export const addToCart = async (
         customValue: {
           value: valueOption?.value || "",
           extraPrice: valueOption?.extraPrice || 0,
+          inscriptionText: customization.inscriptionText ?? null,
+          imagesId: customization.imagesId ?? null,
         },
       };
     });
@@ -136,12 +154,15 @@ export const addToCart = async (
     const sameProduct = item.productId === productId;
     const sameVariant = item.variantId === variantId;
     const sameTopping = item.toppingOptionId === (toppingOptionId ?? null);
-    const sameCompositionOptions =
-      JSON.stringify(item.compositionSnapShot) ===
-      JSON.stringify(compositionSnapShot);
-    const sameCustomization =
-      JSON.stringify(item.customizationSnapShot) ===
-      JSON.stringify(customizationSnapShot);
+
+    const sameCompositionOptions = isEqual(
+      item.compositionSnapShot,
+      compositionSnapShot
+    );
+    const sameCustomization = isEqual(
+      item.customizationsSnapShot,
+      customizationsSnapShot
+    );
     return (
       sameProduct &&
       sameVariant &&
@@ -178,7 +199,9 @@ export const addToCart = async (
         unitPrice: unitPrice,
         subTotal: unitPrice * 1,
         ...(compositionOptions && { compositionSnapShot: compositionSnapShot }),
-        ...(customizations && { customizationSnapShot: customizationSnapShot }),
+        ...(customizations && {
+          customizationsSnapShot: customizationsSnapShot,
+        }),
         ...(toppingOptionId && {
           toppingOption: { connect: { id: selectedTopping?.id } },
         }),

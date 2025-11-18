@@ -45,6 +45,16 @@ export default withAuth(
         endpoint: YC_S3_PRIVATE_ENDPOINT,
         acl: "public-read",
       },
+      yc_s3_order_images: {
+        kind: "s3",
+        type: "image",
+        bucketName: `${YC_S3_BUCKET}-order-images`,
+        region: YC_S3_REGION,
+        accessKeyId: ycS3KeyId,
+        secretAccessKey: ycS3SecretId,
+        endpoint: YC_S3_PRIVATE_ENDPOINT,
+        acl: "public-read",
+      },
     },
     graphql: {
       extendGraphqlSchema: customExtendResolvers,

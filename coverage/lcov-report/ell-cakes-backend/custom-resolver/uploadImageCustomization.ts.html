@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for ell-cakes-backend/custom-resolver/verifyUserByPhoneNumber.ts</title>
+    <title>Code coverage report for ell-cakes-backend/custom-resolver/uploadImageCustomization.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/custom-resolver</a> verifyUserByPhoneNumber.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/custom-resolver</a> uploadImageCustomization.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">15.38% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>4/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">13.04% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/16</span>
+                <span class='fraction'>3/23</span>
             </div>
         
             
@@ -112,7 +112,15 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -121,22 +129,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -148,7 +145,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,55 +161,73 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import bcrypt from "bcryptjs";
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// @ts-expect-error Upload.mjs was exported from the type
+import Upload from "graphql-upload/Upload.js";
+import sharp from "sharp";
 import { Context } from ".keystone/types";
 &nbsp;
-export const verifyUserByPhoneNumber = <span class="fstat-no" title="function not covered" >async </span>(
+export const uploadImageCustomization = <span class="fstat-no" title="function not covered" >async </span>(
   root: any,
-  { token, phoneNumber }: { token: string; phoneNumber: string },
+  { files }: { files: Upload[] },
   context: Context
 ) =&gt; {
-  const user = <span class="cstat-no" title="statement not covered" >await context.db.User.findOne({</span>
-    where: { phoneNumber: phoneNumber },
-  });
+  const sudoContext = <span class="cstat-no" title="statement not covered" >context.sudo();</span>
+  const newImagesId = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-  // Check if USER with this number exist!
-<span class="cstat-no" title="statement not covered" >  if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error("User with this phone number doesn't exist!");</span>
-  }
+<span class="cstat-no" title="statement not covered" >  for (const file of files) {</span>
+    const resolveFile = <span class="cstat-no" title="statement not covered" >await file;</span>
 &nbsp;
-  // Compare the token with the harsh saved on database
-  const match = <span class="cstat-no" title="statement not covered" >await bcrypt.compare(token, user.phoneNumberToken as string);</span>
-<span class="cstat-no" title="statement not covered" >  if (!match) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error("Invalid token");</span>
-  }
+    const stream = <span class="cstat-no" title="statement not covered" >resolveFile.createReadStream() as NodeJS.ReadableStream;</span>
+    const buffer = <span class="cstat-no" title="statement not covered" >await streamToBuffer(stream);</span>
+    const mimeType = <span class="cstat-no" title="statement not covered" >(await sharp(buffer).metadata()).format;</span>
 &nbsp;
-  // Check and compare the expiration since the token issued
-  const issuedAt = <span class="cstat-no" title="statement not covered" >user.phoneNumberVerificationIssuedAt;</span>
-  const expiration = <span class="cstat-no" title="statement not covered" >30 * 60 * 1000;</span>
-<span class="cstat-no" title="statement not covered" >  if (issuedAt &amp;&amp; new Date(issuedAt).getTime() + expiration &lt; Date.now()) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error("Token expired");</span>
-  }
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await context.db.User.updateOne({</span>
-      where: { id: user.id },
+    const imageData = <span class="cstat-no" title="statement not covered" >{</span>
+      createReadStream: <span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >resolveFile.createReadStream(),</span>
+      filename: resolveFile.filename,
+      mimetype: `image/${mimeType}`,
+      encoding: "7bit",
+    };
+&nbsp;
+    const upload = <span class="cstat-no" title="statement not covered" >new Upload();</span>
+<span class="cstat-no" title="statement not covered" >    upload.resolve(imageData);</span>
+&nbsp;
+    const newImage = <span class="cstat-no" title="statement not covered" >await sudoContext.query.OrderImage.createOne({</span>
       data: {
-        isPhoneNumberVerified: true,
-        phoneNumberToken: null,
-        phoneNumberVerificationIssuedAt: null,
-        phoneNumberVerificationRedeemedAt: new Date(),
-        updatedAt: new Date(),
+        image: { upload: upload },
+        altText: imageData.filename,
       },
     });
-  } catch (error) {
-    // @ts-expect-error error has an unknow type
-<span class="cstat-no" title="statement not covered" >    throw new Error(error.message);</span>
+<span class="cstat-no" title="statement not covered" >    newImagesId.push(newImage.id);</span>
   }
-<span class="cstat-no" title="statement not covered" >  return {</span>
-    status: true,
-    message: "Successfully verified user",
-  };
+<span class="cstat-no" title="statement not covered" >  return await sudoContext.db.OrderImage.findMany({</span>
+    where: {
+      id: { in: newImagesId },
+    },
+  });
 };
+&nbsp;
+function <span class="fstat-no" title="function not covered" >streamToBuffer(</span>stream: NodeJS.ReadableStream): Promise&lt;Buffer&gt; {
+<span class="cstat-no" title="statement not covered" >  return new Promise(<span class="fstat-no" title="function not covered" >(r</span>esolve, reject) =&gt; {</span>
+    const chunks: Buffer[] = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >    stream.on("data", <span class="fstat-no" title="function not covered" >(c</span>hunk) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))</span>
+    );
+<span class="cstat-no" title="statement not covered" >    stream.on("end", <span class="fstat-no" title="function not covered" >() =</span>&gt; <span class="cstat-no" title="statement not covered" >resolve(Buffer.concat(chunks)))</span>;</span>
+<span class="cstat-no" title="statement not covered" >    stream.on("error", <span class="fstat-no" title="function not covered" >(e</span>rr) =&gt; <span class="cstat-no" title="statement not covered" >reject(err))</span>;</span>
+  });
+}
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

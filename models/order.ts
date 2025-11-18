@@ -107,6 +107,10 @@ export const Order = list({
         },
       },
     }),
+    orderImages: relationship({
+      ref: "OrderImage.order",
+      many: true,
+    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

@@ -6,6 +6,7 @@ import { Context } from ".keystone/types";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
 import type { Session } from "../access";
 import type { JSONValue } from "@keystone-6/core/types";
+import type { CustomizationSnapshot } from "./addToCart";
 
 interface CheckOutArgs {
   deliveryAddressId: string;
@@ -99,7 +100,7 @@ export const checkOut = async (
     query: `
       id
       subTotal
-      cartItems { id quantity unitPrice subTotal compositionSnapShot customizationSnapShot product { id } variant { id } toppingOption { id } }
+      cartItems { id quantity unitPrice subTotal compositionSnapShot customizationsSnapShot product { id } variant { id } toppingOption { id } }
     `,
   })) as CartWithItem;
 
@@ -142,8 +143,8 @@ export const checkOut = async (
       ...(cartItem.compositionSnapShot && {
         compositionSnapShot: cartItem.compositionSnapShot as JSONValue,
       }),
-      ...(cartItem.customizationSnapShot && {
-        customizationSnapShot: cartItem.customizationSnapShot as JSONValue,
+      ...(cartItem.customizationsSnapShot && {
+        customizationsSnapShot: cartItem.customizationsSnapShot as JSONValue,
       }),
     };
     return item;
@@ -155,7 +156,7 @@ export const checkOut = async (
   });
 
   // Create a new ORDER
-  const order = await context.db.Order.createOne({
+  const newOrder = await context.db.Order.createOne({
     data: {
       user: { connect: { id: loggedInUser.itemId } },
       deliveryAddress: { connect: { id: deliveryAddress?.id } },
@@ -168,6 +169,27 @@ export const checkOut = async (
     },
   });
 
+  // We need to check if user has added customize image,
+  // and connect the new order id to it.
+  const cartItems = cart.cartItems;
+  for (const cartItem of cartItems) {
+    const snapShots =
+      cartItem.customizationsSnapShot as unknown as CustomizationSnapshot[];
+    for (const snapShot of snapShots) {
+      if (snapShot.name !== "PHOTOS") {
+        continue;
+      }
+      snapShot.customValue.imagesId?.forEach(async (imageId) => {
+        await context.query.OrderImage.updateOne({
+          where: { id: imageId },
+          data: {
+            order: { connect: { id: newOrder.id } },
+          },
+        });
+      });
+    }
+  }
+
   // Clean up the cart
   await context.db.Cart.deleteOne({
     where: { id: cart.id },
@@ -177,7 +199,7 @@ export const checkOut = async (
   const payment = await context.db.Payment.createOne({
     data: {
       user: { connect: { id: loggedInUser.itemId } },
-      order: { connect: { id: order.id } },
+      order: { connect: { id: newOrder.id } },
       paymentId: processPayment?.id,
       confirmationUrl: processPayment?.confirmation.confirmation_url,
       amount: processPayment?.amount.value,

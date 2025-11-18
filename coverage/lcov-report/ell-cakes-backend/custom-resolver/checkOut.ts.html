@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.29% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>29/34</span>
+                <span class='fraction'>35/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.25% </span>
+                <span class="strong">61.11% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/16</span>
+                <span class='fraction'>11/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.84% </span>
+                <span class="strong">82.92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/33</span>
+                <span class='fraction'>34/41</span>
             </div>
         
             
@@ -253,12 +253,35 @@
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a>
+<a name='L207'></a><a href='#L207'>207</a>
+<a name='L208'></a><a href='#L208'>208</a>
+<a name='L209'></a><a href='#L209'>209</a>
+<a name='L210'></a><a href='#L210'>210</a>
+<a name='L211'></a><a href='#L211'>211</a>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -414,6 +437,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -451,6 +495,7 @@ import { Context } from ".keystone/types";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
 import type { Session } from "../access";
 import type { JSONValue } from "@keystone-6/core/types";
+import type { CustomizationSnapshot } from "./addToCart";
 &nbsp;
 interface CheckOutArgs {
   deliveryAddressId: string;
@@ -544,7 +589,7 @@ export const checkOut = async (
     query: `
       id
       subTotal
-      cartItems { id quantity unitPrice subTotal compositionSnapShot customizationSnapShot product { id } variant { id } toppingOption { id } }
+      cartItems { id quantity unitPrice subTotal compositionSnapShot customizationsSnapShot product { id } variant { id } toppingOption { id } }
     `,
   })) as CartWithItem;
 &nbsp;
@@ -587,8 +632,8 @@ export const checkOut = async (
       ...(cartItem.compositionSnapShot &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{</span>
         compositionSnapShot: cartItem.compositionSnapShot as JSONValue,
       }),
-      ...(cartItem.customizationSnapShot &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{</span>
-        customizationSnapShot: cartItem.customizationSnapShot as JSONValue,
+      ...(cartItem.customizationsSnapShot &amp;&amp; {
+        customizationsSnapShot: cartItem.customizationsSnapShot as JSONValue,
       }),
     };
     return item;
@@ -600,7 +645,7 @@ export const checkOut = async (
   });
 &nbsp;
   // Create a new ORDER
-  const order = await context.db.Order.createOne({
+  const newOrder = await context.db.Order.createOne({
     data: {
       user: { connect: { id: loggedInUser.itemId } },
       deliveryAddress: { connect: { id: deliveryAddress?.id } },
@@ -613,6 +658,27 @@ export const checkOut = async (
     },
   });
 &nbsp;
+  // We need to check if user has added customize image,
+  // and connect the new order id to it.
+  const cartItems = cart.cartItems;
+  for (const cartItem of cartItems) {
+    const snapShots =
+      cartItem.customizationsSnapShot as unknown as CustomizationSnapshot[];
+    for (const snapShot of snapShots) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (snapShot.name !== "PHOTOS") {
+        continue;
+      }
+<span class="cstat-no" title="statement not covered" >      snapShot.customValue.imagesId?.forEach(<span class="fstat-no" title="function not covered" >async </span>(imageId) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >        await context.query.OrderImage.updateOne({</span>
+          where: { id: imageId },
+          data: {
+            order: { connect: { id: newOrder.id } },
+          },
+        });
+      });
+    }
+  }
+&nbsp;
   // Clean up the cart
   await context.db.Cart.deleteOne({
     where: { id: cart.id },
@@ -622,7 +688,7 @@ export const checkOut = async (
   const payment = await context.db.Payment.createOne({
     data: {
       user: { connect: { id: loggedInUser.itemId } },
-      order: { connect: { id: order.id } },
+      order: { connect: { id: newOrder.id } },
       paymentId: processPayment?.id,
       confirmationUrl: processPayment?.confirmation.confirmation_url,
       amount: processPayment?.amount.value,
@@ -640,7 +706,7 @@ export const checkOut = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-11-10T08:01:38.798Z
+                at 2025-11-18T11:59:59.348Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

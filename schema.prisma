@@ -283,7 +283,7 @@ model Order {
   deliveryAddress   DelivaryAddress? @relation("Order_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
   note              String           @default("")
-  orderImages       OrderImage[]     @relation("OrderImage_order")
+  customizeImages   CustomizeImage[] @relation("CustomizeImage_order")
   createdAt         DateTime?        @default(now())
   updatedAt         DateTime?
 
@@ -357,9 +357,9 @@ model ProductCategoryBanner {
   @@index([productId])
 }
 
-model OrderImage {
+model CustomizeImage {
   id              String    @id @default(uuid()) @postgresql.Uuid
-  order           Order?    @relation("OrderImage_order", fields: [orderId], references: [id])
+  order           Order?    @relation("CustomizeImage_order", fields: [orderId], references: [id])
   orderId         String?   @map("order") @postgresql.Uuid
   image_id        String?
   image_filesize  Int?

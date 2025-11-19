@@ -1624,8 +1624,8 @@ type Order {
   payment: Payment
   deliveryAddress: DelivaryAddress
   note: String
-  orderImages(where: OrderImageWhereInput! = {}, orderBy: [OrderImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderImageWhereUniqueInput): [OrderImage!]
-  orderImagesCount(where: OrderImageWhereInput! = {}): Int
+  customizeImages(where: CustomizeImageWhereInput! = {}, orderBy: [CustomizeImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizeImageWhereUniqueInput): [CustomizeImage!]
+  customizeImagesCount(where: CustomizeImageWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1651,7 +1651,7 @@ input OrderWhereInput {
   payment: PaymentWhereInput
   deliveryAddress: DelivaryAddressWhereInput
   note: StringFilter
-  orderImages: OrderImageManyRelationFilter
+  customizeImages: CustomizeImageManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1662,10 +1662,10 @@ input OrderItemManyRelationFilter {
   none: OrderItemWhereInput
 }
 
-input OrderImageManyRelationFilter {
-  every: OrderImageWhereInput
-  some: OrderImageWhereInput
-  none: OrderImageWhereInput
+input CustomizeImageManyRelationFilter {
+  every: CustomizeImageWhereInput
+  some: CustomizeImageWhereInput
+  none: CustomizeImageWhereInput
 }
 
 input OrderOrderByInput {
@@ -1691,7 +1691,7 @@ input OrderUpdateInput {
   payment: PaymentRelateToOneForUpdateInput
   deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
   note: String
-  orderImages: OrderImageRelateToManyForUpdateInput
+  customizeImages: CustomizeImageRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1715,11 +1715,11 @@ input DelivaryAddressRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input OrderImageRelateToManyForUpdateInput {
-  disconnect: [OrderImageWhereUniqueInput!]
-  set: [OrderImageWhereUniqueInput!]
-  create: [OrderImageCreateInput!]
-  connect: [OrderImageWhereUniqueInput!]
+input CustomizeImageRelateToManyForUpdateInput {
+  disconnect: [CustomizeImageWhereUniqueInput!]
+  set: [CustomizeImageWhereUniqueInput!]
+  create: [CustomizeImageCreateInput!]
+  connect: [CustomizeImageWhereUniqueInput!]
 }
 
 input OrderUpdateArgs {
@@ -1738,7 +1738,7 @@ input OrderCreateInput {
   payment: PaymentRelateToOneForCreateInput
   deliveryAddress: DelivaryAddressRelateToOneForCreateInput
   note: String
-  orderImages: OrderImageRelateToManyForCreateInput
+  customizeImages: CustomizeImageRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1758,9 +1758,9 @@ input DelivaryAddressRelateToOneForCreateInput {
   connect: DelivaryAddressWhereUniqueInput
 }
 
-input OrderImageRelateToManyForCreateInput {
-  create: [OrderImageCreateInput!]
-  connect: [OrderImageWhereUniqueInput!]
+input CustomizeImageRelateToManyForCreateInput {
+  create: [CustomizeImageCreateInput!]
+  connect: [CustomizeImageWhereUniqueInput!]
 }
 
 type OrderItem {
@@ -2033,7 +2033,7 @@ input ProductCategoryBannerCreateInput {
   updatedAt: DateTime
 }
 
-type OrderImage {
+type CustomizeImage {
   id: ID!
   order: Order
   image: ImageFieldOutput
@@ -2042,14 +2042,14 @@ type OrderImage {
   updatedAt: DateTime
 }
 
-input OrderImageWhereUniqueInput {
+input CustomizeImageWhereUniqueInput {
   id: ID
 }
 
-input OrderImageWhereInput {
-  AND: [OrderImageWhereInput!]
-  OR: [OrderImageWhereInput!]
-  NOT: [OrderImageWhereInput!]
+input CustomizeImageWhereInput {
+  AND: [CustomizeImageWhereInput!]
+  OR: [CustomizeImageWhereInput!]
+  NOT: [CustomizeImageWhereInput!]
   id: IDFilter
   order: OrderWhereInput
   altText: StringFilter
@@ -2057,14 +2057,14 @@ input OrderImageWhereInput {
   updatedAt: DateTimeNullableFilter
 }
 
-input OrderImageOrderByInput {
+input CustomizeImageOrderByInput {
   id: OrderDirection
   altText: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
-input OrderImageUpdateInput {
+input CustomizeImageUpdateInput {
   order: OrderRelateToOneForUpdateInput
   image: ImageFieldInput
   altText: String
@@ -2072,12 +2072,12 @@ input OrderImageUpdateInput {
   updatedAt: DateTime
 }
 
-input OrderImageUpdateArgs {
-  where: OrderImageWhereUniqueInput!
-  data: OrderImageUpdateInput!
+input CustomizeImageUpdateArgs {
+  where: CustomizeImageWhereUniqueInput!
+  data: CustomizeImageUpdateInput!
 }
 
-input OrderImageCreateInput {
+input CustomizeImageCreateInput {
   order: OrderRelateToOneForCreateInput
   image: ImageFieldInput
   altText: String
@@ -2217,12 +2217,12 @@ type Mutation {
   updateProductCategoryBanners(data: [ProductCategoryBannerUpdateArgs!]!): [ProductCategoryBanner]
   deleteProductCategoryBanner(where: ProductCategoryBannerWhereUniqueInput!): ProductCategoryBanner
   deleteProductCategoryBanners(where: [ProductCategoryBannerWhereUniqueInput!]!): [ProductCategoryBanner]
-  createOrderImage(data: OrderImageCreateInput!): OrderImage
-  createOrderImages(data: [OrderImageCreateInput!]!): [OrderImage]
-  updateOrderImage(where: OrderImageWhereUniqueInput!, data: OrderImageUpdateInput!): OrderImage
-  updateOrderImages(data: [OrderImageUpdateArgs!]!): [OrderImage]
-  deleteOrderImage(where: OrderImageWhereUniqueInput!): OrderImage
-  deleteOrderImages(where: [OrderImageWhereUniqueInput!]!): [OrderImage]
+  createCustomizeImage(data: CustomizeImageCreateInput!): CustomizeImage
+  createCustomizeImages(data: [CustomizeImageCreateInput!]!): [CustomizeImage]
+  updateCustomizeImage(where: CustomizeImageWhereUniqueInput!, data: CustomizeImageUpdateInput!): CustomizeImage
+  updateCustomizeImages(data: [CustomizeImageUpdateArgs!]!): [CustomizeImage]
+  deleteCustomizeImage(where: CustomizeImageWhereUniqueInput!): CustomizeImage
+  deleteCustomizeImages(where: [CustomizeImageWhereUniqueInput!]!): [CustomizeImage]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2236,7 +2236,7 @@ type Mutation {
   registerUser(registerData: RegisterUserInput!): User!
   registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
   authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
-  uploadImageCustomization(files: [Upload!]!): [OrderImage!]!
+  uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -2332,9 +2332,9 @@ type Query {
   productCategoryBanner(where: ProductCategoryBannerWhereUniqueInput!): ProductCategoryBanner
   productCategoryBanners(where: ProductCategoryBannerWhereInput! = {}, orderBy: [ProductCategoryBannerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductCategoryBannerWhereUniqueInput): [ProductCategoryBanner!]
   productCategoryBannersCount(where: ProductCategoryBannerWhereInput! = {}): Int
-  orderImage(where: OrderImageWhereUniqueInput!): OrderImage
-  orderImages(where: OrderImageWhereInput! = {}, orderBy: [OrderImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderImageWhereUniqueInput): [OrderImage!]
-  orderImagesCount(where: OrderImageWhereInput! = {}): Int
+  customizeImage(where: CustomizeImageWhereUniqueInput!): CustomizeImage
+  customizeImages(where: CustomizeImageWhereInput! = {}, orderBy: [CustomizeImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizeImageWhereUniqueInput): [CustomizeImage!]
+  customizeImagesCount(where: CustomizeImageWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult

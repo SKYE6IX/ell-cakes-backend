@@ -3,7 +3,7 @@ import { relationship, timestamp, text, image } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 
-export const OrderImage = list({
+export const CustomizeImage = list({
   access: {
     operation: {
       ...allOperations(hasSession),
@@ -15,7 +15,7 @@ export const OrderImage = list({
     },
   },
   fields: {
-    order: relationship({ ref: "Order.orderImages" }),
+    order: relationship({ ref: "Order.customizeImages" }),
     image: image({ storage: "yc_s3_order_images" }),
     altText: text(),
     createdAt: timestamp({

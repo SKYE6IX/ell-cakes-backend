@@ -112,7 +112,7 @@ describe("cart and cart-item Model", () => {
             valueId:
               newProduct.customization.customOptions[0].customValues[0].id,
             inscriptionText: null,
-            imageId: null,
+            imagesId: null,
           },
         ],
       },
@@ -138,7 +138,7 @@ describe("cart and cart-item Model", () => {
             valueId:
               newProduct.customization.customOptions[0].customValues[0].id,
             inscriptionText: null,
-            imageId: null,
+            imagesId: null,
           },
         ],
       },

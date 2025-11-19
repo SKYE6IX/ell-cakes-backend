@@ -180,7 +180,7 @@ export const checkOut = async (
         continue;
       }
       snapShot.customValue.imagesId?.forEach(async (imageId) => {
-        await context.query.OrderImage.updateOne({
+        await context.query.CustomizeImage.updateOne({
           where: { id: imageId },
           data: {
             order: { connect: { id: newOrder.id } },

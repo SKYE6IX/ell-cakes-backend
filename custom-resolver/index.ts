@@ -47,7 +47,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         registerUser(registerData: RegisterUserInput!): User!
         registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
         authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
-        uploadImageCustomization(files: [Upload!]!): [OrderImage!]!
+        uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
     }
     `,
     resolvers: {

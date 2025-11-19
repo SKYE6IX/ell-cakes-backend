@@ -107,8 +107,8 @@ export const Order = list({
         },
       },
     }),
-    orderImages: relationship({
-      ref: "OrderImage.order",
+    customizeImages: relationship({
+      ref: "CustomizeImage.order",
       many: true,
     }),
     createdAt: timestamp({

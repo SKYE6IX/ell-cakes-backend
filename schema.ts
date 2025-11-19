@@ -19,7 +19,7 @@ import { OrderItem } from "./models/order-item";
 import { Payment } from "./models/payment";
 import { ProductHomeBanner } from "./models/product-home-banner";
 import { ProductCategoryBanner } from "./models/product-category-banner";
-import { OrderImage } from "./models/order-image";
+import { CustomizeImage } from "./models/customize-image";
 
 export const lists = {
   User,
@@ -43,5 +43,5 @@ export const lists = {
   Payment,
   ProductHomeBanner,
   ProductCategoryBanner,
-  OrderImage,
+  CustomizeImage,
 };

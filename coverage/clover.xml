@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1763467199379" clover="3.2.0">
-  <project timestamp="1763467199379" name="All files">
+<coverage generated="1763560376836" clover="3.2.0">
+  <project timestamp="1763560376836" name="All files">
     <metrics statements="508" coveredstatements="347" conditionals="155" coveredconditionals="73" methods="77" coveredmethods="33" elements="740" coveredelements="453" complexity="0" loc="508" ncloc="508" packages="4" files="42" classes="42"/>
     <package name="ell-cakes-backend">
       <metrics statements="74" coveredstatements="59" conditionals="26" coveredconditionals="10" methods="12" coveredmethods="5"/>
@@ -473,6 +473,14 @@
         <line num="77" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
       </file>
+      <file name="customize-image.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/customize-image.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="6" count="4" type="stmt"/>
+      </file>
       <file name="delivary-address.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/delivary-address.ts">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="4" type="stmt"/>
@@ -480,14 +488,6 @@
         <line num="8" count="4" type="stmt"/>
         <line num="9" count="4" type="stmt"/>
         <line num="11" count="4" type="stmt"/>
-      </file>
-      <file name="order-image.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/order-image.ts">
-        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="4" type="stmt"/>
-        <line num="2" count="4" type="stmt"/>
-        <line num="3" count="4" type="stmt"/>
-        <line num="4" count="4" type="stmt"/>
-        <line num="6" count="4" type="stmt"/>
       </file>
       <file name="order-item.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/order-item.ts">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

@@ -30,7 +30,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       optionId: String!
       valueId: String!
       inscriptionText: String
-      imageId: String
+      imagesId: [String!]
     }
 
     input CompositionOptionInput {

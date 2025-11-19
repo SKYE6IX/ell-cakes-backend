@@ -28,7 +28,7 @@ export const uploadImageCustomization = async (
     const upload = new Upload();
     upload.resolve(imageData);
 
-    const newImage = await sudoContext.query.OrderImage.createOne({
+    const newImage = await sudoContext.query.CustomizeImage.createOne({
       data: {
         image: { upload: upload },
         altText: imageData.filename,
@@ -36,7 +36,7 @@ export const uploadImageCustomization = async (
     });
     newImagesId.push(newImage.id);
   }
-  return await sudoContext.db.OrderImage.findMany({
+  return await sudoContext.db.CustomizeImage.findMany({
     where: {
       id: { in: newImagesId },
     },

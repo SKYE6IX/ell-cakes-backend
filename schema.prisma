@@ -61,6 +61,7 @@ model Product {
   type                               String
   variantType                        String
   fillings                           ProductFilling[]        @relation("Product_fillings")
+  mixBoxCompositions                 Product[]               @relation("Product_mixBoxCompositions")
   stockQuantity                      Int
   isAvailable                        Boolean                 @default(true)
   badge                              String?
@@ -74,7 +75,7 @@ model Product {
   toppingId                          String?                 @unique @map("topping") @postgresql.Uuid
   createdAt                          DateTime?               @default(now())
   updatedAt                          DateTime?
-  from_ProductAttribute_product      ProductAttribute[]      @relation("ProductAttribute_product")
+  from_Product_mixBoxCompositions    Product[]               @relation("Product_mixBoxCompositions")
   from_CartItem_product              CartItem[]              @relation("CartItem_product")
   from_OrderItem_product             OrderItem[]             @relation("OrderItem_product")
   from_ProductHomeBanner_product     ProductHomeBanner[]     @relation("ProductHomeBanner_product")
@@ -101,34 +102,9 @@ model ProductFilling {
   image_icon_width     Int?
   image_icon_height    Int?
   image_icon_extension String?
-  attribute            Attribute?       @relation("Attribute_productFilling")
   variants             ProductVariant[] @relation("ProductVariant_filling")
   createdAt            DateTime?        @default(now())
   updatedAt            DateTime?
-}
-
-model Attribute {
-  id                String             @id @default(uuid()) @postgresql.Uuid
-  name              String             @default("")
-  productFilling    ProductFilling?    @relation("Attribute_productFilling", fields: [productFillingId], references: [id])
-  productFillingId  String?            @unique @map("productFilling") @postgresql.Uuid
-  productAttributes ProductAttribute[] @relation("ProductAttribute_attribute")
-  createdAt         DateTime?          @default(now())
-  updatedAt         DateTime?
-}
-
-model ProductAttribute {
-  id          String     @id @default(uuid()) @postgresql.Uuid
-  attribute   Attribute? @relation("ProductAttribute_attribute", fields: [attributeId], references: [id])
-  attributeId String?    @map("attribute") @postgresql.Uuid
-  product     Product?   @relation("ProductAttribute_product", fields: [productId], references: [id])
-  productId   String?    @map("product") @postgresql.Uuid
-  value       String     @default("")
-  createdAt   DateTime?  @default(now())
-  updatedAt   DateTime?
-
-  @@index([attributeId])
-  @@index([productId])
 }
 
 model ProductImage {

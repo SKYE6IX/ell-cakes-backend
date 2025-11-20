@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1763560376836" clover="3.2.0">
-  <project timestamp="1763560376836" name="All files">
-    <metrics statements="508" coveredstatements="347" conditionals="155" coveredconditionals="73" methods="77" coveredmethods="33" elements="740" coveredelements="453" complexity="0" loc="508" ncloc="508" packages="4" files="42" classes="42"/>
+<coverage generated="1763631432148" clover="3.2.0">
+  <project timestamp="1763631432148" name="All files">
+    <metrics statements="516" coveredstatements="349" conditionals="157" coveredconditionals="73" methods="79" coveredmethods="33" elements="752" coveredelements="455" complexity="0" loc="516" ncloc="516" packages="4" files="42" classes="42"/>
     <package name="ell-cakes-backend">
       <metrics statements="74" coveredstatements="59" conditionals="26" coveredconditionals="10" methods="12" coveredmethods="5"/>
       <file name="access.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/access.ts">
@@ -92,7 +92,7 @@
       </file>
     </package>
     <package name="ell-cakes-backend.custom-resolver">
-      <metrics statements="223" coveredstatements="123" conditionals="101" coveredconditionals="49" methods="33" coveredmethods="15"/>
+      <metrics statements="231" coveredstatements="125" conditionals="103" coveredconditionals="49" methods="35" coveredmethods="15"/>
       <file name="addToCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/addToCart.ts">
         <metrics statements="50" coveredstatements="47" conditionals="41" coveredconditionals="34" methods="10" coveredmethods="8"/>
         <line num="2" count="4" type="stmt"/>
@@ -305,30 +305,38 @@
         <line num="25" count="0" type="stmt"/>
       </file>
       <file name="uploadImageCustomization.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/uploadImageCustomization.ts">
-        <metrics statements="23" coveredstatements="3" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <metrics statements="31" coveredstatements="5" conditionals="4" coveredconditionals="0" methods="9" coveredmethods="0"/>
         <line num="2" count="4" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
-        <line num="6" count="4" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
+        <line num="16" count="0" type="stmt"/>
         <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
         <line num="19" count="0" type="stmt"/>
         <line num="21" count="0" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
         <line num="47" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="50" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="52" count="0" type="stmt"/>
         <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="71" count="0" type="stmt"/>
+        <line num="72" count="0" type="stmt"/>
       </file>
       <file name="verifyUserByPhoneNumber.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/verifyUserByPhoneNumber.ts">
         <metrics statements="16" coveredstatements="2" conditionals="8" coveredconditionals="0" methods="1" coveredmethods="0"/>

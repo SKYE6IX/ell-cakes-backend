@@ -1,7 +1,5 @@
 import { Product } from "./models/product";
 import { ProductFilling } from "./models/product-filling";
-import { Attribute } from "./models/attribute";
-import { ProductAttribute } from "./models/product-atrribute";
 import { User } from "./models/user";
 import { ProductImage } from "./models/product-image";
 import { ProductVariant } from "./models/product-variant";
@@ -26,8 +24,6 @@ export const lists = {
   DelivaryAddress,
   Product,
   ProductFilling,
-  Attribute,
-  ProductAttribute,
   ProductImage,
   ProductVariant,
   Category,

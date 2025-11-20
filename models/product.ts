@@ -116,7 +116,6 @@ export const Product = list({
           "ingredients",
           "lifeShelf",
           "image_icon",
-          "attribute",
           "variants",
         ],
         inlineCreate: {
@@ -130,7 +129,6 @@ export const Product = list({
             "ingredients",
             "lifeShelf",
             "image_icon",
-            "attribute",
             "variants",
           ],
         },
@@ -145,12 +143,16 @@ export const Product = list({
             "ingredients",
             "lifeShelf",
             "image_icon",
-            "attribute",
             "variants",
           ],
         },
         linkToItem: true,
       },
+    }),
+    mixBoxCompositions: relationship({
+      ref: "Product",
+      many: true,
+      label: "Выберите продукт для миксбокса",
     }),
     stockQuantity: integer({
       label: "количество на складе",

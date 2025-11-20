@@ -72,20 +72,6 @@ export const ProductFilling = list({
       validation: { isRequired: true },
     }),
     image_icon: image({ storage: "yc_s3_image", label: "Иконка" }),
-    attribute: relationship({
-      ref: "Attribute.productFilling",
-      ui: {
-        displayMode: "cards",
-        cardFields: ["name", "productAttributes"],
-        inlineCreate: {
-          fields: ["name", "productAttributes"],
-        },
-        inlineEdit: {
-          fields: ["name", "productAttributes"],
-        },
-        linkToItem: true,
-      },
-    }),
     variants: relationship({
       label: "Вариант продукта",
       ref: "ProductVariant.filling",

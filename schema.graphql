@@ -365,6 +365,8 @@ type Product {
   variantType: String
   fillings(where: ProductFillingWhereInput! = {}, orderBy: [ProductFillingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductFillingWhereUniqueInput): [ProductFilling!]
   fillingsCount(where: ProductFillingWhereInput! = {}): Int
+  mixBoxCompositions(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  mixBoxCompositionsCount(where: ProductWhereInput! = {}): Int
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
@@ -403,6 +405,7 @@ input ProductWhereInput {
   type: StringFilter
   variantType: StringFilter
   fillings: ProductFillingManyRelationFilter
+  mixBoxCompositions: ProductManyRelationFilter
   stockQuantity: IntFilter
   isAvailable: BooleanFilter
   badge: StringNullableFilter
@@ -418,6 +421,12 @@ input ProductFillingManyRelationFilter {
   every: ProductFillingWhereInput
   some: ProductFillingWhereInput
   none: ProductFillingWhereInput
+}
+
+input ProductManyRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
 }
 
 input IntFilter {
@@ -475,6 +484,7 @@ input ProductUpdateInput {
   type: String
   variantType: String
   fillings: ProductFillingRelateToManyForUpdateInput
+  mixBoxCompositions: ProductRelateToManyForUpdateInput
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
@@ -498,6 +508,13 @@ input ProductFillingRelateToManyForUpdateInput {
   set: [ProductFillingWhereUniqueInput!]
   create: [ProductFillingCreateInput!]
   connect: [ProductFillingWhereUniqueInput!]
+}
+
+input ProductRelateToManyForUpdateInput {
+  disconnect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
 }
 
 input ProductImageRelateToManyForUpdateInput {
@@ -539,6 +556,7 @@ input ProductCreateInput {
   type: String
   variantType: String
   fillings: ProductFillingRelateToManyForCreateInput
+  mixBoxCompositions: ProductRelateToManyForCreateInput
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
@@ -559,6 +577,11 @@ input CategoryRelateToOneForCreateInput {
 input ProductFillingRelateToManyForCreateInput {
   create: [ProductFillingCreateInput!]
   connect: [ProductFillingWhereUniqueInput!]
+}
+
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
 }
 
 input ProductImageRelateToManyForCreateInput {
@@ -591,7 +614,6 @@ type ProductFilling {
   lifeShelf: Int
   stockQuantity: Int
   image_icon: ImageFieldOutput
-  attribute: Attribute
   variants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVariantWhereUniqueInput): [ProductVariant!]
   variantsCount(where: ProductVariantWhereInput! = {}): Int
   createdAt: DateTime
@@ -619,7 +641,6 @@ enum ImageExtension {
 input ProductFillingWhereUniqueInput {
   id: ID
   slug: String
-  attribute: AttributeWhereUniqueInput
 }
 
 input ProductFillingWhereInput {
@@ -638,16 +659,9 @@ input ProductFillingWhereInput {
   ingredients: StringFilter
   lifeShelf: IntFilter
   stockQuantity: IntFilter
-  attribute: AttributeWhereInput
   variants: ProductVariantManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
-}
-
-input ProductManyRelationFilter {
-  every: ProductWhereInput
-  some: ProductWhereInput
-  none: ProductWhereInput
 }
 
 input DecimalNullableFilter {
@@ -696,27 +710,13 @@ input ProductFillingUpdateInput {
   lifeShelf: Int
   stockQuantity: Int
   image_icon: ImageFieldInput
-  attribute: AttributeRelateToOneForUpdateInput
   variants: ProductVariantRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
 
-input ProductRelateToManyForUpdateInput {
-  disconnect: [ProductWhereUniqueInput!]
-  set: [ProductWhereUniqueInput!]
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
-}
-
 input ImageFieldInput {
   upload: Upload!
-}
-
-input AttributeRelateToOneForUpdateInput {
-  create: AttributeCreateInput
-  connect: AttributeWhereUniqueInput
-  disconnect: Boolean
 }
 
 input ProductVariantRelateToManyForUpdateInput {
@@ -744,173 +744,14 @@ input ProductFillingCreateInput {
   lifeShelf: Int
   stockQuantity: Int
   image_icon: ImageFieldInput
-  attribute: AttributeRelateToOneForCreateInput
   variants: ProductVariantRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
 
-input ProductRelateToManyForCreateInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
-}
-
-input AttributeRelateToOneForCreateInput {
-  create: AttributeCreateInput
-  connect: AttributeWhereUniqueInput
-}
-
 input ProductVariantRelateToManyForCreateInput {
   create: [ProductVariantCreateInput!]
   connect: [ProductVariantWhereUniqueInput!]
-}
-
-type Attribute {
-  id: ID!
-  name: String
-  productFilling: ProductFilling
-  productAttributes(where: ProductAttributeWhereInput! = {}, orderBy: [ProductAttributeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductAttributeWhereUniqueInput): [ProductAttribute!]
-  productAttributesCount(where: ProductAttributeWhereInput! = {}): Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input AttributeWhereUniqueInput {
-  id: ID
-  productFilling: ProductFillingWhereUniqueInput
-}
-
-input AttributeWhereInput {
-  AND: [AttributeWhereInput!]
-  OR: [AttributeWhereInput!]
-  NOT: [AttributeWhereInput!]
-  id: IDFilter
-  name: StringFilter
-  productFilling: ProductFillingWhereInput
-  productAttributes: ProductAttributeManyRelationFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input ProductAttributeManyRelationFilter {
-  every: ProductAttributeWhereInput
-  some: ProductAttributeWhereInput
-  none: ProductAttributeWhereInput
-}
-
-input AttributeOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input AttributeUpdateInput {
-  name: String
-  productFilling: ProductFillingRelateToOneForUpdateInput
-  productAttributes: ProductAttributeRelateToManyForUpdateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductFillingRelateToOneForUpdateInput {
-  create: ProductFillingCreateInput
-  connect: ProductFillingWhereUniqueInput
-  disconnect: Boolean
-}
-
-input ProductAttributeRelateToManyForUpdateInput {
-  disconnect: [ProductAttributeWhereUniqueInput!]
-  set: [ProductAttributeWhereUniqueInput!]
-  create: [ProductAttributeCreateInput!]
-  connect: [ProductAttributeWhereUniqueInput!]
-}
-
-input AttributeUpdateArgs {
-  where: AttributeWhereUniqueInput!
-  data: AttributeUpdateInput!
-}
-
-input AttributeCreateInput {
-  name: String
-  productFilling: ProductFillingRelateToOneForCreateInput
-  productAttributes: ProductAttributeRelateToManyForCreateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductFillingRelateToOneForCreateInput {
-  create: ProductFillingCreateInput
-  connect: ProductFillingWhereUniqueInput
-}
-
-input ProductAttributeRelateToManyForCreateInput {
-  create: [ProductAttributeCreateInput!]
-  connect: [ProductAttributeWhereUniqueInput!]
-}
-
-type ProductAttribute {
-  id: ID!
-  attribute: Attribute
-  product: Product
-  value: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductAttributeWhereUniqueInput {
-  id: ID
-}
-
-input ProductAttributeWhereInput {
-  AND: [ProductAttributeWhereInput!]
-  OR: [ProductAttributeWhereInput!]
-  NOT: [ProductAttributeWhereInput!]
-  id: IDFilter
-  attribute: AttributeWhereInput
-  product: ProductWhereInput
-  value: StringFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input ProductAttributeOrderByInput {
-  id: OrderDirection
-  value: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input ProductAttributeUpdateInput {
-  attribute: AttributeRelateToOneForUpdateInput
-  product: ProductRelateToOneForUpdateInput
-  value: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductRelateToOneForUpdateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
-  disconnect: Boolean
-}
-
-input ProductAttributeUpdateArgs {
-  where: ProductAttributeWhereUniqueInput!
-  data: ProductAttributeUpdateInput!
-}
-
-input ProductAttributeCreateInput {
-  attribute: AttributeRelateToOneForCreateInput
-  product: ProductRelateToOneForCreateInput
-  value: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductRelateToOneForCreateInput {
-  create: ProductCreateInput
-  connect: ProductWhereUniqueInput
 }
 
 type ProductImage {
@@ -944,6 +785,12 @@ input ProductImageUpdateInput {
   altText: String
 }
 
+input ProductRelateToOneForUpdateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
+  disconnect: Boolean
+}
+
 input ProductImageUpdateArgs {
   where: ProductImageWhereUniqueInput!
   data: ProductImageUpdateInput!
@@ -953,6 +800,11 @@ input ProductImageCreateInput {
   product: ProductRelateToOneForCreateInput
   image: ImageFieldInput
   altText: String
+}
+
+input ProductRelateToOneForCreateInput {
+  create: ProductCreateInput
+  connect: ProductWhereUniqueInput
 }
 
 type ProductVariant {
@@ -1019,6 +871,12 @@ input ProductVariantUpdateInput {
   updatedAt: DateTime
 }
 
+input ProductFillingRelateToOneForUpdateInput {
+  create: ProductFillingCreateInput
+  connect: ProductFillingWhereUniqueInput
+  disconnect: Boolean
+}
+
 input ProductVariantUpdateArgs {
   where: ProductVariantWhereUniqueInput!
   data: ProductVariantUpdateInput!
@@ -1033,6 +891,11 @@ input ProductVariantCreateInput {
   isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input ProductFillingRelateToOneForCreateInput {
+  create: ProductFillingCreateInput
+  connect: ProductFillingWhereUniqueInput
 }
 
 type Category {
@@ -2115,18 +1978,6 @@ type Mutation {
   updateProductFillings(data: [ProductFillingUpdateArgs!]!): [ProductFilling]
   deleteProductFilling(where: ProductFillingWhereUniqueInput!): ProductFilling
   deleteProductFillings(where: [ProductFillingWhereUniqueInput!]!): [ProductFilling]
-  createAttribute(data: AttributeCreateInput!): Attribute
-  createAttributes(data: [AttributeCreateInput!]!): [Attribute]
-  updateAttribute(where: AttributeWhereUniqueInput!, data: AttributeUpdateInput!): Attribute
-  updateAttributes(data: [AttributeUpdateArgs!]!): [Attribute]
-  deleteAttribute(where: AttributeWhereUniqueInput!): Attribute
-  deleteAttributes(where: [AttributeWhereUniqueInput!]!): [Attribute]
-  createProductAttribute(data: ProductAttributeCreateInput!): ProductAttribute
-  createProductAttributes(data: [ProductAttributeCreateInput!]!): [ProductAttribute]
-  updateProductAttribute(where: ProductAttributeWhereUniqueInput!, data: ProductAttributeUpdateInput!): ProductAttribute
-  updateProductAttributes(data: [ProductAttributeUpdateArgs!]!): [ProductAttribute]
-  deleteProductAttribute(where: ProductAttributeWhereUniqueInput!): ProductAttribute
-  deleteProductAttributes(where: [ProductAttributeWhereUniqueInput!]!): [ProductAttribute]
   createProductImage(data: ProductImageCreateInput!): ProductImage
   createProductImages(data: [ProductImageCreateInput!]!): [ProductImage]
   updateProductImage(where: ProductImageWhereUniqueInput!, data: ProductImageUpdateInput!): ProductImage
@@ -2281,12 +2132,6 @@ type Query {
   productFilling(where: ProductFillingWhereUniqueInput!): ProductFilling
   productFillings(where: ProductFillingWhereInput! = {}, orderBy: [ProductFillingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductFillingWhereUniqueInput): [ProductFilling!]
   productFillingsCount(where: ProductFillingWhereInput! = {}): Int
-  attribute(where: AttributeWhereUniqueInput!): Attribute
-  attributes(where: AttributeWhereInput! = {}, orderBy: [AttributeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: AttributeWhereUniqueInput): [Attribute!]
-  attributesCount(where: AttributeWhereInput! = {}): Int
-  productAttribute(where: ProductAttributeWhereUniqueInput!): ProductAttribute
-  productAttributes(where: ProductAttributeWhereInput! = {}, orderBy: [ProductAttributeOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductAttributeWhereUniqueInput): [ProductAttribute!]
-  productAttributesCount(where: ProductAttributeWhereInput! = {}): Int
   productImage(where: ProductImageWhereUniqueInput!): ProductImage
   productImages(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
   productImagesCount(where: ProductImageWhereInput! = {}): Int

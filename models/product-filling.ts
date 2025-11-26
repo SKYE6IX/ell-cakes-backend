@@ -111,7 +111,7 @@ export const ProductFilling = list({
       delete: async ({ context, item }) => {
         const productFilling = await context.query.ProductFilling.findOne({
           where: { id: item.id.toString() },
-          query: "id variants { id } attribute { id }",
+          query: "id variants { id } ",
         });
         if (productFilling.variants) {
           await context.query.ProductVariant.deleteMany({

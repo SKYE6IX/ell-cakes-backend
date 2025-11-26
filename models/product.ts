@@ -169,7 +169,6 @@ export const Product = list({
       defaultValue: undefined,
       label: "значок",
     }),
-    isFeatured: checkbox({ defaultValue: false, label: "популярный товар" }),
     images: relationship({
       ref: "ProductImage.product",
       many: true,

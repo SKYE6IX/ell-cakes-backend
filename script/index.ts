@@ -75,9 +75,6 @@ async function main() {
   // Query all the categories
   const dbCategories = await sudoContext.db.Category.findMany();
 
-  // Query all the toppings
-  const dbToppings = await sudoContext.db.Topping.findMany();
-
   // Query all the product fillings
   const dbProductFillings = await sudoContext.db.ProductFilling.findMany();
   const existingProductFillings = [...dbProductFillings];
@@ -91,9 +88,9 @@ async function main() {
     const product = JSON.parse(readFileSync(productPath, "utf-8"));
 
     const connectProductFillingIds = [];
+
     for (const productFilling of product.fillings) {
       const productFillingSlug = getTransliterationSlug(productFilling.name);
-
       // We check if a filling already exist or has been created by the previous
       // product so we can re-use it by storing it's ID into an array
       const existingProductFilling = existingProductFillings.find(
@@ -106,31 +103,31 @@ async function main() {
           existingProductFilling.name
         );
         connectProductFillingIds.push({ id: existingProductFilling.id });
-        continue;
+      } else {
+        // If the filling doesn't exisit, we can go on and create a new one and then return
+        // it's ID, NAME, and SLUG for later used.
+        const newProductFilling = await sudoContext.db.ProductFilling.createOne(
+          {
+            data: {
+              ...productFilling,
+              variants: {
+                create: productFilling.variants.map((variant: any) => ({
+                  ...variant,
+                })),
+              },
+            },
+          }
+        );
+        // First add to the "existingProductFillings" Array
+        existingProductFillings.push({
+          id: newProductFilling.id,
+          slug: newProductFilling.slug,
+          name: newProductFilling.name,
+        });
+        // And then assign a local ID for connection for each product
+        // because we need to know which product has particular fillings
+        connectProductFillingIds.push({ id: newProductFilling.id });
       }
-
-      // If the filling doesn't exisit, we can go on and create a new one and then return
-      // it's ID, NAME, and SLUG for later used.
-      const newProductFilling = await sudoContext.db.ProductFilling.createOne({
-        data: {
-          ...productFilling,
-          variants: {
-            create: productFilling.variants.map((variant: any) => ({
-              ...variant,
-            })),
-          },
-        },
-      });
-
-      // First add to the "existingProductFillings" Array
-      existingProductFillings.push({
-        id: newProductFilling.id,
-        slug: newProductFilling.slug,
-        name: newProductFilling.name,
-      });
-      // And then assign a local ID for connection for each product
-      // because we need to know which product has particular fillings
-      connectProductFillingIds.push({ id: newProductFilling.id });
     }
 
     // Check if the product exist and skip the product
@@ -145,7 +142,6 @@ async function main() {
     }
 
     // If product doesn't exist, we start the creation of a new product.
-
     // Get it's category using the slug
     const category = dbCategories.find(
       (cat) => cat.slug === getTransliterationSlug(product.category)
@@ -154,6 +150,9 @@ async function main() {
     // If product has a topping among it's data
     let toppingId = null;
     const toppingSlug = getTransliterationSlug(product.topping.toppingName);
+
+    // Query all the toppings
+    const dbToppings = await sudoContext.db.Topping.findMany();
     // First check if the topping exist
     const existingTopping = dbToppings.find((tp) => tp.slug === toppingSlug);
     if (existingTopping) {

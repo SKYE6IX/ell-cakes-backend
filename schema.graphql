@@ -370,7 +370,6 @@ type Product {
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
-  isFeatured: Boolean
   images(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
   imagesCount(where: ProductImageWhereInput! = {}): Int
   video: FileFieldOutput
@@ -409,7 +408,6 @@ input ProductWhereInput {
   stockQuantity: IntFilter
   isAvailable: BooleanFilter
   badge: StringNullableFilter
-  isFeatured: BooleanFilter
   images: ProductImageManyRelationFilter
   customization: ProductCustomizationWhereInput
   topping: ToppingWhereInput
@@ -471,7 +469,6 @@ input ProductOrderByInput {
   stockQuantity: OrderDirection
   isAvailable: OrderDirection
   badge: OrderDirection
-  isFeatured: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -488,7 +485,6 @@ input ProductUpdateInput {
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
-  isFeatured: Boolean
   images: ProductImageRelateToManyForUpdateInput
   video: FileFieldInput
   customization: ProductCustomizationRelateToOneForUpdateInput
@@ -560,7 +556,6 @@ input ProductCreateInput {
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
-  isFeatured: Boolean
   images: ProductImageRelateToManyForCreateInput
   video: FileFieldInput
   customization: ProductCustomizationRelateToOneForCreateInput
@@ -1948,6 +1943,50 @@ input CustomizeImageCreateInput {
   updatedAt: DateTime
 }
 
+type FeaturedProduct {
+  id: ID!
+  product: Product
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input FeaturedProductWhereUniqueInput {
+  id: ID
+}
+
+input FeaturedProductWhereInput {
+  AND: [FeaturedProductWhereInput!]
+  OR: [FeaturedProductWhereInput!]
+  NOT: [FeaturedProductWhereInput!]
+  id: IDFilter
+  product: ProductWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input FeaturedProductOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input FeaturedProductUpdateInput {
+  product: ProductRelateToOneForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input FeaturedProductUpdateArgs {
+  where: FeaturedProductWhereUniqueInput!
+  data: FeaturedProductUpdateInput!
+}
+
+input FeaturedProductCreateInput {
+  product: ProductRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2074,6 +2113,12 @@ type Mutation {
   updateCustomizeImages(data: [CustomizeImageUpdateArgs!]!): [CustomizeImage]
   deleteCustomizeImage(where: CustomizeImageWhereUniqueInput!): CustomizeImage
   deleteCustomizeImages(where: [CustomizeImageWhereUniqueInput!]!): [CustomizeImage]
+  createFeaturedProduct(data: FeaturedProductCreateInput!): FeaturedProduct
+  createFeaturedProducts(data: [FeaturedProductCreateInput!]!): [FeaturedProduct]
+  updateFeaturedProduct(where: FeaturedProductWhereUniqueInput!, data: FeaturedProductUpdateInput!): FeaturedProduct
+  updateFeaturedProducts(data: [FeaturedProductUpdateArgs!]!): [FeaturedProduct]
+  deleteFeaturedProduct(where: FeaturedProductWhereUniqueInput!): FeaturedProduct
+  deleteFeaturedProducts(where: [FeaturedProductWhereUniqueInput!]!): [FeaturedProduct]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2180,6 +2225,9 @@ type Query {
   customizeImage(where: CustomizeImageWhereUniqueInput!): CustomizeImage
   customizeImages(where: CustomizeImageWhereInput! = {}, orderBy: [CustomizeImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizeImageWhereUniqueInput): [CustomizeImage!]
   customizeImagesCount(where: CustomizeImageWhereInput! = {}): Int
+  featuredProduct(where: FeaturedProductWhereUniqueInput!): FeaturedProduct
+  featuredProducts(where: FeaturedProductWhereInput! = {}, orderBy: [FeaturedProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FeaturedProductWhereUniqueInput): [FeaturedProduct!]
+  featuredProductsCount(where: FeaturedProductWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult

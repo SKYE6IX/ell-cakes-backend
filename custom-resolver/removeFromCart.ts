@@ -1,19 +1,21 @@
 import { Context } from ".keystone/types";
 import type { Session } from "../access";
 import type { CartWithItem } from "./addToCart";
+import { getSessionId } from "../lib/getSessionId";
 
 interface RemoveFromCartArgs {
   cartItemId: string;
-  cartId: string;
 }
 
 export const removeFromCart = async (
   root: any,
-  { cartId, cartItemId }: RemoveFromCartArgs,
+  { cartItemId }: RemoveFromCartArgs,
   context: Context
 ) => {
   let cart: CartWithItem | null = null;
+
   const loggedInUser = context.session as Session;
+  const sessionId = await getSessionId(context);
 
   if (loggedInUser) {
     cart = await context.prisma.cart.findUnique({
@@ -22,7 +24,7 @@ export const removeFromCart = async (
     });
   } else {
     cart = await context.prisma.cart.findUnique({
-      where: { id: cartId },
+      where: { sessionId },
       include: { cartItems: true },
     });
   }
@@ -36,6 +38,7 @@ export const removeFromCart = async (
   const cartItemToRemoveOrReduce = cart.cartItems.find(
     (item) => item.id === cartItemId
   );
+
   if (cartItemToRemoveOrReduce) {
     const updateQuantity = Number(cartItemToRemoveOrReduce.quantity) - 1;
     if (updateQuantity <= 0) {
@@ -53,6 +56,7 @@ export const removeFromCart = async (
       });
     }
   }
+
   // Recalculate the the total amount of cart-items
   await context.transaction(
     async (tx) => {

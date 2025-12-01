@@ -1,5 +1,7 @@
 import { getContext } from "@keystone-6/core/context";
 import { KeystoneContext } from "@keystone-6/core/types";
+import * as cookie from "cookie";
+import * as iron from "@hapi/iron";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -9,6 +11,7 @@ import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
 import path from "path";
 import type { CartWithItem } from "../custom-resolver/addToCart";
+import { getSecret } from "../lib/getSecret";
 
 interface GraphQLResponse<T> {
   data: {
@@ -22,6 +25,10 @@ jest.mock("iuliia", () => ({
   translate: jest.fn((text) => text),
   WIKIPEDIA: {},
 }));
+
+jest.mock("@hapi/iron");
+jest.mock("cookie");
+jest.mock("../lib/getSecret");
 
 const IMAGE = "postgres:16-alpine";
 const prismaSchemaPath = path.join(process.cwd(), "schema.prisma");
@@ -44,6 +51,14 @@ afterAll(async () => {
 
 beforeEach(async () => {
   await resetDatabase(container.getConnectionUri(), prismaSchemaPath);
+
+  (getSecret as jest.Mock).mockReturnValue("my-secret-key");
+
+  (cookie.parse as jest.Mock).mockReturnValue({
+    "keystonejs-session": "ENCRYPTED_COOKIE_VALUE",
+  });
+
+  (iron.unseal as jest.Mock).mockResolvedValue("SESSION_ID_123");
 });
 
 describe("cart and cart-item Model", () => {
@@ -122,8 +137,8 @@ describe("cart and cart-item Model", () => {
     expect(cart.data.addToCart.cartItems[0].quantity).toEqual(1);
 
     const updateCart = (await context.graphql.raw({
-      query: `mutation AddToCart($productId: String!, $variantId: String!, $cartId: String, $customizations: [CustomizationInput!]) {
-         addToCart(productId: $productId, variantId: $variantId, cartId: $cartId, customizations: $customizations ) {
+      query: `mutation AddToCart($productId: String!, $variantId: String!, $customizations: [CustomizationInput!]) {
+         addToCart(productId: $productId, variantId: $variantId, customizations: $customizations ) {
           id subTotal cartItems { id quantity }
          }
        }
@@ -131,7 +146,6 @@ describe("cart and cart-item Model", () => {
       variables: {
         productId: newProduct.id,
         variantId: newProduct.fillings[0].variants[0].id,
-        cartId: cart.data.addToCart.id,
         customizations: [
           {
             optionId: newProduct.customization.customOptions[0].id,
@@ -153,6 +167,7 @@ describe("cart and cart-item Model", () => {
       itemId: "1234567890",
       data: { role: "EDITOR" },
     };
+
     const newProduct = await context
       .withSession(editor)
       .query.Product.createOne({
@@ -195,14 +210,13 @@ describe("cart and cart-item Model", () => {
     })) as GraphQLResponse<CartWithItem>;
 
     const removeCart = (await context.graphql.raw({
-      query: `mutation RemoveFromCart($cartItemId: String!, $cartId: String!) {
-          removeFromCart(cartItemId: $cartItemId, cartId: $cartId){
+      query: `mutation RemoveFromCart($cartItemId: String!) {
+          removeFromCart(cartItemId: $cartItemId ){
            id subTotal cartItems { id }
           }
         }`,
       variables: {
         cartItemId: addToCart.data.addToCart.cartItems[0].id,
-        cartId: addToCart.data.addToCart.id,
       },
     })) as GraphQLResponse<CartWithItem>;
 

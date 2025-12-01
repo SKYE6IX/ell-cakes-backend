@@ -1,4 +1,5 @@
 import { Context } from ".keystone/types";
+import { getSessionId } from "../lib/getSessionId";
 
 interface RegisterUserArgs {
   name: string;
@@ -16,6 +17,7 @@ export const registerUser = async (
   context: Context
 ) => {
   const sudoContext = context.sudo();
+  const sessionId = await getSessionId(context);
 
   // Check if USER with the email or phoneNumber already exist
   const isUserExist = await sudoContext.db.User.findOne({
@@ -54,6 +56,23 @@ export const registerUser = async (
 
   if (errors) {
     throw new Error(errors[0].message);
+  }
+
+  // Checking while user signing in if there is a cart already available
+  // and update the cart with the user ID
+  const existingCart = await sudoContext.db.Cart.findOne({
+    where: { sessionId },
+  });
+  if (existingCart) {
+    await sudoContext.db.Cart.updateOne({
+      where: {
+        id: existingCart.id,
+      },
+      data: {
+        user: { connect: { id: data?.authenticateUserWithPassword.item.id } },
+        updatedAt: new Date(),
+      },
+    });
   }
 
   return await sudoContext.db.User.findOne({

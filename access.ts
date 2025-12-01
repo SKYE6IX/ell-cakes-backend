@@ -1,4 +1,5 @@
 export type Session = {
+  id: string;
   itemId: string;
   listKey: string;
   data: {

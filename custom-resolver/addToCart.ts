@@ -1,6 +1,7 @@
 import { Prisma } from "@prisma/client";
 import isEqual from "lodash/isEqual";
 import { Context } from ".keystone/types";
+import { getSessionId } from "../lib/getSessionId";
 import type { Session } from "../access";
 
 type CustomizationValue = {
@@ -21,11 +22,11 @@ export interface CustomizationSnapshot {
 interface AddToCartArgs {
   productId: string;
   variantId: string;
-  cartId: string | null;
   customizations: CustomizationValue[] | null;
   compositionOptions: { productId: string; quantity: number }[] | null;
   toppingOptionId: string | null;
 }
+
 export type CartWithItem = Prisma.CartGetPayload<{
   include: { cartItems: true };
 }>;
@@ -55,23 +56,24 @@ export const addToCart = async (
     customizations,
     compositionOptions,
     toppingOptionId,
-    cartId,
   }: AddToCartArgs,
   context: Context
 ) => {
   let cart: CartWithItem | null = null;
+
+  const sessionId = await getSessionId(context);
   const loggedInUser = context.session as Session;
 
-  // If user is in session, we try to find if they have an existing cart
+  // We check if user log in and they have a cart already
   if (loggedInUser) {
     cart = await context.prisma.cart.findUnique({
       where: { userId: loggedInUser.itemId },
       include: { cartItems: true },
     });
-    // If user isn't in session but they already create a cart, we get the cart by it's ID
-  } else if (cartId) {
+    // If not a login user, we use the guest session ID to find an existing cart
+  } else {
     cart = await context.prisma.cart.findUnique({
-      where: { id: cartId },
+      where: { sessionId },
       include: { cartItems: true },
     });
   }
@@ -80,6 +82,7 @@ export const addToCart = async (
   if (cart === null) {
     cart = await context.prisma.cart.create({
       data: {
+        sessionId: sessionId,
         ...(loggedInUser && { user: { connect: { id: loggedInUser.itemId } } }),
       },
       include: { cartItems: true },
@@ -94,7 +97,7 @@ export const addToCart = async (
      weight
      pieces
      price
-     filling { 
+     filling {
       id
       name
       products {
@@ -114,6 +117,7 @@ export const addToCart = async (
 
   // Check if user added customization and calculate the
   // one with extra price and return a snapShot of it.
+
   let customizationsTotalAmount = 0;
   let customizationsSnapShot = null;
   if (customizations) {
@@ -138,7 +142,8 @@ export const addToCart = async (
     });
   }
 
-  // Store the composition snapShot for comprasion
+  // Store the composition (Mix box cupcakes in context of this code)
+  // snapShot for comprasion
   let compositionSnapShot = null;
   if (compositionOptions) {
     compositionOptions = compositionOptions?.map((composition) => {
@@ -154,7 +159,6 @@ export const addToCart = async (
     const sameProduct = item.productId === productId;
     const sameVariant = item.variantId === variantId;
     const sameTopping = item.toppingOptionId === (toppingOptionId ?? null);
-
     const sameCompositionOptions = isEqual(
       item.compositionSnapShot,
       compositionSnapShot

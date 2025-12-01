@@ -12,9 +12,13 @@
   "dependencies": {
     "@a2seven/yoo-checkout": "^1.1.4",
     "@graphql-tools/schema": "^10.0.25",
+    "@hapi/iron": "^7.0.1",
     "@keystone-6/auth": "^8.0.0",
     "@keystone-6/core": "^6.0.0",
     "@keystone-6/fields-document": "^9.0.0",
+    "@redis/client": "^5.10.0",
+    "cookie": "^1.1.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "heic-convert": "^2.1.0",
     "iuliia": "^0.8.2",
@@ -28,6 +32,7 @@
   "devDependencies": {
     "@testcontainers/postgresql": "^11.7.1",
     "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.10",
     "@types/graphql-upload": "^17.0.0",
     "@types/heic-convert": "^2.1.0",
     "@types/jest": "^30.0.0",

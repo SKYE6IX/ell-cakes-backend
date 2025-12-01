@@ -1299,6 +1299,7 @@ input ToppingOptionCreateInput {
 
 type Cart {
   id: ID!
+  sessionId: String
   user: User
   cartItems(where: CartItemWhereInput! = {}, orderBy: [CartItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CartItemWhereUniqueInput): [CartItem!]
   cartItemsCount(where: CartItemWhereInput! = {}): Int
@@ -1309,6 +1310,7 @@ type Cart {
 
 input CartWhereUniqueInput {
   id: ID
+  sessionId: String
   user: UserWhereUniqueInput
 }
 
@@ -1317,6 +1319,7 @@ input CartWhereInput {
   OR: [CartWhereInput!]
   NOT: [CartWhereInput!]
   id: IDFilter
+  sessionId: StringFilter
   user: UserWhereInput
   cartItems: CartItemManyRelationFilter
   subTotal: IntNullableFilter
@@ -1332,12 +1335,14 @@ input CartItemManyRelationFilter {
 
 input CartOrderByInput {
   id: OrderDirection
+  sessionId: OrderDirection
   subTotal: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input CartUpdateInput {
+  sessionId: String
   user: UserRelateToOneForUpdateInput
   cartItems: CartItemRelateToManyForUpdateInput
   subTotal: Int
@@ -1358,6 +1363,7 @@ input CartUpdateArgs {
 }
 
 input CartCreateInput {
+  sessionId: String
   user: UserRelateToOneForCreateInput
   cartItems: CartItemRelateToManyForCreateInput
   subTotal: Int
@@ -2124,14 +2130,13 @@ type Mutation {
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
   sendUserPasswordResetLink(email: String!): Boolean!
   redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
+  authorizedUser(email: String!, password: String!): User!
   verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
   resendVerificationToken(phoneNumber: String!): String!
-  addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String, cartId: String): Cart!
-  removeFromCart(cartItemId: String!, cartId: String!): Cart!
+  addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
+  removeFromCart(cartItemId: String!): Cart!
   checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
   registerUser(registerData: RegisterUserInput!): User!
-  registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
-  authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
 }
 
@@ -2231,6 +2236,7 @@ type Query {
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult
+  queryCart: Cart
 }
 
 union AuthenticatedItem = User

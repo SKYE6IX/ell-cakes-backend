@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for ell-cakes-backend/custom-resolver/resendVerificationToken.ts</title>
+    <title>Code coverage report for ell-cakes-backend/custom-resolver/queryCartByIdOrByUserId.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/custom-resolver</a> resendVerificationToken.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">ell-cakes-backend/custom-resolver</a> queryCartByIdOrByUserId.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.27% </span>
+                <span class="strong">22.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/11</span>
+                <span class='fraction'>2/9</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">12.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/10</span>
+                <span class='fraction'>1/8</span>
             </div>
         
             
@@ -85,61 +85,49 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Context } from ".keystone/types";
-import { issueVerificationToken } from "../lib/issueVerificationToken";
+import type { Session } from "../access";
 &nbsp;
-export const resendVerificationToken = <span class="fstat-no" title="function not covered" >async </span>(
+export const queryCartByIdOrByUserId = <span class="fstat-no" title="function not covered" >async </span>(
   root: any,
-  { phoneNumber }: { phoneNumber: string },
+  { cartId }: { cartId: string | null },
   context: Context
 ) =&gt; {
-  // Check if USER has a session
-  const isLoggeIn = <span class="cstat-no" title="statement not covered" >context.session;</span>
-<span class="cstat-no" title="statement not covered" >  if (!isLoggeIn) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error("Only signed in user allow to perform this operation");</span>
-  }
-  // Find the user with the phone number
-  const user = <span class="cstat-no" title="statement not covered" >await context.db.User.findOne({</span>
-    where: { phoneNumber: phoneNumber },
-  });
-<span class="cstat-no" title="statement not covered" >  if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >    throw new Error("User with this phone number doesn't exist!");</span>
-  }
+  const loggedInUser = <span class="cstat-no" title="statement not covered" >context.session as Session;</span>
+  const sudoContext = <span class="cstat-no" title="statement not covered" >context.sudo();</span>
 &nbsp;
-  // Continue operation
-<span class="cstat-no" title="statement not covered" >  await issueVerificationToken({ userId: user.id, context });</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return "Token Sent!";</span>
+<span class="cstat-no" title="statement not covered" >  if (loggedInUser) {</span>
+<span class="cstat-no" title="statement not covered" >    return sudoContext.db.Cart.findOne({</span>
+      where: { user: { id: loggedInUser.itemId } },
+    });
+  } else <span class="cstat-no" title="statement not covered" >if (cartId) {</span>
+<span class="cstat-no" title="statement not covered" >    return sudoContext.db.Cart.findOne({</span>
+      where: { id: cartId },
+    });
+  }
+<span class="cstat-no" title="statement not covered" >  return null;</span>
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -148,7 +136,7 @@ export const resendVerificationToken = <span class="fstat-no" title="function no
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-01T16:18:08.092Z
+                at 2025-12-01T15:47:34.221Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

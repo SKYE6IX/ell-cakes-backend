@@ -1,5 +1,10 @@
 import { list } from "@keystone-6/core";
-import { relationship, timestamp, integer } from "@keystone-6/core/fields";
+import {
+  relationship,
+  timestamp,
+  integer,
+  text,
+} from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 
 export const Cart = list({
@@ -7,6 +12,7 @@ export const Cart = list({
     operation: allowAll,
   },
   fields: {
+    sessionId: text({ isIndexed: "unique" }),
     user: relationship({ ref: "User.cart" }),
     cartItems: relationship({ ref: "CartItem.cart", many: true }),
     subTotal: integer(),

@@ -1,5 +1,7 @@
 import { getContext } from "@keystone-6/core/context";
 import { KeystoneContext } from "@keystone-6/core/types";
+import * as cookie from "cookie";
+import * as iron from "@hapi/iron";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -8,6 +10,7 @@ import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
 import path from "path";
+import { getSecret } from "../lib/getSecret";
 
 jest.mock("iuliia", () => ({
   translate: jest.fn((text) => text),
@@ -17,6 +20,10 @@ jest.mock("iuliia", () => ({
 jest.mock("../lib/mail.ts", () => ({
   sendVerificationEmail: jest.fn(async () => Promise.resolve()),
 }));
+
+jest.mock("@hapi/iron");
+jest.mock("cookie");
+jest.mock("../lib/getSecret");
 
 jest.mock("../lib/paymentGateway.ts", () => ({
   __esModule: true,
@@ -62,6 +69,13 @@ beforeEach(async () => {
 
 describe("Order and OrderItem Model and", () => {
   test("Only Sign in User can complete order", async () => {
+    (getSecret as jest.Mock).mockReturnValue("my-secret-key");
+
+    (cookie.parse as jest.Mock).mockReturnValue({
+      "keystonejs-session": "ENCRYPTED_COOKIE_VALUE",
+    });
+
+    (iron.unseal as jest.Mock).mockResolvedValue("SESSION_ID_123");
     const sudoContext = context.sudo();
     const mockUser = await sudoContext.db.User.createOne({
       data: {
@@ -118,6 +132,7 @@ describe("Order and OrderItem Model and", () => {
         query:
           "id name stockQuantity type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } }",
       });
+
     await context.withSession(mockSession).graphql.raw({
       query: `mutation AddToCart($productId: String!, $variantId: String!, $customizations: [CustomizationInput!]) {
                addToCart(productId: $productId, variantId: $variantId, customizations: $customizations) {
@@ -139,6 +154,7 @@ describe("Order and OrderItem Model and", () => {
         ],
       },
     });
+
     const userAddress = await context
       .withSession(mockSession)
       .db.DelivaryAddress.createOne({
@@ -147,6 +163,7 @@ describe("Order and OrderItem Model and", () => {
           user: { connect: { id: mockSession.itemId } },
         },
       });
+
     const checkOut = await context
       .withSession(mockSession)
       .graphql.raw<{ checkOut: any }, {}>({

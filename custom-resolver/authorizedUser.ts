@@ -1,25 +1,18 @@
 import { Context } from ".keystone/types";
+import { getSessionId } from "../lib/getSessionId";
 
-interface AuthorizedUserWithCartArgs {
+interface AuthorizedUser {
   email: string;
   password: string;
-  cartId: string;
 }
 
-export const authorizedUserWithCart = async (
+export const authorizedUser = async (
   root: any,
-  { email, password, cartId }: AuthorizedUserWithCartArgs,
+  { email, password }: AuthorizedUser,
   context: Context
 ) => {
   const sudoContext = context.sudo();
-
-  const existingCart = await sudoContext.db.Cart.findOne({
-    where: { id: cartId },
-  });
-
-  if (!existingCart) {
-    throw new Error("Unable to login user, cart must exist!");
-  }
+  const sessionId = await getSessionId(context);
 
   // authorized USER
   const { data, errors } = await sudoContext.graphql.raw<
@@ -39,19 +32,28 @@ export const authorizedUserWithCart = async (
     `,
     variables: { email: email, password: password },
   });
+
   if (errors) {
     throw new Error(errors[0].message);
   }
-  // Update the cart so it belong to the user
-  await sudoContext.db.Cart.updateOne({
-    where: {
-      id: existingCart.id,
-    },
-    data: {
-      user: { connect: { id: data?.authenticateUserWithPassword.item.id } },
-      updatedAt: new Date(),
-    },
+
+  // Checking while user signing in if there is a cart already available
+  // and update the cart with the user ID
+  const existingCart = await sudoContext.db.Cart.findOne({
+    where: { sessionId },
   });
+  if (existingCart) {
+    await sudoContext.db.Cart.updateOne({
+      where: {
+        id: existingCart.id,
+      },
+      data: {
+        user: { connect: { id: data?.authenticateUserWithPassword.item.id } },
+        updatedAt: new Date(),
+      },
+    });
+  }
+
   return await sudoContext.db.User.findOne({
     where: { id: data?.authenticateUserWithPassword.item.id },
   });

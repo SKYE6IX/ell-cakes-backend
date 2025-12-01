@@ -5,10 +5,10 @@ import { addToCart } from "./addToCart";
 import { removeFromCart } from "./removeFromCart";
 import { checkOut } from "./checkOut";
 import { registerUser } from "./registerUser";
-import { registerUserWithCart } from "./registerUserWithCart";
-import { authorizedUserWithCart } from "./authorizedUserWithCart";
+import { authorizedUser } from "./authorizedUser";
 import { resendVerificationToken } from "./resendVerificationToken";
 import { uploadImageCustomization } from "./uploadImageCustomization";
+import { queryCart } from "./queryCart";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -37,19 +37,23 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       productId: String!
       quantity: Int!
     }
+    
+    type Query {
+      queryCart: Cart
+    }
 
     type Mutation {
+        authorizedUser(email: String!, password: String!): User!
         verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
         resendVerificationToken(phoneNumber: String!): String!
-        addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String, cartId: String): Cart!
-        removeFromCart(cartItemId: String!, cartId: String!): Cart!
+        addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
+        removeFromCart(cartItemId: String!): Cart!
         checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
         registerUser(registerData: RegisterUserInput!): User!
-        registerUserWithCart(cartId: String!, registerData: RegisterUserInput!): User!
-        authorizedUserWithCart(email: String!, password: String!, cartId: String): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
     }
     `,
+
     resolvers: {
       Mutation: {
         verifyUserByPhoneNumber,
@@ -58,9 +62,12 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         removeFromCart,
         checkOut,
         registerUser,
-        registerUserWithCart,
-        authorizedUserWithCart,
+        authorizedUser,
         uploadImageCustomization,
+      },
+
+      Query: {
+        queryCart,
       },
     },
   });

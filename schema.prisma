@@ -212,6 +212,7 @@ model ToppingOption {
 
 model Cart {
   id        String     @id @default(uuid()) @postgresql.Uuid
+  sessionId String     @unique @default("")
   user      User?      @relation("Cart_user", fields: [userId], references: [id])
   userId    String?    @unique @map("user") @postgresql.Uuid
   cartItems CartItem[] @relation("CartItem_cart")

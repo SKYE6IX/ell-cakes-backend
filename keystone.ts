@@ -10,15 +10,20 @@ import { customExtendResolvers } from "./custom-resolver";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
 import { getSecret } from "./lib/getSecret";
 
-const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
-  process.env;
+const {
+  YC_S3_BUCKET,
+  YC_S3_REGION,
+  YC_S3_PRIVATE_ENDPOINT,
+  FRONTEND_URL,
+  REDIS_URL,
+} = process.env;
 
 const databaseUrl = getSecret("DATABASE_URL");
 const ycS3KeyId = getSecret("YC_S3_KEY_ID");
 const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
 
 const redis = createClient({
-  url: "redis://localhost:6379",
+  url: REDIS_URL,
 });
 
 export default withAuth(
@@ -69,7 +74,7 @@ export default withAuth(
       extendGraphqlSchema: customExtendResolvers,
     },
     server: {
-      cors: { origin: [FRONTEND_URL, "*"], credentials: true },
+      cors: { origin: [FRONTEND_URL], credentials: true },
       port: 8080,
       extendExpressApp: (app, commonContext) => {
         app.use(cookieParser());

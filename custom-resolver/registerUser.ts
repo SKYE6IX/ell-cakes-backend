@@ -10,7 +10,6 @@ interface RegisterUserArgs {
 
 // TODO:
 // 1. Set up SMS verification so has to confirm USER are real and not a bot
-
 export const registerUser = async (
   root: any,
   { registerData }: { registerData: RegisterUserArgs },
@@ -58,15 +57,14 @@ export const registerUser = async (
     throw new Error(errors[0].message);
   }
 
-  // Checking while user signing in if there is a cart already available
-  // and update the cart with the user ID
-  const existingCart = await sudoContext.db.Cart.findOne({
+  const sessionCart = await sudoContext.db.Cart.findOne({
     where: { sessionId },
   });
-  if (existingCart) {
+
+  if (sessionCart) {
     await sudoContext.db.Cart.updateOne({
       where: {
-        id: existingCart.id,
+        id: sessionCart.id,
       },
       data: {
         user: { connect: { id: data?.authenticateUserWithPassword.item.id } },

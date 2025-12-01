@@ -16,7 +16,8 @@ services:
         FRONTEND_URL: http://localhost:3000
         YOO_MONEY_SHOP_ID_FILE: /run/secrets/yoo_money_shop_id
         YOO_MONEY_SECRET_ID_FILE: /run/secrets/yoo_money_secret_id
-        NODE_ENV: production
+        NODE_ENV: 
+        REDIS_URL: redis://host.docker.internal:6379
         
     secrets: 
       - database_url

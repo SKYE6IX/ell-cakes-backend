@@ -1,7 +1,7 @@
 import { Context } from ".keystone/types";
 import type { Session } from "../access";
 import type { CartWithItem } from "./addToCart";
-import { getSessionId } from "../lib/getSessionId";
+import { getSessionCartId } from "../lib/getSessionCartId";
 
 interface RemoveFromCartArgs {
   cartItemId: string;
@@ -15,7 +15,7 @@ export const removeFromCart = async (
   let cart: CartWithItem | null = null;
 
   const loggedInUser = context.session as Session;
-  const sessionId = await getSessionId(context);
+  const sessionCartId = getSessionCartId(context);
 
   if (loggedInUser) {
     cart = await context.prisma.cart.findUnique({
@@ -24,7 +24,7 @@ export const removeFromCart = async (
     });
   } else {
     cart = await context.prisma.cart.findUnique({
-      where: { sessionId },
+      where: { sessionId: sessionCartId },
       include: { cartItems: true },
     });
   }

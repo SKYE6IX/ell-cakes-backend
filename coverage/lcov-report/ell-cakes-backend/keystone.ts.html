@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.62% </span>
+                <span class="strong">59.25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/29</span>
+                <span class='fraction'>16/27</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.62% </span>
+                <span class="strong">59.25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/29</span>
+                <span class='fraction'>16/27</span>
             </div>
         
             
@@ -154,18 +154,7 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a>
-<a name='L95'></a><a href='#L95'>95</a>
-<a name='L96'></a><a href='#L96'>96</a>
-<a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
@@ -178,11 +167,6 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -193,14 +177,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,17 +223,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -271,29 +249,20 @@
 import dotenv from "dotenv";
 import express from "express";
 import cookieParser from "cookie-parser";
-import { createClient } from "@redis/client";
+import { randomUUID } from "crypto";
 dotenv.config({ override: true });
 import { lists } from "./schema";
-import { withAuth, redisSessionStrategy } from "./auth";
+import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
 import { getSecret } from "./lib/getSecret";
 &nbsp;
-const {
-  YC_S3_BUCKET,
-  YC_S3_REGION,
-  YC_S3_PRIVATE_ENDPOINT,
-  FRONTEND_URL,
-  REDIS_URL,
-} = process.env;
+const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
+  process.env;
 &nbsp;
 const databaseUrl = getSecret("DATABASE_URL");
 const ycS3KeyId = getSecret("YC_S3_KEY_ID");
 const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
-&nbsp;
-const redis = createClient({
-  url: REDIS_URL,
-});
 &nbsp;
 export default withAuth(
   config({
@@ -301,12 +270,9 @@ export default withAuth(
       provider: "postgresql",
       url: databaseUrl,
       idField: { kind: "uuid" },
-<span class="fstat-no" title="function not covered" >      async </span>onConnect() {
-<span class="cstat-no" title="statement not covered" >        await redis.connect();</span>
-      },
     },
     lists,
-    session: redisSessionStrategy(redis),
+    session,
     storage: {
       yc_s3_image: {
         kind: "s3",
@@ -348,18 +314,19 @@ export default withAuth(
       extendExpressApp: <span class="fstat-no" title="function not covered" >(a</span>pp, commonContext) =&gt; {
 <span class="cstat-no" title="statement not covered" >        app.use(cookieParser());</span>
 <span class="cstat-no" title="statement not covered" >        app.use(express.json());</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        app.use("/api/graphql", <span class="fstat-no" title="function not covered" >async </span>(req, res, next) =&gt; {</span>
-          const context = <span class="cstat-no" title="statement not covered" >await commonContext.withRequest(req, res);</span>
-<span class="cstat-no" title="statement not covered" >          if (!req.cookies["keystonejs-session"]) {</span>
-<span class="cstat-no" title="statement not covered" >            await context.sessionStrategy?.start({</span>
-              context,
-              data: {
-                role: "GUEST",
-              },
+<span class="cstat-no" title="statement not covered" >          if (!req.cookies["ell-cake-cart-id"]) {</span>
+            const cartId = <span class="cstat-no" title="statement not covered" >randomUUID();</span>
+<span class="cstat-no" title="statement not covered" >            res.cookie("ell-cake-cart-id", cartId, {</span>
+              httpOnly: true,
+              sameSite: "lax",
+              maxAge: 1000 * 60 * 60 * 24 * 30,
             });
           }
 <span class="cstat-no" title="statement not covered" >          next();</span>
         });
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        app.post("/payment/payment-verification", <span class="fstat-no" title="function not covered" >async </span>(req, res) =&gt; {</span>
           const context = <span class="cstat-no" title="statement not covered" >await commonContext.withRequest(req, res);</span>
 <span class="cstat-no" title="statement not covered" >          await confirmPayment({ body: req.body, context: context });</span>
@@ -376,7 +343,7 @@ export default withAuth(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-01T20:29:52.950Z
+                at 2025-12-02T08:01:59.606Z
             </div>
         <script src="../prettify.js"></script>
         <script>

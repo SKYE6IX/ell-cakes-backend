@@ -1,19 +1,19 @@
 import { Context } from ".keystone/types";
-import { getSessionId } from "../lib/getSessionId";
+import { getSessionCartId } from "../lib/getSessionCartId";
 import type { Session } from "../access";
 
 export const queryCart = async (root: any, args: {}, context: Context) => {
   const sudoContext = context.sudo();
   const loggedInUser = context.session as Session;
-  const sessionId = await getSessionId(context);
+  const sessionCartId = getSessionCartId(context);
 
   if (loggedInUser) {
     return sudoContext.db.Cart.findOne({
       where: { user: { id: loggedInUser.itemId } },
     });
-  } else if (sessionId) {
+  } else if (sessionCartId) {
     return sudoContext.db.Cart.findOne({
-      where: { sessionId },
+      where: { sessionId: sessionCartId },
     });
   }
   return null;

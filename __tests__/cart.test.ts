@@ -1,7 +1,6 @@
 import { getContext } from "@keystone-6/core/context";
 import { KeystoneContext } from "@keystone-6/core/types";
 import * as cookie from "cookie";
-import * as iron from "@hapi/iron";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -11,7 +10,6 @@ import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
 import path from "path";
 import type { CartWithItem } from "../custom-resolver/addToCart";
-import { getSecret } from "../lib/getSecret";
 
 interface GraphQLResponse<T> {
   data: {
@@ -51,14 +49,9 @@ afterAll(async () => {
 
 beforeEach(async () => {
   await resetDatabase(container.getConnectionUri(), prismaSchemaPath);
-
-  (getSecret as jest.Mock).mockReturnValue("my-secret-key");
-
   (cookie.parse as jest.Mock).mockReturnValue({
-    "keystonejs-session": "ENCRYPTED_COOKIE_VALUE",
+    "ell-cake-cart-id": "ENCRYPTED_COOKIE_VALUE",
   });
-
-  (iron.unseal as jest.Mock).mockResolvedValue("SESSION_ID_123");
 });
 
 describe("cart and cart-item Model", () => {

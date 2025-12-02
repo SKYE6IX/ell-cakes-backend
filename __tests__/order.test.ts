@@ -1,7 +1,6 @@
 import { getContext } from "@keystone-6/core/context";
 import { KeystoneContext } from "@keystone-6/core/types";
 import * as cookie from "cookie";
-import * as iron from "@hapi/iron";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -10,7 +9,6 @@ import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
 import path from "path";
-import { getSecret } from "../lib/getSecret";
 
 jest.mock("iuliia", () => ({
   translate: jest.fn((text) => text),
@@ -69,13 +67,9 @@ beforeEach(async () => {
 
 describe("Order and OrderItem Model and", () => {
   test("Only Sign in User can complete order", async () => {
-    (getSecret as jest.Mock).mockReturnValue("my-secret-key");
-
     (cookie.parse as jest.Mock).mockReturnValue({
-      "keystonejs-session": "ENCRYPTED_COOKIE_VALUE",
+      "ell-cake-cart-id": "ENCRYPTED_COOKIE_VALUE",
     });
-
-    (iron.unseal as jest.Mock).mockResolvedValue("SESSION_ID_123");
     const sudoContext = context.sudo();
     const mockUser = await sudoContext.db.User.createOne({
       data: {

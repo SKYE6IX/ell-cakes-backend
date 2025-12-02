@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import isEqual from "lodash/isEqual";
 import { Context } from ".keystone/types";
-import { getSessionId } from "../lib/getSessionId";
+import { getSessionCartId } from "../lib/getSessionCartId";
 import type { Session } from "../access";
 
 type CustomizationValue = {
@@ -61,7 +61,7 @@ export const addToCart = async (
 ) => {
   let cart: CartWithItem | null = null;
 
-  const sessionId = await getSessionId(context);
+  const sessionCartId = getSessionCartId(context);
   const loggedInUser = context.session as Session;
 
   // We check if user log in and they have a cart already
@@ -73,7 +73,7 @@ export const addToCart = async (
     // If not a login user, we use the guest session ID to find an existing cart
   } else {
     cart = await context.prisma.cart.findUnique({
-      where: { sessionId },
+      where: { sessionId: sessionCartId },
       include: { cartItems: true },
     });
   }
@@ -82,7 +82,7 @@ export const addToCart = async (
   if (cart === null) {
     cart = await context.prisma.cart.create({
       data: {
-        sessionId: sessionId,
+        sessionId: sessionCartId,
         ...(loggedInUser && { user: { connect: { id: loggedInUser.itemId } } }),
       },
       include: { cartItems: true },

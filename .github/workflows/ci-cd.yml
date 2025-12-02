@@ -63,7 +63,7 @@ jobs:
           folder-id: ${{ vars.YC_FOLDER_ID }}
           revision-service-account-id: ${{ secrets.YC_SA_ID }}
           revision-cores: 1
-          revision-memory: 512Mb
+          revision-memory: 1024Mb
           revision-core-fraction: 100
           revision-image-url: cr.yandex/${{ vars.YC_REGISTRY_ID }}/${{ github.event.repository.name }}:latest
           revision-execution-timeout: 30
@@ -79,4 +79,3 @@ jobs:
             FRONTEND_URL=${{ vars.FRONTEND_URL }}
             YOO_MONEY_SHOP_ID=${{ secrets.YOO_MONEY_SHOP_ID }}
             YOO_MONEY_SECRET_ID=${{ secrets.YOO_MONEY_SECRET_ID }}
-            REDIS_URL=${{ secrets.REDIS_URL }}

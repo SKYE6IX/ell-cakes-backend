@@ -1,6 +1,5 @@
 import { createAuth } from "@keystone-6/auth";
-import { storedSessions } from "@keystone-6/core/session";
-import { RedisClientType } from "@redis/client";
+import { statelessSessions } from "@keystone-6/core/session";
 import { sendResetPasswordTokenEmail } from "./lib/mail";
 import { getSecret } from "./lib/getSecret";
 
@@ -22,25 +21,9 @@ const { withAuth } = createAuth({
 
 const secretKey = getSecret("SESSION_SECRET");
 const sessionMaxAge = 60 * 60 * 24 * 30;
+const session = statelessSessions({
+  maxAge: sessionMaxAge,
+  secret: secretKey,
+});
 
-function redisSessionStrategy(redis: RedisClientType) {
-  return storedSessions({
-    maxAge: sessionMaxAge,
-    secret: secretKey,
-    store: ({ maxAge }) => ({
-      async get(sessionId) {
-        const result = await redis.get(sessionId);
-        if (!result) return;
-        return JSON.parse(result);
-      },
-      async set(sessionId, data) {
-        await redis.setEx(sessionId, maxAge, JSON.stringify(data));
-      },
-      async delete(sessionId) {
-        await redis.del(sessionId);
-      },
-    }),
-  });
-}
-
-export { withAuth, redisSessionStrategy };
+export { withAuth, session };

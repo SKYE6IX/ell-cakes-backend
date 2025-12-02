@@ -1,5 +1,5 @@
 import { Context } from ".keystone/types";
-import { getSessionId } from "../lib/getSessionId";
+import { getSessionCartId } from "../lib/getSessionCartId";
 import { CartWithItem } from "./addToCart";
 
 interface AuthorizedUser {
@@ -13,7 +13,7 @@ export const authorizedUser = async (
   context: Context
 ) => {
   const sudoContext = context.sudo();
-  const sessionId = await getSessionId(context);
+  const sessionCartId = getSessionCartId(context);
 
   // authorized USER
   const { data, errors } = await sudoContext.graphql.raw<
@@ -39,11 +39,11 @@ export const authorizedUser = async (
   }
 
   const sessionCart = (await sudoContext.query.Cart.findOne({
-    where: { sessionId },
+    where: { sessionId: sessionCartId },
     query: "id cartItems { id }",
   })) as CartWithItem;
 
-  if (sessionCart) {
+  if (sessionCartId) {
     // We need to check if user already has a cart from diffrent
     // device
     const userCart = await sudoContext.db.Cart.findOne({
@@ -68,12 +68,14 @@ export const authorizedUser = async (
       // Update session cart and disconnect the cart-item before deleting it
       // to avoid cascading the cart-items
       await sudoContext.db.Cart.updateOne({
-        where: { sessionId },
+        where: { sessionId: sessionCartId },
         data: {
           cartItems: null,
         },
       }).then(async () => {
-        await sudoContext.db.Cart.deleteOne({ where: { sessionId } });
+        await sudoContext.db.Cart.deleteOne({
+          where: { sessionId: sessionCartId },
+        });
       });
     } else {
       // If there is no cart from the user, we connext the current cart from sesssion with

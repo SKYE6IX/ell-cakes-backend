@@ -4,12 +4,6 @@ import { Context } from ".keystone/types";
 import { getSessionCartId } from "../lib/getSessionCartId";
 import type { Session } from "../access";
 
-type CustomizationValue = {
-  optionId: string;
-  valueId: string;
-  inscriptionText: string | null;
-  imagesId: string[] | null;
-};
 export interface CustomizationSnapshot {
   name: string;
   customValue: {
@@ -19,6 +13,14 @@ export interface CustomizationSnapshot {
     imagesId: string[] | null;
   };
 }
+
+interface CustomizationValue {
+  optionId: string;
+  valueId: string;
+  inscriptionText: string | null;
+  imagesId: string[] | null;
+}
+
 interface AddToCartArgs {
   productId: string;
   variantId: string;
@@ -125,9 +127,11 @@ export const addToCart = async (
       const customOption = product?.customization?.customOptions.find(
         (option) => option.id === customization.optionId
       );
+
       const valueOption = customOption?.customValues.find(
         (value) => value.id === customization.valueId
       );
+
       const extraPrice = valueOption?.extraPrice ?? 0;
       customizationsTotalAmount += extraPrice;
       return {

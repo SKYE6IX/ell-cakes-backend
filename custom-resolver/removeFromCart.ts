@@ -57,28 +57,37 @@ export const removeFromCart = async (
     }
   }
 
-  // Recalculate the the total amount of cart-items
-  await context.transaction(
-    async (tx) => {
-      const cartItems = await tx.prisma.cartItem.findMany({
-        where: { cartId: cart.id },
-      });
+  // Query the uppdated cart again to check if the cart item removed was the last item
+  // and delete it.
+  const updatedCart = await context.query.Cart.findOne({
+    where: { id: cart.id },
+    query: "id cartItems { id }",
+  });
 
-      const cartSubTotal = cartItems.reduce(
-        (sum, item) => sum + Number(item.subTotal),
-        0
-      );
-
-      await tx.prisma.cart.update({
-        where: { id: cart.id },
-        data: {
-          subTotal: cartSubTotal,
-          updatedAt: new Date(),
-        },
-      });
-    },
-    { timeout: 10000 }
-  );
+  if (!updatedCart.cartItems) {
+    await context.db.Cart.deleteOne({ where: { id: updatedCart.id } });
+  } else {
+    // Recalculate the the total amount of cart-items
+    await context.transaction(
+      async (tx) => {
+        const cartItems = await tx.prisma.cartItem.findMany({
+          where: { cartId: cart.id },
+        });
+        const cartSubTotal = cartItems.reduce(
+          (sum, item) => sum + Number(item.subTotal),
+          0
+        );
+        await tx.prisma.cart.update({
+          where: { id: cart.id },
+          data: {
+            subTotal: cartSubTotal,
+            updatedAt: new Date(),
+          },
+        });
+      },
+      { timeout: 10000 }
+    );
+  }
 
   return context.db.Cart.findOne({
     where: { id: cart.id },

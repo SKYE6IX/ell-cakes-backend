@@ -41,7 +41,4 @@ export const Cart = list({
       },
     },
   },
-  ui: {
-    isHidden: true,
-  },
 });

@@ -2134,7 +2134,8 @@ type Mutation {
   verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
   resendVerificationToken(phoneNumber: String!): String!
   addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
-  removeFromCart(cartItemId: String!): Cart!
+  increaseCartItem(cartItemId: String!): Cart!
+  removeFromCart(cartItemId: String!): Cart
   checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
   registerUser(registerData: RegisterUserInput!): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!

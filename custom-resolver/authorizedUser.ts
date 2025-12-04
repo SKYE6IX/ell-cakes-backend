@@ -1,6 +1,5 @@
 import { Context } from ".keystone/types";
 import { getSessionCartId } from "../lib/getSessionCartId";
-import { CartWithItem } from "./addToCart";
 
 interface AuthorizedUser {
   email: string;
@@ -38,23 +37,31 @@ export const authorizedUser = async (
     throw new Error(errors[0].message);
   }
 
-  const sessionCart = (await sudoContext.query.Cart.findOne({
+  const sessionCart = await context.prisma.cart.findUnique({
     where: { sessionId: sessionCartId },
-    query: "id cartItems { id }",
-  })) as CartWithItem;
+    select: {
+      id: true,
+      cartItems: {
+        select: { id: true },
+      },
+    },
+  });
 
-  if (sessionCartId) {
-    // We need to check if user already has a cart from diffrent
-    // device
-    const userCart = await sudoContext.db.Cart.findOne({
-      where: { user: { id: data?.authenticateUserWithPassword.item.id } },
+  // We check if there is any cart in the connected to the session at all
+  // if there is none, we skip running the codes
+  if (sessionCart) {
+    // We check if user already has a cart and we update it.
+    // it will return null if user doesn't have a cart.
+    const userCart = await context.prisma.cart.findUnique({
+      where: { userId: data?.authenticateUserWithPassword.item.id },
+      select: {
+        id: true,
+      },
     });
 
-    // If the cart exist, we merge the sesssionCart items into the userCart
-    // and then clean up the sessionCart. so user continue with cart related to there own id
+    // if there is a cart for the user, we merge it with the current session Cart
     if (userCart) {
-      // Update user cart by connecting the cart-item id from the session cart
-      await sudoContext.db.Cart.updateOne({
+      await context.db.Cart.updateOne({
         where: { id: userCart.id },
         data: {
           cartItems: {
@@ -67,20 +74,21 @@ export const authorizedUser = async (
 
       // Update session cart and disconnect the cart-item before deleting it
       // to avoid cascading the cart-items
-      await sudoContext.db.Cart.updateOne({
+      await context.db.Cart.updateOne({
         where: { sessionId: sessionCartId },
         data: {
           cartItems: null,
         },
       }).then(async () => {
-        await sudoContext.db.Cart.deleteOne({
+        await context.db.Cart.deleteOne({
           where: { sessionId: sessionCartId },
         });
       });
     } else {
       // If there is no cart from the user, we connext the current cart from sesssion with
       // the userID
-      await sudoContext.db.Cart.updateOne({
+
+      await context.db.Cart.updateOne({
         where: {
           id: sessionCart.id,
         },

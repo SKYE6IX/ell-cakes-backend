@@ -161,7 +161,15 @@
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
 <a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -169,7 +177,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,23 +213,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,10 +223,36 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,7 +277,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Context } from ".keystone/types";
 import { getSessionCartId } from "../lib/getSessionCartId";
-import { CartWithItem } from "./addToCart";
 &nbsp;
 interface AuthorizedUser {
   email: string;
@@ -299,23 +314,31 @@ export const authorizedUser = <span class="fstat-no" title="function not covered
 <span class="cstat-no" title="statement not covered" >    throw new Error(errors[0].message);</span>
   }
 &nbsp;
-  const sessionCart = (<span class="cstat-no" title="statement not covered" >await sudoContext.query.Cart.findOne({</span>
+  const sessionCart = <span class="cstat-no" title="statement not covered" >await context.prisma.cart.findUnique({</span>
     where: { sessionId: sessionCartId },
-    query: "id cartItems { id }",
-  })) as CartWithItem;
+    select: {
+      id: true,
+      cartItems: {
+        select: { id: true },
+      },
+    },
+  });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (sessionCartId) {</span>
-    // We need to check if user already has a cart from diffrent
-    // device
-    const userCart = <span class="cstat-no" title="statement not covered" >await sudoContext.db.Cart.findOne({</span>
-      where: { user: { id: data?.authenticateUserWithPassword.item.id } },
+  // We check if there is any cart in the connected to the session at all
+  // if there is none, we skip running the codes
+<span class="cstat-no" title="statement not covered" >  if (sessionCart) {</span>
+    // We check if user already has a cart and we update it.
+    // it will return null if user doesn't have a cart.
+    const userCart = <span class="cstat-no" title="statement not covered" >await context.prisma.cart.findUnique({</span>
+      where: { userId: data?.authenticateUserWithPassword.item.id },
+      select: {
+        id: true,
+      },
     });
 &nbsp;
-    // If the cart exist, we merge the sesssionCart items into the userCart
-    // and then clean up the sessionCart. so user continue with cart related to there own id
+    // if there is a cart for the user, we merge it with the current session Cart
 <span class="cstat-no" title="statement not covered" >    if (userCart) {</span>
-      // Update user cart by connecting the cart-item id from the session cart
-<span class="cstat-no" title="statement not covered" >      await sudoContext.db.Cart.updateOne({</span>
+<span class="cstat-no" title="statement not covered" >      await context.db.Cart.updateOne({</span>
         where: { id: userCart.id },
         data: {
           cartItems: {
@@ -328,20 +351,21 @@ export const authorizedUser = <span class="fstat-no" title="function not covered
 &nbsp;
       // Update session cart and disconnect the cart-item before deleting it
       // to avoid cascading the cart-items
-<span class="cstat-no" title="statement not covered" >      await sudoContext.db.Cart.updateOne({</span>
+<span class="cstat-no" title="statement not covered" >      await context.db.Cart.updateOne({</span>
         where: { sessionId: sessionCartId },
         data: {
           cartItems: null,
         },
       }).then(<span class="fstat-no" title="function not covered" >async </span>() =&gt; {
-<span class="cstat-no" title="statement not covered" >        await sudoContext.db.Cart.deleteOne({</span>
+<span class="cstat-no" title="statement not covered" >        await context.db.Cart.deleteOne({</span>
           where: { sessionId: sessionCartId },
         });
       });
     } else {
       // If there is no cart from the user, we connext the current cart from sesssion with
       // the userID
-<span class="cstat-no" title="statement not covered" >      await sudoContext.db.Cart.updateOne({</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      await context.db.Cart.updateOne({</span>
         where: {
           id: sessionCart.id,
         },
@@ -364,7 +388,7 @@ export const authorizedUser = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-03T09:25:55.904Z
+                at 2025-12-04T07:42:07.239Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

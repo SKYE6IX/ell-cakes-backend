@@ -1,79 +1,53 @@
 import { Context } from ".keystone/types";
-import type { Session } from "../access";
-import type { CartWithItem } from "./addToCart";
-import { getSessionCartId } from "../lib/getSessionCartId";
 
 interface IncreaseCartItemArgs {
   cartItemId: string;
 }
-
 export const increaseCartItem = async (
   root: any,
   { cartItemId }: IncreaseCartItemArgs,
   context: Context
 ) => {
-  let cart: CartWithItem | null = null;
+  const cartItem = await context.prisma.cartItem.findUnique({
+    where: { id: cartItemId },
+    select: {
+      id: true,
+      quantity: true,
+      unitPrice: true,
+      subTotal: true,
+      cart: { select: { id: true } },
+    },
+  });
 
-  const loggedInUser = context.session as Session;
-  const sessionCartId = getSessionCartId(context);
-
-  if (loggedInUser) {
-    cart = await context.prisma.cart.findUnique({
-      where: { userId: loggedInUser.itemId },
-      include: { cartItems: true },
-    });
-  } else {
-    cart = await context.prisma.cart.findUnique({
-      where: { sessionId: sessionCartId },
-      include: { cartItems: true },
-    });
-  }
-
-  // Throw an error and return the fuction immediatly
-  if (cart === null) {
-    throw new Error("This Cart doesn't exist anymore!");
-  }
-
-  const cartItemToIncrease = cart.cartItems.find(
-    (item) => item.id === cartItemId
-  );
-
-  if (cartItemToIncrease) {
-    const updateQuantity = Number(cartItemToIncrease.quantity) + 1;
-    await context.db.CartItem.updateOne({
-      where: { id: cartItemToIncrease.id },
+  if (cartItem) {
+    const updateQuantity = Number(cartItem.quantity) + 1;
+    await context.query.CartItem.updateOne({
+      where: { id: cartItem.id },
       data: {
         quantity: updateQuantity,
-        subTotal: Number(cartItemToIncrease.unitPrice) * updateQuantity,
+        subTotal: Number(cartItem.unitPrice) * updateQuantity,
         updatedAt: new Date(),
       },
     });
   }
 
   // Recalculate the the total amount of cart-items
-  await context.transaction(
-    async (tx) => {
-      const cartItems = await tx.prisma.cartItem.findMany({
-        where: { cartId: cart.id },
-      });
-
-      const cartSubTotal = cartItems.reduce(
-        (sum, item) => sum + Number(item.subTotal),
-        0
-      );
-
-      await tx.prisma.cart.update({
-        where: { id: cart.id },
-        data: {
-          subTotal: cartSubTotal,
-          updatedAt: new Date(),
-        },
-      });
+  const result = await context.prisma.cartItem.aggregate({
+    _sum: {
+      subTotal: true,
     },
-    { timeout: 10000 }
-  );
+    where: {
+      cartId: cartItem?.cart?.id,
+    },
+  });
 
-  return context.db.Cart.findOne({
-    where: { id: cart.id },
+  const newCartSubTotal = result._sum.subTotal || 0;
+
+  return context.db.Cart.updateOne({
+    where: { id: cartItem?.cart?.id },
+    data: {
+      subTotal: newCartSubTotal,
+      updatedAt: new Date(),
+    },
   });
 };

@@ -1,7 +1,4 @@
 import { Context } from ".keystone/types";
-import type { Session } from "../access";
-import type { CartWithItem } from "./addToCart";
-import { getSessionCartId } from "../lib/getSessionCartId";
 
 interface RemoveFromCartArgs {
   cartItemId: string;
@@ -12,84 +9,60 @@ export const removeFromCart = async (
   { cartItemId }: RemoveFromCartArgs,
   context: Context
 ) => {
-  let cart: CartWithItem | null = null;
+  const cartItem = await context.prisma.cartItem.findUnique({
+    where: { id: cartItemId },
+    select: {
+      id: true,
+      quantity: true,
+      unitPrice: true,
+      subTotal: true,
+      cart: { select: { id: true } },
+    },
+  });
 
-  const loggedInUser = context.session as Session;
-  const sessionCartId = getSessionCartId(context);
-
-  if (loggedInUser) {
-    cart = await context.prisma.cart.findUnique({
-      where: { userId: loggedInUser.itemId },
-      include: { cartItems: true },
-    });
-  } else {
-    cart = await context.prisma.cart.findUnique({
-      where: { sessionId: sessionCartId },
-      include: { cartItems: true },
-    });
-  }
-
-  // Throw an error and return the fuction immediatly
-  if (cart === null) {
-    throw new Error("This Cart doesn't exist anymore!");
-  }
-
-  // If cart found, continue
-  const cartItemToRemoveOrReduce = cart.cartItems.find(
-    (item) => item.id === cartItemId
-  );
-
-  if (cartItemToRemoveOrReduce) {
-    const updateQuantity = Number(cartItemToRemoveOrReduce.quantity) - 1;
+  // If cartItem found, continue
+  if (cartItem) {
+    const updateQuantity = Number(cartItem.quantity) - 1;
     if (updateQuantity <= 0) {
       await context.db.CartItem.deleteOne({
-        where: { id: cartItemToRemoveOrReduce.id },
+        where: { id: cartItem.id },
       });
     } else {
       await context.db.CartItem.updateOne({
-        where: { id: cartItemToRemoveOrReduce.id },
+        where: { id: cartItem.id },
         data: {
           quantity: updateQuantity,
-          subTotal: Number(cartItemToRemoveOrReduce.unitPrice) * updateQuantity,
+          subTotal: Number(cartItem.unitPrice) * updateQuantity,
           updatedAt: new Date(),
         },
       });
     }
   }
 
-  // Query the uppdated cart again to check if the cart item removed was the last item
-  // and delete it.
-  const updatedCart = await context.query.Cart.findOne({
-    where: { id: cart.id },
-    query: "id cartItems { id }",
+  // Count the current Item in the Cart and check if there still remain
+  const cartItemCount = await context.prisma.cartItem.count({
+    where: { cartId: cartItem?.cart?.id },
   });
 
-  if (!updatedCart.cartItems) {
-    await context.db.Cart.deleteOne({ where: { id: updatedCart.id } });
+  if (cartItemCount == 0) {
+    await context.db.Cart.deleteOne({ where: { id: cartItem?.cart?.id } });
+    return null;
   } else {
-    // Recalculate the the total amount of cart-items
-    await context.transaction(
-      async (tx) => {
-        const cartItems = await tx.prisma.cartItem.findMany({
-          where: { cartId: cart.id },
-        });
-        const cartSubTotal = cartItems.reduce(
-          (sum, item) => sum + Number(item.subTotal),
-          0
-        );
-        await tx.prisma.cart.update({
-          where: { id: cart.id },
-          data: {
-            subTotal: cartSubTotal,
-            updatedAt: new Date(),
-          },
-        });
+    const result = await context.prisma.cartItem.aggregate({
+      _sum: {
+        subTotal: true,
       },
-      { timeout: 10000 }
-    );
+      where: {
+        cartId: cartItem?.cart?.id,
+      },
+    });
+    const newCartSubTotal = result._sum.subTotal || 0;
+    return context.db.Cart.updateOne({
+      where: { id: cartItem?.cart?.id },
+      data: {
+        subTotal: newCartSubTotal,
+        updatedAt: new Date(),
+      },
+    });
   }
-
-  return context.db.Cart.findOne({
-    where: { id: cart.id },
-  });
 };

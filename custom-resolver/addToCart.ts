@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import isEqual from "lodash/isEqual";
 import { Context } from ".keystone/types";
 import { getSessionCartId } from "../lib/getSessionCartId";
 import type { Session } from "../access";
@@ -13,14 +12,12 @@ export interface CustomizationSnapshot {
     imagesId: string[] | null;
   };
 }
-
 interface CustomizationValue {
   optionId: string;
   valueId: string;
   inscriptionText: string | null;
   imagesId: string[] | null;
 }
-
 interface AddToCartArgs {
   productId: string;
   variantId: string;
@@ -29,26 +26,41 @@ interface AddToCartArgs {
   toppingOptionId: string | null;
 }
 
-export type CartWithItem = Prisma.CartGetPayload<{
-  include: { cartItems: true };
-}>;
-
-export type ProductVariant = Prisma.ProductVariantGetPayload<{
-  include: {
-    filling: {
-      include: {
-        products: {
-          include: {
-            customization: {
-              include: { customOptions: { include: { customValues: true } } };
-            };
-            topping: { include: { options: true } };
-          };
-        };
+type CartWithItem = Prisma.CartGetPayload<{
+  select: {
+    id: true;
+    cartItems: {
+      select: {
+        id: true;
+        quantity: true;
+        unitPrice: true;
+        subTotal: true;
+        productId: true;
+        variantId: true;
+        toppingOptionId: true;
+        compositionSnapShot: true;
+        customizationsSnapShot: true;
       };
     };
   };
 }>;
+
+const selectItemInCart = {
+  id: true,
+  cartItems: {
+    select: {
+      id: true,
+      quantity: true,
+      unitPrice: true,
+      subTotal: true,
+      productId: true,
+      variantId: true,
+      toppingOptionId: true,
+      compositionSnapShot: true,
+      customizationsSnapShot: true,
+    },
+  },
+};
 
 export const addToCart = async (
   root: any,
@@ -62,77 +74,81 @@ export const addToCart = async (
   context: Context
 ) => {
   let cart: CartWithItem | null = null;
-
-  const sessionCartId = getSessionCartId(context);
   const loggedInUser = context.session as Session;
-
-  // We check if user log in and they have a cart already
-  if (loggedInUser) {
-    cart = await context.prisma.cart.findUnique({
-      where: { userId: loggedInUser.itemId },
-      include: { cartItems: true },
-    });
-    // If not a login user, we use the guest session ID to find an existing cart
-  } else {
-    cart = await context.prisma.cart.findUnique({
-      where: { sessionId: sessionCartId },
-      include: { cartItems: true },
-    });
+  let sessionCartId = "";
+  if (!sessionCartId) {
+    sessionCartId = getSessionCartId(context);
   }
 
-  // At this stage if Cart is null, we create a new Cart
-  if (cart === null) {
-    cart = await context.prisma.cart.create({
-      data: {
-        sessionId: sessionCartId,
-        ...(loggedInUser && { user: { connect: { id: loggedInUser.itemId } } }),
+  const cartWhere = loggedInUser
+    ? { userId: loggedInUser.itemId }
+    : { sessionId: sessionCartId };
+
+  cart = await context.prisma.cart.upsert({
+    where: cartWhere,
+    update: {},
+    create: {
+      sessionId: sessionCartId,
+      ...(loggedInUser && { user: { connect: { id: loggedInUser.itemId } } }),
+    },
+    select: selectItemInCart,
+  });
+
+  const product = await context.prisma.product.findUnique({
+    where: { id: productId },
+    select: {
+      fillings: {
+        where: {
+          variants: { some: { id: variantId } },
+        },
+        select: {
+          variants: {
+            where: { id: variantId },
+            select: {
+              id: true,
+              weight: true,
+              pieces: true,
+              price: true,
+            },
+          },
+        },
       },
-      include: { cartItems: true },
-    });
-  }
+      topping: {
+        select: { options: { where: { id: toppingOptionId ?? "" } } },
+      },
+      customization: {
+        select: {
+          customOptions: {
+            select: { id: true, name: true, customValues: true },
+          },
+        },
+      },
+    },
+  });
 
-  // Query the details about the product using the VariantID
-  const productVariant = (await context.query.ProductVariant.findOne({
-    where: { id: variantId },
-    query: `
-     id
-     weight
-     pieces
-     price
-     filling {
-      id
-      name
-      products {
-       id
-       name
-       customization { id customOptions { id name customValues { id value extraPrice } } }
-       topping { id options { id weight pieces extraPrice } }
-      }
-     }
-    `,
-  })) as ProductVariant;
-
-  // We find the current product inside the filling using it's ID
-  const product = productVariant.filling?.products.find(
-    (product) => product.id === productId
+  const customOptionsMap = new Map(
+    product?.customization?.customOptions.map((option) => [
+      option.id,
+      option,
+    ]) || []
   );
 
   // Check if user added customization and calculate the
   // one with extra price and return a snapShot of it.
-
   let customizationsTotalAmount = 0;
   let customizationsSnapShot = null;
   if (customizations) {
     customizationsSnapShot = customizations?.map((customization) => {
-      const customOption = product?.customization?.customOptions.find(
-        (option) => option.id === customization.optionId
+      const customOption = customOptionsMap.get(customization.optionId);
+
+      const customValuesMap = new Map(
+        customOption?.customValues.map((value) => [value.id, value]) || []
       );
 
-      const valueOption = customOption?.customValues.find(
-        (value) => value.id === customization.valueId
-      );
+      const valueOption = customValuesMap.get(customization.valueId);
 
       const extraPrice = valueOption?.extraPrice ?? 0;
+
       customizationsTotalAmount += extraPrice;
       return {
         name: customOption?.name || "",
@@ -159,26 +175,20 @@ export const addToCart = async (
   }
 
   // Check for existing cart-item
-  const existCartItem = cart.cartItems.find((item) => {
-    const sameProduct = item.productId === productId;
-    const sameVariant = item.variantId === variantId;
-    const sameTopping = item.toppingOptionId === (toppingOptionId ?? null);
-    const sameCompositionOptions = isEqual(
-      item.compositionSnapShot,
-      compositionSnapShot
-    );
-    const sameCustomization = isEqual(
-      item.customizationsSnapShot,
-      customizationsSnapShot
-    );
-    return (
-      sameProduct &&
-      sameVariant &&
-      sameTopping &&
-      sameCompositionOptions &&
-      sameCustomization
-    );
+  const cartItemMap = new Map<string, CartWithItem["cartItems"][0]>();
+  for (const cartItem of cart.cartItems) {
+    cartItemMap.set(generateCartItemKey(cartItem), cartItem);
+  }
+
+  const key = generateCartItemKey({
+    productId,
+    variantId,
+    toppingOptionId,
+    compositionSnapShot,
+    customizationsSnapShot,
   });
+
+  const existCartItem = cartItemMap.get(key) ?? null;
 
   if (existCartItem) {
     const newQuantity = Number(existCartItem.quantity) + 1;
@@ -191,19 +201,16 @@ export const addToCart = async (
       },
     });
   } else {
-    // Check if user select topping option and get the price
-    const selectedTopping = product?.topping?.options.find(
-      (toppingOption) => toppingOption.id === toppingOptionId
-    );
+    const selectedTopping = product?.topping?.options[0];
     // Calculate the unit price for a single product
     const toppingPrice = selectedTopping?.extraPrice ?? 0;
-    const basePrice = productVariant.price;
+    const basePrice = product?.fillings[0].variants[0].price ?? 0;
     const unitPrice = basePrice + customizationsTotalAmount + toppingPrice;
     await context.db.CartItem.createOne({
       data: {
         cart: { connect: { id: cart.id } },
-        variant: { connect: { id: productVariant.id } },
-        product: { connect: { id: product?.id } },
+        variant: { connect: { id: variantId } },
+        product: { connect: { id: productId } },
         unitPrice: unitPrice,
         subTotal: unitPrice * 1,
         ...(compositionOptions && { compositionSnapShot: compositionSnapShot }),
@@ -218,29 +225,36 @@ export const addToCart = async (
   }
 
   // Calculate all cart-items
-  await context.transaction(
-    async (tx) => {
-      const cartItems = await tx.prisma.cartItem.findMany({
-        where: { cartId: cart.id },
-      });
-      const cartSubTotal = cartItems.reduce(
-        (sum, item) => sum + Number(item.subTotal),
-        0
-      );
-
-      // Update the total amount of the cart-item to the cart
-      await tx.db.Cart.updateOne({
-        where: { id: cart.id },
-        data: {
-          subTotal: cartSubTotal,
-          updatedAt: new Date(),
-        },
-      });
+  const result = await context.prisma.cartItem.aggregate({
+    _sum: {
+      subTotal: true,
     },
-    { timeout: 10000 }
-  );
+    where: {
+      cartId: cart.id,
+    },
+  });
+  const newCartSubTotal = result._sum.subTotal || 0;
 
-  return context.db.Cart.findOne({
+  return context.db.Cart.updateOne({
     where: { id: cart.id },
+    data: {
+      subTotal: newCartSubTotal,
+      updatedAt: new Date(),
+    },
   });
 };
+
+function generateCartItemKey(
+  item: Omit<
+    CartWithItem["cartItems"][0],
+    "id" | "quantity" | "unitPrice" | "subTotal"
+  >
+) {
+  return JSON.stringify({
+    productId: item.productId,
+    variantId: item.variantId,
+    toppingOptionId: item.toppingOptionId ?? null,
+    compositionSnapShot: item.compositionSnapShot?.toString(),
+    customizationsSnapShot: item.customizationsSnapShot?.toString(),
+  });
+}

@@ -172,8 +172,6 @@ describe("Order and OrderItem Model and", () => {
           paymentMethod: "bank_card",
         },
       });
-    console.log("Here error", checkOut.errors);
-    console.log("Here payment deatils", checkOut.data?.checkOut);
     expect(checkOut.data?.checkOut.status).toEqual("pending");
     expect(checkOut.data?.checkOut.method).toEqual("bank_card");
     expect(checkOut.data?.checkOut.amount).toEqual("3000");

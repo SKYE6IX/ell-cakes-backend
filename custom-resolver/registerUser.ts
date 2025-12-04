@@ -57,12 +57,18 @@ export const registerUser = async (
     throw new Error(errors[0].message);
   }
 
-  const sessionCart = await sudoContext.db.Cart.findOne({
+  const sessionCart = await context.prisma.cart.findUnique({
     where: { sessionId: sessionCartId },
+    select: {
+      id: true,
+      cartItems: {
+        select: { id: true },
+      },
+    },
   });
 
   if (sessionCart) {
-    await sudoContext.db.Cart.updateOne({
+    await context.db.Cart.updateOne({
       where: {
         id: sessionCart.id,
       },

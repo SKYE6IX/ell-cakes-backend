@@ -9,7 +9,27 @@ import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
 import path from "path";
-import type { CartWithItem } from "../custom-resolver/addToCart";
+import { Prisma } from ".prisma/client";
+
+type CartWithItem = Prisma.CartGetPayload<{
+  select: {
+    id: true;
+    subTotal: true;
+    cartItems: {
+      select: {
+        id: true;
+        quantity: true;
+        unitPrice: true;
+        subTotal: true;
+        productId: true;
+        variantId: true;
+        toppingOptionId: true;
+        compositionSnapShot: true;
+        customizationsSnapShot: true;
+      };
+    };
+  };
+}>;
 
 interface GraphQLResponse<T> {
   data: {
@@ -150,6 +170,7 @@ describe("cart and cart-item Model", () => {
         ],
       },
     })) as GraphQLResponse<CartWithItem>;
+
     expect(updateCart.data.addToCart.cartItems[0].quantity).toEqual(2);
     expect(updateCart.data.addToCart.subTotal).toEqual(400 * 2);
   });
@@ -213,7 +234,6 @@ describe("cart and cart-item Model", () => {
       },
     })) as GraphQLResponse<CartWithItem>;
 
-    expect(removeCart.data.removeFromCart.cartItems.length).toEqual(0);
-    expect(removeCart.data.removeFromCart.subTotal).toEqual(0);
+    expect(removeCart.data.removeFromCart).toEqual(null);
   });
 });

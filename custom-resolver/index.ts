@@ -9,6 +9,7 @@ import { authorizedUser } from "./authorizedUser";
 import { resendVerificationToken } from "./resendVerificationToken";
 import { uploadImageCustomization } from "./uploadImageCustomization";
 import { increaseCartItem } from "./increaseCartItem";
+import { decreaseCartItem } from "./decreaseCartItem";
 import { queryCart } from "./queryCart";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
@@ -49,6 +50,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         resendVerificationToken(phoneNumber: String!): String!
         addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
         increaseCartItem(cartItemId: String!): Cart!
+        decreaseCartItem(cartItemId: String!): Cart
         removeFromCart(cartItemId: String!): Cart
         checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
         registerUser(registerData: RegisterUserInput!): User!
@@ -63,6 +65,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         increaseCartItem,
         addToCart,
         removeFromCart,
+        decreaseCartItem,
         checkOut,
         registerUser,
         authorizedUser,

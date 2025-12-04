@@ -34,7 +34,7 @@ type CartWithItem = Prisma.CartGetPayload<{
 interface GraphQLResponse<T> {
   data: {
     addToCart: T;
-    removeFromCart: T;
+    decreaseCartItem: T;
   };
   errors?: any[];
 }
@@ -224,8 +224,8 @@ describe("cart and cart-item Model", () => {
     })) as GraphQLResponse<CartWithItem>;
 
     const removeCart = (await context.graphql.raw({
-      query: `mutation RemoveFromCart($cartItemId: String!) {
-          removeFromCart(cartItemId: $cartItemId ){
+      query: `mutation DecreaseCartItem($cartItemId: String!) {
+          decreaseCartItem(cartItemId: $cartItemId ){
            id subTotal cartItems { id }
           }
         }`,
@@ -234,6 +234,6 @@ describe("cart and cart-item Model", () => {
       },
     })) as GraphQLResponse<CartWithItem>;
 
-    expect(removeCart.data.removeFromCart).toEqual(null);
+    expect(removeCart.data.decreaseCartItem).toEqual(null);
   });
 });

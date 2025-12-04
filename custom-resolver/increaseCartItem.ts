@@ -19,17 +19,15 @@ export const increaseCartItem = async (
     },
   });
 
-  if (cartItem) {
-    const updateQuantity = Number(cartItem.quantity) + 1;
-    await context.query.CartItem.updateOne({
-      where: { id: cartItem.id },
-      data: {
-        quantity: updateQuantity,
-        subTotal: Number(cartItem.unitPrice) * updateQuantity,
-        updatedAt: new Date(),
-      },
-    });
-  }
+  const updateQuantity = Number(cartItem?.quantity) + 1;
+  await context.query.CartItem.updateOne({
+    where: { id: cartItem?.id },
+    data: {
+      quantity: updateQuantity,
+      subTotal: Number(cartItem?.unitPrice) * updateQuantity,
+      updatedAt: new Date(),
+    },
+  });
 
   // Recalculate the the total amount of cart-items
   const result = await context.prisma.cartItem.aggregate({

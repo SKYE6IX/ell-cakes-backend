@@ -71,6 +71,12 @@ export default withAuth(
         app.use("/api/graphql", async (req, res, next) => {
           if (!req.cookies["ell-cake-cart-id"]) {
             const cartId = randomUUID();
+            res.setHeader("Access-Control-Allow-Origin", FRONTEND_URL);
+            res.setHeader("Access-Control-Allow-Credentials", "true");
+            res.setHeader(
+              "Access-Control-Allow-Headers",
+              "Content-Type, Authorization"
+            );
             res.cookie("ell-cake-cart-id", cartId, {
               httpOnly: true,
               sameSite: "lax",

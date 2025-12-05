@@ -114,7 +114,11 @@ export const addToCart = async (
         },
       },
       topping: {
-        select: { options: { where: { id: toppingOptionId ?? "" } } },
+        select: {
+          options: {
+            where: toppingOptionId ? { id: toppingOptionId } : undefined,
+          },
+        },
       },
       customization: {
         select: {

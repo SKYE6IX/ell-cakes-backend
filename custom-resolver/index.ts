@@ -10,7 +10,10 @@ import { resendVerificationToken } from "./resendVerificationToken";
 import { uploadImageCustomization } from "./uploadImageCustomization";
 import { increaseCartItem } from "./increaseCartItem";
 import { decreaseCartItem } from "./decreaseCartItem";
+import { isEmailInUse } from "./isEmailInUse";
+import { isPhoneNumberInUse } from "./isPhoneNumberInUse";
 import { queryCart } from "./queryCart";
+import { queryAuthorizedUser } from "./queryAuthorizedUser";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -42,6 +45,9 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     
     type Query {
       queryCart: Cart
+      isEmailInUse(email: String!): Boolean!
+      isPhoneNumberInUse(phoneNumber: String!): Boolean!
+      queryAuthorizedUser: User
     }
 
     type Mutation {
@@ -74,6 +80,9 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
 
       Query: {
         queryCart,
+        isEmailInUse,
+        isPhoneNumberInUse,
+        queryAuthorizedUser,
       },
     },
   });

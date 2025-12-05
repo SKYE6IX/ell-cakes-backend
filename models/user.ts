@@ -41,6 +41,7 @@ export const User = list({
     password: password({ validation: { isRequired: true } }),
     phoneNumber: text({
       isIndexed: "unique",
+      defaultValue: null,
     }),
     isPhoneNumberVerified: checkbox({ defaultValue: false }),
     phoneNumberToken: password(hiddenFieldConfig),

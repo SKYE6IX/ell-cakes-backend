@@ -2239,6 +2239,9 @@ type Query {
   authenticatedItem: AuthenticatedItem
   validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult
   queryCart: Cart
+  isEmailInUse(email: String!): Boolean!
+  isPhoneNumberInUse(phoneNumber: String!): Boolean!
+  queryAuthorizedUser: User
 }
 
 union AuthenticatedItem = User

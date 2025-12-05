@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/18</span>
+                <span class='fraction'>3/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.76% </span>
+                <span class="strong">10.52% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/17</span>
+                <span class='fraction'>2/19</span>
             </div>
         
             
@@ -169,7 +169,12 @@
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,6 +209,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -293,25 +303,30 @@ export const authorizedUser = <span class="fstat-no" title="function not covered
 &nbsp;
   // authorized USER
   const { data, errors } = <span class="cstat-no" title="statement not covered" >await sudoContext.graphql.raw&lt;</span>
-    { authenticateUserWithPassword: { item: { id: string } } },
+    { authenticateUserWithPassword: { item: { id: string }; message: string } },
     {}
   &gt;({
     query: `
-     mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
-       authenticateUserWithPassword(email: $email, password: $password) {
-         ... on UserAuthenticationWithPasswordSuccess {
-            item {
-               id
-            }
-          }
-       }
-     }
+    mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
+     authenticateUserWithPassword(email: $email, password: $password) {
+    ... on UserAuthenticationWithPasswordFailure {
+      message
+    }
+    ... on UserAuthenticationWithPasswordSuccess {
+      item {
+        id
+      }
+    }
+  }
+}
     `,
-    variables: { email: email, password: password },
+    variables: { email, password },
   });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (errors) {</span>
 <span class="cstat-no" title="statement not covered" >    throw new Error(errors[0].message);</span>
+  } else <span class="cstat-no" title="statement not covered" >if (data?.authenticateUserWithPassword.message) {</span>
+<span class="cstat-no" title="statement not covered" >    throw new Error(data?.authenticateUserWithPassword.message);</span>
   }
 &nbsp;
   const sessionCart = <span class="cstat-no" title="statement not covered" >await context.prisma.cart.findUnique({</span>
@@ -324,8 +339,8 @@ export const authorizedUser = <span class="fstat-no" title="function not covered
     },
   });
 &nbsp;
-  // We check if there is any cart in the connected to the session at all
-  // if there is none, we skip running the codes
+  // // We check if there is any cart in the connected to the session at all
+  // // if there is none, we skip running the codes
 <span class="cstat-no" title="statement not covered" >  if (sessionCart) {</span>
     // We check if user already has a cart and we update it.
     // it will return null if user doesn't have a cart.
@@ -388,7 +403,7 @@ export const authorizedUser = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-04T08:51:10.893Z
+                at 2025-12-05T14:23:13.117Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -16,25 +16,30 @@ export const authorizedUser = async (
 
   // authorized USER
   const { data, errors } = await sudoContext.graphql.raw<
-    { authenticateUserWithPassword: { item: { id: string } } },
+    { authenticateUserWithPassword: { item: { id: string }; message: string } },
     {}
   >({
     query: `
-     mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
-       authenticateUserWithPassword(email: $email, password: $password) {
-         ... on UserAuthenticationWithPasswordSuccess {
-            item {
-               id
-            }
-          }
-       }
-     }
+    mutation AuthenticateUserWithPassword($email: String!, $password: String!) {
+     authenticateUserWithPassword(email: $email, password: $password) {
+    ... on UserAuthenticationWithPasswordFailure {
+      message
+    }
+    ... on UserAuthenticationWithPasswordSuccess {
+      item {
+        id
+      }
+    }
+  }
+}
     `,
-    variables: { email: email, password: password },
+    variables: { email, password },
   });
 
   if (errors) {
     throw new Error(errors[0].message);
+  } else if (data?.authenticateUserWithPassword.message) {
+    throw new Error(data?.authenticateUserWithPassword.message);
   }
 
   const sessionCart = await context.prisma.cart.findUnique({
@@ -47,8 +52,8 @@ export const authorizedUser = async (
     },
   });
 
-  // We check if there is any cart in the connected to the session at all
-  // if there is none, we skip running the codes
+  // // We check if there is any cart in the connected to the session at all
+  // // if there is none, we skip running the codes
   if (sessionCart) {
     // We check if user already has a cart and we update it.
     // it will return null if user doesn't have a cart.

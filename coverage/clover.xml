@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1764838270919" clover="3.2.0">
-  <project timestamp="1764838270919" name="All files">
-    <metrics statements="539" coveredstatements="347" conditionals="176" coveredconditionals="75" methods="76" coveredmethods="29" elements="791" coveredelements="451" complexity="0" loc="539" ncloc="539" packages="4" files="44" classes="44"/>
+<coverage generated="1764944593149" clover="3.2.0">
+  <project timestamp="1764944593149" name="All files">
+    <metrics statements="557" coveredstatements="353" conditionals="180" coveredconditionals="74" methods="79" coveredmethods="29" elements="816" coveredelements="456" complexity="0" loc="557" ncloc="557" packages="4" files="47" classes="47"/>
     <package name="ell-cakes-backend">
       <metrics statements="81" coveredstatements="60" conditionals="28" coveredconditionals="10" methods="13" coveredmethods="5"/>
       <file name="access.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/access.ts">
@@ -99,9 +99,9 @@
       </file>
     </package>
     <package name="ell-cakes-backend.custom-resolver">
-      <metrics statements="248" coveredstatements="120" conditionals="116" coveredconditionals="48" methods="32" coveredmethods="10"/>
+      <metrics statements="266" coveredstatements="126" conditionals="120" coveredconditionals="47" methods="35" coveredmethods="10"/>
       <file name="addToCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/addToCart.ts">
-        <metrics statements="45" coveredstatements="43" conditionals="46" coveredconditionals="35" methods="6" coveredmethods="5"/>
+        <metrics statements="45" coveredstatements="43" conditionals="46" coveredconditionals="34" methods="6" coveredmethods="5"/>
         <line num="3" count="4" type="stmt"/>
         <line num="48" count="4" type="stmt"/>
         <line num="65" count="4" type="stmt"/>
@@ -113,60 +113,62 @@
         <line num="83" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="87" count="4" type="stmt"/>
         <line num="97" count="4" type="stmt"/>
-        <line num="129" count="4" type="stmt"/>
-        <line num="130" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="138" count="4" type="stmt"/>
-        <line num="139" count="4" type="stmt"/>
-        <line num="140" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="141" count="3" type="stmt"/>
-        <line num="142" count="3" type="stmt"/>
-        <line num="144" count="3" type="stmt"/>
-        <line num="145" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="133" count="4" type="stmt"/>
+        <line num="134" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="142" count="4" type="stmt"/>
+        <line num="143" count="4" type="stmt"/>
+        <line num="144" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="145" count="3" type="stmt"/>
+        <line num="146" count="3" type="stmt"/>
         <line num="148" count="3" type="stmt"/>
-        <line num="150" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="149" count="3" type="cond" truecount="1" falsecount="1"/>
         <line num="152" count="3" type="stmt"/>
-        <line num="153" count="3" type="stmt"/>
-        <line num="167" count="4" type="stmt"/>
-        <line num="168" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="170" count="0" type="stmt"/>
-        <line num="178" count="4" type="stmt"/>
-        <line num="179" count="4" type="stmt"/>
-        <line num="180" count="1" type="stmt"/>
+        <line num="154" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="156" count="3" type="stmt"/>
+        <line num="157" count="3" type="stmt"/>
+        <line num="171" count="4" type="stmt"/>
+        <line num="172" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="173" count="0" type="stmt"/>
+        <line num="174" count="0" type="stmt"/>
+        <line num="182" count="4" type="stmt"/>
         <line num="183" count="4" type="stmt"/>
-        <line num="191" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="193" count="4" type="cond" truecount="2" falsecount="0"/>
-        <line num="194" count="1" type="stmt"/>
-        <line num="195" count="1" type="stmt"/>
-        <line num="204" count="3" type="stmt"/>
-        <line num="206" count="3" type="cond" truecount="2" falsecount="0"/>
-        <line num="207" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="184" count="1" type="stmt"/>
+        <line num="187" count="4" type="stmt"/>
+        <line num="195" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="197" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="198" count="1" type="stmt"/>
+        <line num="199" count="1" type="stmt"/>
         <line num="208" count="3" type="stmt"/>
-        <line num="209" count="3" type="stmt"/>
-        <line num="228" count="4" type="stmt"/>
-        <line num="236" count="4" type="cond" truecount="1" falsecount="1"/>
-        <line num="238" count="4" type="stmt"/>
-        <line num="253" count="5" type="stmt"/>
+        <line num="210" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="211" count="3" type="cond" truecount="1" falsecount="1"/>
+        <line num="212" count="3" type="stmt"/>
+        <line num="213" count="3" type="stmt"/>
+        <line num="232" count="4" type="stmt"/>
+        <line num="240" count="4" type="cond" truecount="1" falsecount="1"/>
+        <line num="242" count="4" type="stmt"/>
+        <line num="257" count="5" type="stmt"/>
       </file>
       <file name="authorizedUser.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/authorizedUser.ts">
-        <metrics statements="17" coveredstatements="2" conditionals="6" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="19" coveredstatements="2" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="2" count="4" type="stmt"/>
         <line num="9" count="4" type="stmt"/>
         <line num="14" count="0" type="stmt"/>
         <line num="15" count="0" type="stmt"/>
         <line num="18" count="0" type="stmt"/>
-        <line num="36" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="40" count="0" type="stmt"/>
-        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="64" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="77" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="91" count="0" type="stmt"/>
-        <line num="103" count="0" type="stmt"/>
+        <line num="41" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="57" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="68" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="88" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="108" count="0" type="stmt"/>
       </file>
       <file name="checkOut.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/checkOut.ts">
         <metrics statements="41" coveredstatements="34" conditionals="18" coveredconditionals="11" methods="4" coveredmethods="3"/>
@@ -262,7 +264,7 @@
         <line num="44" count="0" type="stmt"/>
       </file>
       <file name="index.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/index.ts">
-        <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="2" count="4" type="stmt"/>
         <line num="3" count="4" type="stmt"/>
         <line num="4" count="4" type="stmt"/>
@@ -275,8 +277,33 @@
         <line num="11" count="4" type="stmt"/>
         <line num="12" count="4" type="stmt"/>
         <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
         <line num="15" count="4" type="stmt"/>
-        <line num="16" count="8" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
+      </file>
+      <file name="isEmailInUse.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/isEmailInUse.ts">
+        <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+      </file>
+      <file name="isPhoneNumberInUse.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/isPhoneNumberInUse.ts">
+        <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="15" count="0" type="stmt"/>
+      </file>
+      <file name="queryAuthorizedUser.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/queryAuthorizedUser.ts">
+        <metrics statements="5" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+        <line num="10" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="13" count="0" type="stmt"/>
       </file>
       <file name="queryCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/queryCart.ts">
         <metrics statements="10" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -674,15 +701,15 @@
         <line num="12" count="4" type="stmt"/>
         <line num="15" count="4" type="stmt"/>
         <line num="23" count="4" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
-        <line num="65" count="0" type="stmt"/>
-        <line num="69" count="0" type="stmt"/>
-        <line num="157" count="3" type="stmt"/>
-        <line num="165" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="169" count="1" type="stmt"/>
-        <line num="179" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="180" count="0" type="stmt"/>
-        <line num="182" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="158" count="3" type="stmt"/>
+        <line num="166" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="170" count="1" type="stmt"/>
+        <line num="180" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="181" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
       </file>
     </package>
   </project>

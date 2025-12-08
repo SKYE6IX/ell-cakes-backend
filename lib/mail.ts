@@ -67,7 +67,7 @@ export async function sendResetPasswordTokenEmail({
       to: to,
       html: formatEmail(`
         You requested for a password reset. Click the link below to reset your password.<b/>
-        If you didn't made this request kindly ignore the email.<b/>
+        If you didn't make this request kindly ignore the email.<b/>
         <a href="${verificationUrl}">Click here to reset your password</a>
         `),
     });

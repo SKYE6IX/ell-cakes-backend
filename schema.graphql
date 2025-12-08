@@ -754,6 +754,8 @@ type ProductImage {
   product: Product
   image: ImageFieldOutput
   altText: String
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input ProductImageWhereUniqueInput {
@@ -767,17 +769,23 @@ input ProductImageWhereInput {
   id: IDFilter
   product: ProductWhereInput
   altText: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
 }
 
 input ProductImageOrderByInput {
   id: OrderDirection
   altText: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
 }
 
 input ProductImageUpdateInput {
   product: ProductRelateToOneForUpdateInput
   image: ImageFieldInput
   altText: String
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input ProductRelateToOneForUpdateInput {
@@ -795,6 +803,8 @@ input ProductImageCreateInput {
   product: ProductRelateToOneForCreateInput
   image: ImageFieldInput
   altText: String
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input ProductRelateToOneForCreateInput {
@@ -2128,15 +2138,14 @@ type Mutation {
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
-  sendUserPasswordResetLink(email: String!): Boolean!
-  redeemUserPasswordResetToken(email: String!, token: String!, password: String!): RedeemUserPasswordResetTokenResult
   authorizedUser(email: String!, password: String!): User!
-  verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
-  resendVerificationToken(phoneNumber: String!): String!
+  redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
+  resendPhoneNumberToken(phoneNumber: String!): String!
   addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
   increaseCartItem(cartItemId: String!): Cart!
   decreaseCartItem(cartItemId: String!): Cart
   removeFromCart(cartItemId: String!): Cart
+  connectCartToUser(userId: String!): Cart!
   checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
   registerUser(registerData: RegisterUserInput!): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
@@ -2158,17 +2167,6 @@ input CreateInitialUserInput {
   email: String
   password: String
   role: String
-}
-
-type RedeemUserPasswordResetTokenResult {
-  code: PasswordResetRedemptionErrorCode!
-  message: String!
-}
-
-enum PasswordResetRedemptionErrorCode {
-  FAILURE
-  TOKEN_EXPIRED
-  TOKEN_REDEEMED
 }
 
 type Query {
@@ -2237,7 +2235,6 @@ type Query {
   featuredProductsCount(where: FeaturedProductWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
-  validateUserPasswordResetToken(email: String!, token: String!): ValidateUserPasswordResetTokenResult
   queryCart: Cart
   isEmailInUse(email: String!): Boolean!
   isPhoneNumberInUse(phoneNumber: String!): Boolean!
@@ -2245,11 +2242,6 @@ type Query {
 }
 
 union AuthenticatedItem = User
-
-type ValidateUserPasswordResetTokenResult {
-  code: PasswordResetRedemptionErrorCode!
-  message: String!
-}
 
 type KeystoneMeta {
   adminMeta: KeystoneAdminMeta!

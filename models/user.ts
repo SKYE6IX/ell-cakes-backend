@@ -9,7 +9,7 @@ import {
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
-import { issueVerificationToken } from "../lib/issueVerificationToken";
+import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
 import { Context } from ".keystone/types";
 
 const hiddenFieldConfig = {
@@ -43,6 +43,7 @@ export const User = list({
       isIndexed: "unique",
       defaultValue: null,
     }),
+
     isPhoneNumberVerified: checkbox({ defaultValue: false }),
     phoneNumberToken: password(hiddenFieldConfig),
     phoneNumberVerificationIssuedAt: timestamp(hiddenFieldConfig),
@@ -152,14 +153,26 @@ export const User = list({
       },
     }),
   },
+
   hooks: {
     afterOperation: {
-      create: async ({ item, context }) => {
-        await issueVerificationToken({
-          userId: item.id.toString(),
-          context: context as unknown as Context,
+      create: async ({ item, context, inputData }) => {
+        const { token, issuedAt } = await issuePhoneNumberToken({
+          phoneNumber: inputData.phoneNumber,
+        });
+
+        await context.db.User.updateOne({
+          where: { id: item.id.toString() },
+          data: {
+            isPhoneNumberVerified: false,
+            phoneNumberToken: token,
+            phoneNumberVerificationIssuedAt: issuedAt,
+            phoneNumberVerificationRedeemedAt: null,
+            updatedAt: issuedAt,
+          },
         });
       },
+
       update: async ({ inputData, originalItem, context }) => {
         // Check if USER passed in a new phone number
         // and verify it isn't the same as the existing one they had
@@ -167,9 +180,18 @@ export const User = list({
           inputData.phoneNumber &&
           inputData.phoneNumber !== originalItem.phoneNumber
         ) {
-          await issueVerificationToken({
-            userId: originalItem.id.toString(),
-            context: context as unknown as Context,
+          const { token, issuedAt } = await issuePhoneNumberToken({
+            phoneNumber: inputData.phoneNumber,
+          });
+          await context.db.User.updateOne({
+            where: { id: originalItem.id.toString() },
+            data: {
+              isPhoneNumberVerified: false,
+              phoneNumberToken: token,
+              phoneNumberVerificationIssuedAt: issuedAt,
+              phoneNumberVerificationRedeemedAt: null,
+              updatedAt: issuedAt,
+            },
           });
         }
       },

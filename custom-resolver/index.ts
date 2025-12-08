@@ -1,12 +1,12 @@
 import type { GraphQLSchema } from "graphql";
 import { mergeSchemas } from "@graphql-tools/schema";
-import { verifyUserByPhoneNumber } from "./verifyUserByPhoneNumber";
+import { redeemPhoneNumberToken } from "./redeemPhoneNumberToken";
 import { addToCart } from "./addToCart";
 import { removeFromCart } from "./removeFromCart";
 import { checkOut } from "./checkOut";
 import { registerUser } from "./registerUser";
 import { authorizedUser } from "./authorizedUser";
-import { resendVerificationToken } from "./resendVerificationToken";
+import { resendPhoneNumberToken } from "./resendPhoneNumberToken";
 import { uploadImageCustomization } from "./uploadImageCustomization";
 import { increaseCartItem } from "./increaseCartItem";
 import { decreaseCartItem } from "./decreaseCartItem";
@@ -14,6 +14,7 @@ import { isEmailInUse } from "./isEmailInUse";
 import { isPhoneNumberInUse } from "./isPhoneNumberInUse";
 import { queryCart } from "./queryCart";
 import { queryAuthorizedUser } from "./queryAuthorizedUser";
+import { connectCartToUser } from "./connectCartToUser";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -52,12 +53,13 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
 
     type Mutation {
         authorizedUser(email: String!, password: String!): User!
-        verifyUserByPhoneNumber(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
-        resendVerificationToken(phoneNumber: String!): String!
+        redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
+        resendPhoneNumberToken(phoneNumber: String!): String!
         addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
         increaseCartItem(cartItemId: String!): Cart!
         decreaseCartItem(cartItemId: String!): Cart
         removeFromCart(cartItemId: String!): Cart
+        connectCartToUser(userId: String!): Cart!
         checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
@@ -66,8 +68,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
 
     resolvers: {
       Mutation: {
-        verifyUserByPhoneNumber,
-        resendVerificationToken,
+        redeemPhoneNumberToken,
+        resendPhoneNumberToken,
         increaseCartItem,
         addToCart,
         removeFromCart,
@@ -76,6 +78,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         registerUser,
         authorizedUser,
         uploadImageCustomization,
+        connectCartToUser,
       },
 
       Query: {

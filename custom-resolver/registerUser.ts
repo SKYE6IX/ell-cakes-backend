@@ -1,5 +1,4 @@
 import { Context } from ".keystone/types";
-import { getSessionCartId } from "../lib/getSessionCartId";
 
 interface RegisterUserArgs {
   name: string;
@@ -16,7 +15,6 @@ export const registerUser = async (
   context: Context
 ) => {
   const sudoContext = context.sudo();
-  const sessionCartId = getSessionCartId(context);
 
   // Check if USER with the email or phoneNumber already exist
   const isUserExist = await sudoContext.db.User.findOne({
@@ -57,29 +55,10 @@ export const registerUser = async (
     throw new Error(errors[0].message);
   }
 
-  const sessionCart = await context.prisma.cart.findUnique({
-    where: { sessionId: sessionCartId },
-    select: {
-      id: true,
-      cartItems: {
-        select: { id: true },
-      },
-    },
-  });
-
-  if (sessionCart) {
-    await context.db.Cart.updateOne({
-      where: {
-        id: sessionCart.id,
-      },
-      data: {
-        user: { connect: { id: data?.authenticateUserWithPassword.item.id } },
-        updatedAt: new Date(),
-      },
-    });
-  }
-
-  return await sudoContext.db.User.findOne({
+  return await sudoContext.db.User.updateOne({
     where: { id: data?.authenticateUserWithPassword.item.id },
+    data: {
+      lastLogin: new Date(),
+    },
   });
 };

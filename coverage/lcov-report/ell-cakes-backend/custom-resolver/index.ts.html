@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>22/22</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/18</span>
+                <span class='fraction'>21/21</span>
             </div>
         
             
@@ -155,26 +155,52 @@
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
 <a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -264,6 +290,9 @@ import { isPhoneNumberInUse } from "./isPhoneNumberInUse";
 import { queryCart } from "./queryCart";
 import { queryAuthorizedUser } from "./queryAuthorizedUser";
 import { connectCartToUser } from "./connectCartToUser";
+import { sendPasswordResetToken } from "./sendPasswordResetToken";
+import { validateUserPasswordResetToken } from "./validateUserPasswordResetToken";
+import { updatePassword } from "./updatePassword";
 &nbsp;
 export const customExtendResolvers = (baseSchema: GraphQLSchema) =&gt; {
   return mergeSchemas({
@@ -272,7 +301,11 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) =&gt; {
     type VerifyUserByPhoneNumberResponse {
       status: Boolean
       message: String
-    }  
+    }
+      
+    type PasswordResetTokenResponse {
+      passwordResetUrl: String!
+    }
 &nbsp;
     input RegisterUserInput {
      name: String!
@@ -298,12 +331,15 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) =&gt; {
       isEmailInUse(email: String!): Boolean!
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
+      validateUserPasswordResetToken(token: String!, email: String!): Boolean!
     }
 &nbsp;
     type Mutation {
         authorizedUser(email: String!, password: String!): User!
         redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
         resendPhoneNumberToken(phoneNumber: String!): String!
+        sendPasswordResetToken(phoneNumber: String!): PasswordResetTokenResponse!
+        updatePassword(token: String!, email: String!, newPassword: String!): User!
         addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
         increaseCartItem(cartItemId: String!): Cart!
         decreaseCartItem(cartItemId: String!): Cart
@@ -328,6 +364,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) =&gt; {
         authorizedUser,
         uploadImageCustomization,
         connectCartToUser,
+        sendPasswordResetToken,
+        updatePassword,
       },
 &nbsp;
       Query: {
@@ -335,6 +373,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) =&gt; {
         isEmailInUse,
         isPhoneNumberInUse,
         queryAuthorizedUser,
+        validateUserPasswordResetToken,
       },
     },
   });
@@ -346,7 +385,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-08T07:46:45.264Z
+                at 2025-12-08T09:22:07.292Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -5,19 +5,19 @@ export const updatePassword = async (
   root: any,
   {
     token,
-    phoneNumber,
+    email,
     newPassword,
-  }: { token: string; phoneNumber: string; newPassword: string },
+  }: { token: string; email: string; newPassword: string },
   context: Context
 ) => {
   const sudoContext = context.sudo();
 
   const user = await sudoContext.db.User.findOne({
-    where: { phoneNumber },
+    where: { email },
   });
 
   if (!user) {
-    throw new Error("User with this phone number doesn't exist!", {
+    throw new Error("User with this email doesn't exist!", {
       cause: "Invalid data passed!",
     });
   }

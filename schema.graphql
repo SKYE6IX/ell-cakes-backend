@@ -2141,6 +2141,8 @@ type Mutation {
   authorizedUser(email: String!, password: String!): User!
   redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
   resendPhoneNumberToken(phoneNumber: String!): String!
+  sendPasswordResetToken(phoneNumber: String!): PasswordResetTokenResponse!
+  updatePassword(token: String!, email: String!, newPassword: String!): User!
   addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
   increaseCartItem(cartItemId: String!): Cart!
   decreaseCartItem(cartItemId: String!): Cart
@@ -2239,6 +2241,7 @@ type Query {
   isEmailInUse(email: String!): Boolean!
   isPhoneNumberInUse(phoneNumber: String!): Boolean!
   queryAuthorizedUser: User
+  validateUserPasswordResetToken(token: String!, email: String!): Boolean!
 }
 
 union AuthenticatedItem = User
@@ -2377,6 +2380,10 @@ enum KeystoneAdminUISortDirection {
 type VerifyUserByPhoneNumberResponse {
   status: Boolean
   message: String
+}
+
+type PasswordResetTokenResponse {
+  passwordResetUrl: String!
 }
 
 input RegisterUserInput {

@@ -3,13 +3,13 @@ import { Context } from ".keystone/types";
 
 export const validateUserPasswordResetToken = async (
   root: any,
-  { token, phoneNumber }: { token: string; phoneNumber: string },
+  { token, email }: { token: string; email: string },
   context: Context
 ) => {
   const sudoContext = context.sudo();
 
   const user = await sudoContext.db.User.findOne({
-    where: { phoneNumber },
+    where: { email },
   });
 
   if (!user) {

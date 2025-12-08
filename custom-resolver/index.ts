@@ -15,6 +15,9 @@ import { isPhoneNumberInUse } from "./isPhoneNumberInUse";
 import { queryCart } from "./queryCart";
 import { queryAuthorizedUser } from "./queryAuthorizedUser";
 import { connectCartToUser } from "./connectCartToUser";
+import { sendPasswordResetToken } from "./sendPasswordResetToken";
+import { validateUserPasswordResetToken } from "./validateUserPasswordResetToken";
+import { updatePassword } from "./updatePassword";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -23,7 +26,11 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
     type VerifyUserByPhoneNumberResponse {
       status: Boolean
       message: String
-    }  
+    }
+      
+    type PasswordResetTokenResponse {
+      passwordResetUrl: String!
+    }
 
     input RegisterUserInput {
      name: String!
@@ -49,12 +56,15 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       isEmailInUse(email: String!): Boolean!
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
+      validateUserPasswordResetToken(token: String!, email: String!): Boolean!
     }
 
     type Mutation {
         authorizedUser(email: String!, password: String!): User!
         redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
         resendPhoneNumberToken(phoneNumber: String!): String!
+        sendPasswordResetToken(phoneNumber: String!): PasswordResetTokenResponse!
+        updatePassword(token: String!, email: String!, newPassword: String!): User!
         addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
         increaseCartItem(cartItemId: String!): Cart!
         decreaseCartItem(cartItemId: String!): Cart
@@ -79,6 +89,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         authorizedUser,
         uploadImageCustomization,
         connectCartToUser,
+        sendPasswordResetToken,
+        updatePassword,
       },
 
       Query: {
@@ -86,6 +98,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         isEmailInUse,
         isPhoneNumberInUse,
         queryAuthorizedUser,
+        validateUserPasswordResetToken,
       },
     },
   });

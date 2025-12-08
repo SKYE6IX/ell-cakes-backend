@@ -17,6 +17,7 @@ export const sendPasswordResetToken = async (
       cause: "Invalid data passed!",
     });
   }
+
   const { token, issuedAt } = await issuePhoneNumberToken({ phoneNumber });
 
   await sudoContext.db.User.updateOne({
@@ -27,5 +28,11 @@ export const sendPasswordResetToken = async (
     },
   });
 
-  return "Token Sent!";
+  const baseUrl = `${process.env.FRONTEND_URL}/reset-password`;
+  const passwordResetUrl = new URL(baseUrl);
+  passwordResetUrl.searchParams.set("email", user.email);
+
+  return {
+    passwordResetUrl,
+  };
 };

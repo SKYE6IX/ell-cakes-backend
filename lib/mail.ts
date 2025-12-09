@@ -29,49 +29,49 @@ function formatEmail(text: string) {
     `;
 }
 
-export async function sendVerificationEmail({
-  to,
-  token,
-}: {
-  to: string;
-  token: string;
-}) {
-  try {
-    const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${to}`;
-    await transporter.sendMail({
-      subject: "Email Verification",
-      from: "azeezabioladev@gmail.com",
-      to: to,
-      html: formatEmail(`
-        Click on the link below to verify your email address. It expire in one hour.<b/>
-        <a href="${verificationUrl}">Click Here To Verify</a>
-        `),
-    });
-  } catch (error) {
-    console.error("An error occur while trying to send email", error);
-  }
-}
+// export async function sendVerificationEmail({
+//   to,
+//   token,
+// }: {
+//   to: string;
+//   token: string;
+// }) {
+//   try {
+//     const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${to}`;
+//     await transporter.sendMail({
+//       subject: "Email Verification",
+//       from: "azeezabioladev@gmail.com",
+//       to: to,
+//       html: formatEmail(`
+//         Click on the link below to verify your email address. It expire in one hour.<b/>
+//         <a href="${verificationUrl}">Click Here To Verify</a>
+//         `),
+//     });
+//   } catch (error) {
+//     console.error("An error occur while trying to send email", error);
+//   }
+// }
 
-export async function sendResetPasswordTokenEmail({
-  to,
-  token,
-}: {
-  to: string;
-  token: string;
-}) {
-  try {
-    const verificationUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${to}`;
-    await transporter.sendMail({
-      subject: "Password Reset Link",
-      from: "azeezabioladev@gmail.com",
-      to: to,
-      html: formatEmail(`
-        You requested for a password reset. Click the link below to reset your password.<b/>
-        If you didn't make this request kindly ignore the email.<b/>
-        <a href="${verificationUrl}">Click here to reset your password</a>
-        `),
-    });
-  } catch (error) {
-    console.error("An error occur while trying to send email", error);
-  }
-}
+// export async function sendResetPasswordTokenEmail({
+//   to,
+//   token,
+// }: {
+//   to: string;
+//   token: string;
+// }) {
+//   try {
+//     const verificationUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${to}`;
+//     await transporter.sendMail({
+//       subject: "Password Reset Link",
+//       from: "azeezabioladev@gmail.com",
+//       to: to,
+//       html: formatEmail(`
+//         You requested for a password reset. Click the link below to reset your password.<b/>
+//         If you didn't make this request kindly ignore the email.<b/>
+//         <a href="${verificationUrl}">Click here to reset your password</a>
+//         `),
+//     });
+//   } catch (error) {
+//     console.error("An error occur while trying to send email", error);
+//   }
+// }

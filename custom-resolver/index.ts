@@ -16,7 +16,7 @@ import { queryCart } from "./queryCart";
 import { queryAuthorizedUser } from "./queryAuthorizedUser";
 import { connectCartToUser } from "./connectCartToUser";
 import { sendPasswordResetToken } from "./sendPasswordResetToken";
-import { validateUserPasswordResetToken } from "./validateUserPasswordResetToken";
+import { validatePasswordResetToken } from "./validatePasswordResetToken";
 import { updatePassword } from "./updatePassword";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
@@ -56,7 +56,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       isEmailInUse(email: String!): Boolean!
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
-      validateUserPasswordResetToken(token: String!, email: String!): Boolean!
+      validatePasswordResetToken(token: String!, email: String!): Boolean!
     }
 
     type Mutation {
@@ -98,7 +98,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         isEmailInUse,
         isPhoneNumberInUse,
         queryAuthorizedUser,
-        validateUserPasswordResetToken,
+        validatePasswordResetToken,
       },
     },
   });

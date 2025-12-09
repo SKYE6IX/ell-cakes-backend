@@ -2241,7 +2241,7 @@ type Query {
   isEmailInUse(email: String!): Boolean!
   isPhoneNumberInUse(phoneNumber: String!): Boolean!
   queryAuthorizedUser: User
-  validateUserPasswordResetToken(token: String!, email: String!): Boolean!
+  validatePasswordResetToken(token: String!, email: String!): Boolean!
 }
 
 union AuthenticatedItem = User

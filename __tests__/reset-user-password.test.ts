@@ -16,7 +16,7 @@ type User = Prisma.UserGetPayload<{}>;
 interface GraphQLResponse<T> {
   data: {
     sendPasswordResetToken: T;
-    validateUserPasswordResetToken: T;
+    validatePasswordResetToken: T;
     updatePassword: T;
   };
   errors?: any[];
@@ -138,13 +138,13 @@ describe("Resetting user password", () => {
     const { data, errors } = (await context.graphql.raw({
       query: `
         query Query($token: String!, $email: String!) {
-         validateUserPasswordResetToken(token: $token, email: $email)
+         validatePasswordResetToken(token: $token, email: $email)
         }
       `,
       variables: { token, email: user.email },
     })) as GraphQLResponse<boolean>;
 
-    expect(data.validateUserPasswordResetToken).toBeTruthy();
+    expect(data.validatePasswordResetToken).toBeTruthy();
   });
 
   test("it update and reset user password", async () => {

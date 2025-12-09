@@ -34,6 +34,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           updatedAt: new Date(),
         },
       });
+
       // Query the current Order
       const order = (await sudoContext.query.Order.findOne({
         where: { payment: { id: updatePayment.id } },
@@ -88,7 +89,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       // 2. Create an order for Merchant CRM using the values of all the order items.
       // ::::: 1. We need to update the order model, so we can store the ID of CRM order ID
       // :::::  we've just created.
-      // ::::: 2. Another option is to send and order details to merchant email with the help of nodemailer.
+      // ::::: 2. Another option is to send order details to merchant email with the help of nodemailer.
     }
   } catch (error) {
     console.log(error);

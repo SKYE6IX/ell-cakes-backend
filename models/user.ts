@@ -43,7 +43,6 @@ export const User = list({
       isIndexed: "unique",
       defaultValue: null,
     }),
-
     isPhoneNumberVerified: checkbox({ defaultValue: false }),
     phoneNumberToken: password(hiddenFieldConfig),
     phoneNumberVerificationIssuedAt: timestamp(hiddenFieldConfig),

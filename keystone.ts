@@ -9,6 +9,7 @@ import { withAuth, session } from "./auth";
 import { customExtendResolvers } from "./custom-resolver";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
 import { getSecret } from "./lib/getSecret";
+import { pinoLogger } from "./lib/logger";
 
 const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
   process.env;
@@ -60,11 +61,48 @@ export default withAuth(
     },
     graphql: {
       extendGraphqlSchema: customExtendResolvers,
+      apolloConfig: {
+        formatError(formattedError, error) {
+          console.error("Here is the formatted error -> ", formattedError);
+          return formattedError;
+        },
+        plugins: [
+          {
+            async requestDidStart() {
+              const start = Date.now();
+              return {
+                async willSendResponse(requestContext) {
+                  pinoLogger.logger.info(
+                    {
+                      req: requestContext.contextValue.req
+                        ? { id: requestContext.contextValue.req?.id }
+                        : undefined,
+                      responseTime: Date.now() - start,
+                      graphql: {
+                        type: requestContext.operation?.operation,
+                        name: requestContext.request.operationName,
+                        errors:
+                          requestContext.errors?.map((e) => ({
+                            path: e.path,
+                            message: e.message,
+                          })) || undefined,
+                      },
+                    },
+                    "graphql query completed"
+                  );
+                },
+              };
+            },
+          },
+        ],
+      },
     },
     server: {
       cors: { origin: [FRONTEND_URL], credentials: true },
       port: 8080,
+
       extendExpressApp: (app, commonContext) => {
+        app.use(pinoLogger);
         app.use(cookieParser());
         app.use(express.json());
 

@@ -22,6 +22,8 @@
     "iuliia": "^0.8.2",
     "nanoid": "^5.1.6",
     "nodemailer": "^7.0.7",
+    "pino": "^10.1.0",
+    "pino-http": "^11.0.0",
     "sharp": "^0.34.4",
     "typescript": "^5.5.0",
     "uuid": "^13.0.0"

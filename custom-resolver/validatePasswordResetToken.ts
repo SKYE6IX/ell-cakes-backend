@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { Context } from ".keystone/types";
 
-export const validateUserPasswordResetToken = async (
+export const validatePasswordResetToken = async (
   root: any,
   { token, email }: { token: string; email: string },
   context: Context

@@ -71,10 +71,12 @@ export const checkOut = async (
       },
       capture: true,
     };
+
     const processPayment = await yooMoney.createPayment(
       createPayLoad,
       uuidv4()
     );
+
     return await context.db.Payment.updateOne({
       where: { id: pendingOrder.payment?.id },
       data: {

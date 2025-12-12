@@ -79,3 +79,4 @@ jobs:
             FRONTEND_URL=${{ vars.FRONTEND_URL }}
             YOO_MONEY_SHOP_ID=${{ secrets.YOO_MONEY_SHOP_ID }}
             YOO_MONEY_SECRET_ID=${{ secrets.YOO_MONEY_SECRET_ID }}
+            NODE_ENV=production

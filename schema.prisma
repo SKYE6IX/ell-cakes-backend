@@ -44,7 +44,6 @@ model DelivaryAddress {
   apartmentNumber String    @default("")
   floor           String    @default("")
   intercomCode    String    @default("")
-  isDefault       Boolean   @default(false)
   createdAt       DateTime? @default(now())
   updatedAt       DateTime?
 

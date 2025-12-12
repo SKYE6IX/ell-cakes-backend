@@ -38,6 +38,7 @@ export const authorizedUser = async (
   } else if (data?.authenticateUserWithPassword.message) {
     throw new Error(data?.authenticateUserWithPassword.message);
   }
+
   return await sudoContext.db.User.updateOne({
     where: { id: data?.authenticateUserWithPassword.item.id },
     data: {

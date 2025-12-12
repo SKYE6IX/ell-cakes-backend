@@ -102,7 +102,6 @@ export default withAuth(
       port: 8080,
 
       extendExpressApp: (app, commonContext) => {
-        app.use(pinoLogger);
         app.use(cookieParser());
         app.use(express.json());
 

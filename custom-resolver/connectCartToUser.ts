@@ -26,60 +26,62 @@ export const connectCartToUser = async (
     },
   });
 
-  //Check if user has an exising cart, then we merge them
-  const userCart = await context.db.Cart.findOne({
-    where: { user: { id: userId } },
-  });
-
-  if (userCart !== null) {
-    const cartToUpdate = await context.db.Cart.updateOne({
-      where: { id: userCart.id },
-      data: {
-        cartItems: {
-          connect: sessionCart?.cartItems.map((cartItem) => ({
-            id: cartItem.id,
-          })),
+  if (sessionCart) {
+    //Check if user has an exising cart, then we merge them
+    const userCart = await context.db.Cart.findOne({
+      where: { user: { id: userId } },
+    });
+    if (userCart) {
+      const cartToUpdate = await context.db.Cart.updateOne({
+        where: { id: userCart.id },
+        data: {
+          cartItems: {
+            connect: sessionCart?.cartItems.map((cartItem) => ({
+              id: cartItem.id,
+            })),
+          },
         },
-      },
-    });
-
-    const result = await context.prisma.cartItem.aggregate({
-      _sum: {
-        subTotal: true,
-      },
-      where: {
-        cartId: cartToUpdate.id,
-      },
-    });
-    const newCartSubTotal = result._sum.subTotal || 0;
-
-    // Disconnect the cartItems from the session cart and then delete it
-    await context.db.Cart.updateOne({
-      where: { sessionId: sessionCartId },
-      data: {
-        cartItems: null,
-      },
-    }).then(async () => {
-      await context.db.Cart.deleteOne({
-        where: { sessionId: sessionCartId },
       });
-    });
+      const result = await context.prisma.cartItem.aggregate({
+        _sum: {
+          subTotal: true,
+        },
+        where: {
+          cartId: cartToUpdate.id,
+        },
+      });
 
-    return await context.db.Cart.updateOne({
-      where: { id: cartToUpdate.id },
-      data: {
-        subTotal: newCartSubTotal,
-        updatedAt: new Date(),
-      },
-    });
+      const newCartSubTotal = result._sum.subTotal || 0;
+
+      // Disconnect the cartItems from the session cart and then delete it
+      const cartToDelete = await context.db.Cart.updateOne({
+        where: { sessionId: sessionCartId },
+        data: {
+          cartItems: null,
+        },
+      });
+      await context.db.Cart.deleteOne({
+        where: { id: cartToDelete.id },
+      });
+
+      return await context.db.Cart.updateOne({
+        where: { id: cartToUpdate.id },
+        data: {
+          subTotal: newCartSubTotal,
+          updatedAt: new Date(),
+        },
+      });
+    } else {
+      return await context.db.Cart.updateOne({
+        where: { id: sessionCart?.id },
+        data: {
+          user: { connect: { id: userId } },
+          sessionId: "null",
+          updatedAt: new Date(),
+        },
+      });
+    }
   } else {
-    return await context.db.Cart.updateOne({
-      where: { id: sessionCart?.id },
-      data: {
-        user: { connect: { id: userId } },
-        sessionId: "null",
-        updatedAt: new Date(),
-      },
-    });
+    return null;
   }
 };

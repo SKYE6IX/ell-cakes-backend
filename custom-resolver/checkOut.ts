@@ -15,14 +15,6 @@ interface CheckOutArgs {
   customerNote?: string;
 }
 
-type CartWithItem = Prisma.CartGetPayload<{
-  include: {
-    cartItems: {
-      include: { product: true; variant: true; toppingOption: true };
-    };
-  };
-}>;
-
 export enum PaymentStatus {
   PENDING = "pending",
   SUCCEEDED = "succeeded",
@@ -42,7 +34,9 @@ export const checkOut = async (
 
   // Reject with error if USER isn't in session
   if (!loggedInUser) {
-    throw new Error("Only signed in user can perform this action!");
+    throw new Error("Only signed in user can perform this action!", {
+      cause: "Authorization!",
+    });
   }
 
   const yooMoney = await yooMoneyPaymentGateway();
@@ -97,22 +91,34 @@ export const checkOut = async (
   const orderNumber = `ORD-${nanoid()}`;
 
   // Get the cart that belong to the current signin USER
-  const cart = (await context.query.Cart.findOne({
-    where: { user: { id: loggedInUser.itemId } },
-    query: `
-      id
-      subTotal
-      cartItems { id quantity unitPrice subTotal compositionSnapShot customizationsSnapShot product { id } variant { id } toppingOption { id } }
-    `,
-  })) as CartWithItem;
+  const userCart = await context.prisma.cart.findUnique({
+    where: { userId: loggedInUser.itemId },
+    include: {
+      cartItems: {
+        select: {
+          id: true,
+          quantity: true,
+          unitPrice: true,
+          subTotal: true,
+          compositionSnapShot: true,
+          customizationsSnapShot: true,
+          productId: true,
+          variantId: true,
+          toppingOptionId: true,
+        },
+      },
+    },
+  });
 
   // Reject with an error if User doesn't have a cart
-  if (!cart) {
-    throw new Error("User doesn't have open cart at the moment");
+  if (!userCart) {
+    throw new Error("User doesn't have open cart at the moment", {
+      cause: "Cart not found!",
+    });
   }
 
   // Calculate and setup payment process
-  const totalAmount = Number(cart.subTotal) + shippingCost;
+  const totalAmount = Number(userCart.subTotal) + shippingCost;
   const createPayLoad: ICreatePayment = {
     amount: {
       value: `${totalAmount}`,
@@ -132,15 +138,15 @@ export const checkOut = async (
   const processPayment = await yooMoney.createPayment(createPayLoad, uuidv4());
 
   // Create a new order-items and order
-  const orderItems = cart.cartItems.map((cartItem) => {
+  const orderItems = userCart.cartItems.map((cartItem) => {
     const item = {
-      product: { connect: { id: cartItem.product?.id } },
-      variant: { connect: { id: cartItem.variant?.id } },
+      product: { connect: { id: cartItem.productId } },
+      variant: { connect: { id: cartItem.variantId } },
       quantity: cartItem.quantity,
       unitPrice: cartItem.unitPrice,
       subTotal: cartItem.subTotal,
-      ...(cartItem.toppingOption && {
-        toppingOption: { connect: { id: cartItem.toppingOption.id } },
+      ...(cartItem.toppingOptionId && {
+        toppingOption: { connect: { id: cartItem.toppingOptionId } },
       }),
       ...(cartItem.compositionSnapShot && {
         compositionSnapShot: cartItem.compositionSnapShot as JSONValue,
@@ -164,7 +170,7 @@ export const checkOut = async (
       deliveryAddress: { connect: { id: deliveryAddress?.id } },
       orderItems: { create: orderItems },
       orderNumber: orderNumber,
-      subTotalAmount: cart.subTotal,
+      subTotalAmount: userCart.subTotal,
       totalAmount: totalAmount,
       shippingCost: shippingCost,
       ...(customerNote && { note: customerNote }),
@@ -173,28 +179,28 @@ export const checkOut = async (
 
   // We need to check if user has added customize image,
   // and connect the new order id to it.
-  const cartItems = cart.cartItems;
-  for (const cartItem of cartItems) {
+  for (const orderItem of orderItems) {
     const snapShots =
-      cartItem.customizationsSnapShot as unknown as CustomizationSnapshot[];
-    for (const snapShot of snapShots) {
-      if (snapShot.name !== "PHOTOS") {
-        continue;
+      orderItem.customizationsSnapShot as unknown as CustomizationSnapshot[];
+    if (snapShots) {
+      for (const snapShot of snapShots) {
+        if (snapShot.name === "PHOTOS") {
+          snapShot.customValue.imagesId?.forEach(async (imageId) => {
+            await context.query.CustomizeImage.updateOne({
+              where: { id: imageId },
+              data: {
+                order: { connect: { id: newOrder.id } },
+              },
+            });
+          });
+        }
       }
-      snapShot.customValue.imagesId?.forEach(async (imageId) => {
-        await context.query.CustomizeImage.updateOne({
-          where: { id: imageId },
-          data: {
-            order: { connect: { id: newOrder.id } },
-          },
-        });
-      });
     }
   }
 
   // Clean up the cart
   await context.db.Cart.deleteOne({
-    where: { id: cart.id },
+    where: { id: userCart.id },
   });
 
   // Create a new Payment entity for the order and return it

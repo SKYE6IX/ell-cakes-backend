@@ -1,10 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  text,
-  relationship,
-  checkbox,
-  timestamp,
-} from "@keystone-6/core/fields";
+import { text, relationship, timestamp } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, rules } from "../access";
 
@@ -25,7 +20,6 @@ export const DelivaryAddress = list({
     apartmentNumber: text(),
     floor: text(),
     intercomCode: text(),
-    isDefault: checkbox(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -45,7 +39,7 @@ export const DelivaryAddress = list({
     }),
   },
 
-  ui: {
-    isHidden: true,
-  },
+  // ui: {
+  //   isHidden: true,
+  // },
 });

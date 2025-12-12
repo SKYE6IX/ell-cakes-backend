@@ -279,7 +279,6 @@ type DelivaryAddress {
   apartmentNumber: String
   floor: String
   intercomCode: String
-  isDefault: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -299,7 +298,6 @@ input DelivaryAddressWhereInput {
   apartmentNumber: StringFilter
   floor: StringFilter
   intercomCode: StringFilter
-  isDefault: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -310,7 +308,6 @@ input DelivaryAddressOrderByInput {
   apartmentNumber: OrderDirection
   floor: OrderDirection
   intercomCode: OrderDirection
-  isDefault: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -322,7 +319,6 @@ input DelivaryAddressUpdateInput {
   apartmentNumber: String
   floor: String
   intercomCode: String
-  isDefault: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -345,7 +341,6 @@ input DelivaryAddressCreateInput {
   apartmentNumber: String
   floor: String
   intercomCode: String
-  isDefault: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -2147,7 +2142,7 @@ type Mutation {
   increaseCartItem(cartItemId: String!): Cart!
   decreaseCartItem(cartItemId: String!): Cart
   removeFromCart(cartItemId: String!): Cart
-  connectCartToUser(userId: String!): Cart!
+  connectCartToUser(userId: String!): Cart
   checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
   registerUser(registerData: RegisterUserInput!): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!

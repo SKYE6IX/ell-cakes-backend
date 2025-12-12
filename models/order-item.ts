@@ -14,7 +14,6 @@ export const OrderItem = list({
       ...allOperations(hasSession),
     },
     filter: {
-      query: rules.canReadOrder,
       update: permissions.canManageOrder,
       delete: permissions.canManageOrder,
     },

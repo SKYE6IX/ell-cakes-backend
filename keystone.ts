@@ -115,11 +115,9 @@ export default withAuth(
               sameSite: isProduction ? "none" : "lax",
               maxAge: 1000 * 60 * 60 * 24 * 30,
               secure: isProduction,
-              domain: isProduction ? undefined : "",
-              path: "/",
+              domain: isProduction ? ".containers.yandexcloud.net" : "",
             });
           }
-
           next();
         });
 

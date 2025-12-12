@@ -18,6 +18,8 @@ const databaseUrl = getSecret("DATABASE_URL");
 const ycS3KeyId = getSecret("YC_S3_KEY_ID");
 const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export default withAuth(
   config({
     db: {
@@ -110,11 +112,13 @@ export default withAuth(
             const cartId = randomUUID();
             res.cookie("ell-cake-cart-id", cartId, {
               httpOnly: true,
-              sameSite: "lax",
+              sameSite: isProduction ? "none" : "lax",
               maxAge: 1000 * 60 * 60 * 24 * 30,
-              secure: process.env.NODE_ENV === "production",
+              secure: isProduction,
+              domain: isProduction ? ".ellcakes.ru" : "",
             });
           }
+
           next();
         });
 

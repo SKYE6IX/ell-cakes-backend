@@ -14,6 +14,7 @@ const { withAuth } = createAuth({
   }),
 });
 
+const isProduction = process.env.NODE_ENV === "production";
 const secretKey = getSecret("SESSION_SECRET");
 
 const sessionMaxAge = 60 * 60 * 24 * 30;
@@ -21,6 +22,9 @@ const sessionMaxAge = 60 * 60 * 24 * 30;
 const session = statelessSessions({
   maxAge: sessionMaxAge,
   secret: secretKey,
+  secure: isProduction,
+  sameSite: isProduction ? "none" : "lax",
+  domain: isProduction ? ".ellcakes.ru" : "",
 });
 
 export { withAuth, session };

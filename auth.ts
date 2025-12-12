@@ -24,7 +24,7 @@ const session = statelessSessions({
   secret: secretKey,
   secure: isProduction,
   sameSite: isProduction ? "none" : "lax",
-  domain: isProduction ? ".ellcakes.ru" : "",
+  domain: isProduction ? "/" : "",
 });
 
 export { withAuth, session };

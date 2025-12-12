@@ -24,7 +24,7 @@ const session = statelessSessions({
   secret: secretKey,
   secure: isProduction,
   sameSite: isProduction ? "none" : "lax",
-  domain: isProduction ? ".containers.yandexcloud.net" : "",
+  domain: isProduction ? ".ellcakes.ru" : "",
 });
 
 export { withAuth, session };

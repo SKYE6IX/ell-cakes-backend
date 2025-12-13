@@ -19,6 +19,12 @@ export const increaseCartItem = async (
     },
   });
 
+  if (!cartItem) {
+    throw new Error("Cart item doesn't exist", {
+      cause: "Unable to find cart item with this ID",
+    });
+  }
+
   const updateQuantity = Number(cartItem?.quantity) + 1;
   await context.query.CartItem.updateOne({
     where: { id: cartItem?.id },

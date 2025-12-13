@@ -16,6 +16,12 @@ export const removeFromCart = async (
     },
   });
 
+  if (!deletedCartItem) {
+    throw new Error("Cart item doesn't exist", {
+      cause: "Unable to find cart item with this ID",
+    });
+  }
+
   // Count the current Item in the Cart and check if there still item remain
   const cartItemCount = await context.prisma.cartItem.count({
     where: { cartId: deletedCartItem?.cart?.id },

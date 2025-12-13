@@ -51,34 +51,33 @@ model DelivaryAddress {
 }
 
 model Product {
-  id                                 String                  @id @default(uuid()) @postgresql.Uuid
-  category                           Category?               @relation("Product_category", fields: [categoryId], references: [id])
-  categoryId                         String?                 @map("category") @postgresql.Uuid
-  name                               String                  @default("")
-  slug                               String                  @unique @default("")
-  baseDescription                    String                  @default("")
-  type                               String
-  variantType                        String
-  fillings                           ProductFilling[]        @relation("Product_fillings")
-  mixBoxCompositions                 Product[]               @relation("Product_mixBoxCompositions")
-  stockQuantity                      Int
-  isAvailable                        Boolean                 @default(true)
-  badge                              String?
-  images                             ProductImage[]          @relation("ProductImage_product")
-  video_filesize                     Int?
-  video_filename                     String?
-  customization                      ProductCustomization?   @relation("Product_customization", fields: [customizationId], references: [id])
-  customizationId                    String?                 @unique @map("customization") @postgresql.Uuid
-  topping                            Topping?                @relation("Product_topping", fields: [toppingId], references: [id])
-  toppingId                          String?                 @unique @map("topping") @postgresql.Uuid
-  createdAt                          DateTime?               @default(now())
-  updatedAt                          DateTime?
-  from_Product_mixBoxCompositions    Product[]               @relation("Product_mixBoxCompositions")
-  from_CartItem_product              CartItem[]              @relation("CartItem_product")
-  from_OrderItem_product             OrderItem[]             @relation("OrderItem_product")
-  from_ProductHomeBanner_product     ProductHomeBanner[]     @relation("ProductHomeBanner_product")
-  from_ProductCategoryBanner_product ProductCategoryBanner[] @relation("ProductCategoryBanner_product")
-  from_FeaturedProduct_product       FeaturedProduct[]       @relation("FeaturedProduct_product")
+  id                              String                @id @default(uuid()) @postgresql.Uuid
+  category                        Category?             @relation("Product_category", fields: [categoryId], references: [id])
+  categoryId                      String?               @map("category") @postgresql.Uuid
+  name                            String                @default("")
+  slug                            String                @unique @default("")
+  baseDescription                 String                @default("")
+  type                            String
+  variantType                     String
+  fillings                        ProductFilling[]      @relation("Product_fillings")
+  mixBoxCompositions              Product[]             @relation("Product_mixBoxCompositions")
+  stockQuantity                   Int
+  isAvailable                     Boolean               @default(true)
+  badge                           String?
+  images                          ProductImage[]        @relation("ProductImage_product")
+  video_filesize                  Int?
+  video_filename                  String?
+  customization                   ProductCustomization? @relation("Product_customization", fields: [customizationId], references: [id])
+  customizationId                 String?               @unique @map("customization") @postgresql.Uuid
+  topping                         Topping?              @relation("Product_topping", fields: [toppingId], references: [id])
+  toppingId                       String?               @unique @map("topping") @postgresql.Uuid
+  createdAt                       DateTime?             @default(now())
+  updatedAt                       DateTime?
+  from_Product_mixBoxCompositions Product[]             @relation("Product_mixBoxCompositions")
+  from_CartItem_product           CartItem[]            @relation("CartItem_product")
+  from_OrderItem_product          OrderItem[]           @relation("OrderItem_product")
+  from_ProductHomeBanner_product  ProductHomeBanner[]   @relation("ProductHomeBanner_product")
+  from_FeaturedProduct_product    FeaturedProduct[]     @relation("FeaturedProduct_product")
 
   @@index([categoryId])
 }
@@ -140,16 +139,15 @@ model ProductVariant {
 }
 
 model Category {
-  id                                  String                  @id @default(uuid()) @postgresql.Uuid
-  name                                String                  @default("")
-  slug                                String                  @unique @default("")
-  parent                              Category?               @relation("Category_parent", fields: [parentId], references: [id])
-  parentId                            String?                 @map("parent") @postgresql.Uuid
-  products                            Product[]               @relation("Product_category")
-  createdAt                           DateTime?               @default(now())
-  updatedAt                           DateTime?
-  from_Category_parent                Category[]              @relation("Category_parent")
-  from_ProductCategoryBanner_category ProductCategoryBanner[] @relation("ProductCategoryBanner_category")
+  id                   String     @id @default(uuid()) @postgresql.Uuid
+  name                 String     @default("")
+  slug                 String     @unique @default("")
+  parent               Category?  @relation("Category_parent", fields: [parentId], references: [id])
+  parentId             String?    @map("parent") @postgresql.Uuid
+  products             Product[]  @relation("Product_category")
+  createdAt            DateTime?  @default(now())
+  updatedAt            DateTime?
+  from_Category_parent Category[] @relation("Category_parent")
 
   @@index([parentId])
 }
@@ -318,20 +316,6 @@ model ProductHomeBanner {
   createdAt  DateTime? @default(now())
   updatedAt  DateTime?
 
-  @@index([productId])
-}
-
-model ProductCategoryBanner {
-  id         String    @id @default(uuid()) @postgresql.Uuid
-  category   Category? @relation("ProductCategoryBanner_category", fields: [categoryId], references: [id])
-  categoryId String?   @map("category") @postgresql.Uuid
-  product    Product?  @relation("ProductCategoryBanner_product", fields: [productId], references: [id])
-  productId  String?   @map("product") @postgresql.Uuid
-  bannerText String    @default("")
-  createdAt  DateTime? @default(now())
-  updatedAt  DateTime?
-
-  @@index([categoryId])
   @@index([productId])
 }
 

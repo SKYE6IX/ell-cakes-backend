@@ -16,7 +16,6 @@ import { Order } from "./models/order";
 import { OrderItem } from "./models/order-item";
 import { Payment } from "./models/payment";
 import { ProductHomeBanner } from "./models/product-home-banner";
-import { ProductCategoryBanner } from "./models/product-category-banner";
 import { CustomizeImage } from "./models/customize-image";
 import { FeaturedProduct } from "./models/featured-product";
 
@@ -39,7 +38,6 @@ export const lists = {
   OrderItem,
   Payment,
   ProductHomeBanner,
-  ProductCategoryBanner,
   CustomizeImage,
   FeaturedProduct,
 };

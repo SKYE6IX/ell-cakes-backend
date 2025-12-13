@@ -1849,59 +1849,6 @@ input ProductHomeBannerCreateInput {
   updatedAt: DateTime
 }
 
-type ProductCategoryBanner {
-  id: ID!
-  category: Category
-  product: Product
-  bannerText: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductCategoryBannerWhereUniqueInput {
-  id: ID
-}
-
-input ProductCategoryBannerWhereInput {
-  AND: [ProductCategoryBannerWhereInput!]
-  OR: [ProductCategoryBannerWhereInput!]
-  NOT: [ProductCategoryBannerWhereInput!]
-  id: IDFilter
-  category: CategoryWhereInput
-  product: ProductWhereInput
-  bannerText: StringFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input ProductCategoryBannerOrderByInput {
-  id: OrderDirection
-  bannerText: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input ProductCategoryBannerUpdateInput {
-  category: CategoryRelateToOneForUpdateInput
-  product: ProductRelateToOneForUpdateInput
-  bannerText: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductCategoryBannerUpdateArgs {
-  where: ProductCategoryBannerWhereUniqueInput!
-  data: ProductCategoryBannerUpdateInput!
-}
-
-input ProductCategoryBannerCreateInput {
-  category: CategoryRelateToOneForCreateInput
-  product: ProductRelateToOneForCreateInput
-  bannerText: String
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
 type CustomizeImage {
   id: ID!
   order: Order
@@ -2112,12 +2059,6 @@ type Mutation {
   updateProductHomeBanners(data: [ProductHomeBannerUpdateArgs!]!): [ProductHomeBanner]
   deleteProductHomeBanner(where: ProductHomeBannerWhereUniqueInput!): ProductHomeBanner
   deleteProductHomeBanners(where: [ProductHomeBannerWhereUniqueInput!]!): [ProductHomeBanner]
-  createProductCategoryBanner(data: ProductCategoryBannerCreateInput!): ProductCategoryBanner
-  createProductCategoryBanners(data: [ProductCategoryBannerCreateInput!]!): [ProductCategoryBanner]
-  updateProductCategoryBanner(where: ProductCategoryBannerWhereUniqueInput!, data: ProductCategoryBannerUpdateInput!): ProductCategoryBanner
-  updateProductCategoryBanners(data: [ProductCategoryBannerUpdateArgs!]!): [ProductCategoryBanner]
-  deleteProductCategoryBanner(where: ProductCategoryBannerWhereUniqueInput!): ProductCategoryBanner
-  deleteProductCategoryBanners(where: [ProductCategoryBannerWhereUniqueInput!]!): [ProductCategoryBanner]
   createCustomizeImage(data: CustomizeImageCreateInput!): CustomizeImage
   createCustomizeImages(data: [CustomizeImageCreateInput!]!): [CustomizeImage]
   updateCustomizeImage(where: CustomizeImageWhereUniqueInput!, data: CustomizeImageUpdateInput!): CustomizeImage
@@ -2221,9 +2162,6 @@ type Query {
   productHomeBanner(where: ProductHomeBannerWhereUniqueInput!): ProductHomeBanner
   productHomeBanners(where: ProductHomeBannerWhereInput! = {}, orderBy: [ProductHomeBannerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductHomeBannerWhereUniqueInput): [ProductHomeBanner!]
   productHomeBannersCount(where: ProductHomeBannerWhereInput! = {}): Int
-  productCategoryBanner(where: ProductCategoryBannerWhereUniqueInput!): ProductCategoryBanner
-  productCategoryBanners(where: ProductCategoryBannerWhereInput! = {}, orderBy: [ProductCategoryBannerOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductCategoryBannerWhereUniqueInput): [ProductCategoryBanner!]
-  productCategoryBannersCount(where: ProductCategoryBannerWhereInput! = {}): Int
   customizeImage(where: CustomizeImageWhereUniqueInput!): CustomizeImage
   customizeImages(where: CustomizeImageWhereInput! = {}, orderBy: [CustomizeImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizeImageWhereUniqueInput): [CustomizeImage!]
   customizeImagesCount(where: CustomizeImageWhereInput! = {}): Int

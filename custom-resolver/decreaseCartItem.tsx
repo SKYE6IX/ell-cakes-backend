@@ -20,6 +20,12 @@ export const decreaseCartItem = async (
     },
   });
 
+  if (!cartItem) {
+    throw new Error("Cart item doesn't exist", {
+      cause: "Unable to find cart item with this ID",
+    });
+  }
+
   const updateQuantity = Number(cartItem?.quantity) - 1;
   if (updateQuantity <= 0) {
     await context.db.CartItem.deleteOne({
@@ -40,7 +46,6 @@ export const decreaseCartItem = async (
   const cartItemCount = await context.prisma.cartItem.count({
     where: { cartId: cartItem?.cart?.id },
   });
-
   if (cartItemCount == 0) {
     await context.db.Cart.deleteOne({ where: { id: cartItem?.cart?.id } });
     return null;

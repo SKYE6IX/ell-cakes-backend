@@ -77,7 +77,13 @@ async function main() {
 
   // Query all the product fillings
   const dbProductFillings = await sudoContext.db.ProductFilling.findMany();
-  const existingProductFillings = [...dbProductFillings];
+
+  const productFillingMap = new Map();
+  for (const productFilling of dbProductFillings) {
+    productFillingMap.set(productFilling.slug, productFilling);
+  }
+
+  // const existingProductFillings = [...dbProductFillings];
 
   // Query all the product
   const existingProducts = await sudoContext.db.Product.findMany();
@@ -93,9 +99,7 @@ async function main() {
       const productFillingSlug = getTransliterationSlug(productFilling.name);
       // We check if a filling already exist or has been created by the previous
       // product so we can re-use it by storing it's ID into an array
-      const existingProductFilling = existingProductFillings.find(
-        (epf) => epf.slug === productFillingSlug
-      );
+      const existingProductFilling = productFillingMap.get(productFillingSlug);
 
       if (existingProductFilling) {
         console.log(
@@ -119,11 +123,7 @@ async function main() {
           }
         );
         // First add to the "existingProductFillings" Array
-        existingProductFillings.push({
-          id: newProductFilling.id,
-          slug: newProductFilling.slug,
-          name: newProductFilling.name,
-        });
+        productFillingMap.set(newProductFilling.slug, newProductFilling);
         // And then assign a local ID for connection for each product
         // because we need to know which product has particular fillings
         connectProductFillingIds.push({ id: newProductFilling.id });
@@ -132,6 +132,7 @@ async function main() {
 
     // Check if the product exist and skip the product
     const productSlug = getTransliterationSlug(product.name);
+
     const existingProduct = existingProducts.find(
       (ep) => ep.slug === productSlug
     );

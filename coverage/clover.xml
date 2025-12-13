@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765647729566" clover="3.2.0">
-  <project timestamp="1765647729566" name="All files">
-    <metrics statements="612" coveredstatements="397" conditionals="242" coveredconditionals="102" methods="84" coveredmethods="33" elements="938" coveredelements="532" complexity="0" loc="612" ncloc="612" packages="4" files="50" classes="50"/>
+<coverage generated="1765647885122" clover="3.2.0">
+  <project timestamp="1765647885122" name="All files">
+    <metrics statements="614" coveredstatements="397" conditionals="244" coveredconditionals="102" methods="84" coveredmethods="33" elements="942" coveredelements="532" complexity="0" loc="614" ncloc="614" packages="4" files="50" classes="50"/>
     <package name="ell-cakes-backend">
       <metrics statements="87" coveredstatements="62" conditionals="42" coveredconditionals="16" methods="16" coveredmethods="5"/>
       <file name="access.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/access.ts">
@@ -105,7 +105,7 @@
       </file>
     </package>
     <package name="ell-cakes-backend.custom-resolver">
-      <metrics statements="322" coveredstatements="176" conditionals="152" coveredconditionals="69" methods="38" coveredmethods="14"/>
+      <metrics statements="324" coveredstatements="176" conditionals="154" coveredconditionals="69" methods="38" coveredmethods="14"/>
       <file name="addToCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/addToCart.ts">
         <metrics statements="43" coveredstatements="41" conditionals="46" coveredconditionals="35" methods="6" coveredmethods="5"/>
         <line num="3" count="6" type="stmt"/>
@@ -374,16 +374,18 @@
         <line num="58" count="0" type="stmt"/>
       </file>
       <file name="removeFromCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/removeFromCart.ts">
-        <metrics statements="9" coveredstatements="1" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="1" conditionals="6" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="7" count="6" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
+        <line num="19" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="20" count="0" type="stmt"/>
-        <line num="24" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="30" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="40" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="42" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="48" count="0" type="stmt"/>
       </file>
       <file name="resendPhoneNumberToken.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/resendPhoneNumberToken.ts">
         <metrics statements="11" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>

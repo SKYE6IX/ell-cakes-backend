@@ -23,9 +23,10 @@ export const OrderIntent = list({
   fields: {
     intentId: text({ isIndexed: "unique" }),
     yooMoneyId: text({ isIndexed: "unique" }),
-    cartId: text({ isIndexed: "unique" }),
-    userId: text({ isIndexed: "unique" }),
-    deliveryAddressId: text({ isIndexed: "unique" }),
+    paymentId: text(),
+    cart: relationship({ ref: "Cart" }),
+    user: relationship({ ref: "User" }),
+    deliveryAddress: relationship({ ref: "DelivaryAddress" }),
     note: text(),
     paymentStatus: select({
       options: [

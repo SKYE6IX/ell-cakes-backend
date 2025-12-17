@@ -42,7 +42,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       });
     } else if (payment.status === "succeeded") {
       // Update the payment status to succeeded
-      await sudoContext.db.Payment.updateOne({
+      const updatedPayment = await sudoContext.db.Payment.updateOne({
         where: { yooMoneyId: payment.id },
         data: {
           status: PaymentStatus.SUCCEEDED,
@@ -55,6 +55,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       const orderIntentUpdate = await sudoContext.db.OrderIntent.updateOne({
         where: { yooMoneyId: payment.id },
         data: {
+          paymentId: updatedPayment.id,
           paymentStatus: PaymentStatus.SUCCEEDED,
           updatedAt: new Date(),
         },
@@ -65,6 +66,8 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         orderIntent: orderIntentUpdate,
         context,
       });
+
+      // console.log("A new created Order -> ", newOrder);
 
       // Send a receipt to USER about their payment
       // const idempotence_key = uuidv4();

@@ -60,6 +60,9 @@ export const checkOut = async (
 
   // Calculate and setup payment processing
   const totalAmount = Number(userCart.subTotal) + shippingCost;
+
+  // console.log("Total Amount -> ", totalAmount);
+
   const createPayLoad: ICreatePayment = {
     amount: {
       value: `${totalAmount}`,
@@ -83,11 +86,12 @@ export const checkOut = async (
     data: {
       intentId,
       yooMoneyId: processPayment.id,
-      cartId: userCart.id,
-      userId: loggedInUser.itemId,
-      deliveryAddressId,
-      note: customerNote || undefined,
+      cart: { connect: { id: userCart.id } },
+      user: { connect: { id: loggedInUser.itemId } },
+      deliveryAddress: { connect: { id: deliveryAddressId } },
+      note: customerNote ?? undefined,
       totalAmount,
+      shippingCost,
       paymentStatus: PaymentStatus.PENDING,
     },
   });

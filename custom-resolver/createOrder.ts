@@ -20,7 +20,7 @@ export const createOrder = async ({
   const orderNumber = `ORD-${nanoid()}`;
 
   const cart = await context.prisma.cart.findUnique({
-    where: { id: orderIntent.cartId },
+    where: { id: orderIntent.cartId || "" },
     include: {
       cartItems: {
         select: {
@@ -55,21 +55,18 @@ export const createOrder = async ({
     return item;
   });
 
-  // Get the seleceted delivery address for user
-  const deliveryAddress = await sudoContext.db.DelivaryAddress.findOne({
-    where: { id: orderIntent.deliveryAddressId },
-  });
-
   if (orderItems) {
     // Create a new ORDER
     const newOrder = await sudoContext.db.Order.createOne({
       data: {
+        payment: { connect: { id: orderIntent.paymentId } },
         user: { connect: { id: orderIntent.userId } },
-        deliveryAddress: { connect: { id: deliveryAddress?.id } },
+        deliveryAddress: { connect: { id: orderIntent.deliveryAddressId } },
         orderItems: { create: orderItems },
         orderNumber,
         shippingCost: orderIntent.shippingCost,
-        subTotalAmount: orderIntent.totalAmount,
+        subTotalAmount: cart?.subTotal,
+        totalAmount: orderIntent.totalAmount,
         note: orderIntent.note ?? null,
         orderIntent: { connect: { id: orderIntent.id } },
       },

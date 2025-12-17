@@ -1965,9 +1965,10 @@ type OrderIntent {
   id: ID!
   intentId: String
   yooMoneyId: String
-  cartId: String
-  userId: String
-  deliveryAddressId: String
+  paymentId: String
+  cart: Cart
+  user: User
+  deliveryAddress: DelivaryAddress
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -1981,9 +1982,6 @@ input OrderIntentWhereUniqueInput {
   id: ID
   intentId: String
   yooMoneyId: String
-  cartId: String
-  userId: String
-  deliveryAddressId: String
   order: OrderWhereUniqueInput
 }
 
@@ -1994,9 +1992,10 @@ input OrderIntentWhereInput {
   id: IDFilter
   intentId: StringFilter
   yooMoneyId: StringFilter
-  cartId: StringFilter
-  userId: StringFilter
-  deliveryAddressId: StringFilter
+  paymentId: StringFilter
+  cart: CartWhereInput
+  user: UserWhereInput
+  deliveryAddress: DelivaryAddressWhereInput
   note: StringFilter
   paymentStatus: StringNullableFilter
   shippingCost: IntNullableFilter
@@ -2010,9 +2009,7 @@ input OrderIntentOrderByInput {
   id: OrderDirection
   intentId: OrderDirection
   yooMoneyId: OrderDirection
-  cartId: OrderDirection
-  userId: OrderDirection
-  deliveryAddressId: OrderDirection
+  paymentId: OrderDirection
   note: OrderDirection
   paymentStatus: OrderDirection
   shippingCost: OrderDirection
@@ -2024,9 +2021,10 @@ input OrderIntentOrderByInput {
 input OrderIntentUpdateInput {
   intentId: String
   yooMoneyId: String
-  cartId: String
-  userId: String
-  deliveryAddressId: String
+  paymentId: String
+  cart: CartRelateToOneForUpdateInput
+  user: UserRelateToOneForUpdateInput
+  deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -2044,9 +2042,10 @@ input OrderIntentUpdateArgs {
 input OrderIntentCreateInput {
   intentId: String
   yooMoneyId: String
-  cartId: String
-  userId: String
-  deliveryAddressId: String
+  paymentId: String
+  cart: CartRelateToOneForCreateInput
+  user: UserRelateToOneForCreateInput
+  deliveryAddress: DelivaryAddressRelateToOneForCreateInput
   note: String
   paymentStatus: String
   shippingCost: Int

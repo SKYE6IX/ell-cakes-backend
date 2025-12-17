@@ -33,19 +33,21 @@ model User {
   lastLogin                         DateTime?
   createdAt                         DateTime?         @default(now())
   updatedAt                         DateTime?
+  from_OrderIntent_user             OrderIntent[]     @relation("OrderIntent_user")
 }
 
 model DelivaryAddress {
-  id              String    @id @default(uuid()) @postgresql.Uuid
-  user            User?     @relation("DelivaryAddress_user", fields: [userId], references: [id])
-  userId          String?   @map("user") @postgresql.Uuid
-  orders          Order[]   @relation("Order_deliveryAddress")
-  street          String    @default("")
-  apartmentNumber String    @default("")
-  floor           String    @default("")
-  intercomCode    String    @default("")
-  createdAt       DateTime? @default(now())
-  updatedAt       DateTime?
+  id                               String        @id @default(uuid()) @postgresql.Uuid
+  user                             User?         @relation("DelivaryAddress_user", fields: [userId], references: [id])
+  userId                           String?       @map("user") @postgresql.Uuid
+  orders                           Order[]       @relation("Order_deliveryAddress")
+  street                           String        @default("")
+  apartmentNumber                  String        @default("")
+  floor                            String        @default("")
+  intercomCode                     String        @default("")
+  createdAt                        DateTime?     @default(now())
+  updatedAt                        DateTime?
+  from_OrderIntent_deliveryAddress OrderIntent[] @relation("OrderIntent_deliveryAddress")
 
   @@index([userId])
 }
@@ -210,14 +212,15 @@ model ToppingOption {
 }
 
 model Cart {
-  id        String     @id @default(uuid()) @postgresql.Uuid
-  sessionId String     @unique @default("")
-  user      User?      @relation("Cart_user", fields: [userId], references: [id])
-  userId    String?    @unique @map("user") @postgresql.Uuid
-  cartItems CartItem[] @relation("CartItem_cart")
-  subTotal  Int?
-  createdAt DateTime?  @default(now())
-  updatedAt DateTime?
+  id                    String        @id @default(uuid()) @postgresql.Uuid
+  sessionId             String        @unique @default("")
+  user                  User?         @relation("Cart_user", fields: [userId], references: [id])
+  userId                String?       @unique @map("user") @postgresql.Uuid
+  cartItems             CartItem[]    @relation("CartItem_cart")
+  subTotal              Int?
+  createdAt             DateTime?     @default(now())
+  updatedAt             DateTime?
+  from_OrderIntent_cart OrderIntent[] @relation("OrderIntent_cart")
 }
 
 model CartItem {
@@ -348,17 +351,25 @@ model FeaturedProduct {
 }
 
 model OrderIntent {
-  id                String    @id @default(uuid()) @postgresql.Uuid
-  intentId          String    @unique @default("")
-  yooMoneyId        String    @unique @default("")
-  cartId            String    @unique @default("")
-  userId            String    @unique @default("")
-  deliveryAddressId String    @unique @default("")
-  note              String    @default("")
-  paymentStatus     String?   @default("PENDING")
+  id                String           @id @default(uuid()) @postgresql.Uuid
+  intentId          String           @unique @default("")
+  yooMoneyId        String           @unique @default("")
+  paymentId         String           @default("")
+  cart              Cart?            @relation("OrderIntent_cart", fields: [cartId], references: [id])
+  cartId            String?          @map("cart") @postgresql.Uuid
+  user              User?            @relation("OrderIntent_user", fields: [userId], references: [id])
+  userId            String?          @map("user") @postgresql.Uuid
+  deliveryAddress   DelivaryAddress? @relation("OrderIntent_deliveryAddress", fields: [deliveryAddressId], references: [id])
+  deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
+  note              String           @default("")
+  paymentStatus     String?          @default("PENDING")
   shippingCost      Int?
   totalAmount       Int?
-  order             Order?    @relation("Order_orderIntent")
-  createdAt         DateTime? @default(now())
+  order             Order?           @relation("Order_orderIntent")
+  createdAt         DateTime?        @default(now())
   updatedAt         DateTime?
+
+  @@index([cartId])
+  @@index([userId])
+  @@index([deliveryAddressId])
 }

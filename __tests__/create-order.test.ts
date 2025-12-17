@@ -128,18 +128,25 @@ describe("Creating a new order", () => {
         },
       });
 
+    const payment = await sudoContext.db.Payment.createOne({
+      data: {
+        status: "PENDING",
+      },
+    });
+
     // Create a new Order Intent
     const orderIntent = await sudoContext.db.OrderIntent.createOne({
       data: {
         intentId: "mock-id-1234",
         yooMoneyId: "mock-yoo-money-id",
         // @ts-ignore
-        cartId: cart.data.addToCart.id,
-        userId: mockUser.id,
-        deliveryAddressId: userAddress.id,
+        cart: { connect: { id: cart.data.addToCart.id } },
+        user: { connect: { id: mockUser.id } },
+        deliveryAddress: { connect: { id: userAddress.id } },
         // @ts-ignore
         totalAmount: cart.data.addToCart.subTotal,
         paymentStatus: "PENDING",
+        paymentId: payment.id,
       },
     });
 

@@ -25,6 +25,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
     if (!payment) {
       return;
     } else if (payment.status === "canceled") {
+      console.log("Payment Canceled");
       await sudoContext.db.Payment.updateOne({
         where: { yooMoneyId: payment.id },
         data: {
@@ -67,7 +68,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         context,
       });
 
-      // console.log("A new created Order -> ", newOrder);
+      console.log("A new created Order -> ", newOrder);
 
       // Send a receipt to USER about their payment
       // const idempotence_key = uuidv4();

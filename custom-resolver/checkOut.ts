@@ -37,6 +37,8 @@ export const checkOut = async (
     });
   }
 
+  console.log(loggedInUser);
+
   // Setup payment
   const yooMoney = await yooMoneyPaymentGateway();
 

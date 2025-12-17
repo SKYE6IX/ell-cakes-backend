@@ -24,8 +24,8 @@ type CartWithItem = Prisma.CartGetPayload<{
         productId: true;
         variantId: true;
         toppingOptionId: true;
-        compositionSnapShot: true;
-        customizationsSnapShot: true;
+        compositions: true;
+        customizations: true;
       };
     };
   };

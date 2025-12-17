@@ -1,10 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  relationship,
-  timestamp,
-  text,
-  integer,
-} from "@keystone-6/core/fields";
+import { relationship, timestamp, text, select } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession } from "../access";
 
@@ -17,11 +12,18 @@ export const Payment = list({
   fields: {
     user: relationship({ ref: "User.payments" }),
     order: relationship({ ref: "Order.payment" }),
-    paymentId: text({ isIndexed: "unique" }),
-    confirmationUrl: text(),
+    yooMoneyId: text({ isIndexed: "unique" }),
+    redirectUrl: text(),
     amount: text(),
     method: text(),
-    status: text({ defaultValue: "pending" }),
+    status: select({
+      options: [
+        { label: "Pending", value: "PENDING" },
+        { label: "Success", value: "SUCCEEDED" },
+        { label: "Failed", value: "CANCELED" },
+      ],
+      defaultValue: "PENDING",
+    }),
     paidAt: timestamp(),
     createdAt: timestamp({
       defaultValue: { kind: "now" },

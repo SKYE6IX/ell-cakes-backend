@@ -221,22 +221,22 @@ model Cart {
 }
 
 model CartItem {
-  id                     String          @id @default(uuid()) @postgresql.Uuid
-  cart                   Cart?           @relation("CartItem_cart", fields: [cartId], references: [id])
-  cartId                 String?         @map("cart") @postgresql.Uuid
-  product                Product?        @relation("CartItem_product", fields: [productId], references: [id])
-  productId              String?         @map("product") @postgresql.Uuid
-  variant                ProductVariant? @relation("CartItem_variant", fields: [variantId], references: [id])
-  variantId              String?         @map("variant") @postgresql.Uuid
-  toppingOption          ToppingOption?  @relation("CartItem_toppingOption", fields: [toppingOptionId], references: [id])
-  toppingOptionId        String?         @map("toppingOption") @postgresql.Uuid
-  compositionSnapShot    Json?
-  customizationsSnapShot Json?
-  quantity               Int?            @default(1)
-  unitPrice              Int?
-  subTotal               Int?
-  createdAt              DateTime?       @default(now())
-  updatedAt              DateTime?
+  id              String          @id @default(uuid()) @postgresql.Uuid
+  cart            Cart?           @relation("CartItem_cart", fields: [cartId], references: [id])
+  cartId          String?         @map("cart") @postgresql.Uuid
+  product         Product?        @relation("CartItem_product", fields: [productId], references: [id])
+  productId       String?         @map("product") @postgresql.Uuid
+  variant         ProductVariant? @relation("CartItem_variant", fields: [variantId], references: [id])
+  variantId       String?         @map("variant") @postgresql.Uuid
+  toppingOption   ToppingOption?  @relation("CartItem_toppingOption", fields: [toppingOptionId], references: [id])
+  toppingOptionId String?         @map("toppingOption") @postgresql.Uuid
+  compositions    Json?
+  customizations  Json?
+  quantity        Int?            @default(1)
+  unitPrice       Int?
+  subTotal        Int?
+  createdAt       DateTime?       @default(now())
+  updatedAt       DateTime?
 
   @@index([cartId])
   @@index([productId])
@@ -259,6 +259,8 @@ model Order {
   deliveryAddress   DelivaryAddress? @relation("Order_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
   note              String           @default("")
+  orderIntent       OrderIntent?     @relation("Order_orderIntent", fields: [orderIntentId], references: [id])
+  orderIntentId     String?          @unique @map("orderIntent") @postgresql.Uuid
   customizeImages   CustomizeImage[] @relation("CustomizeImage_order")
   createdAt         DateTime?        @default(now())
   updatedAt         DateTime?
@@ -268,22 +270,22 @@ model Order {
 }
 
 model OrderItem {
-  id                     String          @id @default(uuid()) @postgresql.Uuid
-  order                  Order?          @relation("OrderItem_order", fields: [orderId], references: [id])
-  orderId                String?         @map("order") @postgresql.Uuid
-  product                Product?        @relation("OrderItem_product", fields: [productId], references: [id])
-  productId              String?         @map("product") @postgresql.Uuid
-  variant                ProductVariant? @relation("OrderItem_variant", fields: [variantId], references: [id])
-  variantId              String?         @map("variant") @postgresql.Uuid
-  toppingOption          ToppingOption?  @relation("OrderItem_toppingOption", fields: [toppingOptionId], references: [id])
-  toppingOptionId        String?         @map("toppingOption") @postgresql.Uuid
-  compositionSnapShot    Json?
-  customizationsSnapShot Json?
-  quantity               Int?
-  unitPrice              Int?
-  subTotal               Int?
-  createdAt              DateTime?       @default(now())
-  updatedAt              DateTime?
+  id              String          @id @default(uuid()) @postgresql.Uuid
+  order           Order?          @relation("OrderItem_order", fields: [orderId], references: [id])
+  orderId         String?         @map("order") @postgresql.Uuid
+  product         Product?        @relation("OrderItem_product", fields: [productId], references: [id])
+  productId       String?         @map("product") @postgresql.Uuid
+  variant         ProductVariant? @relation("OrderItem_variant", fields: [variantId], references: [id])
+  variantId       String?         @map("variant") @postgresql.Uuid
+  toppingOption   ToppingOption?  @relation("OrderItem_toppingOption", fields: [toppingOptionId], references: [id])
+  toppingOptionId String?         @map("toppingOption") @postgresql.Uuid
+  compositions    Json?
+  customizations  Json?
+  quantity        Int?
+  unitPrice       Int?
+  subTotal        Int?
+  createdAt       DateTime?       @default(now())
+  updatedAt       DateTime?
 
   @@index([orderId])
   @@index([productId])
@@ -292,18 +294,18 @@ model OrderItem {
 }
 
 model Payment {
-  id              String    @id @default(uuid()) @postgresql.Uuid
-  user            User?     @relation("Payment_user", fields: [userId], references: [id])
-  userId          String?   @map("user") @postgresql.Uuid
-  order           Order?    @relation("Order_payment")
-  paymentId       String    @unique @default("")
-  confirmationUrl String    @default("")
-  amount          String    @default("")
-  method          String    @default("")
-  status          String    @default("pending")
-  paidAt          DateTime?
-  createdAt       DateTime? @default(now())
-  updatedAt       DateTime?
+  id          String    @id @default(uuid()) @postgresql.Uuid
+  user        User?     @relation("Payment_user", fields: [userId], references: [id])
+  userId      String?   @map("user") @postgresql.Uuid
+  order       Order?    @relation("Order_payment")
+  yooMoneyId  String    @unique @default("")
+  redirectUrl String    @default("")
+  amount      String    @default("")
+  method      String    @default("")
+  status      String?   @default("PENDING")
+  paidAt      DateTime?
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime?
 
   @@index([userId])
 }
@@ -343,4 +345,20 @@ model FeaturedProduct {
   updatedAt DateTime?
 
   @@index([productId])
+}
+
+model OrderIntent {
+  id                String    @id @default(uuid()) @postgresql.Uuid
+  intentId          String    @unique @default("")
+  yooMoneyId        String    @unique @default("")
+  cartId            String    @unique @default("")
+  userId            String    @unique @default("")
+  deliveryAddressId String    @unique @default("")
+  note              String    @default("")
+  paymentStatus     String?   @default("PENDING")
+  shippingCost      Int?
+  totalAmount       Int?
+  order             Order?    @relation("Order_orderIntent")
+  createdAt         DateTime? @default(now())
+  updatedAt         DateTime?
 }

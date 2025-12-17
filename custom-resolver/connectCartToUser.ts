@@ -76,7 +76,7 @@ export const connectCartToUser = async (
         where: { id: sessionCart?.id },
         data: {
           user: { connect: { id: userId } },
-          sessionId: "null",
+          sessionId: undefined,
           updatedAt: new Date(),
         },
       });

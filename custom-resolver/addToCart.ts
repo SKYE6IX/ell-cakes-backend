@@ -38,8 +38,8 @@ type CartWithItem = Prisma.CartGetPayload<{
         productId: true;
         variantId: true;
         toppingOptionId: true;
-        compositionSnapShot: true;
-        customizationsSnapShot: true;
+        compositions: true;
+        customizations: true;
       };
     };
   };
@@ -56,8 +56,8 @@ const selectItemInCart = {
       productId: true,
       variantId: true,
       toppingOptionId: true,
-      compositionSnapShot: true,
-      customizationsSnapShot: true,
+      compositions: true,
+      customizations: true,
     },
   },
 };
@@ -85,7 +85,7 @@ export const addToCart = async (
     where: cartWhere,
     update: {},
     create: {
-      sessionId: !loggedInUser ? sessionCartId : "null",
+      sessionId: !loggedInUser ? sessionCartId : undefined,
       ...(loggedInUser && { user: { connect: { id: loggedInUser.itemId } } }),
     },
     select: selectItemInCart,
@@ -185,8 +185,8 @@ export const addToCart = async (
     productId,
     variantId,
     toppingOptionId,
-    compositionSnapShot,
-    customizationsSnapShot,
+    compositions: compositionSnapShot,
+    customizations: customizationsSnapShot,
   });
 
   const existCartItem = cartItemMap.get(key) ?? null;
@@ -214,10 +214,8 @@ export const addToCart = async (
         product: { connect: { id: productId } },
         unitPrice: unitPrice,
         subTotal: unitPrice * 1,
-        ...(compositionOptions && { compositionSnapShot: compositionSnapShot }),
-        ...(customizations && {
-          customizationsSnapShot: customizationsSnapShot,
-        }),
+        compositions: compositionSnapShot ?? null,
+        customizations: customizationsSnapShot ?? null,
         ...(toppingOptionId && {
           toppingOption: { connect: { id: selectedTopping?.id } },
         }),
@@ -255,7 +253,7 @@ function generateCartItemKey(
     productId: item.productId,
     variantId: item.variantId,
     toppingOptionId: item.toppingOptionId ?? null,
-    compositionSnapShot: item.compositionSnapShot?.toString(),
-    customizationsSnapShot: item.customizationsSnapShot?.toString(),
+    compositions: item.compositions?.toString(),
+    customizations: item.customizations?.toString(),
   });
 }

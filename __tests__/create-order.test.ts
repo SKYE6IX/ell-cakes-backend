@@ -1,6 +1,5 @@
 import { getContext } from "@keystone-6/core/context";
 import { KeystoneContext } from "@keystone-6/core/types";
-import * as cookie from "cookie";
 import {
   PostgreSqlContainer,
   StartedPostgreSqlContainer,
@@ -8,39 +7,8 @@ import {
 import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
+import { createOrder } from "../custom-resolver/createOrder";
 import path from "path";
-
-jest.mock("iuliia", () => ({
-  translate: jest.fn((text) => text),
-  WIKIPEDIA: {},
-}));
-
-jest.mock("../lib/mail.ts", () => ({
-  sendVerificationEmail: jest.fn(async () => Promise.resolve()),
-}));
-
-jest.mock("@hapi/iron");
-jest.mock("cookie");
-jest.mock("../lib/getSecret");
-
-jest.mock("../lib/paymentGateway.ts", () => ({
-  __esModule: true,
-  default: jest.fn().mockResolvedValue({
-    createPayment: jest.fn().mockResolvedValue({
-      id: "mock-payment-123",
-      status: "succeeded",
-      confirmation: {
-        confirmation_url: "https://mock.payment.url",
-      },
-      amount: {
-        value: "3000",
-      },
-      payment_method: {
-        type: "bank_card",
-      },
-    }),
-  }),
-}));
 
 const IMAGE = "postgres:16-alpine";
 const prismaSchemaPath = path.join(process.cwd(), "schema.prisma");
@@ -50,6 +18,8 @@ const config = {
 
 let container: StartedPostgreSqlContainer;
 let context: KeystoneContext<any>;
+
+jest.mock("nanoid");
 
 beforeAll(async () => {
   container = await new PostgreSqlContainer(IMAGE).start();
@@ -65,12 +35,10 @@ beforeEach(async () => {
   await resetDatabase(container.getConnectionUri(), prismaSchemaPath);
 });
 
-describe("Order and OrderItem Model and", () => {
-  test("Only Sign in User can complete order", async () => {
-    (cookie.parse as jest.Mock).mockReturnValue({
-      "ell-cake-cart-id": "ENCRYPTED_COOKIE_VALUE",
-    });
+describe("Creating a new order", () => {
+  it("Create and return new order ", async () => {
     const sudoContext = context.sudo();
+
     const mockUser = await sudoContext.db.User.createOne({
       data: {
         name: "Jon",
@@ -79,11 +47,13 @@ describe("Order and OrderItem Model and", () => {
         phoneNumber: "9988776699",
       },
     });
+
     const mockSession = {
       listKey: "User",
       itemId: mockUser.id,
       data: { role: "ADMIN" },
     };
+
     const newProduct = await context
       .withSession(mockSession)
       .query.Product.createOne({
@@ -127,7 +97,7 @@ describe("Order and OrderItem Model and", () => {
           "id name stockQuantity type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } }",
       });
 
-    await context.withSession(mockSession).graphql.raw({
+    const cart = await context.withSession(mockSession).graphql.raw({
       query: `mutation AddToCart($productId: String!, $variantId: String!, $customizations: [CustomizationInput!]) {
                addToCart(productId: $productId, variantId: $variantId, customizations: $customizations) {
                 id subTotal cartItems { id quantity }
@@ -158,23 +128,25 @@ describe("Order and OrderItem Model and", () => {
         },
       });
 
-    const checkOut = await context
-      .withSession(mockSession)
-      .graphql.raw<{ checkOut: any }, {}>({
-        query: `mutation CheckOut($deliveryAddressId: String!, $shippingCost: Int!, $paymentMethod: String!) {
-              checkOut(shippingCost: $shippingCost, deliveryAddressId: $deliveryAddressId, paymentMethod: $paymentMethod) {
-               id status amount confirmationUrl method paymentId
-              }
-            }`,
-        variables: {
-          deliveryAddressId: userAddress.id,
-          shippingCost: 1000,
-          paymentMethod: "bank_card",
-        },
-      });
+    // Create a new Order Intent
+    const orderIntent = await sudoContext.db.OrderIntent.createOne({
+      data: {
+        intentId: "mock-id-1234",
+        yooMoneyId: "mock-yoo-money-id",
+        // @ts-ignore
+        cartId: cart.data.addToCart.id,
+        userId: mockUser.id,
+        deliveryAddressId: userAddress.id,
+        // @ts-ignore
+        totalAmount: cart.data.addToCart.subTotal,
+        paymentStatus: "PENDING",
+      },
+    });
 
-    expect(checkOut.data?.checkOut.status).toEqual("pending");
-    expect(checkOut.data?.checkOut.method).toEqual("bank_card");
-    expect(checkOut.data?.checkOut.amount).toEqual("3000");
+    const newOrder = await createOrder({ context, orderIntent });
+
+    expect(newOrder?.status).toEqual("PROCESSING");
+    expect(newOrder?.userId).toEqual(mockUser.id);
+    expect(newOrder?.orderIntentId).toEqual(orderIntent.id);
   });
 });

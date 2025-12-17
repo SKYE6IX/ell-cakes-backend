@@ -107,6 +107,7 @@ export const Order = list({
         },
       },
     }),
+    orderIntent: relationship({ ref: "OrderIntent.order", many: false }),
     customizeImages: relationship({
       ref: "CustomizeImage.order",
       many: true,

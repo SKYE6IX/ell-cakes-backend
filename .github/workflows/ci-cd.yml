@@ -47,6 +47,7 @@ jobs:
           CR_REGISTRY_ID: ${{ vars.YC_REGISTRY_ID }}
           IMAGE_NAME: ${{ github.event.repository.name }}
           IMAGE_TAG: latest
+
         run: |
           docker pull ${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 

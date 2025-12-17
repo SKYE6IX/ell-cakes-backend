@@ -1387,8 +1387,8 @@ type CartItem {
   product: Product
   variant: ProductVariant
   toppingOption: ToppingOption
-  compositionSnapShot: JSON
-  customizationsSnapShot: JSON
+  compositions: JSON
+  customizations: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1430,8 +1430,8 @@ input CartItemUpdateInput {
   product: ProductRelateToOneForUpdateInput
   variant: ProductVariantRelateToOneForUpdateInput
   toppingOption: ToppingOptionRelateToOneForUpdateInput
-  compositionSnapShot: JSON
-  customizationsSnapShot: JSON
+  compositions: JSON
+  customizations: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1461,8 +1461,8 @@ input CartItemCreateInput {
   product: ProductRelateToOneForCreateInput
   variant: ProductVariantRelateToOneForCreateInput
   toppingOption: ToppingOptionRelateToOneForCreateInput
-  compositionSnapShot: JSON
-  customizationsSnapShot: JSON
+  compositions: JSON
+  customizations: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1493,6 +1493,7 @@ type Order {
   payment: Payment
   deliveryAddress: DelivaryAddress
   note: String
+  orderIntent: OrderIntent
   customizeImages(where: CustomizeImageWhereInput! = {}, orderBy: [CustomizeImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizeImageWhereUniqueInput): [CustomizeImage!]
   customizeImagesCount(where: CustomizeImageWhereInput! = {}): Int
   createdAt: DateTime
@@ -1503,6 +1504,7 @@ input OrderWhereUniqueInput {
   id: ID
   orderNumber: String
   payment: PaymentWhereUniqueInput
+  orderIntent: OrderIntentWhereUniqueInput
 }
 
 input OrderWhereInput {
@@ -1520,6 +1522,7 @@ input OrderWhereInput {
   payment: PaymentWhereInput
   deliveryAddress: DelivaryAddressWhereInput
   note: StringFilter
+  orderIntent: OrderIntentWhereInput
   customizeImages: CustomizeImageManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1560,6 +1563,7 @@ input OrderUpdateInput {
   payment: PaymentRelateToOneForUpdateInput
   deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
   note: String
+  orderIntent: OrderIntentRelateToOneForUpdateInput
   customizeImages: CustomizeImageRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1581,6 +1585,12 @@ input PaymentRelateToOneForUpdateInput {
 input DelivaryAddressRelateToOneForUpdateInput {
   create: DelivaryAddressCreateInput
   connect: DelivaryAddressWhereUniqueInput
+  disconnect: Boolean
+}
+
+input OrderIntentRelateToOneForUpdateInput {
+  create: OrderIntentCreateInput
+  connect: OrderIntentWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -1607,6 +1617,7 @@ input OrderCreateInput {
   payment: PaymentRelateToOneForCreateInput
   deliveryAddress: DelivaryAddressRelateToOneForCreateInput
   note: String
+  orderIntent: OrderIntentRelateToOneForCreateInput
   customizeImages: CustomizeImageRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1627,6 +1638,11 @@ input DelivaryAddressRelateToOneForCreateInput {
   connect: DelivaryAddressWhereUniqueInput
 }
 
+input OrderIntentRelateToOneForCreateInput {
+  create: OrderIntentCreateInput
+  connect: OrderIntentWhereUniqueInput
+}
+
 input CustomizeImageRelateToManyForCreateInput {
   create: [CustomizeImageCreateInput!]
   connect: [CustomizeImageWhereUniqueInput!]
@@ -1638,8 +1654,8 @@ type OrderItem {
   product: Product
   variant: ProductVariant
   toppingOption: ToppingOption
-  compositionSnapShot: JSON
-  customizationsSnapShot: JSON
+  compositions: JSON
+  customizations: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1681,8 +1697,8 @@ input OrderItemUpdateInput {
   product: ProductRelateToOneForUpdateInput
   variant: ProductVariantRelateToOneForUpdateInput
   toppingOption: ToppingOptionRelateToOneForUpdateInput
-  compositionSnapShot: JSON
-  customizationsSnapShot: JSON
+  compositions: JSON
+  customizations: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1706,8 +1722,8 @@ input OrderItemCreateInput {
   product: ProductRelateToOneForCreateInput
   variant: ProductVariantRelateToOneForCreateInput
   toppingOption: ToppingOptionRelateToOneForCreateInput
-  compositionSnapShot: JSON
-  customizationsSnapShot: JSON
+  compositions: JSON
+  customizations: JSON
   quantity: Int
   unitPrice: Int
   subTotal: Int
@@ -1724,8 +1740,8 @@ type Payment {
   id: ID!
   user: User
   order: Order
-  paymentId: String
-  confirmationUrl: String
+  yooMoneyId: String
+  redirectUrl: String
   amount: String
   method: String
   status: String
@@ -1737,7 +1753,7 @@ type Payment {
 input PaymentWhereUniqueInput {
   id: ID
   order: OrderWhereUniqueInput
-  paymentId: String
+  yooMoneyId: String
 }
 
 input PaymentWhereInput {
@@ -1747,11 +1763,11 @@ input PaymentWhereInput {
   id: IDFilter
   user: UserWhereInput
   order: OrderWhereInput
-  paymentId: StringFilter
-  confirmationUrl: StringFilter
+  yooMoneyId: StringFilter
+  redirectUrl: StringFilter
   amount: StringFilter
   method: StringFilter
-  status: StringFilter
+  status: StringNullableFilter
   paidAt: DateTimeNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1759,8 +1775,8 @@ input PaymentWhereInput {
 
 input PaymentOrderByInput {
   id: OrderDirection
-  paymentId: OrderDirection
-  confirmationUrl: OrderDirection
+  yooMoneyId: OrderDirection
+  redirectUrl: OrderDirection
   amount: OrderDirection
   method: OrderDirection
   status: OrderDirection
@@ -1772,8 +1788,8 @@ input PaymentOrderByInput {
 input PaymentUpdateInput {
   user: UserRelateToOneForUpdateInput
   order: OrderRelateToOneForUpdateInput
-  paymentId: String
-  confirmationUrl: String
+  yooMoneyId: String
+  redirectUrl: String
   amount: String
   method: String
   status: String
@@ -1790,8 +1806,8 @@ input PaymentUpdateArgs {
 input PaymentCreateInput {
   user: UserRelateToOneForCreateInput
   order: OrderRelateToOneForCreateInput
-  paymentId: String
-  confirmationUrl: String
+  yooMoneyId: String
+  redirectUrl: String
   amount: String
   method: String
   status: String
@@ -1945,6 +1961,101 @@ input FeaturedProductCreateInput {
   updatedAt: DateTime
 }
 
+type OrderIntent {
+  id: ID!
+  intentId: String
+  yooMoneyId: String
+  cartId: String
+  userId: String
+  deliveryAddressId: String
+  note: String
+  paymentStatus: String
+  shippingCost: Int
+  totalAmount: Int
+  order: Order
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderIntentWhereUniqueInput {
+  id: ID
+  intentId: String
+  yooMoneyId: String
+  cartId: String
+  userId: String
+  deliveryAddressId: String
+  order: OrderWhereUniqueInput
+}
+
+input OrderIntentWhereInput {
+  AND: [OrderIntentWhereInput!]
+  OR: [OrderIntentWhereInput!]
+  NOT: [OrderIntentWhereInput!]
+  id: IDFilter
+  intentId: StringFilter
+  yooMoneyId: StringFilter
+  cartId: StringFilter
+  userId: StringFilter
+  deliveryAddressId: StringFilter
+  note: StringFilter
+  paymentStatus: StringNullableFilter
+  shippingCost: IntNullableFilter
+  totalAmount: IntNullableFilter
+  order: OrderWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input OrderIntentOrderByInput {
+  id: OrderDirection
+  intentId: OrderDirection
+  yooMoneyId: OrderDirection
+  cartId: OrderDirection
+  userId: OrderDirection
+  deliveryAddressId: OrderDirection
+  note: OrderDirection
+  paymentStatus: OrderDirection
+  shippingCost: OrderDirection
+  totalAmount: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input OrderIntentUpdateInput {
+  intentId: String
+  yooMoneyId: String
+  cartId: String
+  userId: String
+  deliveryAddressId: String
+  note: String
+  paymentStatus: String
+  shippingCost: Int
+  totalAmount: Int
+  order: OrderRelateToOneForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderIntentUpdateArgs {
+  where: OrderIntentWhereUniqueInput!
+  data: OrderIntentUpdateInput!
+}
+
+input OrderIntentCreateInput {
+  intentId: String
+  yooMoneyId: String
+  cartId: String
+  userId: String
+  deliveryAddressId: String
+  note: String
+  paymentStatus: String
+  shippingCost: Int
+  totalAmount: Int
+  order: OrderRelateToOneForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2071,6 +2182,12 @@ type Mutation {
   updateFeaturedProducts(data: [FeaturedProductUpdateArgs!]!): [FeaturedProduct]
   deleteFeaturedProduct(where: FeaturedProductWhereUniqueInput!): FeaturedProduct
   deleteFeaturedProducts(where: [FeaturedProductWhereUniqueInput!]!): [FeaturedProduct]
+  createOrderIntent(data: OrderIntentCreateInput!): OrderIntent
+  createOrderIntents(data: [OrderIntentCreateInput!]!): [OrderIntent]
+  updateOrderIntent(where: OrderIntentWhereUniqueInput!, data: OrderIntentUpdateInput!): OrderIntent
+  updateOrderIntents(data: [OrderIntentUpdateArgs!]!): [OrderIntent]
+  deleteOrderIntent(where: OrderIntentWhereUniqueInput!): OrderIntent
+  deleteOrderIntents(where: [OrderIntentWhereUniqueInput!]!): [OrderIntent]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2168,6 +2285,9 @@ type Query {
   featuredProduct(where: FeaturedProductWhereUniqueInput!): FeaturedProduct
   featuredProducts(where: FeaturedProductWhereInput! = {}, orderBy: [FeaturedProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: FeaturedProductWhereUniqueInput): [FeaturedProduct!]
   featuredProductsCount(where: FeaturedProductWhereInput! = {}): Int
+  orderIntent(where: OrderIntentWhereUniqueInput!): OrderIntent
+  orderIntents(where: OrderIntentWhereInput! = {}, orderBy: [OrderIntentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderIntentWhereUniqueInput): [OrderIntent!]
+  orderIntentsCount(where: OrderIntentWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   queryCart: Cart

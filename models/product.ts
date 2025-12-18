@@ -22,9 +22,9 @@ export const Product = list({
     },
   },
   fields: {
-    category: relationship({
+    categories: relationship({
       ref: "Category.products",
-      many: false,
+      many: true,
       hooks: {
         validate: {
           create: async ({ resolvedData, fieldKey, addValidationError }) => {
@@ -83,6 +83,7 @@ export const Product = list({
         displayMode: "segmented-control",
       },
     }),
+
     variantType: select({
       label: "Выберите тип варианта",
       options: [
@@ -94,12 +95,17 @@ export const Product = list({
           label: "Количество",
           value: "pieces",
         },
+        {
+          label: "Размер",
+          value: "size",
+        },
       ],
       validation: { isRequired: true },
       ui: {
         displayMode: "segmented-control",
       },
     }),
+
     fillings: relationship({
       label: "Начинки",
       ref: "ProductFilling.products",
@@ -149,16 +155,20 @@ export const Product = list({
         linkToItem: true,
       },
     }),
+
     mixBoxCompositions: relationship({
       ref: "Product",
       many: true,
       label: "Выберите продукт для миксбокса",
     }),
+
     stockQuantity: integer({
       label: "количество на складе",
       validation: { isRequired: true },
     }),
+
     isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
+
     badge: select({
       options: [
         { label: "Новинка", value: "NEW" },
@@ -169,6 +179,7 @@ export const Product = list({
       defaultValue: undefined,
       label: "значок",
     }),
+
     images: relationship({
       ref: "ProductImage.product",
       many: true,
@@ -185,7 +196,9 @@ export const Product = list({
         linkToItem: true,
       },
     }),
+
     video: file({ storage: "yc_s3_files", label: "видео" }),
+
     customization: relationship({
       ref: "ProductCustomization.product",
       many: false,
@@ -202,10 +215,12 @@ export const Product = list({
         linkToItem: true,
       },
     }),
+
     topping: relationship({
       ref: "Topping.product",
       label: "топпинг",
     }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -215,6 +230,7 @@ export const Product = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     updatedAt: timestamp({
       ui: {
         itemView: {

@@ -54,8 +54,7 @@ model DelivaryAddress {
 
 model Product {
   id                              String                @id @default(uuid()) @postgresql.Uuid
-  category                        Category?             @relation("Product_category", fields: [categoryId], references: [id])
-  categoryId                      String?               @map("category") @postgresql.Uuid
+  categories                      Category[]            @relation("Category_products")
   name                            String                @default("")
   slug                            String                @unique @default("")
   baseDescription                 String                @default("")
@@ -80,8 +79,6 @@ model Product {
   from_OrderItem_product          OrderItem[]           @relation("OrderItem_product")
   from_ProductHomeBanner_product  ProductHomeBanner[]   @relation("ProductHomeBanner_product")
   from_FeaturedProduct_product    FeaturedProduct[]     @relation("FeaturedProduct_product")
-
-  @@index([categoryId])
 }
 
 model ProductFilling {
@@ -146,7 +143,7 @@ model Category {
   slug                 String     @unique @default("")
   parent               Category?  @relation("Category_parent", fields: [parentId], references: [id])
   parentId             String?    @map("parent") @postgresql.Uuid
-  products             Product[]  @relation("Product_category")
+  products             Product[]  @relation("Category_products")
   createdAt            DateTime?  @default(now())
   updatedAt            DateTime?
   from_Category_parent Category[] @relation("Category_parent")

@@ -13,8 +13,10 @@ export const Category = list({
       delete: permissions.canManageProduct,
     },
   },
+
   fields: {
     name: text({ validation: { isRequired: true }, label: "Название" }),
+
     slug: text({
       isIndexed: "unique",
       ui: {
@@ -24,9 +26,11 @@ export const Category = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     parent: relationship({ ref: "Category", many: false }),
+
     products: relationship({
-      ref: "Product.category",
+      ref: "Product.categories",
       many: true,
       ui: {
         itemView: {
@@ -35,6 +39,7 @@ export const Category = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

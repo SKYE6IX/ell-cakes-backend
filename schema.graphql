@@ -352,7 +352,8 @@ input UserRelateToOneForCreateInput {
 
 type Product {
   id: ID!
-  category: Category
+  categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
+  categoriesCount(where: CategoryWhereInput! = {}): Int
   name: String
   slug: String
   baseDescription: String
@@ -392,7 +393,7 @@ input ProductWhereInput {
   OR: [ProductWhereInput!]
   NOT: [ProductWhereInput!]
   id: IDFilter
-  category: CategoryWhereInput
+  categories: CategoryManyRelationFilter
   name: StringFilter
   slug: StringFilter
   baseDescription: StringFilter
@@ -408,6 +409,12 @@ input ProductWhereInput {
   topping: ToppingWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
+}
+
+input CategoryManyRelationFilter {
+  every: CategoryWhereInput
+  some: CategoryWhereInput
+  none: CategoryWhereInput
 }
 
 input ProductFillingManyRelationFilter {
@@ -469,7 +476,7 @@ input ProductOrderByInput {
 }
 
 input ProductUpdateInput {
-  category: CategoryRelateToOneForUpdateInput
+  categories: CategoryRelateToManyForUpdateInput
   name: String
   slug: String
   baseDescription: String
@@ -488,10 +495,11 @@ input ProductUpdateInput {
   updatedAt: DateTime
 }
 
-input CategoryRelateToOneForUpdateInput {
-  create: CategoryCreateInput
-  connect: CategoryWhereUniqueInput
-  disconnect: Boolean
+input CategoryRelateToManyForUpdateInput {
+  disconnect: [CategoryWhereUniqueInput!]
+  set: [CategoryWhereUniqueInput!]
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
 }
 
 input ProductFillingRelateToManyForUpdateInput {
@@ -540,7 +548,7 @@ input ProductUpdateArgs {
 }
 
 input ProductCreateInput {
-  category: CategoryRelateToOneForCreateInput
+  categories: CategoryRelateToManyForCreateInput
   name: String
   slug: String
   baseDescription: String
@@ -559,9 +567,9 @@ input ProductCreateInput {
   updatedAt: DateTime
 }
 
-input CategoryRelateToOneForCreateInput {
-  create: CategoryCreateInput
-  connect: CategoryWhereUniqueInput
+input CategoryRelateToManyForCreateInput {
+  create: [CategoryCreateInput!]
+  connect: [CategoryWhereUniqueInput!]
 }
 
 input ProductFillingRelateToManyForCreateInput {
@@ -944,6 +952,12 @@ input CategoryUpdateInput {
   updatedAt: DateTime
 }
 
+input CategoryRelateToOneForUpdateInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
+  disconnect: Boolean
+}
+
 input CategoryUpdateArgs {
   where: CategoryWhereUniqueInput!
   data: CategoryUpdateInput!
@@ -956,6 +970,11 @@ input CategoryCreateInput {
   products: ProductRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input CategoryRelateToOneForCreateInput {
+  create: CategoryCreateInput
+  connect: CategoryWhereUniqueInput
 }
 
 type ProductCustomization {

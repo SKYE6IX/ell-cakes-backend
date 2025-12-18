@@ -18,6 +18,7 @@ import { connectCartToUser } from "./connectCartToUser";
 import { sendPasswordResetToken } from "./sendPasswordResetToken";
 import { validatePasswordResetToken } from "./validatePasswordResetToken";
 import { updatePassword } from "./updatePassword";
+import { querySimilarProducts } from "./querySimilarProducts";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -57,6 +58,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
       validatePasswordResetToken(token: String!, email: String!): Boolean!
+
     }
 
     type Mutation {
@@ -99,7 +101,10 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         isPhoneNumberInUse,
         queryAuthorizedUser,
         validatePasswordResetToken,
+        // querySimilarProducts,
       },
     },
   });
 };
+
+// querySimilarProducts(productId: String!, categoryId: String!): [Product!]!

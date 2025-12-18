@@ -49,7 +49,8 @@ async function main() {
   }
 
   // Second Level Categories
-  // We used "Find" since we only have one category with sub-categories
+  // We used "Find" since at the moment
+  // we only have one category with sub-categories
   const categoryWithSubCategories = topLevelCategories.find(
     (cat) => cat.subcategories.length > 0
   );
@@ -82,8 +83,6 @@ async function main() {
   for (const productFilling of dbProductFillings) {
     productFillingMap.set(productFilling.slug, productFilling);
   }
-
-  // const existingProductFillings = [...dbProductFillings];
 
   // Query all the product
   const existingProducts = await sudoContext.db.Product.findMany();
@@ -143,9 +142,22 @@ async function main() {
     }
 
     // If product doesn't exist, we start the creation of a new product.
+
     // Get it's category using the slug
-    const category = dbCategories.find(
-      (cat) => cat.slug === getTransliterationSlug(product.category)
+    // const category = dbCategories.find(
+    //   (cat) => cat.slug === getTransliterationSlug(product.category)
+    // );
+    // const productCategories = dbCategories.filter(
+    //   (cat, i) => cat.slug === getTransliterationSlug(product.categories[i])
+    // );
+    const productCategories = product.categories.filter(
+      (productCat: string) => {
+        const category = dbCategories.find(
+          (cat) => cat.slug === getTransliterationSlug(productCat)
+        );
+
+        return category;
+      }
     );
 
     // If product has a topping among it's data
@@ -186,7 +198,9 @@ async function main() {
         fillings: {
           connect: connectProductFillingIds.map((cpf) => ({ ...cpf })),
         },
-        category: { connect: { id: category?.id } },
+        categories: {
+          connect: productCategories.map((c: { id: any }) => ({ id: c.id })),
+        },
         ...(product.customizations && {
           customization: {
             create: {

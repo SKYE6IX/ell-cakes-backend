@@ -85,7 +85,7 @@ describe("cart and cart-item Model", () => {
       .withSession(editor)
       .query.Product.createOne({
         data: {
-          category: { create: { name: "cakes" } },
+          categories: { create: [{ name: "cakes" }] },
           images: { create: { altText: "test" } },
           name: "Fluffy Cake",
           baseDescription: "The best cake to ever grace this earth",
@@ -186,7 +186,7 @@ describe("cart and cart-item Model", () => {
       .withSession(editor)
       .query.Product.createOne({
         data: {
-          category: { create: { name: "cakes" } },
+          categories: { create: [{ name: "cakes" }] },
           images: { create: { altText: "test" } },
           name: "Fluffy Cake",
           baseDescription: "The best cake to ever grace this earth",

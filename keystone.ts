@@ -33,7 +33,7 @@ export default withAuth(
       yc_s3_image: {
         kind: "s3",
         type: "image",
-        bucketName: `${YC_S3_BUCKET}-images`,
+        bucketName: `${YC_S3_BUCKET}-images-develop`,
         region: YC_S3_REGION,
         accessKeyId: ycS3KeyId,
         secretAccessKey: ycS3SecretId,

@@ -2313,6 +2313,7 @@ type Query {
   isPhoneNumberInUse(phoneNumber: String!): Boolean!
   queryAuthorizedUser: User
   validatePasswordResetToken(token: String!, email: String!): Boolean!
+  querySimilarProducts(productId: String!, variantType: String!): [Product!]!
 }
 
 union AuthenticatedItem = User

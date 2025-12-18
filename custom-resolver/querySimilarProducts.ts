@@ -2,14 +2,14 @@ import { Context } from ".keystone/types";
 
 export const querySimilarProducts = async (
   root: any,
-  { productId, categoryId }: { productId: string; categoryId: string },
+  { productId, variantType }: { productId: string; variantType: string },
   context: Context
 ) => {
-  // return await context.db.Product.findMany({
-  //   where: {
-  //     category: { id: { equals: categoryId } },
-  //     NOT: { id: { equals: productId } },
-  //   },
-  //   take: 4,
-  // });
+  return await context.db.Product.findMany({
+    where: {
+      variantType: { equals: variantType },
+      NOT: { id: { equals: productId } },
+    },
+    take: 4,
+  });
 };

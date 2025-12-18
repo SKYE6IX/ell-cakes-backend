@@ -143,22 +143,12 @@ async function main() {
 
     // If product doesn't exist, we start the creation of a new product.
 
-    // Get it's category using the slug
-    // const category = dbCategories.find(
-    //   (cat) => cat.slug === getTransliterationSlug(product.category)
-    // );
-    // const productCategories = dbCategories.filter(
-    //   (cat, i) => cat.slug === getTransliterationSlug(product.categories[i])
-    // );
-    const productCategories = product.categories.filter(
-      (productCat: string) => {
-        const category = dbCategories.find(
-          (cat) => cat.slug === getTransliterationSlug(productCat)
-        );
-
-        return category;
-      }
-    );
+    const productCategories = product.categories.map((productCat: string) => {
+      const category = dbCategories.find(
+        (cat) => cat.slug === getTransliterationSlug(productCat)
+      );
+      return category;
+    });
 
     // If product has a topping among it's data
     let toppingId = null;
@@ -199,7 +189,7 @@ async function main() {
           connect: connectProductFillingIds.map((cpf) => ({ ...cpf })),
         },
         categories: {
-          connect: productCategories.map((c: { id: any }) => ({ id: c.id })),
+          connect: productCategories.map((c: { id: any }) => ({ id: c?.id })),
         },
         ...(product.customizations && {
           customization: {

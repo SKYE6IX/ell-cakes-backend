@@ -91,7 +91,7 @@ describe("Order and OrderItem Model and", () => {
       .withSession(mockSession)
       .query.Product.createOne({
         data: {
-          category: { create: { name: "cakes" } },
+          categories: { create: [{ name: "cakes" }] },
           images: { create: { altText: "test" } },
           name: "Fluffy Cake",
           baseDescription: "The best cake to ever grace this earth",

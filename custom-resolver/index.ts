@@ -58,6 +58,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
       validatePasswordResetToken(token: String!, email: String!): Boolean!
+      querySimilarProducts(productId: String!, variantType: String!): [Product!]!
 
     }
 
@@ -101,10 +102,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         isPhoneNumberInUse,
         queryAuthorizedUser,
         validatePasswordResetToken,
-        // querySimilarProducts,
+        querySimilarProducts,
       },
     },
   });
 };
-
-// querySimilarProducts(productId: String!, categoryId: String!): [Product!]!

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766062767425" clover="3.2.0">
-  <project timestamp="1766062767425" name="All files">
+<coverage generated="1766137660690" clover="3.2.0">
+  <project timestamp="1766137660690" name="All files">
     <metrics statements="634" coveredstatements="412" conditionals="244" coveredconditionals="101" methods="85" coveredmethods="33" elements="963" coveredelements="546" complexity="0" loc="634" ncloc="634" packages="4" files="53" classes="53"/>
     <package name="ell-cakes-backend">
       <metrics statements="88" coveredstatements="60" conditionals="42" coveredconditionals="13" methods="16" coveredmethods="4"/>

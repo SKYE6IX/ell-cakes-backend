@@ -78,7 +78,7 @@ model Product {
   from_CartItem_product           CartItem[]            @relation("CartItem_product")
   from_OrderItem_product          OrderItem[]           @relation("OrderItem_product")
   from_ProductHomeBanner_product  ProductHomeBanner[]   @relation("ProductHomeBanner_product")
-  from_FeaturedProduct_product    FeaturedProduct[]     @relation("FeaturedProduct_product")
+  from_FeaturedProduct_products   FeaturedProduct[]     @relation("FeaturedProduct_products")
 }
 
 model ProductFilling {
@@ -339,12 +339,9 @@ model CustomizeImage {
 
 model FeaturedProduct {
   id        String    @id @default(uuid()) @postgresql.Uuid
-  product   Product?  @relation("FeaturedProduct_product", fields: [productId], references: [id])
-  productId String?   @map("product") @postgresql.Uuid
+  products  Product[] @relation("FeaturedProduct_products")
   createdAt DateTime? @default(now())
   updatedAt DateTime?
-
-  @@index([productId])
 }
 
 model OrderIntent {

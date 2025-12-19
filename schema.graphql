@@ -1938,7 +1938,8 @@ input CustomizeImageCreateInput {
 
 type FeaturedProduct {
   id: ID!
-  product: Product
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1952,7 +1953,7 @@ input FeaturedProductWhereInput {
   OR: [FeaturedProductWhereInput!]
   NOT: [FeaturedProductWhereInput!]
   id: IDFilter
-  product: ProductWhereInput
+  products: ProductManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1964,7 +1965,7 @@ input FeaturedProductOrderByInput {
 }
 
 input FeaturedProductUpdateInput {
-  product: ProductRelateToOneForUpdateInput
+  products: ProductRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1975,7 +1976,7 @@ input FeaturedProductUpdateArgs {
 }
 
 input FeaturedProductCreateInput {
-  product: ProductRelateToOneForCreateInput
+  products: ProductRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
 }

@@ -13,7 +13,7 @@ export const FeaturedProduct = list({
     },
   },
   fields: {
-    product: relationship({ ref: "Product" }),
+    products: relationship({ ref: "Product", many: true }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

@@ -70,10 +70,12 @@ jobs:
           folder-id: ${{ vars.YC_FOLDER_ID }}
           revision-service-account-id: ${{ secrets.YC_SA_ID }}
           revision-cores: 1
-          revision-memory: 1024Mb
           revision-core-fraction: 100
-          revision-image-url: cr.yandex/${{ vars.YC_REGISTRY_ID }}/${{ github.event.repository.name }}:latest
+          revision-concurrency: 4
+          revision-memory: 512Mb
+          revision-provisioned: 2
           revision-execution-timeout: 30
+          revision-image-url: cr.yandex/${{ vars.YC_REGISTRY_ID }}/${{ github.event.repository.name }}:latest
           revision-network-id: ${{ vars.YC_NETWORK_ID }}
           revision-env: |
             DATABASE_URL=${{ secrets.DATABASE_URL}}

@@ -156,7 +156,7 @@ describe("Order and OrderItem Model and", () => {
       .withSession(mockSession)
       .db.DelivaryAddress.createOne({
         data: {
-          street: "No 16, mock address",
+          address: "No 16, mock address",
           user: { connect: { id: mockSession.itemId } },
         },
       });

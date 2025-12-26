@@ -25,7 +25,6 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
     if (!payment) {
       return;
     } else if (payment.status === "canceled") {
-      console.log("Payment Canceled");
       await sudoContext.db.Payment.updateOne({
         where: { yooMoneyId: payment.id },
         data: {
@@ -125,6 +124,6 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       "An error occur inside the payment notification web-hook -> ",
       error
     );
-    return;
+    throw error;
   }
 };

@@ -74,7 +74,9 @@ export const addToCart = async (
   context: Context
 ) => {
   let cart: CartWithItem | null = null;
+
   const loggedInUser = context.session as Session;
+
   const sessionCartId = getSessionCartId(context);
 
   const cartWhere = loggedInUser
@@ -85,7 +87,7 @@ export const addToCart = async (
     where: cartWhere,
     update: {},
     create: {
-      sessionId: !loggedInUser ? sessionCartId : undefined,
+      sessionId: loggedInUser ? undefined : sessionCartId,
       ...(loggedInUser && { user: { connect: { id: loggedInUser.itemId } } }),
     },
     select: selectItemInCart,
@@ -243,6 +245,7 @@ export const addToCart = async (
   });
 };
 
+// HELPER FUNCTION
 function generateCartItemKey(
   item: Omit<
     CartWithItem["cartItems"][0],

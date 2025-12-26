@@ -97,7 +97,7 @@ export const Order = list({
           fieldMode: "read",
         },
         displayMode: "cards",
-        cardFields: ["street", "apartmentNumber", "floor", "intercomCode"],
+        cardFields: ["address", "apartmentNumber", "floor", "intercomCode"],
       },
     }),
     note: text({

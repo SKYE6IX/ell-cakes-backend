@@ -12,7 +12,11 @@ export const Cart = list({
     operation: allowAll,
   },
   fields: {
-    sessionId: text({ isIndexed: "unique", defaultValue: null }),
+    sessionId: text({
+      isIndexed: "unique",
+      defaultValue: null,
+      db: { isNullable: true },
+    }),
     user: relationship({ ref: "User.cart" }),
     cartItems: relationship({ ref: "CartItem.cart", many: true }),
     subTotal: integer(),

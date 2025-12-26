@@ -12,44 +12,42 @@ generator client {
 }
 
 model User {
-  id                                String            @id @default(uuid()) @postgresql.Uuid
-  name                              String            @default("")
-  email                             String            @unique @default("")
+  id                                String           @id @default(uuid()) @postgresql.Uuid
+  name                              String           @default("")
+  email                             String           @unique @default("")
   password                          String
-  phoneNumber                       String            @unique @default("")
-  isPhoneNumberVerified             Boolean           @default(false)
+  phoneNumber                       String           @unique @default("")
+  isPhoneNumberVerified             Boolean          @default(false)
   phoneNumberToken                  String?
   phoneNumberVerificationIssuedAt   DateTime?
   phoneNumberVerificationRedeemedAt DateTime?
-  role                              String            @default("CUSTOMER")
+  role                              String           @default("CUSTOMER")
   passwordResetToken                String?
   passwordResetIssuedAt             DateTime?
   passwordResetRedeemedAt           DateTime?
-  firstOrderDiscountEligible        Boolean           @default(true)
-  delivaryAddress                   DelivaryAddress[] @relation("DelivaryAddress_user")
-  cart                              Cart?             @relation("Cart_user")
-  orders                            Order[]           @relation("Order_user")
-  payments                          Payment[]         @relation("Payment_user")
+  firstOrderDiscountEligible        Boolean          @default(true)
+  delivaryAddress                   DelivaryAddress? @relation("DelivaryAddress_user")
+  cart                              Cart?            @relation("Cart_user")
+  orders                            Order[]          @relation("Order_user")
+  payments                          Payment[]        @relation("Payment_user")
   lastLogin                         DateTime?
-  createdAt                         DateTime?         @default(now())
+  createdAt                         DateTime?        @default(now())
   updatedAt                         DateTime?
-  from_OrderIntent_user             OrderIntent[]     @relation("OrderIntent_user")
+  from_OrderIntent_user             OrderIntent[]    @relation("OrderIntent_user")
 }
 
 model DelivaryAddress {
   id                               String        @id @default(uuid()) @postgresql.Uuid
   user                             User?         @relation("DelivaryAddress_user", fields: [userId], references: [id])
-  userId                           String?       @map("user") @postgresql.Uuid
+  userId                           String?       @unique @map("user") @postgresql.Uuid
   orders                           Order[]       @relation("Order_deliveryAddress")
-  street                           String        @default("")
+  address                          String        @default("")
   apartmentNumber                  String        @default("")
   floor                            String        @default("")
   intercomCode                     String        @default("")
   createdAt                        DateTime?     @default(now())
   updatedAt                        DateTime?
   from_OrderIntent_deliveryAddress OrderIntent[] @relation("OrderIntent_deliveryAddress")
-
-  @@index([userId])
 }
 
 model Product {
@@ -210,7 +208,7 @@ model ToppingOption {
 
 model Cart {
   id                    String        @id @default(uuid()) @postgresql.Uuid
-  sessionId             String        @unique @default("")
+  sessionId             String?       @unique
   user                  User?         @relation("Cart_user", fields: [userId], references: [id])
   userId                String?       @unique @map("user") @postgresql.Uuid
   cartItems             CartItem[]    @relation("CartItem_cart")

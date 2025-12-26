@@ -10,7 +10,6 @@ import {
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
-import { Context } from ".keystone/types";
 
 const hiddenFieldConfig = {
   ui: {
@@ -69,6 +68,7 @@ export const User = list({
       ...hiddenFieldConfig,
       access: () => false,
     }),
+
     firstOrderDiscountEligible: checkbox({
       defaultValue: true,
       label: "Eligible for 15% off on first order",
@@ -76,9 +76,10 @@ export const User = list({
         update: permissions.canManageUsers,
       },
     }),
+
     delivaryAddress: relationship({
       ref: "DelivaryAddress.user",
-      many: true,
+      many: false,
       ui: {
         itemView: {
           fieldMode: "hidden",
@@ -88,6 +89,7 @@ export const User = list({
         },
       },
     }),
+
     cart: relationship({
       ref: "Cart.user",
       ui: {
@@ -111,6 +113,7 @@ export const User = list({
         },
       },
     }),
+
     payments: relationship({
       ref: "Payment.user",
       many: true,
@@ -123,6 +126,7 @@ export const User = list({
         },
       },
     }),
+
     lastLogin: timestamp({
       defaultValue: undefined,
       ui: {
@@ -134,6 +138,7 @@ export const User = list({
         },
       },
     }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

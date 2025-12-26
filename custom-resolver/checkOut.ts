@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { ICreatePayment } from "@a2seven/yoo-checkout";
+import { ICreatePayment, YooCheckout } from "@a2seven/yoo-checkout";
 import { customAlphabet } from "nanoid";
 import { Context } from ".keystone/types";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
@@ -37,10 +37,13 @@ export const checkOut = async (
     });
   }
 
-  console.log(loggedInUser);
-
   // Setup payment
-  const yooMoney = await yooMoneyPaymentGateway();
+  let yooMoney: YooCheckout;
+  try {
+    yooMoney = await yooMoneyPaymentGateway();
+  } catch (error) {
+    throw error;
+  }
 
   // Generate unique ID for each intent
   const alphabet = "0123456789abcdefghjklmnpqrstuvwxyz";
@@ -62,8 +65,6 @@ export const checkOut = async (
 
   // Calculate and setup payment processing
   const totalAmount = Number(userCart.subTotal) + shippingCost;
-
-  // console.log("Total Amount -> ", totalAmount);
 
   const createPayLoad: ICreatePayment = {
     amount: {

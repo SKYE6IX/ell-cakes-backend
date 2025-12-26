@@ -8,6 +8,7 @@ export const connectCartToUser = async (
   context: Context
 ) => {
   const loggedInUser = context.session as Session;
+
   const sessionCartId = getSessionCartId(context);
 
   if (!loggedInUser) {
@@ -31,6 +32,7 @@ export const connectCartToUser = async (
     const userCart = await context.db.Cart.findOne({
       where: { user: { id: userId } },
     });
+
     if (userCart) {
       const cartToUpdate = await context.db.Cart.updateOne({
         where: { id: userCart.id },
@@ -55,11 +57,12 @@ export const connectCartToUser = async (
 
       // Disconnect the cartItems from the session cart and then delete it
       const cartToDelete = await context.db.Cart.updateOne({
-        where: { sessionId: sessionCartId },
+        where: { id: sessionCart.id },
         data: {
           cartItems: null,
         },
       });
+
       await context.db.Cart.deleteOne({
         where: { id: cartToDelete.id },
       });
@@ -76,7 +79,7 @@ export const connectCartToUser = async (
         where: { id: sessionCart?.id },
         data: {
           user: { connect: { id: userId } },
-          sessionId: undefined,
+          sessionId: null,
           updatedAt: new Date(),
         },
       });
@@ -85,3 +88,4 @@ export const connectCartToUser = async (
     return null;
   }
 };
+// 97622c4c-dae0-42dc-b4b1-7608306d9e30

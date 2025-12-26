@@ -16,8 +16,7 @@ type User {
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
   firstOrderDiscountEligible: Boolean
-  delivaryAddress(where: DelivaryAddressWhereInput! = {}, orderBy: [DelivaryAddressOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: DelivaryAddressWhereUniqueInput): [DelivaryAddress!]
-  delivaryAddressCount(where: DelivaryAddressWhereInput! = {}): Int
+  delivaryAddress: DelivaryAddress
   cart: Cart
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
@@ -38,6 +37,7 @@ input UserWhereUniqueInput {
   id: ID
   email: String
   phoneNumber: String
+  delivaryAddress: DelivaryAddressWhereUniqueInput
   cart: CartWhereUniqueInput
 }
 
@@ -58,7 +58,7 @@ input UserWhereInput {
   passwordResetIssuedAt: DateTimeNullableFilter
   passwordResetRedeemedAt: DateTimeNullableFilter
   firstOrderDiscountEligible: BooleanFilter
-  delivaryAddress: DelivaryAddressManyRelationFilter
+  delivaryAddress: DelivaryAddressWhereInput
   cart: CartWhereInput
   orders: OrderManyRelationFilter
   payments: PaymentManyRelationFilter
@@ -132,12 +132,6 @@ input DateTimeNullableFilter {
   not: DateTimeNullableFilter
 }
 
-input DelivaryAddressManyRelationFilter {
-  every: DelivaryAddressWhereInput
-  some: DelivaryAddressWhereInput
-  none: DelivaryAddressWhereInput
-}
-
 input OrderManyRelationFilter {
   every: OrderWhereInput
   some: OrderWhereInput
@@ -186,7 +180,7 @@ input UserUpdateInput {
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
   firstOrderDiscountEligible: Boolean
-  delivaryAddress: DelivaryAddressRelateToManyForUpdateInput
+  delivaryAddress: DelivaryAddressRelateToOneForUpdateInput
   cart: CartRelateToOneForUpdateInput
   orders: OrderRelateToManyForUpdateInput
   payments: PaymentRelateToManyForUpdateInput
@@ -195,11 +189,10 @@ input UserUpdateInput {
   updatedAt: DateTime
 }
 
-input DelivaryAddressRelateToManyForUpdateInput {
-  disconnect: [DelivaryAddressWhereUniqueInput!]
-  set: [DelivaryAddressWhereUniqueInput!]
-  create: [DelivaryAddressCreateInput!]
-  connect: [DelivaryAddressWhereUniqueInput!]
+input DelivaryAddressRelateToOneForUpdateInput {
+  create: DelivaryAddressCreateInput
+  connect: DelivaryAddressWhereUniqueInput
+  disconnect: Boolean
 }
 
 input CartRelateToOneForUpdateInput {
@@ -241,7 +234,7 @@ input UserCreateInput {
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
   firstOrderDiscountEligible: Boolean
-  delivaryAddress: DelivaryAddressRelateToManyForCreateInput
+  delivaryAddress: DelivaryAddressRelateToOneForCreateInput
   cart: CartRelateToOneForCreateInput
   orders: OrderRelateToManyForCreateInput
   payments: PaymentRelateToManyForCreateInput
@@ -250,9 +243,9 @@ input UserCreateInput {
   updatedAt: DateTime
 }
 
-input DelivaryAddressRelateToManyForCreateInput {
-  create: [DelivaryAddressCreateInput!]
-  connect: [DelivaryAddressWhereUniqueInput!]
+input DelivaryAddressRelateToOneForCreateInput {
+  create: DelivaryAddressCreateInput
+  connect: DelivaryAddressWhereUniqueInput
 }
 
 input CartRelateToOneForCreateInput {
@@ -275,7 +268,7 @@ type DelivaryAddress {
   user: User
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
-  street: String
+  address: String
   apartmentNumber: String
   floor: String
   intercomCode: String
@@ -285,6 +278,7 @@ type DelivaryAddress {
 
 input DelivaryAddressWhereUniqueInput {
   id: ID
+  user: UserWhereUniqueInput
 }
 
 input DelivaryAddressWhereInput {
@@ -294,7 +288,7 @@ input DelivaryAddressWhereInput {
   id: IDFilter
   user: UserWhereInput
   orders: OrderManyRelationFilter
-  street: StringFilter
+  address: StringFilter
   apartmentNumber: StringFilter
   floor: StringFilter
   intercomCode: StringFilter
@@ -304,7 +298,7 @@ input DelivaryAddressWhereInput {
 
 input DelivaryAddressOrderByInput {
   id: OrderDirection
-  street: OrderDirection
+  address: OrderDirection
   apartmentNumber: OrderDirection
   floor: OrderDirection
   intercomCode: OrderDirection
@@ -315,7 +309,7 @@ input DelivaryAddressOrderByInput {
 input DelivaryAddressUpdateInput {
   user: UserRelateToOneForUpdateInput
   orders: OrderRelateToManyForUpdateInput
-  street: String
+  address: String
   apartmentNumber: String
   floor: String
   intercomCode: String
@@ -337,7 +331,7 @@ input DelivaryAddressUpdateArgs {
 input DelivaryAddressCreateInput {
   user: UserRelateToOneForCreateInput
   orders: OrderRelateToManyForCreateInput
-  street: String
+  address: String
   apartmentNumber: String
   floor: String
   intercomCode: String
@@ -1343,7 +1337,7 @@ input CartWhereInput {
   OR: [CartWhereInput!]
   NOT: [CartWhereInput!]
   id: IDFilter
-  sessionId: StringFilter
+  sessionId: StringNullableFilter
   user: UserWhereInput
   cartItems: CartItemManyRelationFilter
   subTotal: IntNullableFilter
@@ -1601,12 +1595,6 @@ input PaymentRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input DelivaryAddressRelateToOneForUpdateInput {
-  create: DelivaryAddressCreateInput
-  connect: DelivaryAddressWhereUniqueInput
-  disconnect: Boolean
-}
-
 input OrderIntentRelateToOneForUpdateInput {
   create: OrderIntentCreateInput
   connect: OrderIntentWhereUniqueInput
@@ -1650,11 +1638,6 @@ input OrderItemRelateToManyForCreateInput {
 input PaymentRelateToOneForCreateInput {
   create: PaymentCreateInput
   connect: PaymentWhereUniqueInput
-}
-
-input DelivaryAddressRelateToOneForCreateInput {
-  create: DelivaryAddressCreateInput
-  connect: DelivaryAddressWhereUniqueInput
 }
 
 input OrderIntentRelateToOneForCreateInput {

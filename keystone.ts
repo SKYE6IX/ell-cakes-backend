@@ -10,6 +10,7 @@ import { customExtendResolvers } from "./custom-resolver";
 import { confirmPayment } from "./custom-resolver/confirmPayment";
 import { getSecret } from "./lib/getSecret";
 import { pinoLogger } from "./lib/logger";
+import { initOtel } from "./otel";
 
 const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
   process.env;
@@ -19,6 +20,8 @@ const ycS3KeyId = getSecret("YC_S3_KEY_ID");
 const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
 
 const isProduction = process.env.NODE_ENV === "production";
+
+initOtel();
 
 export default withAuth(
   config({

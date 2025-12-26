@@ -1,5 +1,10 @@
 import { list } from "@keystone-6/core";
-import { text, relationship, timestamp } from "@keystone-6/core/fields";
+import {
+  text,
+  relationship,
+  timestamp,
+  decimal,
+} from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, rules } from "../access";
 
@@ -14,9 +19,9 @@ export const DelivaryAddress = list({
     },
   },
   fields: {
-    user: relationship({ ref: "User.delivaryAddress" }),
+    user: relationship({ ref: "User.delivaryAddress", many: false }),
     orders: relationship({ ref: "Order.deliveryAddress", many: true }),
-    street: text({ validation: { isRequired: true } }),
+    address: text({ validation: { isRequired: true } }),
     apartmentNumber: text(),
     floor: text(),
     intercomCode: text(),
@@ -38,7 +43,6 @@ export const DelivaryAddress = list({
       },
     }),
   },
-
   // ui: {
   //   isHidden: true,
   // },

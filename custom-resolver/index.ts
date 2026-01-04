@@ -58,7 +58,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
       validatePasswordResetToken(token: String!, email: String!): Boolean!
-      querySimilarProducts(productId: String!, variantType: String!): [Product!]!
+      querySimilarProducts(productSlug: String!): [Product!]!
 
     }
 

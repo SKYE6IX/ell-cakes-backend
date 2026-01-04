@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766752183574" clover="3.2.0">
-  <project timestamp="1766752183574" name="All files">
-    <metrics statements="641" coveredstatements="419" conditionals="244" coveredconditionals="101" methods="86" coveredmethods="34" elements="971" coveredelements="554" complexity="0" loc="641" ncloc="641" packages="4" files="54" classes="54"/>
+<coverage generated="1767538375047" clover="3.2.0">
+  <project timestamp="1767538375047" name="All files">
+    <metrics statements="656" coveredstatements="431" conditionals="246" coveredconditionals="101" methods="86" coveredmethods="34" elements="988" coveredelements="566" complexity="0" loc="656" ncloc="656" packages="4" files="56" classes="56"/>
     <package name="ell-cakes-backend">
-      <metrics statements="95" coveredstatements="67" conditionals="42" coveredconditionals="13" methods="17" coveredmethods="5"/>
+      <metrics statements="97" coveredstatements="69" conditionals="42" coveredconditionals="13" methods="17" coveredmethods="5"/>
       <file name="access.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/access.ts">
         <metrics statements="22" coveredstatements="11" conditionals="26" coveredconditionals="9" methods="9" coveredmethods="4"/>
         <line num="13" count="12" type="stmt"/>
@@ -90,7 +90,7 @@
         <line num="14" count="7" type="stmt"/>
       </file>
       <file name="schema.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/schema.ts">
-        <metrics statements="22" coveredstatements="22" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="24" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="7" type="stmt"/>
         <line num="2" count="7" type="stmt"/>
         <line num="3" count="7" type="stmt"/>
@@ -112,11 +112,13 @@
         <line num="19" count="7" type="stmt"/>
         <line num="20" count="7" type="stmt"/>
         <line num="21" count="7" type="stmt"/>
+        <line num="22" count="7" type="stmt"/>
         <line num="23" count="7" type="stmt"/>
+        <line num="25" count="7" type="stmt"/>
       </file>
     </package>
     <package name="ell-cakes-backend.custom-resolver">
-      <metrics statements="338" coveredstatements="188" conditionals="154" coveredconditionals="70" methods="39" coveredmethods="15"/>
+      <metrics statements="341" coveredstatements="188" conditionals="156" coveredconditionals="70" methods="39" coveredmethods="15"/>
       <file name="addToCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/addToCart.ts">
         <metrics statements="43" coveredstatements="41" conditionals="46" coveredconditionals="36" methods="6" coveredmethods="5"/>
         <line num="3" count="7" type="stmt"/>
@@ -226,8 +228,8 @@
         <line num="55" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="127" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
       </file>
       <file name="connectCartToUser.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/connectCartToUser.ts">
         <metrics statements="19" coveredstatements="2" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -367,9 +369,12 @@
         <line num="19" count="0" type="stmt"/>
       </file>
       <file name="querySimilarProducts.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/querySimilarProducts.ts">
-        <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="5" coveredstatements="1" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
         <line num="3" count="7" type="stmt"/>
         <line num="8" count="0" type="stmt"/>
+        <line num="12" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
       </file>
       <file name="redeemPhoneNumberToken.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/redeemPhoneNumberToken.ts">
         <metrics statements="17" coveredstatements="13" conditionals="10" coveredconditionals="6" methods="1" coveredmethods="1"/>
@@ -589,7 +594,7 @@
       </file>
     </package>
     <package name="ell-cakes-backend.models">
-      <metrics statements="163" coveredstatements="133" conditionals="26" coveredconditionals="13" methods="23" coveredmethods="10"/>
+      <metrics statements="173" coveredstatements="143" conditionals="26" coveredconditionals="13" methods="23" coveredmethods="10"/>
       <file name="cart-item.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/cart-item.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="7" type="stmt"/>
@@ -657,6 +662,14 @@
         <line num="11" count="7" type="stmt"/>
       </file>
       <file name="featured-product.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/featured-product.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="7" type="stmt"/>
+        <line num="2" count="7" type="stmt"/>
+        <line num="3" count="7" type="stmt"/>
+        <line num="4" count="7" type="stmt"/>
+        <line num="6" count="7" type="stmt"/>
+      </file>
+      <file name="mix-box-product.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/mix-box-product.ts">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="7" type="stmt"/>
         <line num="2" count="7" type="stmt"/>
@@ -751,6 +764,14 @@
         <line num="10" count="7" type="stmt"/>
         <line num="12" count="7" type="stmt"/>
       </file>
+      <file name="product-video.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/product-video.ts">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="7" type="stmt"/>
+        <line num="2" count="7" type="stmt"/>
+        <line num="3" count="7" type="stmt"/>
+        <line num="4" count="7" type="stmt"/>
+        <line num="6" count="7" type="stmt"/>
+      </file>
       <file name="product.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/product.ts">
         <metrics statements="18" coveredstatements="16" conditionals="8" coveredconditionals="6" methods="4" coveredmethods="4"/>
         <line num="1" count="7" type="stmt"/>
@@ -766,11 +787,11 @@
         <line num="47" count="6" type="stmt"/>
         <line num="48" count="6" type="stmt"/>
         <line num="50" count="1" type="stmt"/>
-        <line num="246" count="1" type="stmt"/>
-        <line num="250" count="1" type="stmt"/>
-        <line num="251" count="1" type="stmt"/>
-        <line num="253" count="1" type="cond" truecount="1" falsecount="1"/>
-        <line num="254" count="0" type="stmt"/>
+        <line num="253" count="1" type="stmt"/>
+        <line num="257" count="1" type="stmt"/>
+        <line num="258" count="1" type="stmt"/>
+        <line num="260" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="261" count="0" type="stmt"/>
       </file>
       <file name="topping-option.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/topping-option.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

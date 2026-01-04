@@ -156,10 +156,17 @@ export const Product = list({
       },
     }),
 
-    mixBoxCompositions: relationship({
-      ref: "Product",
-      many: true,
+    mixBoxProduct: relationship({
+      ref: "MixBoxProduct.product",
+      many: false,
       label: "Выберите продукт для миксбокса",
+      ui: {
+        displayMode: "cards",
+        cardFields: ["compositions"],
+        inlineCreate: { fields: ["compositions"] },
+        inlineEdit: { fields: ["compositions"] },
+        linkToItem: true,
+      },
     }),
 
     stockQuantity: integer({
@@ -197,7 +204,7 @@ export const Product = list({
       },
     }),
 
-    video: file({ storage: "yc_s3_files", label: "видео" }),
+    video: relationship({ ref: "ProductVideo.product", many: false }),
 
     customization: relationship({
       ref: "ProductCustomization.product",

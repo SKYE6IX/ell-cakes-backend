@@ -105,6 +105,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       //   receiptPayload,
       //   idempotence_key
       // );
+
       // console.log(receipt);
 
       // TODO:

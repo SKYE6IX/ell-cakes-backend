@@ -59,24 +59,24 @@ model Product {
   type                            String
   variantType                     String
   fillings                        ProductFilling[]      @relation("Product_fillings")
-  mixBoxCompositions              Product[]             @relation("Product_mixBoxCompositions")
+  mixBoxProduct                   MixBoxProduct?        @relation("MixBoxProduct_product")
   stockQuantity                   Int
   isAvailable                     Boolean               @default(true)
   badge                           String?
   images                          ProductImage[]        @relation("ProductImage_product")
-  video_filesize                  Int?
-  video_filename                  String?
+  video                           ProductVideo?         @relation("Product_video", fields: [videoId], references: [id])
+  videoId                         String?               @unique @map("video") @postgresql.Uuid
   customization                   ProductCustomization? @relation("Product_customization", fields: [customizationId], references: [id])
   customizationId                 String?               @unique @map("customization") @postgresql.Uuid
   topping                         Topping?              @relation("Product_topping", fields: [toppingId], references: [id])
   toppingId                       String?               @unique @map("topping") @postgresql.Uuid
   createdAt                       DateTime?             @default(now())
   updatedAt                       DateTime?
-  from_Product_mixBoxCompositions Product[]             @relation("Product_mixBoxCompositions")
   from_CartItem_product           CartItem[]            @relation("CartItem_product")
   from_OrderItem_product          OrderItem[]           @relation("OrderItem_product")
   from_ProductHomeBanner_product  ProductHomeBanner[]   @relation("ProductHomeBanner_product")
   from_FeaturedProduct_products   FeaturedProduct[]     @relation("FeaturedProduct_products")
+  from_MixBoxProduct_compositions MixBoxProduct[]       @relation("MixBoxProduct_compositions")
 }
 
 model ProductFilling {
@@ -364,4 +364,22 @@ model OrderIntent {
   @@index([cartId])
   @@index([userId])
   @@index([deliveryAddressId])
+}
+
+model MixBoxProduct {
+  id           String    @id @default(uuid()) @postgresql.Uuid
+  product      Product?  @relation("MixBoxProduct_product", fields: [productId], references: [id])
+  productId    String?   @unique @map("product") @postgresql.Uuid
+  compositions Product[] @relation("MixBoxProduct_compositions")
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime?
+}
+
+model ProductVideo {
+  id             String    @id @default(uuid()) @postgresql.Uuid
+  product        Product?  @relation("Product_video")
+  video_filesize Int?
+  video_filename String?
+  createdAt      DateTime? @default(now())
+  updatedAt      DateTime?
 }

@@ -19,6 +19,8 @@ import { ProductHomeBanner } from "./models/product-home-banner";
 import { CustomizeImage } from "./models/customize-image";
 import { FeaturedProduct } from "./models/featured-product";
 import { OrderIntent } from "./models/order-intent";
+import { MixBoxProduct } from "./models/mix-box-product";
+import { ProductVideo } from "./models/product-video";
 
 export const lists = {
   User,
@@ -42,4 +44,6 @@ export const lists = {
   CustomizeImage,
   FeaturedProduct,
   OrderIntent,
+  MixBoxProduct,
+  ProductVideo,
 };

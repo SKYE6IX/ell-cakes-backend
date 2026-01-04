@@ -355,29 +355,24 @@ type Product {
   variantType: String
   fillings(where: ProductFillingWhereInput! = {}, orderBy: [ProductFillingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductFillingWhereUniqueInput): [ProductFilling!]
   fillingsCount(where: ProductFillingWhereInput! = {}): Int
-  mixBoxCompositions(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
-  mixBoxCompositionsCount(where: ProductWhereInput! = {}): Int
+  mixBoxProduct: MixBoxProduct
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
   images(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
   imagesCount(where: ProductImageWhereInput! = {}): Int
-  video: FileFieldOutput
+  video: ProductVideo
   customization: ProductCustomization
   topping: Topping
   createdAt: DateTime
   updatedAt: DateTime
 }
 
-type FileFieldOutput {
-  filename: String!
-  filesize: Int!
-  url: String!
-}
-
 input ProductWhereUniqueInput {
   id: ID
   slug: String
+  mixBoxProduct: MixBoxProductWhereUniqueInput
+  video: ProductVideoWhereUniqueInput
   customization: ProductCustomizationWhereUniqueInput
   topping: ToppingWhereUniqueInput
 }
@@ -394,11 +389,12 @@ input ProductWhereInput {
   type: StringFilter
   variantType: StringFilter
   fillings: ProductFillingManyRelationFilter
-  mixBoxCompositions: ProductManyRelationFilter
+  mixBoxProduct: MixBoxProductWhereInput
   stockQuantity: IntFilter
   isAvailable: BooleanFilter
   badge: StringNullableFilter
   images: ProductImageManyRelationFilter
+  video: ProductVideoWhereInput
   customization: ProductCustomizationWhereInput
   topping: ToppingWhereInput
   createdAt: DateTimeNullableFilter
@@ -415,12 +411,6 @@ input ProductFillingManyRelationFilter {
   every: ProductFillingWhereInput
   some: ProductFillingWhereInput
   none: ProductFillingWhereInput
-}
-
-input ProductManyRelationFilter {
-  every: ProductWhereInput
-  some: ProductWhereInput
-  none: ProductWhereInput
 }
 
 input IntFilter {
@@ -477,12 +467,12 @@ input ProductUpdateInput {
   type: String
   variantType: String
   fillings: ProductFillingRelateToManyForUpdateInput
-  mixBoxCompositions: ProductRelateToManyForUpdateInput
+  mixBoxProduct: MixBoxProductRelateToOneForUpdateInput
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
   images: ProductImageRelateToManyForUpdateInput
-  video: FileFieldInput
+  video: ProductVideoRelateToOneForUpdateInput
   customization: ProductCustomizationRelateToOneForUpdateInput
   topping: ToppingRelateToOneForUpdateInput
   createdAt: DateTime
@@ -503,11 +493,10 @@ input ProductFillingRelateToManyForUpdateInput {
   connect: [ProductFillingWhereUniqueInput!]
 }
 
-input ProductRelateToManyForUpdateInput {
-  disconnect: [ProductWhereUniqueInput!]
-  set: [ProductWhereUniqueInput!]
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
+input MixBoxProductRelateToOneForUpdateInput {
+  create: MixBoxProductCreateInput
+  connect: MixBoxProductWhereUniqueInput
+  disconnect: Boolean
 }
 
 input ProductImageRelateToManyForUpdateInput {
@@ -517,12 +506,11 @@ input ProductImageRelateToManyForUpdateInput {
   connect: [ProductImageWhereUniqueInput!]
 }
 
-input FileFieldInput {
-  upload: Upload!
+input ProductVideoRelateToOneForUpdateInput {
+  create: ProductVideoCreateInput
+  connect: ProductVideoWhereUniqueInput
+  disconnect: Boolean
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input ProductCustomizationRelateToOneForUpdateInput {
   create: ProductCustomizationCreateInput
@@ -549,12 +537,12 @@ input ProductCreateInput {
   type: String
   variantType: String
   fillings: ProductFillingRelateToManyForCreateInput
-  mixBoxCompositions: ProductRelateToManyForCreateInput
+  mixBoxProduct: MixBoxProductRelateToOneForCreateInput
   stockQuantity: Int
   isAvailable: Boolean
   badge: String
   images: ProductImageRelateToManyForCreateInput
-  video: FileFieldInput
+  video: ProductVideoRelateToOneForCreateInput
   customization: ProductCustomizationRelateToOneForCreateInput
   topping: ToppingRelateToOneForCreateInput
   createdAt: DateTime
@@ -571,14 +559,19 @@ input ProductFillingRelateToManyForCreateInput {
   connect: [ProductFillingWhereUniqueInput!]
 }
 
-input ProductRelateToManyForCreateInput {
-  create: [ProductCreateInput!]
-  connect: [ProductWhereUniqueInput!]
+input MixBoxProductRelateToOneForCreateInput {
+  create: MixBoxProductCreateInput
+  connect: MixBoxProductWhereUniqueInput
 }
 
 input ProductImageRelateToManyForCreateInput {
   create: [ProductImageCreateInput!]
   connect: [ProductImageWhereUniqueInput!]
+}
+
+input ProductVideoRelateToOneForCreateInput {
+  create: ProductVideoCreateInput
+  connect: ProductVideoWhereUniqueInput
 }
 
 input ProductCustomizationRelateToOneForCreateInput {
@@ -656,6 +649,12 @@ input ProductFillingWhereInput {
   updatedAt: DateTimeNullableFilter
 }
 
+input ProductManyRelationFilter {
+  every: ProductWhereInput
+  some: ProductWhereInput
+  none: ProductWhereInput
+}
+
 input DecimalNullableFilter {
   equals: Decimal
   in: [Decimal!]
@@ -707,9 +706,19 @@ input ProductFillingUpdateInput {
   updatedAt: DateTime
 }
 
+input ProductRelateToManyForUpdateInput {
+  disconnect: [ProductWhereUniqueInput!]
+  set: [ProductWhereUniqueInput!]
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
 input ImageFieldInput {
   upload: Upload!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 input ProductVariantRelateToManyForUpdateInput {
   disconnect: [ProductVariantWhereUniqueInput!]
@@ -739,6 +748,11 @@ input ProductFillingCreateInput {
   variants: ProductVariantRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input ProductRelateToManyForCreateInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
 }
 
 input ProductVariantRelateToManyForCreateInput {
@@ -2058,6 +2072,114 @@ input OrderIntentCreateInput {
   updatedAt: DateTime
 }
 
+type MixBoxProduct {
+  id: ID!
+  product: Product
+  compositions(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  compositionsCount(where: ProductWhereInput! = {}): Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MixBoxProductWhereUniqueInput {
+  id: ID
+  product: ProductWhereUniqueInput
+}
+
+input MixBoxProductWhereInput {
+  AND: [MixBoxProductWhereInput!]
+  OR: [MixBoxProductWhereInput!]
+  NOT: [MixBoxProductWhereInput!]
+  id: IDFilter
+  product: ProductWhereInput
+  compositions: ProductManyRelationFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input MixBoxProductOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input MixBoxProductUpdateInput {
+  product: ProductRelateToOneForUpdateInput
+  compositions: ProductRelateToManyForUpdateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input MixBoxProductUpdateArgs {
+  where: MixBoxProductWhereUniqueInput!
+  data: MixBoxProductUpdateInput!
+}
+
+input MixBoxProductCreateInput {
+  product: ProductRelateToOneForCreateInput
+  compositions: ProductRelateToManyForCreateInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type ProductVideo {
+  id: ID!
+  product: Product
+  video: FileFieldOutput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type FileFieldOutput {
+  filename: String!
+  filesize: Int!
+  url: String!
+}
+
+input ProductVideoWhereUniqueInput {
+  id: ID
+  product: ProductWhereUniqueInput
+}
+
+input ProductVideoWhereInput {
+  AND: [ProductVideoWhereInput!]
+  OR: [ProductVideoWhereInput!]
+  NOT: [ProductVideoWhereInput!]
+  id: IDFilter
+  product: ProductWhereInput
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ProductVideoOrderByInput {
+  id: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ProductVideoUpdateInput {
+  product: ProductRelateToOneForUpdateInput
+  video: FileFieldInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input FileFieldInput {
+  upload: Upload!
+}
+
+input ProductVideoUpdateArgs {
+  where: ProductVideoWhereUniqueInput!
+  data: ProductVideoUpdateInput!
+}
+
+input ProductVideoCreateInput {
+  product: ProductRelateToOneForCreateInput
+  video: FileFieldInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2190,6 +2312,18 @@ type Mutation {
   updateOrderIntents(data: [OrderIntentUpdateArgs!]!): [OrderIntent]
   deleteOrderIntent(where: OrderIntentWhereUniqueInput!): OrderIntent
   deleteOrderIntents(where: [OrderIntentWhereUniqueInput!]!): [OrderIntent]
+  createMixBoxProduct(data: MixBoxProductCreateInput!): MixBoxProduct
+  createMixBoxProducts(data: [MixBoxProductCreateInput!]!): [MixBoxProduct]
+  updateMixBoxProduct(where: MixBoxProductWhereUniqueInput!, data: MixBoxProductUpdateInput!): MixBoxProduct
+  updateMixBoxProducts(data: [MixBoxProductUpdateArgs!]!): [MixBoxProduct]
+  deleteMixBoxProduct(where: MixBoxProductWhereUniqueInput!): MixBoxProduct
+  deleteMixBoxProducts(where: [MixBoxProductWhereUniqueInput!]!): [MixBoxProduct]
+  createProductVideo(data: ProductVideoCreateInput!): ProductVideo
+  createProductVideos(data: [ProductVideoCreateInput!]!): [ProductVideo]
+  updateProductVideo(where: ProductVideoWhereUniqueInput!, data: ProductVideoUpdateInput!): ProductVideo
+  updateProductVideos(data: [ProductVideoUpdateArgs!]!): [ProductVideo]
+  deleteProductVideo(where: ProductVideoWhereUniqueInput!): ProductVideo
+  deleteProductVideos(where: [ProductVideoWhereUniqueInput!]!): [ProductVideo]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2290,6 +2424,12 @@ type Query {
   orderIntent(where: OrderIntentWhereUniqueInput!): OrderIntent
   orderIntents(where: OrderIntentWhereInput! = {}, orderBy: [OrderIntentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderIntentWhereUniqueInput): [OrderIntent!]
   orderIntentsCount(where: OrderIntentWhereInput! = {}): Int
+  mixBoxProduct(where: MixBoxProductWhereUniqueInput!): MixBoxProduct
+  mixBoxProducts(where: MixBoxProductWhereInput! = {}, orderBy: [MixBoxProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: MixBoxProductWhereUniqueInput): [MixBoxProduct!]
+  mixBoxProductsCount(where: MixBoxProductWhereInput! = {}): Int
+  productVideo(where: ProductVideoWhereUniqueInput!): ProductVideo
+  productVideos(where: ProductVideoWhereInput! = {}, orderBy: [ProductVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVideoWhereUniqueInput): [ProductVideo!]
+  productVideosCount(where: ProductVideoWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   queryCart: Cart
@@ -2297,7 +2437,7 @@ type Query {
   isPhoneNumberInUse(phoneNumber: String!): Boolean!
   queryAuthorizedUser: User
   validatePasswordResetToken(token: String!, email: String!): Boolean!
-  querySimilarProducts(productId: String!, variantType: String!): [Product!]!
+  querySimilarProducts(productSlug: String!): [Product!]!
 }
 
 union AuthenticatedItem = User

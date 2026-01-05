@@ -71,9 +71,8 @@ jobs:
           revision-service-account-id: ${{ secrets.YC_SA_ID }}
           revision-cores: 1
           revision-core-fraction: 100
-          revision-concurrency: 4
+          revision-concurrency: 8
           revision-memory: 512Mb
-          revision-provisioned: 1
           revision-execution-timeout: 30
           revision-image-url: cr.yandex/${{ vars.YC_REGISTRY_ID }}/${{ github.event.repository.name }}:latest
           revision-network-id: ${{ vars.YC_NETWORK_ID }}

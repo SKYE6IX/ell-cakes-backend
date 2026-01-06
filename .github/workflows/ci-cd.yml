@@ -56,5 +56,4 @@ jobs:
           ssh -o StrictHostKeyChecking=yes -T ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}  <<EOF
           docker compose pull server
           docker compose up server --force-recreate -d
-          docker image prune -f
           EOF

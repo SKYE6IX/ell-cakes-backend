@@ -40,6 +40,8 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           updatedAt: new Date(),
         },
       });
+
+      return;
     } else if (payment.status === "succeeded") {
       // Update the payment status to succeeded
       const updatedPayment = await sudoContext.db.Payment.updateOne({

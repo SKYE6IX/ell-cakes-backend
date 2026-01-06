@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { ICreatePayment, YooCheckout } from "@a2seven/yoo-checkout";
+import { ICreatePayment, Payment, YooCheckout } from "@a2seven/yoo-checkout";
 import { customAlphabet } from "nanoid";
 import { Context } from ".keystone/types";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
@@ -28,12 +28,24 @@ export const checkOut = async (
   }: CheckOutArgs,
   context: Context
 ) => {
+  const MIN_DELIVERY_COST = 990;
   const loggedInUser = context.session as Session;
 
   // Reject with error if USER isn't in session
   if (!loggedInUser) {
     throw new Error("Only signed in user can perform this action!", {
       cause: "Authorization!",
+    });
+  }
+
+  if (
+    !shippingCost ||
+    shippingCost < MIN_DELIVERY_COST ||
+    !paymentMethod ||
+    !deliveryAddressId
+  ) {
+    throw new Error("Incomplete or wrong args passed!", {
+      cause: "Bad Argument!",
     });
   }
 
@@ -82,7 +94,12 @@ export const checkOut = async (
   };
 
   // Process payment for the transaction
-  const processPayment = await yooMoney.createPayment(createPayLoad, uuidv4());
+  let processPayment: Payment;
+  try {
+    processPayment = await yooMoney.createPayment(createPayLoad, uuidv4());
+  } catch (error) {
+    throw error;
+  }
 
   // Create a new Order Intent
   await context.db.OrderIntent.createOne({

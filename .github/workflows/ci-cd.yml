@@ -52,7 +52,7 @@ jobs:
 
       - name: Load Docker image and restart docker
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} <<EOF
+          ssh -o StrictHostKeyChecking=yes -T ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}  <<EOF
           docker compose pull server
           docker compose up server --force-recreate -d
           docker image prune -f

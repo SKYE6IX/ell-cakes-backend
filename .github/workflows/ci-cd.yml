@@ -48,7 +48,8 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p 22 -t rsa ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_host
+          ssh-keyscan -p 22 -t rsa ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
 
       - name: Load Docker image and restart docker
         run: |

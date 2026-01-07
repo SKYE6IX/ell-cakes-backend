@@ -48,9 +48,14 @@ jobs:
       - name: Load Docker image and restart docker
         run: |
           ssh -o StrictHostKeyChecking=yes -T ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}  <<EOF
+
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login \
+            --username "${{ vars.DOCKER_USERNAME }}" \
+            --password-stdin
+
           docker compose pull server
+
           docker compose up server --force-recreate -d
+
           docker image prune -f
           EOF
-        env:
-          DOCKER_CLI_AUTH: ${{ secrets.DOCKERHUB_TOKEN }}

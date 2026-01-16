@@ -6,7 +6,6 @@ import {
   integer,
   select,
   timestamp,
-  file,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
@@ -21,6 +20,7 @@ export const Product = list({
       delete: permissions.canManageProduct,
     },
   },
+
   fields: {
     categories: relationship({
       ref: "Category.products",
@@ -38,7 +38,12 @@ export const Product = list({
       },
       label: "Категория",
     }),
-    name: text({ validation: { isRequired: true }, label: "Название торта" }),
+
+    name: text({
+      validation: { isRequired: true },
+      label: "Название десерта",
+    }),
+
     slug: text({
       hooks: {
         resolveInput: ({ resolvedData, fieldKey, operation }) => {
@@ -58,19 +63,21 @@ export const Product = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     baseDescription: text({
       validation: { isRequired: true },
       label: "Базовое описание",
     }),
+
     type: select({
-      label: "Выберите тип торта",
+      label: "Выберите типо десерта",
       options: [
         {
           label: "Торт",
           value: "cake",
         },
         {
-          label: "Капкейки",
+          label: "Пирожные",
           value: "cupcake",
         },
         {
@@ -190,7 +197,7 @@ export const Product = list({
     images: relationship({
       ref: "ProductImage.product",
       many: true,
-      label: "изображения",
+      label: "Изображения(максимум 4)",
       ui: {
         displayMode: "cards",
         cardFields: ["image", "altText"],
@@ -204,12 +211,27 @@ export const Product = list({
       },
     }),
 
-    video: relationship({ ref: "ProductVideo.product", many: false }),
+    video: relationship({
+      ref: "ProductVideo.product",
+      label: "Видео(максимум 15 секунд)",
+      many: false,
+      ui: {
+        displayMode: "cards",
+        cardFields: ["video"],
+        inlineCreate: {
+          fields: ["video"],
+        },
+        inlineEdit: {
+          fields: ["video"],
+        },
+        linkToItem: true,
+      },
+    }),
 
     customization: relationship({
       ref: "ProductCustomization.product",
       many: false,
-      label: "персонализация",
+      label: "Кастомизация",
       ui: {
         displayMode: "cards",
         cardFields: ["customOptions"],
@@ -247,6 +269,7 @@ export const Product = list({
       },
     }),
   },
+
   hooks: {
     beforeOperation: {
       delete: async ({ context, item }) => {

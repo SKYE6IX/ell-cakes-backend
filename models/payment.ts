@@ -39,5 +39,6 @@ export const Payment = list({
   },
   ui: {
     isHidden: true,
+    labelField: "status",
   },
 });

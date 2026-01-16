@@ -826,11 +826,12 @@ input ProductRelateToOneForCreateInput {
 type ProductVariant {
   id: ID!
   filling: ProductFilling
-  pieces: Int
   weight: Decimal
+  pieces: Int
+  size: String
   price: Int
   serving: Int
-  isAvailable: Boolean
+  selectedValue: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -845,11 +846,11 @@ input ProductVariantWhereInput {
   NOT: [ProductVariantWhereInput!]
   id: IDFilter
   filling: ProductFillingWhereInput
-  pieces: IntNullableFilter
   weight: DecimalNullableFilter
+  pieces: IntNullableFilter
+  size: StringFilter
   price: IntFilter
   serving: IntNullableFilter
-  isAvailable: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -867,22 +868,22 @@ input IntNullableFilter {
 
 input ProductVariantOrderByInput {
   id: OrderDirection
-  pieces: OrderDirection
   weight: OrderDirection
+  pieces: OrderDirection
+  size: OrderDirection
   price: OrderDirection
   serving: OrderDirection
-  isAvailable: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input ProductVariantUpdateInput {
   filling: ProductFillingRelateToOneForUpdateInput
-  pieces: Int
   weight: Decimal
+  pieces: Int
+  size: String
   price: Int
   serving: Int
-  isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -900,11 +901,11 @@ input ProductVariantUpdateArgs {
 
 input ProductVariantCreateInput {
   filling: ProductFillingRelateToOneForCreateInput
-  pieces: Int
   weight: Decimal
+  pieces: Int
+  size: String
   price: Int
   serving: Int
-  isAvailable: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }

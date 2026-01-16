@@ -1,10 +1,11 @@
-import { list } from "@keystone-6/core";
+import { list, graphql } from "@keystone-6/core";
 import {
   relationship,
-  checkbox,
   integer,
   timestamp,
   decimal,
+  virtual,
+  text,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
@@ -20,16 +21,32 @@ export const ProductVariant = list({
   },
   fields: {
     filling: relationship({ ref: "ProductFilling.variants" }),
-    pieces: integer({ defaultValue: undefined, label: "порции" }),
     weight: decimal({
       precision: 4,
       scale: 1,
       defaultValue: undefined,
-      label: "вес",
+      label: "Вес",
     }),
+    pieces: integer({ defaultValue: undefined, label: "Порции" }),
+    size: text({ defaultValue: undefined, label: "Размер" }),
     price: integer({ validation: { isRequired: true }, label: "цена" }),
     serving: integer(),
-    isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
+    selectedValue: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item, args, context) {
+          // @ts-expect-error ID type doesn't exist on item
+          if (item.weight) return `Вес: ${item.weight}kg`;
+          // @ts-expect-error ID type doesn't exist on item
+          if (item.pieces) return `Порции: ${item.pieces}pc`;
+          // @ts-expect-error ID type doesn't exist on item
+          if (item.size) return `Размер: ${item.size}`;
+        },
+      }),
+      ui: {
+        itemView: { fieldMode: "read" },
+      },
+    }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -50,5 +67,6 @@ export const ProductVariant = list({
   },
   ui: {
     isHidden: !permissions.canManageAll,
+    labelField: "selectedValue",
   },
 });

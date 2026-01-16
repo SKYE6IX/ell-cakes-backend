@@ -107,10 +107,17 @@ export const Order = list({
         },
       },
     }),
-    orderIntent: relationship({ ref: "OrderIntent.order", many: false }),
+    orderIntent: relationship({
+      ref: "OrderIntent.order",
+      many: false,
+    }),
     customizeImages: relationship({
       ref: "CustomizeImage.order",
       many: true,
+      ui: {
+        displayMode: "cards",
+        cardFields: ["image"],
+      },
     }),
     createdAt: timestamp({
       defaultValue: { kind: "now" },
@@ -129,5 +136,17 @@ export const Order = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+  },
+  ui: {
+    listView: {
+      initialColumns: [
+        "orderNumber",
+        "totalAmount",
+        "status",
+        "payment",
+        "createdAt",
+      ],
+      initialSort: { field: "createdAt", direction: "DESC" },
+    },
   },
 });

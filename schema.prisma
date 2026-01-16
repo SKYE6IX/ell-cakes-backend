@@ -122,11 +122,11 @@ model ProductVariant {
   id                     String          @id @default(uuid()) @postgresql.Uuid
   filling                ProductFilling? @relation("ProductVariant_filling", fields: [fillingId], references: [id])
   fillingId              String?         @map("filling") @postgresql.Uuid
-  pieces                 Int?
   weight                 Decimal?        @postgresql.Decimal(4, 1)
+  pieces                 Int?
+  size                   String          @default("")
   price                  Int
   serving                Int?
-  isAvailable            Boolean         @default(true)
   createdAt              DateTime?       @default(now())
   updatedAt              DateTime?
   from_CartItem_variant  CartItem[]      @relation("CartItem_variant")

@@ -42,7 +42,8 @@ export const ProductFilling = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-    description: text({ validation: { isRequired: true }, label: "описание" }),
+    description: text({ label: "описание" }),
+
     carbonhydrate: decimal({
       precision: 5,
       scale: 2,
@@ -78,12 +79,12 @@ export const ProductFilling = list({
       many: true,
       ui: {
         displayMode: "cards",
-        cardFields: ["weight", "pieces", "price", "isAvailable"],
+        cardFields: ["weight", "pieces", "size", "price"],
         inlineCreate: {
-          fields: ["weight", "pieces", "price", "isAvailable"],
+          fields: ["weight", "pieces", "size", "price"],
         },
         inlineEdit: {
-          fields: ["weight", "pieces", "price", "isAvailable"],
+          fields: ["weight", "pieces", "size", "price"],
         },
         linkToItem: true,
       },

@@ -1,5 +1,5 @@
 import { list } from "@keystone-6/core";
-import { text, timestamp, relationship, select } from "@keystone-6/core/fields";
+import { timestamp, relationship, select } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
@@ -18,9 +18,7 @@ export const CustomizationOption = list({
     }),
     name: select({
       options: [
-        { label: "Color", value: "COLOR" },
         { label: "Candle", value: "CANDLE" },
-        { label: "Shape", value: "SHAPE" },
         { label: "Inscription", value: "INSCRIPTION" },
         { label: "Photos", value: "PHOTOS" },
       ],

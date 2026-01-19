@@ -54,7 +54,9 @@ export const checkOut = async (
   try {
     yooMoney = await yooMoneyPaymentGateway();
   } catch (error) {
-    throw error;
+    throw new Error("Error occur while setting up payment gateway", {
+      cause: "Payment Gateway Error!",
+    });
   }
 
   // Generate unique ID for each intent
@@ -78,6 +80,9 @@ export const checkOut = async (
   // Calculate and setup payment processing
   const totalAmount = Number(userCart.subTotal) + shippingCost;
 
+  // Create confirmation URL
+  const paymentConfirmationUrl = `${process.env.FRONTEND_URL}/order/order-status?iid=${intentId}`;
+
   const createPayLoad: ICreatePayment = {
     amount: {
       value: `${totalAmount}`,
@@ -88,7 +93,7 @@ export const checkOut = async (
     },
     confirmation: {
       type: "redirect",
-      return_url: `${process.env.FRONTEND_URL}/order/order-status?iid=${intentId}`,
+      return_url: paymentConfirmationUrl,
     },
     capture: true,
   };
@@ -98,7 +103,10 @@ export const checkOut = async (
   try {
     processPayment = await yooMoney.createPayment(createPayLoad, uuidv4());
   } catch (error) {
-    throw error;
+    console.error("YooMoneny Error -> ", error);
+    throw new Error("Error occur while processing payment gateway", {
+      cause: "Payment Gateway Error!",
+    });
   }
 
   // Create a new Order Intent
@@ -119,10 +127,12 @@ export const checkOut = async (
   // Create a new Payment entity for the order and return it
   const payment = await context.db.Payment.createOne({
     data: {
+      user: { connect: { id: loggedInUser.itemId } },
       yooMoneyId: processPayment?.id,
       amount: processPayment?.amount.value,
       method: processPayment?.payment_method.type,
       redirectUrl: processPayment.confirmation.confirmation_url,
+      confirmationUrl: paymentConfirmationUrl,
       status: PaymentStatus.PENDING,
     },
   });

@@ -3,13 +3,13 @@ import { Context } from ".keystone/types";
 
 export const validatePasswordResetToken = async (
   root: any,
-  { token, email }: { token: string; email: string },
+  { token, phoneNumber }: { token: string; phoneNumber: string },
   context: Context
 ) => {
   const sudoContext = context.sudo();
 
   const user = await sudoContext.db.User.findOne({
-    where: { email },
+    where: { phoneNumber },
   });
 
   if (!user) {
@@ -18,13 +18,15 @@ export const validatePasswordResetToken = async (
     });
   }
 
-  const match = await bcrypt.compare(token, user.phoneNumberToken as string);
+  const match = await bcrypt.compare(token, user.passwordResetToken as string);
+
   if (!match) {
-    throw new Error("Invalid token", { cause: "Failed on bcrypt" });
+    throw new Error("Invalid token!", { cause: "Failed on bcrypt" });
   }
 
-  const issuedAt = user.phoneNumberVerificationIssuedAt;
+  const issuedAt = user.passwordResetIssuedAt;
   const expiration = 30 * 60 * 1000;
+
   if (issuedAt && new Date(issuedAt).getTime() + expiration < Date.now()) {
     throw new Error("Token expired!");
   }

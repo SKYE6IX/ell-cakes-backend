@@ -86,19 +86,14 @@ describe("Resetting user password", () => {
       },
     })) as User;
 
-    const { data, errors } = (await context.graphql.raw({
+    await context.graphql.raw({
       query: `
         mutation SendPasswordResetToken($phoneNumber: String!) {
-          sendPasswordResetToken(phoneNumber: $phoneNumber) {
-           passwordResetUrl
-          }
+          sendPasswordResetToken(phoneNumber: $phoneNumber)
         }
       `,
       variables: { phoneNumber: user.phoneNumber },
-    })) as GraphQLResponse<{ passwordResetUrl: string }>;
-
-    const url = new URL(data.sendPasswordResetToken.passwordResetUrl);
-    expect(url.searchParams.get("email")).toEqual(user.email);
+    });
 
     const updatedUser = (await sudoContext.db.User.findOne({
       where: { id: user.id },
@@ -127,9 +122,7 @@ describe("Resetting user password", () => {
     await context.graphql.raw({
       query: `
         mutation SendPasswordResetToken($phoneNumber: String!) {
-          sendPasswordResetToken(phoneNumber: $phoneNumber) {
-           passwordResetUrl
-          }
+          sendPasswordResetToken(phoneNumber: $phoneNumber)
         }
       `,
       variables: { phoneNumber: user.phoneNumber },
@@ -137,11 +130,11 @@ describe("Resetting user password", () => {
 
     const { data, errors } = (await context.graphql.raw({
       query: `
-        query Query($token: String!, $email: String!) {
-         validatePasswordResetToken(token: $token, email: $email)
+        query Query($token: String!, $phoneNumber: String!) {
+         validatePasswordResetToken(token: $token, phoneNumber: $phoneNumber)
         }
       `,
-      variables: { token, email: user.email },
+      variables: { token, phoneNumber: user.phoneNumber },
     })) as GraphQLResponse<boolean>;
 
     expect(data.validatePasswordResetToken).toBeTruthy();
@@ -159,6 +152,7 @@ describe("Resetting user password", () => {
       token,
       issuedAt: new Date(),
     });
+
     const sudoContext = context.sudo();
     const user = (await sudoContext.db.User.createOne({
       data: {
@@ -172,9 +166,7 @@ describe("Resetting user password", () => {
     await context.graphql.raw({
       query: `
         mutation SendPasswordResetToken($phoneNumber: String!) {
-          sendPasswordResetToken(phoneNumber: $phoneNumber) {
-           passwordResetUrl
-          }
+          sendPasswordResetToken(phoneNumber: $phoneNumber) 
         }
       `,
       variables: { phoneNumber: user.phoneNumber },
@@ -184,13 +176,13 @@ describe("Resetting user password", () => {
 
     const { data, errors } = (await withRequest.graphql.raw({
       query: `
-      mutation UpdatePassword($token: String!, $email: String!, $newPassword: String!) {
-       updatePassword(token: $token, email: $email, newPassword: $newPassword) {
+      mutation UpdatePassword($token: String!, $phoneNumber: String!, $newPassword: String!) {
+       updatePassword(token: $token, phoneNumber: $phoneNumber, newPassword: $newPassword) {
            id
         }
        }
       `,
-      variables: { token, email: user.email, newPassword },
+      variables: { token, phoneNumber: user.phoneNumber, newPassword },
     })) as GraphQLResponse<User>;
 
     expect(data.updatePassword.id).toEqual(user.id);

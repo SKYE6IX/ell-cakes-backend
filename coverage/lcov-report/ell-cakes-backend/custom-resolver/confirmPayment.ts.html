@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">20.68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/25</span>
+                <span class='fraction'>6/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">17.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/24</span>
+                <span class='fraction'>5/28</span>
             </div>
         
             
@@ -195,12 +195,18 @@
 <a name='L130'></a><a href='#L130'>130</a>
 <a name='L131'></a><a href='#L131'>131</a>
 <a name='L132'></a><a href='#L132'>132</a>
-<a name='L133'></a><a href='#L133'>133</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -270,6 +276,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -331,6 +341,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { ICreateReceipt } from "@a2seven/yoo-checkout";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
+import { sendSms } from "../lib/sendSms";
 import { createOrder } from "./createOrder";
 import { PaymentStatus } from "./checkOut";
 &nbsp;
@@ -398,7 +409,18 @@ export const confirmPayment = <span class="fstat-no" title="function not covered
         context,
       });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      console.log("A new created Order -&gt; ", newOrder);</span>
+      const user = <span class="cstat-no" title="statement not covered" >await sudoContext.db.User.findOne({</span>
+        where: { id: newOrder?.userId },
+      });
+&nbsp;
+      // Set up new order sms notification for user.
+      const newOrderMessage = <span class="cstat-no" title="statement not covered" >`Заказ № ${newOrder?.orderNumber} принят. Сборка 1-5 дня. ELLCAKES`;</span>
+<span class="cstat-no" title="statement not covered" >      if (user) {</span>
+<span class="cstat-no" title="statement not covered" >        await sendSms({</span>
+          phoneNumber: user.phoneNumber,
+          message: newOrderMessage,
+        });
+      }
 &nbsp;
       // Send a receipt to USER about their payment
       // const idempotence_key = uuidv4();
@@ -431,7 +453,6 @@ export const confirmPayment = <span class="fstat-no" title="function not covered
       //     },
       //   ],
       // };
-&nbsp;
       // const receipt = await yooMoney.createReceipt(
       //   receiptPayload,
       //   idempotence_key
@@ -439,13 +460,7 @@ export const confirmPayment = <span class="fstat-no" title="function not covered
 &nbsp;
       // console.log(receipt);
 &nbsp;
-      // TODO:
-      // Set up sms service that will send sms about the order to the USER
-      // Use the payment ID to query the ORDER to get information about the order and the
-      // User information.
-&nbsp;
       // 1. Send receipt email to user after a successful payment(Through Yookassa set up)
-&nbsp;
       // 2. Create an order for Merchant CRM using the values of all the order items.
       // ::::: 1. We need to update the order model, so we can store the ID of CRM order ID
       // :::::  we've just created.
@@ -466,7 +481,7 @@ export const confirmPayment = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-16T11:22:59.711Z
+                at 2026-01-19T15:55:56.672Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

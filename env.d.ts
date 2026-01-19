@@ -11,7 +11,8 @@ interface ImportMetaEnv {
   readonly FRONTEND_URL: string;
   readonly YOO_MONEY_SHOP_ID: string;
   readonly YOO_MONEY_SECRET_ID: string;
-  readonly REDIS_URL: string;
+  readonly SMS_SENDER: string;
+  readonly SMS_API_KEY: string;
 }
 declare global {
   namespace NodeJS {

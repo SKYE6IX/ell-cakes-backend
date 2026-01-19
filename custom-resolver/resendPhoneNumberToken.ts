@@ -8,6 +8,7 @@ export const resendPhoneNumberToken = async (
   context: Context
 ) => {
   const loggedInUser = context.session as Session;
+
   if (!loggedInUser) {
     throw new Error("Only Authorized user can perform this action!", {
       cause: "Authorization",
@@ -25,8 +26,9 @@ export const resendPhoneNumberToken = async (
     });
   }
 
-  // Generate a new token and update user!
+  // Generate a new token and send to user and update user!
   const { token, issuedAt } = await issuePhoneNumberToken({ phoneNumber });
+
   await context.db.User.updateOne({
     where: { id: user.id },
     data: {

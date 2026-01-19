@@ -2,6 +2,7 @@ import { Context } from ".keystone/types";
 import { v4 as uuidv4 } from "uuid";
 import { ICreateReceipt } from "@a2seven/yoo-checkout";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
+import { sendSms } from "../lib/sendSms";
 import { createOrder } from "./createOrder";
 import { PaymentStatus } from "./checkOut";
 
@@ -69,7 +70,18 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         context,
       });
 
-      console.log("A new created Order -> ", newOrder);
+      const user = await sudoContext.db.User.findOne({
+        where: { id: newOrder?.userId },
+      });
+
+      // Set up new order sms notification for user.
+      const newOrderMessage = `Заказ № ${newOrder?.orderNumber} принят. Сборка 1-5 дня. ELLCAKES`;
+      if (user) {
+        await sendSms({
+          phoneNumber: user.phoneNumber,
+          message: newOrderMessage,
+        });
+      }
 
       // Send a receipt to USER about their payment
       // const idempotence_key = uuidv4();
@@ -102,7 +114,6 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       //     },
       //   ],
       // };
-
       // const receipt = await yooMoney.createReceipt(
       //   receiptPayload,
       //   idempotence_key
@@ -110,13 +121,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
 
       // console.log(receipt);
 
-      // TODO:
-      // Set up sms service that will send sms about the order to the USER
-      // Use the payment ID to query the ORDER to get information about the order and the
-      // User information.
-
       // 1. Send receipt email to user after a successful payment(Through Yookassa set up)
-
       // 2. Create an order for Merchant CRM using the values of all the order items.
       // ::::: 1. We need to update the order model, so we can store the ID of CRM order ID
       // :::::  we've just created.

@@ -14,6 +14,7 @@ export const Payment = list({
     order: relationship({ ref: "Order.payment" }),
     yooMoneyId: text({ isIndexed: "unique" }),
     redirectUrl: text(),
+    confirmationUrl: text(),
     amount: text(),
     method: text(),
     status: select({

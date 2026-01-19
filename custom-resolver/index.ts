@@ -28,10 +28,6 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       status: Boolean
       message: String
     }
-      
-    type PasswordResetTokenResponse {
-      passwordResetUrl: String!
-    }
 
     input RegisterUserInput {
      name: String!
@@ -57,7 +53,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       isEmailInUse(email: String!): Boolean!
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
-      validatePasswordResetToken(token: String!, email: String!): Boolean!
+      validatePasswordResetToken(token: String!, phoneNumber: String!): Boolean!
       querySimilarProducts(productSlug: String!): [Product!]!
 
     }
@@ -66,8 +62,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         authorizedUser(email: String!, password: String!): User!
         redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
         resendPhoneNumberToken(phoneNumber: String!): String!
-        sendPasswordResetToken(phoneNumber: String!): PasswordResetTokenResponse!
-        updatePassword(token: String!, email: String!, newPassword: String!): User!
+        sendPasswordResetToken(phoneNumber: String!): String!
+        updatePassword(token: String!, phoneNumber: String!, newPassword: String!): User!
         addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
         increaseCartItem(cartItemId: String!): Cart!
         decreaseCartItem(cartItemId: String!): Cart

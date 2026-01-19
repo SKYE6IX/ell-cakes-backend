@@ -5,15 +5,15 @@ export const updatePassword = async (
   root: any,
   {
     token,
-    email,
+    phoneNumber,
     newPassword,
-  }: { token: string; email: string; newPassword: string },
+  }: { token: string; phoneNumber: string; newPassword: string },
   context: Context
 ) => {
   const sudoContext = context.sudo();
 
   const user = await sudoContext.db.User.findOne({
-    where: { email },
+    where: { phoneNumber },
   });
 
   if (!user) {
@@ -22,14 +22,15 @@ export const updatePassword = async (
     });
   }
 
-  const match = await bcrypt.compare(token, user.phoneNumberToken as string);
+  const match = await bcrypt.compare(token, user.passwordResetToken as string);
   if (!match) {
     throw new Error("Invalid token", { cause: "Failed on bcrypt" });
   }
 
   // Check and compare the expiration since the token issued
-  const issuedAt = user.phoneNumberVerificationIssuedAt;
+  const issuedAt = user.passwordResetIssuedAt;
   const expiration = 30 * 60 * 1000;
+
   if (issuedAt && new Date(issuedAt).getTime() + expiration < Date.now()) {
     throw new Error("Token expired!");
   }

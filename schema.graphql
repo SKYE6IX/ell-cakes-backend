@@ -1759,6 +1759,7 @@ type Payment {
   order: Order
   yooMoneyId: String
   redirectUrl: String
+  confirmationUrl: String
   amount: String
   method: String
   status: String
@@ -1782,6 +1783,7 @@ input PaymentWhereInput {
   order: OrderWhereInput
   yooMoneyId: StringFilter
   redirectUrl: StringFilter
+  confirmationUrl: StringFilter
   amount: StringFilter
   method: StringFilter
   status: StringNullableFilter
@@ -1794,6 +1796,7 @@ input PaymentOrderByInput {
   id: OrderDirection
   yooMoneyId: OrderDirection
   redirectUrl: OrderDirection
+  confirmationUrl: OrderDirection
   amount: OrderDirection
   method: OrderDirection
   status: OrderDirection
@@ -1807,6 +1810,7 @@ input PaymentUpdateInput {
   order: OrderRelateToOneForUpdateInput
   yooMoneyId: String
   redirectUrl: String
+  confirmationUrl: String
   amount: String
   method: String
   status: String
@@ -1825,6 +1829,7 @@ input PaymentCreateInput {
   order: OrderRelateToOneForCreateInput
   yooMoneyId: String
   redirectUrl: String
+  confirmationUrl: String
   amount: String
   method: String
   status: String
@@ -2331,8 +2336,8 @@ type Mutation {
   authorizedUser(email: String!, password: String!): User!
   redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
   resendPhoneNumberToken(phoneNumber: String!): String!
-  sendPasswordResetToken(phoneNumber: String!): PasswordResetTokenResponse!
-  updatePassword(token: String!, email: String!, newPassword: String!): User!
+  sendPasswordResetToken(phoneNumber: String!): String!
+  updatePassword(token: String!, phoneNumber: String!, newPassword: String!): User!
   addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
   increaseCartItem(cartItemId: String!): Cart!
   decreaseCartItem(cartItemId: String!): Cart
@@ -2437,7 +2442,7 @@ type Query {
   isEmailInUse(email: String!): Boolean!
   isPhoneNumberInUse(phoneNumber: String!): Boolean!
   queryAuthorizedUser: User
-  validatePasswordResetToken(token: String!, email: String!): Boolean!
+  validatePasswordResetToken(token: String!, phoneNumber: String!): Boolean!
   querySimilarProducts(productSlug: String!): [Product!]!
 }
 
@@ -2577,10 +2582,6 @@ enum KeystoneAdminUISortDirection {
 type VerifyUserByPhoneNumberResponse {
   status: Boolean
   message: String
-}
-
-type PasswordResetTokenResponse {
-  passwordResetUrl: String!
 }
 
 input RegisterUserInput {

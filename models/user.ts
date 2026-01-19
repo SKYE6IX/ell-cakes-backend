@@ -187,6 +187,7 @@ export const User = list({
           const { token, issuedAt } = await issuePhoneNumberToken({
             phoneNumber: inputData.phoneNumber,
           });
+
           await context.db.User.updateOne({
             where: { id: originalItem.id.toString() },
             data: {

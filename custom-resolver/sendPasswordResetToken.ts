@@ -28,11 +28,5 @@ export const sendPasswordResetToken = async (
     },
   });
 
-  const baseUrl = `${process.env.FRONTEND_URL}/reset-password`;
-  const passwordResetUrl = new URL(baseUrl);
-  passwordResetUrl.searchParams.set("email", user.email);
-
-  return {
-    passwordResetUrl,
-  };
+  return "Token Sent!";
 };

@@ -60,7 +60,9 @@ async function processUploadImages(resolveFile: Upload) {
       format: "JPEG",
       quality: 0.85,
     });
+
     const convertedBuffer = Buffer.from(convertedFile);
+
     return {
       createReadStream: () => Readable.from(convertedBuffer),
       filename: resolveFile.filename,

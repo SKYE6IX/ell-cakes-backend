@@ -4,8 +4,12 @@ import { getContext } from "@keystone-6/core/context";
 import * as PrismaModule from ".prisma/client";
 import path from "path";
 import sharp from "sharp";
-import { createReadStream, readdirSync, readFileSync } from "node:fs";
+import { promisify } from "node:util";
+import heicConvert from "heic-convert";
+import { Readable } from "stream";
+import { createReadStream, readdirSync, readFileSync, readFile } from "node:fs";
 import { getTransliterationSlug } from "../lib/getTransliteration";
+import { fileTypeFromStream } from "file-type";
 import config from "../keystone";
 
 async function main() {
@@ -88,8 +92,10 @@ async function main() {
   const existingProducts = await sudoContext.db.Product.findMany();
 
   console.log("🌱 Seeding products...");
+
   for (const productFile of productsFiles) {
     const productPath = path.join(productsFolderPath, productFile);
+
     const product = JSON.parse(readFileSync(productPath, "utf-8"));
 
     const connectProductFillingIds = [];
@@ -113,6 +119,7 @@ async function main() {
           {
             data: {
               ...productFilling,
+              lifeShelf: Number(productFilling.lifeShelf),
               variants: {
                 create: productFilling.variants.map((variant: any) => ({
                   ...variant,
@@ -142,7 +149,6 @@ async function main() {
     }
 
     // If product doesn't exist, we start the creation of a new product.
-
     const productCategories = product.categories.map((productCat: string) => {
       const category = dbCategories.find(
         (cat) => cat.slug === getTransliterationSlug(productCat)
@@ -152,31 +158,36 @@ async function main() {
 
     // If product has a topping among it's data
     let toppingId = null;
-    const toppingSlug = getTransliterationSlug(product.topping.toppingName);
+    if (product.topping) {
+      const toppingSlug = getTransliterationSlug(product.topping.toppingName);
 
-    // Query all the toppings
-    const dbToppings = await sudoContext.db.Topping.findMany();
-    // First check if the topping exist
-    const existingTopping = dbToppings.find((tp) => tp.slug === toppingSlug);
-    if (existingTopping) {
-      console.log("Toppig already exist...");
-      toppingId = existingTopping.id;
-    } else {
-      console.log("Creating a new topping...");
-      const topping = await sudoContext.db.Topping.createOne({
-        data: {
-          name: product.topping.toppingName,
-          options: {
-            create: product.topping.options.map((option: any) => ({
-              ...option,
-            })),
+      // Query all the toppings
+      const dbToppings = await sudoContext.db.Topping.findMany();
+
+      // First check if the topping exist
+      const existingTopping = dbToppings.find((tp) => tp.slug === toppingSlug);
+
+      if (existingTopping) {
+        console.log("Toppig already exist...");
+        toppingId = existingTopping.id;
+      } else {
+        console.log("Creating a new topping...");
+        const topping = await sudoContext.db.Topping.createOne({
+          data: {
+            name: product.topping.toppingName,
+            options: {
+              create: product.topping.options.map((option: any) => ({
+                ...option,
+              })),
+            },
           },
-        },
-      });
-      toppingId = topping.id;
+        });
+        toppingId = topping.id;
+      }
     }
 
     console.log("Creating new product....");
+
     const newProduct = await context.prisma.product.create({
       data: {
         name: product.name,
@@ -210,27 +221,23 @@ async function main() {
         }),
       },
     });
+
     console.log("Newly created product: -> ", newProduct.id);
 
     console.log("🎆 Starting images uploading....");
 
-    const imageFolder = path.join(
+    const imagesFolder = path.join(
       process.cwd(),
       "data",
-      "seed-images",
-      product.imagesFolder
+      "products-media",
+      product.imagesFolder,
+      "images"
     );
-    const imageFiles = readdirSync(imageFolder);
-    for (const fileName of imageFiles) {
-      const imagePath = path.join(imageFolder, fileName);
-      const mimeType = (await sharp(imagePath).metadata()).format;
+    const imageFiles = readdirSync(imagesFolder);
 
-      const imageData = {
-        createReadStream: () => createReadStream(imagePath),
-        filename: fileName,
-        mimetype: `image/${mimeType}`,
-        encoding: "7bit",
-      };
+    for (const fileName of imageFiles) {
+      const imagePath = path.join(imagesFolder, fileName);
+      const imageData = await getImageData(imagePath, fileName);
       const upload = new Upload();
       upload.resolve(imageData);
       await sudoContext.query.ProductImage.createOne({
@@ -241,10 +248,74 @@ async function main() {
       });
     }
     console.log("🎆 Added images. Total: -> ", imageFiles.length);
+
+    console.log("🎆 Starting video uploading....");
+    const videoFolder = path.join(
+      process.cwd(),
+      "data",
+      "products-media",
+      product.imagesFolder,
+      "video"
+    );
+    const videoFile = readdirSync(videoFolder)[0];
+
+    if (videoFile) {
+      const videoPath = path.join(videoFolder, videoFile);
+      const stream = createReadStream(videoPath);
+      const type = await fileTypeFromStream(stream);
+
+      const videoData = {
+        createReadStream: () => createReadStream(videoPath),
+        filename: videoFile,
+        mimetype: type?.mime,
+        encoding: "7bit",
+      };
+
+      const upload = new Upload();
+      upload.resolve(videoData);
+
+      await sudoContext.db.ProductVideo.createOne({
+        data: {
+          video: { upload: upload },
+          product: { connect: { id: newProduct?.id } },
+        },
+      });
+      console.log("🎆 Added a video.... Name: -> ", videoFile);
+    }
   }
+
   console.log("✅ Product seeded OR existed");
 
   console.log(`✅ Seed Data Inserted`);
   process.exit();
 }
 main();
+
+async function getImageData(imagePath: string, fileName: string) {
+  const mimeType = (await sharp(imagePath).metadata()).format;
+  if (mimeType === "heif") {
+    const inputBuffer = await promisify(readFile)(imagePath);
+
+    const convertedFile = await heicConvert({
+      buffer: inputBuffer as unknown as ArrayBufferLike,
+      format: "JPEG",
+      quality: 0.85,
+    });
+
+    const convertedBuffer = Buffer.from(convertedFile);
+
+    return {
+      createReadStream: () => Readable.from(convertedBuffer),
+      filename: fileName.replace(/\.heic$/i, ".jpg"),
+      mimetype: `image/jpeg`,
+      encoding: "7bit",
+    };
+  } else {
+    return {
+      createReadStream: () => createReadStream(imagePath),
+      filename: fileName,
+      mimetype: `image/${mimeType}`,
+      encoding: "7bit",
+    };
+  }
+}

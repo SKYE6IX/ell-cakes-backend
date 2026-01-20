@@ -374,7 +374,6 @@ input ProductWhereUniqueInput {
   mixBoxProduct: MixBoxProductWhereUniqueInput
   video: ProductVideoWhereUniqueInput
   customization: ProductCustomizationWhereUniqueInput
-  topping: ToppingWhereUniqueInput
 }
 
 input ProductWhereInput {
@@ -1193,7 +1192,8 @@ input CustomizationOptionRelateToOneForCreateInput {
 
 type Topping {
   id: ID!
-  product: Product
+  products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productsCount(where: ProductWhereInput! = {}): Int
   name: String
   slug: String
   options(where: ToppingOptionWhereInput! = {}, orderBy: [ToppingOptionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ToppingOptionWhereUniqueInput): [ToppingOption!]
@@ -1204,7 +1204,6 @@ type Topping {
 
 input ToppingWhereUniqueInput {
   id: ID
-  product: ProductWhereUniqueInput
   name: String
   slug: String
 }
@@ -1214,7 +1213,7 @@ input ToppingWhereInput {
   OR: [ToppingWhereInput!]
   NOT: [ToppingWhereInput!]
   id: IDFilter
-  product: ProductWhereInput
+  products: ProductManyRelationFilter
   name: StringFilter
   slug: StringFilter
   options: ToppingOptionManyRelationFilter
@@ -1237,7 +1236,7 @@ input ToppingOrderByInput {
 }
 
 input ToppingUpdateInput {
-  product: ProductRelateToOneForUpdateInput
+  products: ProductRelateToManyForUpdateInput
   name: String
   slug: String
   options: ToppingOptionRelateToManyForUpdateInput
@@ -1258,7 +1257,7 @@ input ToppingUpdateArgs {
 }
 
 input ToppingCreateInput {
-  product: ProductRelateToOneForCreateInput
+  products: ProductRelateToManyForCreateInput
   name: String
   slug: String
   options: ToppingOptionRelateToManyForCreateInput

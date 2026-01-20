@@ -246,8 +246,9 @@ export const Product = list({
     }),
 
     topping: relationship({
-      ref: "Topping.product",
+      ref: "Topping.products",
       label: "топпинг",
+      many: false,
     }),
 
     createdAt: timestamp({

@@ -306,7 +306,7 @@ async function getImageData(imagePath: string, fileName: string) {
 
     return {
       createReadStream: () => Readable.from(convertedBuffer),
-      filename: fileName.replace(/\.heic$/i, ".jpg"),
+      filename: fileName,
       mimetype: `image/jpeg`,
       encoding: "7bit",
     };

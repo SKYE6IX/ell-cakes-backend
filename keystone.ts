@@ -37,8 +37,8 @@ export default withAuth(
         kind: "s3",
         type: "image",
         // Always check this before seeding
-        bucketName: `${YC_S3_BUCKET}-image-${
-          isProduction ? "prod" : "develop"
+        bucketName: `${YC_S3_BUCKET}-${
+          isProduction ? "image-prod" : "images-develop"
         }`,
         region: YC_S3_REGION,
         accessKeyId: ycS3KeyId,

@@ -45,4 +45,12 @@ export const Cart = list({
       },
     },
   },
+  ui: {
+    isHidden: ({ session }) => {
+      if (session.data.role === "ADMIN") {
+        return false;
+      }
+      return true;
+    },
+  },
 });

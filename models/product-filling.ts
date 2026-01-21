@@ -129,4 +129,7 @@ export const ProductFilling = list({
       },
     },
   },
+  ui: {
+    isHidden: true,
+  },
 });

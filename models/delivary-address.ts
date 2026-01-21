@@ -43,7 +43,7 @@ export const DelivaryAddress = list({
       },
     }),
   },
-  // ui: {
-  //   isHidden: true,
-  // },
+  ui: {
+    isHidden: true,
+  },
 });

@@ -24,7 +24,6 @@ export const MixBoxProduct = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-
     updatedAt: timestamp({
       ui: {
         itemView: {

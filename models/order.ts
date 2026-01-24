@@ -113,7 +113,10 @@ export const Order = list({
                         .map((c) => {
                           if (c.key === "toppingOption.weight") {
                             return `<td style="padding: 8px;">
-                            ${oi.product.topping.name} (${getValue(oi, c.key)}г)
+                            ${oi.product.topping.name} (${getValue(
+                              oi,
+                              c.key
+                            )}кг)
                           </td>`;
                           } else if (c.key === "customizations") {
                             return `<td style="padding: 8px;">   

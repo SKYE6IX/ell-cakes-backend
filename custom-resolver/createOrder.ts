@@ -72,27 +72,6 @@ export const createOrder = async ({
       },
     });
 
-    // We need to check if user has added customize image,
-    // and connect the new order id to it.
-    for (const orderItem of orderItems) {
-      const snapShots =
-        orderItem.customizations as unknown as CustomizationSnapshot[];
-      if (snapShots) {
-        for (const snapShot of snapShots) {
-          if (snapShot.name === "PHOTOS") {
-            snapShot.customValue.imagesId?.forEach(async (imageId) => {
-              await sudoContext.query.CustomizeImage.updateOne({
-                where: { id: imageId },
-                data: {
-                  order: { connect: { id: newOrder.id } },
-                },
-              });
-            });
-          }
-        }
-      }
-    }
-
     // Clean up the cart
     await sudoContext.db.Cart.deleteOne({
       where: { id: cart?.id },

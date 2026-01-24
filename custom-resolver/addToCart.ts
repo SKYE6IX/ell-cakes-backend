@@ -12,12 +12,14 @@ export interface CustomizationSnapshot {
     imagesId: string[] | null;
   };
 }
+
 interface CustomizationValue {
   optionId: string;
   valueId: string;
   inscriptionText: string | null;
   imagesId: string[] | null;
 }
+
 interface AddToCartArgs {
   productId: string;
   variantId: string;
@@ -153,6 +155,7 @@ export const addToCart = async (
       const extraPrice = valueOption?.extraPrice ?? 0;
 
       customizationsTotalAmount += extraPrice;
+
       return {
         name: customOption?.name || "",
         customValue: {
@@ -205,10 +208,12 @@ export const addToCart = async (
     });
   } else {
     const selectedTopping = product?.topping?.options[0];
+
     // Calculate the unit price for a single product
     const toppingPrice = selectedTopping?.extraPrice ?? 0;
     const basePrice = product?.fillings[0].variants[0].price ?? 0;
     const unitPrice = basePrice + customizationsTotalAmount + toppingPrice;
+
     await context.db.CartItem.createOne({
       data: {
         cart: { connect: { id: cart.id } },
@@ -234,6 +239,7 @@ export const addToCart = async (
       cartId: cart.id,
     },
   });
+
   const newCartSubTotal = result._sum.subTotal || 0;
 
   return context.db.Cart.updateOne({

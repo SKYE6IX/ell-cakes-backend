@@ -246,6 +246,8 @@ model CartItem {
 
 model Order {
   id                String           @id @default(uuid()) @postgresql.Uuid
+  orderIntent       OrderIntent?     @relation("Order_orderIntent", fields: [orderIntentId], references: [id])
+  orderIntentId     String?          @unique @map("orderIntent") @postgresql.Uuid
   user              User?            @relation("Order_user", fields: [userId], references: [id])
   userId            String?          @map("user") @postgresql.Uuid
   orderItems        OrderItem[]      @relation("OrderItem_order")
@@ -259,9 +261,6 @@ model Order {
   deliveryAddress   DelivaryAddress? @relation("Order_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
   note              String           @default("")
-  orderIntent       OrderIntent?     @relation("Order_orderIntent", fields: [orderIntentId], references: [id])
-  orderIntentId     String?          @unique @map("orderIntent") @postgresql.Uuid
-  customizeImages   CustomizeImage[] @relation("CustomizeImage_order")
   createdAt         DateTime?        @default(now())
   updatedAt         DateTime?
 
@@ -324,8 +323,6 @@ model ProductHomeBanner {
 
 model CustomizeImage {
   id              String    @id @default(uuid()) @postgresql.Uuid
-  order           Order?    @relation("CustomizeImage_order", fields: [orderId], references: [id])
-  orderId         String?   @map("order") @postgresql.Uuid
   image_id        String?
   image_filesize  Int?
   image_width     Int?
@@ -334,8 +331,6 @@ model CustomizeImage {
   altText         String    @default("")
   createdAt       DateTime? @default(now())
   updatedAt       DateTime?
-
-  @@index([orderId])
 }
 
 model FeaturedProduct {

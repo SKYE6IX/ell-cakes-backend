@@ -20,16 +20,25 @@ export const OrderItem = list({
   },
   fields: {
     order: relationship({ ref: "Order.orderItems" }),
+
     product: relationship({ ref: "Product" }),
+
     variant: relationship({
       ref: "ProductVariant",
     }),
+
     toppingOption: relationship({ ref: "ToppingOption" }),
+
     compositions: json(),
+
     customizations: json(),
+
     quantity: integer(),
+
     unitPrice: integer(),
+
     subTotal: integer(),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {

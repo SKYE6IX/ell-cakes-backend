@@ -1,5 +1,5 @@
 import { list } from "@keystone-6/core";
-import { relationship, timestamp, text, image } from "@keystone-6/core/fields";
+import { timestamp, text, image } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 
@@ -15,7 +15,6 @@ export const CustomizeImage = list({
     },
   },
   fields: {
-    order: relationship({ ref: "Order.customizeImages" }),
     image: image({ storage: "yc_s3_order_images" }),
     altText: text(),
     createdAt: timestamp({

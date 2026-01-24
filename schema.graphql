@@ -1509,7 +1509,9 @@ input ToppingOptionRelateToOneForCreateInput {
 
 type Order {
   id: ID!
+  orderIntent: OrderIntent
   user: User
+  orderDetails: String
   orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   orderItemsCount(where: OrderItemWhereInput! = {}): Int
   orderNumber: String
@@ -1520,18 +1522,15 @@ type Order {
   payment: Payment
   deliveryAddress: DelivaryAddress
   note: String
-  orderIntent: OrderIntent
-  customizeImages(where: CustomizeImageWhereInput! = {}, orderBy: [CustomizeImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizeImageWhereUniqueInput): [CustomizeImage!]
-  customizeImagesCount(where: CustomizeImageWhereInput! = {}): Int
   createdAt: DateTime
   updatedAt: DateTime
 }
 
 input OrderWhereUniqueInput {
   id: ID
+  orderIntent: OrderIntentWhereUniqueInput
   orderNumber: String
   payment: PaymentWhereUniqueInput
-  orderIntent: OrderIntentWhereUniqueInput
 }
 
 input OrderWhereInput {
@@ -1539,6 +1538,7 @@ input OrderWhereInput {
   OR: [OrderWhereInput!]
   NOT: [OrderWhereInput!]
   id: IDFilter
+  orderIntent: OrderIntentWhereInput
   user: UserWhereInput
   orderItems: OrderItemManyRelationFilter
   orderNumber: StringFilter
@@ -1549,8 +1549,6 @@ input OrderWhereInput {
   payment: PaymentWhereInput
   deliveryAddress: DelivaryAddressWhereInput
   note: StringFilter
-  orderIntent: OrderIntentWhereInput
-  customizeImages: CustomizeImageManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -1559,12 +1557,6 @@ input OrderItemManyRelationFilter {
   every: OrderItemWhereInput
   some: OrderItemWhereInput
   none: OrderItemWhereInput
-}
-
-input CustomizeImageManyRelationFilter {
-  every: CustomizeImageWhereInput
-  some: CustomizeImageWhereInput
-  none: CustomizeImageWhereInput
 }
 
 input OrderOrderByInput {
@@ -1580,6 +1572,7 @@ input OrderOrderByInput {
 }
 
 input OrderUpdateInput {
+  orderIntent: OrderIntentRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
   orderItems: OrderItemRelateToManyForUpdateInput
   orderNumber: String
@@ -1590,10 +1583,14 @@ input OrderUpdateInput {
   payment: PaymentRelateToOneForUpdateInput
   deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
   note: String
-  orderIntent: OrderIntentRelateToOneForUpdateInput
-  customizeImages: CustomizeImageRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input OrderIntentRelateToOneForUpdateInput {
+  create: OrderIntentCreateInput
+  connect: OrderIntentWhereUniqueInput
+  disconnect: Boolean
 }
 
 input OrderItemRelateToManyForUpdateInput {
@@ -1609,25 +1606,13 @@ input PaymentRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input OrderIntentRelateToOneForUpdateInput {
-  create: OrderIntentCreateInput
-  connect: OrderIntentWhereUniqueInput
-  disconnect: Boolean
-}
-
-input CustomizeImageRelateToManyForUpdateInput {
-  disconnect: [CustomizeImageWhereUniqueInput!]
-  set: [CustomizeImageWhereUniqueInput!]
-  create: [CustomizeImageCreateInput!]
-  connect: [CustomizeImageWhereUniqueInput!]
-}
-
 input OrderUpdateArgs {
   where: OrderWhereUniqueInput!
   data: OrderUpdateInput!
 }
 
 input OrderCreateInput {
+  orderIntent: OrderIntentRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
   orderItems: OrderItemRelateToManyForCreateInput
   orderNumber: String
@@ -1638,10 +1623,13 @@ input OrderCreateInput {
   payment: PaymentRelateToOneForCreateInput
   deliveryAddress: DelivaryAddressRelateToOneForCreateInput
   note: String
-  orderIntent: OrderIntentRelateToOneForCreateInput
-  customizeImages: CustomizeImageRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
+}
+
+input OrderIntentRelateToOneForCreateInput {
+  create: OrderIntentCreateInput
+  connect: OrderIntentWhereUniqueInput
 }
 
 input OrderItemRelateToManyForCreateInput {
@@ -1652,16 +1640,6 @@ input OrderItemRelateToManyForCreateInput {
 input PaymentRelateToOneForCreateInput {
   create: PaymentCreateInput
   connect: PaymentWhereUniqueInput
-}
-
-input OrderIntentRelateToOneForCreateInput {
-  create: OrderIntentCreateInput
-  connect: OrderIntentWhereUniqueInput
-}
-
-input CustomizeImageRelateToManyForCreateInput {
-  create: [CustomizeImageCreateInput!]
-  connect: [CustomizeImageWhereUniqueInput!]
 }
 
 type OrderItem {
@@ -1888,7 +1866,6 @@ input ProductHomeBannerCreateInput {
 
 type CustomizeImage {
   id: ID!
-  order: Order
   image: ImageFieldOutput
   altText: String
   createdAt: DateTime
@@ -1904,7 +1881,6 @@ input CustomizeImageWhereInput {
   OR: [CustomizeImageWhereInput!]
   NOT: [CustomizeImageWhereInput!]
   id: IDFilter
-  order: OrderWhereInput
   altText: StringFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1918,7 +1894,6 @@ input CustomizeImageOrderByInput {
 }
 
 input CustomizeImageUpdateInput {
-  order: OrderRelateToOneForUpdateInput
   image: ImageFieldInput
   altText: String
   createdAt: DateTime
@@ -1931,7 +1906,6 @@ input CustomizeImageUpdateArgs {
 }
 
 input CustomizeImageCreateInput {
-  order: OrderRelateToOneForCreateInput
   image: ImageFieldInput
   altText: String
   createdAt: DateTime

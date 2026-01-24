@@ -33,19 +33,27 @@ export const User = list({
   },
   fields: {
     name: text({ validation: { isRequired: true } }),
+
     email: text({
       validation: { isRequired: true },
       isIndexed: "unique",
     }),
+
     password: password({ validation: { isRequired: true } }),
+
     phoneNumber: text({
       isIndexed: "unique",
       defaultValue: null,
     }),
+
     isPhoneNumberVerified: checkbox({ defaultValue: false }),
+
     phoneNumberToken: password(hiddenFieldConfig),
+
     phoneNumberVerificationIssuedAt: timestamp(hiddenFieldConfig),
+
     phoneNumberVerificationRedeemedAt: timestamp(hiddenFieldConfig),
+
     role: select({
       options: [
         { label: "Admin", value: "ADMIN" },
@@ -56,14 +64,17 @@ export const User = list({
       validation: { isRequired: true },
       ui: { displayMode: "select" },
     }),
+
     passwordResetToken: password({
       ...hiddenFieldConfig,
       access: () => false,
     }),
+
     passwordResetIssuedAt: timestamp({
       ...hiddenFieldConfig,
       access: () => false,
     }),
+
     passwordResetRedeemedAt: timestamp({
       ...hiddenFieldConfig,
       access: () => false,
@@ -101,6 +112,7 @@ export const User = list({
         },
       },
     }),
+
     orders: relationship({
       ref: "Order.user",
       many: true,
@@ -148,6 +160,7 @@ export const User = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     updatedAt: timestamp({
       ui: {
         itemView: {

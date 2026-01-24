@@ -39,6 +39,7 @@ export const Cart = list({
           where: { id: item.id.toString() },
           query: "id cartItems { id }",
         });
+        console.log("Cart -> ", cart);
         await context.query.CartItem.deleteMany({
           where: cart.cartItems.map((v: { id: any }) => ({ id: v.id })),
         });

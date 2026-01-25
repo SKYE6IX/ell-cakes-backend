@@ -19,6 +19,7 @@ export const uploadImageCustomization = async (
     const imageData = await processUploadImages(resolveFile);
 
     const upload = new Upload();
+
     upload.resolve(imageData);
 
     const newImage = await sudoContext.query.CustomizeImage.createOne({
@@ -50,8 +51,8 @@ function streamToBuffer(stream: NodeJS.ReadableStream): Promise<Buffer> {
 
 async function processUploadImages(resolveFile: Upload) {
   const stream = resolveFile.createReadStream() as NodeJS.ReadableStream;
-  const buffer = await streamToBuffer(stream);
 
+  const buffer = await streamToBuffer(stream);
   const mimeType = (await sharp(buffer).metadata()).format;
 
   if (mimeType === "heif") {

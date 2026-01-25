@@ -109,7 +109,11 @@ export default withAuth(
       },
     },
     server: {
-      cors: { origin: [FRONTEND_URL], credentials: true },
+      cors: {
+        origin: [FRONTEND_URL],
+        credentials: true,
+        allowedHeaders: ["Apollo-Require-Preflight", "x-apollo-operation-name"],
+      },
       port: 8080,
 
       extendExpressApp: (app, commonContext) => {
@@ -119,6 +123,7 @@ export default withAuth(
         app.use("/api/graphql", async (req, res, next) => {
           if (!req.cookies["ell-cake-cart-id"]) {
             const cartId = randomUUID();
+
             res.cookie("ell-cake-cart-id", cartId, {
               httpOnly: true,
               sameSite: isProduction ? "none" : "lax",

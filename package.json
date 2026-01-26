@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "keystone dev",
-    "start": "keystone start",
+    "start": "keystone start --with-migrations",
     "build": "keystone build",
     "seed": "tsx ./script",
     "test": "jest"
@@ -20,10 +20,12 @@
     "@opentelemetry/sdk-metrics": "^2.2.0",
     "@opentelemetry/sdk-node": "^0.208.0",
     "@opentelemetry/sdk-trace-node": "^2.2.0",
+    "bullmq": "^5.67.1",
     "cookie": "^1.1.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "heic-convert": "^2.1.0",
+    "ioredis": "^5.9.2",
     "iuliia": "^0.8.2",
     "keystone-app": "^0.0.1-security",
     "nanoid": "^5.1.6",

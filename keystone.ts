@@ -11,6 +11,7 @@ import { confirmPayment } from "./custom-resolver/confirmPayment";
 import { getSecret } from "./lib/getSecret";
 import { pinoLogger } from "./lib/logger";
 import { initOtel } from "./otel";
+import { runWorkerSchedule, initSchedulers } from "./lib/workerSchedule";
 
 const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
   process.env;
@@ -122,6 +123,10 @@ export default withAuth(
       port: 8080,
 
       extendExpressApp: (app, commonContext) => {
+        // Run worker schedule!
+        initSchedulers();
+        runWorkerSchedule(commonContext);
+
         app.use(cookieParser());
         app.use(express.json());
 

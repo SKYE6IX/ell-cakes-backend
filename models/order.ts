@@ -13,8 +13,10 @@ import { isSignedIn as hasSession, permissions, rules } from "../access";
 // TODO:
 // 1. Set up a field where we render a formated string to display all about order details
 // that isn't included on this fields.✅
+
 // 2. Intregration with CRM, we need to come up with a soluton on how we cant integrate with CRM
 // without bloating about 400 plus more variants.
+
 // 3. Notification setup for new order for store owner. Perhaps an email, or maybe connection with
 // CRM will enough?
 
@@ -76,20 +78,23 @@ export const Order = list({
               "quantity subTotal product { name topping { name } } variant { weight pieces size filling { name } } toppingOption { weight } customizations compositions",
           });
 
-          const customizeImages = await context.query.CustomizeImage.findMany({
-            query: "id image { url }",
-          });
-
           if (!orderItems.length) return "<p>No items in this order.</p>";
 
           const getValue = (obj: any, path: string) =>
             path.split(".").reduce((o, i) => o?.[i], obj);
+
           const activeCols = potentialCols.filter((col) =>
             orderItems.some((oi) => {
               const val = getValue(oi, col.key);
               return val !== null && val !== undefined && val !== "";
             })
           );
+
+          const customizeImages = await context.query.CustomizeImage.findMany({
+            query: "id image { url }",
+          });
+
+          const products = await context.db.Product.findMany();
 
           return `
               <table style="width:70vw; border-collapse: collapse; font-family: sans-serif; font-size: 14px;">
@@ -126,14 +131,16 @@ export const Order = list({
                                   cus.customValue;
 
                                 let imagesUrl: string[] = [];
+
                                 if (imagesId && imagesId.length >= 1) {
-                                  imagesUrl = imagesId?.map((id: string) => {
+                                  imagesUrl = imagesId?.filter((id: string) => {
                                     const imageItem = customizeImages.find(
                                       (img) => img.id === id
                                     );
                                     return imageItem?.image.url;
                                   });
                                 }
+
                                 return `
                                 <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 2px">
                                  <span>Тип: ${cus.name}</span><br/>
@@ -150,7 +157,7 @@ export const Order = list({
                                   ${
                                     imagesUrl.length
                                       ? `Фотоссылка: ${imagesUrl
-                                          .map(
+                                          ?.map(
                                             (url) =>
                                               `<a href="${url}" target="_blank">Ссылка</a>`
                                           )
@@ -162,6 +169,26 @@ export const Order = list({
                               })
                               .join("")} 
                               </td>`;
+                          } else if (c.key === "compositions") {
+                            const compositionData = oi.compositions?.filter(
+                              (compos: {
+                                productId: string;
+                                quantity: number;
+                              }) => {
+                                const product = products.find(
+                                  (pro) => pro.id === compos.productId
+                                );
+                                return {
+                                  name: product.name,
+                                  qty: compos.quantity,
+                                };
+                              }
+                            );
+                            return `<td style="padding: 8px; width: 300px;">
+                            ${compositionData
+                              .map((data: any) => `${data.name}(${data.qty})`)
+                              .join(",")}
+                            </td>`;
                           } else if (c.key === "product.name") {
                             return `<td style="padding: 8px; width: 300px;">
                             ${getValue(oi, c.key)} (${oi.variant.filling.name})

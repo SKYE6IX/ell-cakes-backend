@@ -14,6 +14,7 @@ export const CustomizeImage = list({
       delete: permissions.canManageOrder,
     },
   },
+
   fields: {
     image: image({ storage: "yc_s3_order_images" }),
     altText: text(),

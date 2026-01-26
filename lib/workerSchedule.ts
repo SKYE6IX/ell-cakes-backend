@@ -12,16 +12,22 @@ const connection = new IORedis({
 export async function initSchedulers() {
   const myQueue = new Queue("deleteCustomizeOrderImage", { connection });
 
-  myQueue.obliterate({ force: true });
+  const repeatableJobs = await myQueue.getJobSchedulers();
 
-  await myQueue.add(
+  for (const job of repeatableJobs) {
+    await myQueue.removeJobScheduler(job.key);
+  }
+
+  await myQueue.upsertJobScheduler(
     "cleanUpCustomizeOrderImage",
-    {},
     {
-      removeOnComplete: true,
-      removeOnFail: true,
-      repeat: {
-        pattern: "0 0 */7 * *",
+      every: 7 * 24 * 60 * 60 * 1000,
+    },
+    {
+      name: "cleanUp",
+      data: {},
+      opts: {
+        attempts: 5,
       },
     }
   );

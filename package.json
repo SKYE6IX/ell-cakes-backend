@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "keystone dev",
-    "start": "keystone start --with-migrations",
+    "start": "keystone start",
     "build": "keystone build",
     "seed": "tsx ./script",
     "test": "jest"

@@ -9,13 +9,14 @@ services:
         DATABASE_URL_FILE: /run/secrets/database_url
         YC_S3_KEY_ID_FILE: /run/secrets/yc_s3_key_id
         YC_S3_SECRET_KEY_FILE: /run/secrets/yc_s3_secret_key
-        YC_S3_BUCKET: ell-cake
-        YC_S3_REGION: ru-central1
+        YC_S3_BUCKET: "ell-cake"
+        YC_S3_REGION: "ru-central1"
         YC_S3_PRIVATE_ENDPOINT: https://storage.yandexcloud.net
         SESSION_SECRET_FILE: /run/secrets/session_secret
-        FRONTEND_URL: http://localhost:3000
+        FRONTEND_URL: "http://localhost:3000"
         YOO_MONEY_SHOP_ID_FILE: /run/secrets/yoo_money_shop_id
         YOO_MONEY_SECRET_ID_FILE: /run/secrets/yoo_money_secret_id
+        REDIS_HOST: "host.docker.internal"
 
     secrets: 
       - database_url

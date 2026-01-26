@@ -65,6 +65,7 @@ export const Order = list({
         displayMode: "cards",
         cardFields: ["name", "email", "phoneNumber"],
       },
+      label: "Клиент",
     }),
 
     orderDetails: virtual({
@@ -236,6 +237,7 @@ export const Order = list({
           fieldMode: "read",
         },
       },
+      label: "Номер заказа",
     }),
 
     shippingCost: integer({
@@ -244,6 +246,7 @@ export const Order = list({
           fieldMode: "read",
         },
       },
+      label: "Стоимость доставки",
     }),
 
     subTotalAmount: integer({
@@ -252,6 +255,7 @@ export const Order = list({
           fieldMode: "read",
         },
       },
+      label: "Итоговая сумма",
     }),
 
     totalAmount: integer({
@@ -260,6 +264,7 @@ export const Order = list({
           fieldMode: "read",
         },
       },
+      label: "Общая сумма",
     }),
 
     status: select({
@@ -270,6 +275,7 @@ export const Order = list({
         { label: "Cancelled", value: "CANCELLED" },
       ],
       defaultValue: "PROCESSING",
+      label: "Саттус",
     }),
 
     payment: relationship({
@@ -281,6 +287,8 @@ export const Order = list({
         displayMode: "cards",
         cardFields: ["status"],
       },
+
+      label: "Статус платежа",
     }),
 
     deliveryAddress: relationship({
@@ -292,6 +300,7 @@ export const Order = list({
         displayMode: "cards",
         cardFields: ["address", "apartmentNumber", "floor", "intercomCode"],
       },
+      label: "Адрес доставки",
     }),
 
     note: text({
@@ -300,6 +309,7 @@ export const Order = list({
           fieldMode: "read",
         },
       },
+      label: "Примечание клиента",
     }),
 
     createdAt: timestamp({

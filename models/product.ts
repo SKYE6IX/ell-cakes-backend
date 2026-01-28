@@ -119,6 +119,7 @@ export const Product = list({
       ui: {
         displayMode: "cards",
         cardFields: [
+          "hasDetails",
           "name",
           "description",
           "carbonhydrate",
@@ -131,6 +132,7 @@ export const Product = list({
         ],
         inlineCreate: {
           fields: [
+            "hasDetails",
             "name",
             "description",
             "carbonhydrate",
@@ -144,6 +146,7 @@ export const Product = list({
         },
         inlineEdit: {
           fields: [
+            "hasDetails",
             "name",
             "description",
             "carbonhydrate",

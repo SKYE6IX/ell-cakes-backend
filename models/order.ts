@@ -132,9 +132,8 @@ export const Order = list({
                                   cus.customValue;
 
                                 const imagesUrl: string[] = [];
-
                                 if (imagesId && imagesId.length >= 1) {
-                                  imagesId?.filter((id: string) => {
+                                  imagesId?.forEach((id: string) => {
                                     const imageItem = customizeImages.find(
                                       (img) => img.id === id
                                     );
@@ -173,7 +172,7 @@ export const Order = list({
                               .join("")} 
                               </td>`;
                           } else if (c.key === "compositions") {
-                            const compositionData = oi.compositions?.filter(
+                            const compositionData = oi.compositions?.map(
                               (compos: {
                                 productId: string;
                                 quantity: number;
@@ -187,6 +186,7 @@ export const Order = list({
                                 };
                               }
                             );
+
                             return `<td style="padding: 8px; width: 300px;">
                             ${compositionData
                               .map((data: any) => `${data.name}(${data.qty})`)

@@ -5,7 +5,6 @@ import {
   timestamp,
   decimal,
   virtual,
-  text,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
@@ -31,7 +30,7 @@ export const ProductVariant = list({
 
     pieces: integer({ defaultValue: undefined, label: "Штук" }),
 
-    size: text({ defaultValue: undefined, label: "Размер" }),
+    size: integer({ defaultValue: undefined, label: "Размер" }),
 
     price: integer({ validation: { isRequired: true }, label: "Цена" }),
 

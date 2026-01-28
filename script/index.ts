@@ -75,6 +75,7 @@ async function main() {
       },
     });
   }
+
   console.log("✅ Category seeded OR existed");
 
   // Query all the categories
@@ -119,7 +120,6 @@ async function main() {
           {
             data: {
               ...productFilling,
-              lifeShelf: Number(productFilling.lifeShelf),
               variants: {
                 create: productFilling.variants.map((variant: any) => ({
                   ...variant,
@@ -195,7 +195,6 @@ async function main() {
         baseDescription: product.baseDescription,
         type: product.type,
         variantType: product.variantType,
-        stockQuantity: product.stockQuantity,
         fillings: {
           connect: connectProductFillingIds.map((cpf) => ({ ...cpf })),
         },
@@ -247,6 +246,7 @@ async function main() {
         },
       });
     }
+
     console.log("🎆 Added images. Total: -> ", imageFiles.length);
 
     console.log("🎆 Starting video uploading....");
@@ -257,6 +257,7 @@ async function main() {
       product.imagesFolder,
       "video"
     );
+
     const videoFile = readdirSync(videoFolder)[0];
 
     if (videoFile) {

@@ -124,7 +124,7 @@ model ProductVariant {
   fillingId              String?         @map("filling") @postgresql.Uuid
   weight                 Decimal?        @postgresql.Decimal(4, 1)
   pieces                 Int?
-  size                   String          @default("")
+  size                   Int?
   price                  Int
   serving                Int?
   createdAt              DateTime?       @default(now())

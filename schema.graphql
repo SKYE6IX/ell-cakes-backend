@@ -806,7 +806,7 @@ type ProductVariant {
   filling: ProductFilling
   weight: Decimal
   pieces: Int
-  size: String
+  size: Int
   price: Int
   serving: Int
   selectedValue: String
@@ -826,7 +826,7 @@ input ProductVariantWhereInput {
   filling: ProductFillingWhereInput
   weight: DecimalNullableFilter
   pieces: IntNullableFilter
-  size: StringFilter
+  size: IntNullableFilter
   price: IntFilter
   serving: IntNullableFilter
   createdAt: DateTimeNullableFilter
@@ -870,7 +870,7 @@ input ProductVariantUpdateInput {
   filling: ProductFillingRelateToOneForUpdateInput
   weight: Decimal
   pieces: Int
-  size: String
+  size: Int
   price: Int
   serving: Int
   createdAt: DateTime
@@ -892,7 +892,7 @@ input ProductVariantCreateInput {
   filling: ProductFillingRelateToOneForCreateInput
   weight: Decimal
   pieces: Int
-  size: String
+  size: Int
   price: Int
   serving: Int
   createdAt: DateTime

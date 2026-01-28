@@ -55,7 +55,7 @@ jobs:
 
           docker compose pull server
 
-          docker compose up server --force-recreate -d
+          docker compose up server  -d
 
           docker image prune -f
           EOF

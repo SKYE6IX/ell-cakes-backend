@@ -29,7 +29,7 @@ const potentialCols = [
   { label: "Топпинг", key: "toppingOption.weight" },
   { label: "Кастомизация", key: "customizations" },
   { label: "Варианты микс-боксов", key: "compositions" },
-  { label: "Количество", key: "subTotal" },
+  { label: "Стоимость", key: "subTotal" },
 ];
 
 export const Order = list({
@@ -131,14 +131,16 @@ export const Order = list({
                                 const { value, inscriptionText, imagesId } =
                                   cus.customValue;
 
-                                let imagesUrl: string[] = [];
+                                const imagesUrl: string[] = [];
 
                                 if (imagesId && imagesId.length >= 1) {
-                                  imagesUrl = imagesId?.filter((id: string) => {
+                                  imagesId?.filter((id: string) => {
                                     const imageItem = customizeImages.find(
                                       (img) => img.id === id
                                     );
-                                    return imageItem?.image.url;
+                                    if (imageItem) {
+                                      imagesUrl.push(imageItem.image.url);
+                                    }
                                   });
                                 }
 
@@ -160,7 +162,7 @@ export const Order = list({
                                       ? `Фотоссылка: ${imagesUrl
                                           ?.map(
                                             (url) =>
-                                              `<a href="${url}" target="_blank">Ссылка</a>`
+                                              `<a href="${url}" target="_blank">Сылки</a>`
                                           )
                                           .join(",")}`
                                       : ""

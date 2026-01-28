@@ -21,32 +21,39 @@ export const ProductVariant = list({
   },
   fields: {
     filling: relationship({ ref: "ProductFilling.variants" }),
+
     weight: decimal({
       precision: 4,
       scale: 1,
       defaultValue: undefined,
       label: "Вес",
     }),
-    pieces: integer({ defaultValue: undefined, label: "Порции" }),
+
+    pieces: integer({ defaultValue: undefined, label: "Штук" }),
+
     size: text({ defaultValue: undefined, label: "Размер" }),
-    price: integer({ validation: { isRequired: true }, label: "цена" }),
-    serving: integer(),
+
+    price: integer({ validation: { isRequired: true }, label: "Цена" }),
+
+    serving: integer({ label: "Порции" }),
+
     selectedValue: virtual({
       field: graphql.field({
         type: graphql.String,
         async resolve(item, args, context) {
           // @ts-expect-error ID type doesn't exist on item
-          if (item.weight) return `Вес: ${item.weight}kg`;
+          if (item.weight) return `Вес: ${item.weight}кг`;
           // @ts-expect-error ID type doesn't exist on item
-          if (item.pieces) return `Порции: ${item.pieces}pc`;
+          if (item.pieces) return `Порции: ${item.pieces}шт`;
           // @ts-expect-error ID type doesn't exist on item
-          if (item.size) return `Размер: ${item.size}`;
+          if (item.size) return `Размер: ${item.size}см`;
         },
       }),
       ui: {
         itemView: { fieldMode: "read" },
       },
     }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -56,6 +63,7 @@ export const ProductVariant = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     updatedAt: timestamp({
       ui: {
         itemView: {

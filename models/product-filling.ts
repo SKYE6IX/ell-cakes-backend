@@ -2,10 +2,10 @@ import { list } from "@keystone-6/core";
 import {
   text,
   relationship,
-  integer,
   timestamp,
   decimal,
   image,
+  checkbox,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
@@ -20,9 +20,12 @@ export const ProductFilling = list({
       delete: permissions.canManageProduct,
     },
   },
+
   fields: {
     products: relationship({ ref: "Product.fillings", many: true }),
+
     name: text({ validation: { isRequired: true }, label: "Название" }),
+
     slug: text({
       hooks: {
         resolveInput: ({ resolvedData, fieldKey, operation }) => {
@@ -42,53 +45,54 @@ export const ProductFilling = list({
         createView: { fieldMode: "hidden" },
       },
     }),
-    description: text({ label: "описание" }),
+
+    hasDetails: checkbox({ defaultValue: true, label: "Имеет детали" }),
+
+    description: text({ label: "Описание" }),
 
     carbonhydrate: decimal({
       precision: 5,
       scale: 2,
-      label: "углеводы",
+      label: "Углеводы",
     }),
+
     calories: decimal({
       precision: 5,
       scale: 2,
-      label: "калории",
+      label: "Калории",
     }),
+
     protein: decimal({
       precision: 5,
       scale: 2,
-      label: "белки",
+      label: "Белки",
     }),
-    fat: decimal({ precision: 5, scale: 2, label: "жиры" }),
+
+    fat: decimal({ precision: 5, scale: 2, label: "Жиры" }),
+
     ingredients: text({
-      validation: { isRequired: true },
-      label: "ингредиенты",
+      label: "Ингредиенты",
     }),
-    lifeShelf: integer({
-      validation: { isRequired: true },
-      label: "срок хранения",
-    }),
-    stockQuantity: integer({
-      label: "количество на складе",
-      validation: { isRequired: true },
-    }),
+
     image_icon: image({ storage: "yc_s3_image", label: "Иконка" }),
+
     variants: relationship({
       label: "Вариант продукта",
       ref: "ProductVariant.filling",
       many: true,
       ui: {
         displayMode: "cards",
-        cardFields: ["weight", "pieces", "size", "price"],
+        cardFields: ["weight", "pieces", "size", "serving", "price"],
         inlineCreate: {
-          fields: ["weight", "pieces", "size", "price"],
+          fields: ["weight", "pieces", "size", "serving", "price"],
         },
         inlineEdit: {
-          fields: ["weight", "pieces", "size", "price"],
+          fields: ["weight", "pieces", "size", "serving", "price"],
         },
         linkToItem: true,
       },
     }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -98,6 +102,7 @@ export const ProductFilling = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     updatedAt: timestamp({
       ui: {
         itemView: {

@@ -1,5 +1,10 @@
 import { list } from "@keystone-6/core";
-import { text, relationship, timestamp } from "@keystone-6/core/fields";
+import {
+  text,
+  relationship,
+  timestamp,
+  checkbox,
+} from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
 import { permissions } from "../access";
@@ -29,6 +34,8 @@ export const Category = list({
 
     parent: relationship({ ref: "Category", many: false }),
 
+    isAvailable: checkbox({ defaultValue: true, label: "Доступен" }),
+
     products: relationship({
       ref: "Product.categories",
       many: true,
@@ -49,6 +56,7 @@ export const Category = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     updatedAt: timestamp({
       ui: {
         itemView: {
@@ -58,6 +66,7 @@ export const Category = list({
       },
     }),
   },
+
   hooks: {
     resolveInput({ operation, resolvedData }) {
       if (operation === "create") {

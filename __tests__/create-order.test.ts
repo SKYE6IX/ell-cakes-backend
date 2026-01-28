@@ -64,14 +64,11 @@ describe("Creating a new order", () => {
           baseDescription: "The best cake to ever grace this earth",
           type: "cake",
           variantType: "weight",
-          stockQuantity: 10,
           fillings: {
             create: {
               name: "Fluffy",
               description: "fluffy description",
               ingredients: "made with everything fluffy",
-              lifeShelf: 3,
-              stockQuantity: 10,
               variants: {
                 create: { weight: "2.5", price: 3000, serving: 5 },
               },
@@ -94,7 +91,7 @@ describe("Creating a new order", () => {
           },
         },
         query:
-          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } }",
+          "id name type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } }",
       });
 
     const cart = await context.withSession(mockSession).graphql.raw({

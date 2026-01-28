@@ -356,7 +356,6 @@ type Product {
   fillings(where: ProductFillingWhereInput! = {}, orderBy: [ProductFillingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductFillingWhereUniqueInput): [ProductFilling!]
   fillingsCount(where: ProductFillingWhereInput! = {}): Int
   mixBoxProduct: MixBoxProduct
-  stockQuantity: Int
   isAvailable: Boolean
   badge: String
   images(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
@@ -389,7 +388,6 @@ input ProductWhereInput {
   variantType: StringFilter
   fillings: ProductFillingManyRelationFilter
   mixBoxProduct: MixBoxProductWhereInput
-  stockQuantity: IntFilter
   isAvailable: BooleanFilter
   badge: StringNullableFilter
   images: ProductImageManyRelationFilter
@@ -410,17 +408,6 @@ input ProductFillingManyRelationFilter {
   every: ProductFillingWhereInput
   some: ProductFillingWhereInput
   none: ProductFillingWhereInput
-}
-
-input IntFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntFilter
 }
 
 input StringNullableFilter {
@@ -451,7 +438,6 @@ input ProductOrderByInput {
   baseDescription: OrderDirection
   type: OrderDirection
   variantType: OrderDirection
-  stockQuantity: OrderDirection
   isAvailable: OrderDirection
   badge: OrderDirection
   createdAt: OrderDirection
@@ -467,7 +453,6 @@ input ProductUpdateInput {
   variantType: String
   fillings: ProductFillingRelateToManyForUpdateInput
   mixBoxProduct: MixBoxProductRelateToOneForUpdateInput
-  stockQuantity: Int
   isAvailable: Boolean
   badge: String
   images: ProductImageRelateToManyForUpdateInput
@@ -537,7 +522,6 @@ input ProductCreateInput {
   variantType: String
   fillings: ProductFillingRelateToManyForCreateInput
   mixBoxProduct: MixBoxProductRelateToOneForCreateInput
-  stockQuantity: Int
   isAvailable: Boolean
   badge: String
   images: ProductImageRelateToManyForCreateInput
@@ -589,14 +573,13 @@ type ProductFilling {
   productsCount(where: ProductWhereInput! = {}): Int
   name: String
   slug: String
+  hasDetails: Boolean
   description: String
   carbonhydrate: Decimal
   calories: Decimal
   protein: Decimal
   fat: Decimal
   ingredients: String
-  lifeShelf: Int
-  stockQuantity: Int
   image_icon: ImageFieldOutput
   variants(where: ProductVariantWhereInput! = {}, orderBy: [ProductVariantOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVariantWhereUniqueInput): [ProductVariant!]
   variantsCount(where: ProductVariantWhereInput! = {}): Int
@@ -635,14 +618,13 @@ input ProductFillingWhereInput {
   products: ProductManyRelationFilter
   name: StringFilter
   slug: StringFilter
+  hasDetails: BooleanFilter
   description: StringFilter
   carbonhydrate: DecimalNullableFilter
   calories: DecimalNullableFilter
   protein: DecimalNullableFilter
   fat: DecimalNullableFilter
   ingredients: StringFilter
-  lifeShelf: IntFilter
-  stockQuantity: IntFilter
   variants: ProductVariantManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -675,14 +657,13 @@ input ProductFillingOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  hasDetails: OrderDirection
   description: OrderDirection
   carbonhydrate: OrderDirection
   calories: OrderDirection
   protein: OrderDirection
   fat: OrderDirection
   ingredients: OrderDirection
-  lifeShelf: OrderDirection
-  stockQuantity: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -691,14 +672,13 @@ input ProductFillingUpdateInput {
   products: ProductRelateToManyForUpdateInput
   name: String
   slug: String
+  hasDetails: Boolean
   description: String
   carbonhydrate: Decimal
   calories: Decimal
   protein: Decimal
   fat: Decimal
   ingredients: String
-  lifeShelf: Int
-  stockQuantity: Int
   image_icon: ImageFieldInput
   variants: ProductVariantRelateToManyForUpdateInput
   createdAt: DateTime
@@ -735,14 +715,13 @@ input ProductFillingCreateInput {
   products: ProductRelateToManyForCreateInput
   name: String
   slug: String
+  hasDetails: Boolean
   description: String
   carbonhydrate: Decimal
   calories: Decimal
   protein: Decimal
   fat: Decimal
   ingredients: String
-  lifeShelf: Int
-  stockQuantity: Int
   image_icon: ImageFieldInput
   variants: ProductVariantRelateToManyForCreateInput
   createdAt: DateTime
@@ -865,6 +844,17 @@ input IntNullableFilter {
   not: IntNullableFilter
 }
 
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
 input ProductVariantOrderByInput {
   id: OrderDirection
   weight: OrderDirection
@@ -919,6 +909,7 @@ type Category {
   name: String
   slug: String
   parent: Category
+  isAvailable: Boolean
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
   createdAt: DateTime
@@ -938,6 +929,7 @@ input CategoryWhereInput {
   name: StringFilter
   slug: StringFilter
   parent: CategoryWhereInput
+  isAvailable: BooleanFilter
   products: ProductManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -947,6 +939,7 @@ input CategoryOrderByInput {
   id: OrderDirection
   name: OrderDirection
   slug: OrderDirection
+  isAvailable: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -955,6 +948,7 @@ input CategoryUpdateInput {
   name: String
   slug: String
   parent: CategoryRelateToOneForUpdateInput
+  isAvailable: Boolean
   products: ProductRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -975,6 +969,7 @@ input CategoryCreateInput {
   name: String
   slug: String
   parent: CategoryRelateToOneForCreateInput
+  isAvailable: Boolean
   products: ProductRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime

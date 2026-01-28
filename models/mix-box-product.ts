@@ -14,7 +14,9 @@ export const MixBoxProduct = list({
   },
   fields: {
     product: relationship({ ref: "Product.mixBoxProduct", many: false }),
+
     compositions: relationship({ ref: "Product", many: true }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -24,6 +26,7 @@ export const MixBoxProduct = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     updatedAt: timestamp({
       ui: {
         itemView: {

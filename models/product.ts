@@ -3,7 +3,6 @@ import {
   text,
   relationship,
   checkbox,
-  integer,
   select,
   timestamp,
 } from "@keystone-6/core/fields";
@@ -70,7 +69,7 @@ export const Product = list({
     }),
 
     type: select({
-      label: "Выберите типо десерта",
+      label: "Выберите тип десерта",
       options: [
         {
           label: "Торт",
@@ -99,7 +98,7 @@ export const Product = list({
           value: "weight",
         },
         {
-          label: "Количество",
+          label: "Штук",
           value: "pieces",
         },
         {
@@ -127,7 +126,6 @@ export const Product = list({
           "protein",
           "fat",
           "ingredients",
-          "lifeShelf",
           "image_icon",
           "variants",
         ],
@@ -140,7 +138,6 @@ export const Product = list({
             "protein",
             "fat",
             "ingredients",
-            "lifeShelf",
             "image_icon",
             "variants",
           ],
@@ -154,7 +151,6 @@ export const Product = list({
             "protein",
             "fat",
             "ingredients",
-            "lifeShelf",
             "image_icon",
             "variants",
           ],
@@ -176,12 +172,7 @@ export const Product = list({
       },
     }),
 
-    stockQuantity: integer({
-      label: "количество на складе",
-      validation: { isRequired: true },
-    }),
-
-    isAvailable: checkbox({ defaultValue: true, label: "в наличии" }),
+    isAvailable: checkbox({ defaultValue: true, label: "Доступен" }),
 
     badge: select({
       options: [
@@ -191,7 +182,7 @@ export const Product = list({
         { label: "Скидка", value: "SALE" },
       ],
       defaultValue: undefined,
-      label: "значок",
+      label: "Значок",
     }),
 
     images: relationship({

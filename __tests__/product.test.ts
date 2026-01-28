@@ -43,6 +43,7 @@ describe("Product Model", () => {
       itemId: "1234567890",
       data: { role: "EDITOR" },
     };
+
     // Creating Product
     const newProduct = await context
       .withSession(editor)
@@ -54,20 +55,17 @@ describe("Product Model", () => {
           baseDescription: "The best cake to ever grace this earth",
           type: "cake",
           variantType: "weight",
-          stockQuantity: 10,
           fillings: {
             create: {
               name: "Fluffy",
               description: "fluffy description",
               ingredients: "made with everything fluffy",
-              stockQuantity: 10,
-              lifeShelf: 3,
               variants: { create: { weight: "2.5", price: 300, serving: 5 } },
             },
           },
         },
         query:
-          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
+          "id name type variantType fillings { id name variants { id weight price serving } }",
       });
     expect(newProduct.name).toEqual("Fluffy Cake");
     expect(newProduct.type).toEqual("cake");
@@ -83,9 +81,9 @@ describe("Product Model", () => {
       .query.Product.updateOne({
         where: { id: newProduct.id },
         data: {
-          stockQuantity: 5,
+          name: "Chocolate Fluffy",
         },
-        query: "id stockQuantity fillings { variants { id } }",
+        query: "id name fillings { variants { id } }",
       });
 
     const updateProductVariant = await context
@@ -98,7 +96,7 @@ describe("Product Model", () => {
         query: "id price",
       });
 
-    expect(updateProduct.stockQuantity).toEqual(5);
+    expect(updateProduct.name).toEqual("Chocolate Fluffy");
     expect(updateProductVariant.price).toEqual(600);
 
     // Delete Product
@@ -131,14 +129,11 @@ describe("Product Model", () => {
         baseDescription: "The best cake to ever grace this earth",
         type: "cake",
         variantType: "weight",
-        stockQuantity: 10,
         fillings: {
           create: {
             name: "Fluffy",
             description: "fluffy description",
             ingredients: "made with everything fluffy",
-            stockQuantity: 10,
-            lifeShelf: 3,
             variants: { create: { weight: "2.5", price: 300, serving: 5 } },
           },
         },
@@ -149,7 +144,7 @@ describe("Product Model", () => {
       .withSession(customer)
       .query.Product.findMany({
         query:
-          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
+          "id name type variantType fillings { id name variants { id weight price serving } }",
       });
 
     expect(customerQuery[0].name).toEqual("Fluffy Cake");

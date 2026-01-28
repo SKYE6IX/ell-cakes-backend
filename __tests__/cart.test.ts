@@ -91,14 +91,12 @@ describe("cart and cart-item Model", () => {
           baseDescription: "The best cake to ever grace this earth",
           type: "cake",
           variantType: "weight",
-          stockQuantity: 10,
+
           fillings: {
             create: {
               name: "Fluffy",
               description: "fluffy description",
               ingredients: "made with everything fluffy",
-              stockQuantity: 10,
-              lifeShelf: 3,
               variants: {
                 create: { weight: "2.5", price: 300, serving: 5 },
               },
@@ -121,7 +119,7 @@ describe("cart and cart-item Model", () => {
           },
         },
         query:
-          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } } ",
+          "id name  type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } } ",
       });
 
     const cart = (await context.graphql.raw({
@@ -192,14 +190,11 @@ describe("cart and cart-item Model", () => {
           baseDescription: "The best cake to ever grace this earth",
           type: "cake",
           variantType: "weight",
-          stockQuantity: 10,
           fillings: {
             create: {
               name: "Fluffy",
               description: "fluffy description",
               ingredients: "made with everything fluffy",
-              stockQuantity: 10,
-              lifeShelf: 3,
               variants: {
                 create: { weight: "2.5", price: 300, serving: 5 },
               },
@@ -207,7 +202,7 @@ describe("cart and cart-item Model", () => {
           },
         },
         query:
-          "id name stockQuantity type variantType fillings { id name variants { id weight price serving } }",
+          "id name type variantType fillings { id name variants { id weight price serving } }",
       });
 
     const addToCart = (await context.graphql.raw({

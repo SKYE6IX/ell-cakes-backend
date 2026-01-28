@@ -60,7 +60,6 @@ model Product {
   variantType                     String
   fillings                        ProductFilling[]      @relation("Product_fillings")
   mixBoxProduct                   MixBoxProduct?        @relation("MixBoxProduct_product")
-  stockQuantity                   Int
   isAvailable                     Boolean               @default(true)
   badge                           String?
   images                          ProductImage[]        @relation("ProductImage_product")
@@ -86,14 +85,13 @@ model ProductFilling {
   products             Product[]        @relation("Product_fillings")
   name                 String           @default("")
   slug                 String           @unique @default("")
+  hasDetails           Boolean          @default(true)
   description          String           @default("")
   carbonhydrate        Decimal?         @postgresql.Decimal(5, 2)
   calories             Decimal?         @postgresql.Decimal(5, 2)
   protein              Decimal?         @postgresql.Decimal(5, 2)
   fat                  Decimal?         @postgresql.Decimal(5, 2)
   ingredients          String           @default("")
-  lifeShelf            Int
-  stockQuantity        Int
   image_icon_id        String?
   image_icon_filesize  Int?
   image_icon_width     Int?
@@ -143,6 +141,7 @@ model Category {
   slug                 String     @unique @default("")
   parent               Category?  @relation("Category_parent", fields: [parentId], references: [id])
   parentId             String?    @map("parent") @postgresql.Uuid
+  isAvailable          Boolean    @default(true)
   products             Product[]  @relation("Category_products")
   createdAt            DateTime?  @default(now())
   updatedAt            DateTime?

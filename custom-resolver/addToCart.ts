@@ -172,7 +172,7 @@ export const addToCart = async (
   // snapShot for comprasion
   let compositionSnapShot = null;
   if (compositionOptions) {
-    compositionOptions = compositionOptions?.map((composition) => {
+    compositionSnapShot = compositionOptions?.map((composition) => {
       return {
         productId: composition.productId,
         quantity: composition.quantity,

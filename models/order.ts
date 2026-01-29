@@ -186,11 +186,10 @@ export const Order = list({
                                 };
                               }
                             );
-
                             return `<td style="padding: 8px; width: 300px;">
                             ${compositionData
-                              .map((data: any) => `${data.name}(${data.qty})`)
-                              .join(",")}
+                              .map((data: any) => `${data.name}: (${data.qty})`)
+                              .join("<br/>")}
                             </td>`;
                           } else if (c.key === "product.name") {
                             return `<td style="padding: 8px; width: 300px;">

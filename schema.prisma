@@ -65,8 +65,7 @@ model Product {
   images                          ProductImage[]        @relation("ProductImage_product")
   video                           ProductVideo?         @relation("Product_video", fields: [videoId], references: [id])
   videoId                         String?               @unique @map("video") @postgresql.Uuid
-  customization                   ProductCustomization? @relation("Product_customization", fields: [customizationId], references: [id])
-  customizationId                 String?               @unique @map("customization") @postgresql.Uuid
+  customizations                  CustomizationOption[] @relation("CustomizationOption_product")
   topping                         Topping?              @relation("Product_topping", fields: [toppingId], references: [id])
   toppingId                       String?               @map("topping") @postgresql.Uuid
   createdAt                       DateTime?             @default(now())
@@ -112,6 +111,7 @@ model ProductImage {
   image_height    Int?
   image_extension String?
   altText         String    @default("")
+  isMain          Boolean   @default(false)
   createdAt       DateTime? @default(now())
   updatedAt       DateTime?
 
@@ -150,24 +150,14 @@ model Category {
   @@index([parentId])
 }
 
-model ProductCustomization {
-  id            String                @id @default(uuid()) @postgresql.Uuid
-  product       Product?              @relation("Product_customization")
-  customOptions CustomizationOption[] @relation("CustomizationOption_productCustomization")
-  createdAt     DateTime?             @default(now())
-  updatedAt     DateTime?
-}
-
 model CustomizationOption {
-  id                     String                     @id @default(uuid()) @postgresql.Uuid
-  productCustomization   ProductCustomization?      @relation("CustomizationOption_productCustomization", fields: [productCustomizationId], references: [id])
-  productCustomizationId String?                    @map("productCustomization") @postgresql.Uuid
-  name                   String?
-  customValues           CustomizationOptionValue[] @relation("CustomizationOptionValue_option")
-  createdAt              DateTime?                  @default(now())
-  updatedAt              DateTime?
-
-  @@index([productCustomizationId])
+  id           String                     @id @default(uuid()) @postgresql.Uuid
+  product      Product[]                  @relation("CustomizationOption_product")
+  name         String?
+  slug         String                     @unique @default("")
+  customValues CustomizationOptionValue[] @relation("CustomizationOptionValue_option")
+  createdAt    DateTime?                  @default(now())
+  updatedAt    DateTime?
 }
 
 model CustomizationOptionValue {

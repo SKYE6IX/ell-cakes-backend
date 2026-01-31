@@ -107,24 +107,20 @@ describe("Order and OrderItem Model and", () => {
               },
             },
           },
-          customization: {
+          customizations: {
             create: {
-              customOptions: {
+              name: "CANDLE",
+              customValues: {
                 create: {
-                  name: "CANDLE",
-                  customValues: {
-                    create: {
-                      value: "5",
-                      extraPrice: 100,
-                    },
-                  },
+                  value: "5",
+                  extraPrice: 100,
                 },
               },
             },
           },
         },
         query:
-          "id name type variantType fillings { id name variants { id weight price serving } } customization { customOptions { id customValues { id } } }",
+          "id name type variantType fillings { id name variants { id weight price serving } } customizations { id customValues { id } }",
       });
 
     await context.withSession(mockSession).graphql.raw({
@@ -139,9 +135,8 @@ describe("Order and OrderItem Model and", () => {
         variantId: newProduct.fillings[0].variants[0].id,
         customizations: [
           {
-            optionId: newProduct.customization.customOptions[0].id,
-            valueId:
-              newProduct.customization.customOptions[0].customValues[0].id,
+            optionId: newProduct.customizations[0].id,
+            valueId: newProduct.customizations[0].customValues[0].id,
             inscriptionText: null,
             imagesId: null,
           },

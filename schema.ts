@@ -5,7 +5,6 @@ import { ProductImage } from "./models/product-image";
 import { ProductVariant } from "./models/product-variant";
 import { Category } from "./models/category";
 import { DelivaryAddress } from "./models/delivary-address";
-import { ProductCustomization } from "./models/product-customization";
 import { CustomizationOption } from "./models/customization-option";
 import { CustomizationOptionValue } from "./models/customization-option-value";
 import { Topping } from "./models/topping";
@@ -30,7 +29,6 @@ export const lists = {
   ProductImage,
   ProductVariant,
   Category,
-  ProductCustomization,
   CustomizationOption,
   CustomizationOptionValue,
   Topping,

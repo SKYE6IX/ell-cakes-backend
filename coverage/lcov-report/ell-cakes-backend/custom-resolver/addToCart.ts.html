@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.45% </span>
+                <span class="strong">93.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>42/44</span>
+                <span class='fraction'>42/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.26% </span>
+                <span class="strong">76.08% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>36/46</span>
+                <span class='fraction'>35/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>5/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.34% </span>
+                <span class="strong">93.18% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>41/43</span>
+                <span class='fraction'>41/44</span>
             </div>
         
             
@@ -331,7 +331,8 @@
 <a name='L266'></a><a href='#L266'>266</a>
 <a name='L267'></a><a href='#L267'>267</a>
 <a name='L268'></a><a href='#L268'>268</a>
-<a name='L269'></a><a href='#L269'>269</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -466,9 +467,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -515,6 +513,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -541,10 +540,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -722,21 +724,18 @@ export const addToCart = async (
           },
         },
       },
-      customization: {
+      customizations: {
         select: {
-          customOptions: {
-            select: { id: true, name: true, customValues: true },
-          },
+          id: true,
+          name: true,
+          customValues: true,
         },
       },
     },
   });
 &nbsp;
   const customOptionsMap = new Map(
-    product?.customization?.customOptions.map((option) =&gt; [
-      option.id,
-      option,
-    ]) || []
+    product?.customizations?.map((option) =&gt; [option.id, option]) || <span class="branch-1 cbranch-no" title="branch not covered" >[]</span>
   );
 &nbsp;
   // Check if user added customization and calculate the
@@ -773,7 +772,7 @@ export const addToCart = async (
   // snapShot for comprasion
   let compositionSnapShot = null;
   <span class="missing-if-branch" title="if path not taken" >I</span>if (compositionOptions) {
-<span class="cstat-no" title="statement not covered" >    compositionOptions = compositionOptions?.map(<span class="fstat-no" title="function not covered" >(c</span>omposition) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    compositionSnapShot = compositionOptions?.map(<span class="fstat-no" title="function not covered" >(c</span>omposition) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >      return {</span>
         productId: composition.productId,
         quantity: composition.quantity,
@@ -783,6 +782,7 @@ export const addToCart = async (
 &nbsp;
   // Check for existing cart-item
   const cartItemMap = new Map&lt;string, CartWithItem["cartItems"][0]&gt;();
+&nbsp;
   for (const cartItem of cart.cartItems) {
     cartItemMap.set(generateCartItemKey(cartItem), cartItem);
   }
@@ -808,11 +808,14 @@ export const addToCart = async (
       },
     });
   } else {
-    const selectedTopping = product?.topping?.options[0];
+    const selectedTopping = product?.topping?.options.find(
+<span class="fstat-no" title="function not covered" >      (o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.id === toppingOptionId</span>
+    );
 &nbsp;
-    // Calculate the unit price for a single product
     const toppingPrice = selectedTopping?.extraPrice ?? 0;
+&nbsp;
     const basePrice = product?.fillings[0].variants[0].price ?? <span class="branch-1 cbranch-no" title="branch not covered" >0;</span>
+&nbsp;
     const unitPrice = basePrice + customizationsTotalAmount + toppingPrice;
 &nbsp;
     await context.db.CartItem.createOne({
@@ -874,7 +877,7 @@ function generateCartItemKey(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-28T19:58:27.856Z
+                at 2026-01-31T13:48:49.545Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

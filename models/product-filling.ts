@@ -22,7 +22,11 @@ export const ProductFilling = list({
   },
 
   fields: {
-    products: relationship({ ref: "Product.fillings", many: true }),
+    products: relationship({
+      ref: "Product.fillings",
+      many: true,
+      ui: { createView: { fieldMode: "hidden" } },
+    }),
 
     name: text({ validation: { isRequired: true }, label: "Название" }),
 
@@ -82,10 +86,13 @@ export const ProductFilling = list({
       many: true,
       ui: {
         displayMode: "cards",
+
         cardFields: ["weight", "pieces", "size", "serving", "price"],
+
         inlineCreate: {
           fields: ["weight", "pieces", "size", "serving", "price"],
         },
+
         inlineEdit: {
           fields: ["weight", "pieces", "size", "serving", "price"],
         },
@@ -133,8 +140,5 @@ export const ProductFilling = list({
         }
       },
     },
-  },
-  ui: {
-    isHidden: true,
   },
 });

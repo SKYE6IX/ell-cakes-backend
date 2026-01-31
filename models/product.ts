@@ -117,48 +117,7 @@ export const Product = list({
       ref: "ProductFilling.products",
       many: true,
       ui: {
-        displayMode: "cards",
-        cardFields: [
-          "hasDetails",
-          "name",
-          "description",
-          "carbonhydrate",
-          "calories",
-          "protein",
-          "fat",
-          "ingredients",
-          "image_icon",
-          "variants",
-        ],
-        inlineCreate: {
-          fields: [
-            "hasDetails",
-            "name",
-            "description",
-            "carbonhydrate",
-            "calories",
-            "protein",
-            "fat",
-            "ingredients",
-            "image_icon",
-            "variants",
-          ],
-        },
-        inlineEdit: {
-          fields: [
-            "hasDetails",
-            "name",
-            "description",
-            "carbonhydrate",
-            "calories",
-            "protein",
-            "fat",
-            "ingredients",
-            "image_icon",
-            "variants",
-          ],
-        },
-        linkToItem: true,
+        displayMode: "select",
       },
     }),
 
@@ -194,12 +153,12 @@ export const Product = list({
       label: "Изображения(максимум 4)",
       ui: {
         displayMode: "cards",
-        cardFields: ["image", "altText"],
+        cardFields: ["image", "altText", "isMain"],
         inlineCreate: {
-          fields: ["image", "altText"],
+          fields: ["image", "altText", "isMain"],
         },
         inlineEdit: {
-          fields: ["image", "altText"],
+          fields: ["image", "altText", "isMain"],
         },
         linkToItem: true,
       },
@@ -222,21 +181,10 @@ export const Product = list({
       },
     }),
 
-    customization: relationship({
-      ref: "ProductCustomization.product",
-      many: false,
-      label: "Кастомизация",
-      ui: {
-        displayMode: "cards",
-        cardFields: ["customOptions"],
-        inlineCreate: {
-          fields: ["customOptions"],
-        },
-        inlineEdit: {
-          fields: ["customOptions"],
-        },
-        linkToItem: true,
-      },
+    customizations: relationship({
+      ref: "CustomizationOption.product",
+      many: true,
+      label: "Кастомизация Вариант",
     }),
 
     topping: relationship({
@@ -270,14 +218,16 @@ export const Product = list({
       delete: async ({ context, item }) => {
         const product = await context.query.Product.findOne({
           where: { id: item.id.toString() },
-          query: "id images { id } customization { id } fillings { id }",
+          query: "id images { id } video { id }",
         });
-        await context.query.ProductImage.deleteMany({
+
+        await context.db.ProductImage.deleteMany({
           where: product.images.map((v: { id: any }) => ({ id: v.id })),
         });
-        if (product.customization) {
-          await context.query.ProductCustomization.deleteOne({
-            where: { id: product.customization.id },
+
+        if (product.video) {
+          await context.db.ProductVideo.deleteOne({
+            where: { id: product.video.id },
           });
         }
       },

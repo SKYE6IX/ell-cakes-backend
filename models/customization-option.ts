@@ -1,5 +1,5 @@
 import { list } from "@keystone-6/core";
-import { timestamp, relationship, select } from "@keystone-6/core/fields";
+import { timestamp, relationship, select, text } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
@@ -12,10 +12,18 @@ export const CustomizationOption = list({
       delete: permissions.canManageProduct,
     },
   },
+
   fields: {
-    productCustomization: relationship({
-      ref: "ProductCustomization.customOptions",
+    product: relationship({
+      ref: "Product.customizations",
+      many: true,
+      ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
+      },
     }),
+
     name: select({
       options: [
         { label: "Candle", value: "CANDLE" },
@@ -25,25 +33,48 @@ export const CustomizationOption = list({
       defaultValue: undefined,
       label: "Название",
     }),
+
+    slug: text({
+      hooks: {
+        resolveInput: ({ resolvedData, fieldKey, operation }) => {
+          if (operation === "create") {
+            const { name } = resolvedData;
+            resolvedData.slug = name.toLowerCase();
+            return resolvedData[fieldKey];
+          }
+          return resolvedData[fieldKey];
+        },
+      },
+      isIndexed: "unique",
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+    }),
+
     customValues: relationship({
       ref: "CustomizationOptionValue.option",
       many: true,
       ui: {
         displayMode: "cards",
-        itemView: {
-          fieldMode: "read",
-        },
         cardFields: ["value", "extraPrice"],
+
         inlineCreate: {
           fields: ["value", "extraPrice"],
         },
+
         inlineEdit: {
           fields: ["value", "extraPrice"],
         },
+
         linkToItem: true,
       },
-      label: "Варианты выбора",
+
+      label: "Указать значение",
     }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -65,6 +96,7 @@ export const CustomizationOption = list({
   ui: {
     isHidden: !permissions.canManageAll,
   },
+
   hooks: {
     beforeOperation: {
       delete: async ({ context, item }) => {
@@ -72,6 +104,7 @@ export const CustomizationOption = list({
           where: { id: item.id.toString() },
           query: "id customValues { id }",
         });
+
         await context.query.CustomizationOptionValue.deleteMany({
           where: customOption.customValues.map((v: { id: any }) => ({
             id: v.id,

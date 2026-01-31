@@ -1,10 +1,9 @@
-import { list, graphql } from "@keystone-6/core";
+import { list } from "@keystone-6/core";
 import {
   relationship,
   integer,
   timestamp,
   decimal,
-  virtual,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
@@ -32,26 +31,12 @@ export const ProductVariant = list({
 
     size: integer({ defaultValue: undefined, label: "Размер" }),
 
-    price: integer({ validation: { isRequired: true }, label: "Цена" }),
+    price: integer({
+      validation: { isRequired: true },
+      label: "Цена",
+    }),
 
     serving: integer({ label: "Порции" }),
-
-    selectedValue: virtual({
-      field: graphql.field({
-        type: graphql.String,
-        async resolve(item, args, context) {
-          // @ts-expect-error ID type doesn't exist on item
-          if (item.weight) return `Вес: ${item.weight}кг`;
-          // @ts-expect-error ID type doesn't exist on item
-          if (item.pieces) return `Порции: ${item.pieces}шт`;
-          // @ts-expect-error ID type doesn't exist on item
-          if (item.size) return `Размер: ${item.size}см`;
-        },
-      }),
-      ui: {
-        itemView: { fieldMode: "read" },
-      },
-    }),
 
     createdAt: timestamp({
       defaultValue: { kind: "now" },
@@ -74,6 +59,9 @@ export const ProductVariant = list({
   },
   ui: {
     isHidden: !permissions.canManageAll,
-    labelField: "selectedValue",
+    labelField: "price",
+    listView: {
+      initialSort: { field: "price", direction: "ASC" },
+    },
   },
 });

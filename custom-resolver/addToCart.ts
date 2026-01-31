@@ -121,21 +121,18 @@ export const addToCart = async (
           },
         },
       },
-      customization: {
+      customizations: {
         select: {
-          customOptions: {
-            select: { id: true, name: true, customValues: true },
-          },
+          id: true,
+          name: true,
+          customValues: true,
         },
       },
     },
   });
 
   const customOptionsMap = new Map(
-    product?.customization?.customOptions.map((option) => [
-      option.id,
-      option,
-    ]) || []
+    product?.customizations?.map((option) => [option.id, option]) || []
   );
 
   // Check if user added customization and calculate the
@@ -182,6 +179,7 @@ export const addToCart = async (
 
   // Check for existing cart-item
   const cartItemMap = new Map<string, CartWithItem["cartItems"][0]>();
+
   for (const cartItem of cart.cartItems) {
     cartItemMap.set(generateCartItemKey(cartItem), cartItem);
   }
@@ -207,11 +205,14 @@ export const addToCart = async (
       },
     });
   } else {
-    const selectedTopping = product?.topping?.options[0];
+    const selectedTopping = product?.topping?.options.find(
+      (option) => option.id === toppingOptionId
+    );
 
-    // Calculate the unit price for a single product
     const toppingPrice = selectedTopping?.extraPrice ?? 0;
+
     const basePrice = product?.fillings[0].variants[0].price ?? 0;
+
     const unitPrice = basePrice + customizationsTotalAmount + toppingPrice;
 
     await context.db.CartItem.createOne({

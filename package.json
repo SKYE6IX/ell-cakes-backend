@@ -3,8 +3,9 @@
   "version": "1.0.3",
   "private": true,
   "scripts": {
-    "dev": "keystone dev",
-    "start": "keystone start",
+    "migrate": "keystone migrate create",
+    "dev": "keystone dev --no-db-push",
+    "start": "keystone start --with-migrations",
     "build": "keystone build",
     "seed": "tsx ./script",
     "test": "jest"

@@ -24,7 +24,7 @@ const potentialCols = [
   { label: "Продукта", key: "product.name" },
   { label: "Количество", key: "quantity" },
   { label: "Вес", key: "variant.weight" },
-  { label: "Порции", key: "variant.pieces" },
+  { label: "Штук", key: "variant.pieces" },
   { label: "Размер", key: "variant.size" },
   { label: "Топпинг", key: "toppingOption.weight" },
   { label: "Кастомизация", key: "customizations" },
@@ -148,7 +148,7 @@ export const Order = list({
                                  <span>Тип: ${cus.name}</span><br/>
                                  ${
                                    value
-                                     ? `<span>Ценить: ${value}</span><br/>`
+                                     ? `<span>Количество: ${value}</span><br/>`
                                      : ""
                                  }
                                     ${

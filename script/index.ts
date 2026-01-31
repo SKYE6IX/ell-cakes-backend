@@ -103,6 +103,7 @@ async function main() {
 
     for (const productFilling of product.fillings) {
       const productFillingSlug = getTransliterationSlug(productFilling.name);
+
       // We check if a filling already exist or has been created by the previous
       // product so we can re-use it by storing it's ID into an array
       const existingProductFilling = productFillingMap.get(productFillingSlug);
@@ -128,8 +129,10 @@ async function main() {
             },
           }
         );
+
         // First add to the "existingProductFillings" Array
         productFillingMap.set(newProductFilling.slug, newProductFilling);
+
         // And then assign a local ID for connection for each product
         // because we need to know which product has particular fillings
         connectProductFillingIds.push({ id: newProductFilling.id });
@@ -186,8 +189,39 @@ async function main() {
       }
     }
 
-    console.log("Creating new product....");
+    // We check for if a product has a customization
+    let customizationsId: string[] = [];
+    if (product.customizations) {
+      const dbCusomizations =
+        await sudoContext.db.CustomizationOption.findMany();
 
+      product.customizations.forEach(async (productCus: any) => {
+        const existingCustomization = dbCusomizations.find(
+          (cus) => cus.slug === productCus.customizationName.toLowerCase()
+        );
+
+        if (existingCustomization) {
+          console.log("Customization already exist...");
+          customizationsId.push(existingCustomization.id);
+        } else {
+          console.log("Creating a new customization...");
+          const newCustomization =
+            await sudoContext.db.CustomizationOption.createOne({
+              data: {
+                name: productCus.customizationName.toUpperCase(),
+                customValues: {
+                  create: productCus.valueOptions.map((val: any) => ({
+                    ...val,
+                  })),
+                },
+              },
+            });
+          customizationsId.push(newCustomization.id);
+        }
+      });
+    }
+
+    console.log("Creating new product....");
     const newProduct = await context.prisma.product.create({
       data: {
         name: product.name,
@@ -202,17 +236,8 @@ async function main() {
           connect: productCategories.map((c: { id: any }) => ({ id: c?.id })),
         },
         ...(product.customizations && {
-          customization: {
-            create: {
-              customOptions: {
-                create: product.customizations.map((cus: any) => ({
-                  name: cus.customizationName.toUpperCase(),
-                  customValues: {
-                    create: cus.valueOptions.map((val: any) => ({ ...val })),
-                  },
-                })),
-              },
-            },
+          customizations: {
+            connect: customizationsId.map((cusId: string) => ({ id: cusId })),
           },
         }),
         ...(product.topping && {

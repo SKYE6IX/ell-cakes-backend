@@ -22,8 +22,11 @@ export const CustomizationOptionValue = list({
       ref: "CustomizationOption.customValues",
       many: false,
     }),
+
     value: text({ defaultValue: undefined, label: "Значение" }),
+
     extraPrice: integer({ defaultValue: undefined, label: "Доплата" }),
+
     createdAt: timestamp({
       defaultValue: { kind: "now" },
       ui: {
@@ -33,6 +36,7 @@ export const CustomizationOptionValue = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
     updatedAt: timestamp({
       ui: {
         itemView: {

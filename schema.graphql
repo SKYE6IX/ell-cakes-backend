@@ -361,7 +361,8 @@ type Product {
   images(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
   imagesCount(where: ProductImageWhereInput! = {}): Int
   video: ProductVideo
-  customization: ProductCustomization
+  customizations(where: CustomizationOptionWhereInput! = {}, orderBy: [CustomizationOptionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionWhereUniqueInput): [CustomizationOption!]
+  customizationsCount(where: CustomizationOptionWhereInput! = {}): Int
   topping: Topping
   createdAt: DateTime
   updatedAt: DateTime
@@ -372,7 +373,6 @@ input ProductWhereUniqueInput {
   slug: String
   mixBoxProduct: MixBoxProductWhereUniqueInput
   video: ProductVideoWhereUniqueInput
-  customization: ProductCustomizationWhereUniqueInput
 }
 
 input ProductWhereInput {
@@ -392,7 +392,7 @@ input ProductWhereInput {
   badge: StringNullableFilter
   images: ProductImageManyRelationFilter
   video: ProductVideoWhereInput
-  customization: ProductCustomizationWhereInput
+  customizations: CustomizationOptionManyRelationFilter
   topping: ToppingWhereInput
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -431,6 +431,12 @@ input ProductImageManyRelationFilter {
   none: ProductImageWhereInput
 }
 
+input CustomizationOptionManyRelationFilter {
+  every: CustomizationOptionWhereInput
+  some: CustomizationOptionWhereInput
+  none: CustomizationOptionWhereInput
+}
+
 input ProductOrderByInput {
   id: OrderDirection
   name: OrderDirection
@@ -457,7 +463,7 @@ input ProductUpdateInput {
   badge: String
   images: ProductImageRelateToManyForUpdateInput
   video: ProductVideoRelateToOneForUpdateInput
-  customization: ProductCustomizationRelateToOneForUpdateInput
+  customizations: CustomizationOptionRelateToManyForUpdateInput
   topping: ToppingRelateToOneForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -496,10 +502,11 @@ input ProductVideoRelateToOneForUpdateInput {
   disconnect: Boolean
 }
 
-input ProductCustomizationRelateToOneForUpdateInput {
-  create: ProductCustomizationCreateInput
-  connect: ProductCustomizationWhereUniqueInput
-  disconnect: Boolean
+input CustomizationOptionRelateToManyForUpdateInput {
+  disconnect: [CustomizationOptionWhereUniqueInput!]
+  set: [CustomizationOptionWhereUniqueInput!]
+  create: [CustomizationOptionCreateInput!]
+  connect: [CustomizationOptionWhereUniqueInput!]
 }
 
 input ToppingRelateToOneForUpdateInput {
@@ -526,7 +533,7 @@ input ProductCreateInput {
   badge: String
   images: ProductImageRelateToManyForCreateInput
   video: ProductVideoRelateToOneForCreateInput
-  customization: ProductCustomizationRelateToOneForCreateInput
+  customizations: CustomizationOptionRelateToManyForCreateInput
   topping: ToppingRelateToOneForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -557,9 +564,9 @@ input ProductVideoRelateToOneForCreateInput {
   connect: ProductVideoWhereUniqueInput
 }
 
-input ProductCustomizationRelateToOneForCreateInput {
-  create: ProductCustomizationCreateInput
-  connect: ProductCustomizationWhereUniqueInput
+input CustomizationOptionRelateToManyForCreateInput {
+  create: [CustomizationOptionCreateInput!]
+  connect: [CustomizationOptionWhereUniqueInput!]
 }
 
 input ToppingRelateToOneForCreateInput {
@@ -743,6 +750,7 @@ type ProductImage {
   product: Product
   image: ImageFieldOutput
   altText: String
+  isMain: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -758,6 +766,7 @@ input ProductImageWhereInput {
   id: IDFilter
   product: ProductWhereInput
   altText: StringFilter
+  isMain: BooleanFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -765,6 +774,7 @@ input ProductImageWhereInput {
 input ProductImageOrderByInput {
   id: OrderDirection
   altText: OrderDirection
+  isMain: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -773,6 +783,7 @@ input ProductImageUpdateInput {
   product: ProductRelateToOneForUpdateInput
   image: ImageFieldInput
   altText: String
+  isMain: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -792,6 +803,7 @@ input ProductImageCreateInput {
   product: ProductRelateToOneForCreateInput
   image: ImageFieldInput
   altText: String
+  isMain: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -809,7 +821,6 @@ type ProductVariant {
   size: Int
   price: Int
   serving: Int
-  selectedValue: String
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -980,78 +991,12 @@ input CategoryRelateToOneForCreateInput {
   connect: CategoryWhereUniqueInput
 }
 
-type ProductCustomization {
-  id: ID!
-  product: Product
-  customOptions(where: CustomizationOptionWhereInput! = {}, orderBy: [CustomizationOptionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionWhereUniqueInput): [CustomizationOption!]
-  customOptionsCount(where: CustomizationOptionWhereInput! = {}): Int
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input ProductCustomizationWhereUniqueInput {
-  id: ID
-  product: ProductWhereUniqueInput
-}
-
-input ProductCustomizationWhereInput {
-  AND: [ProductCustomizationWhereInput!]
-  OR: [ProductCustomizationWhereInput!]
-  NOT: [ProductCustomizationWhereInput!]
-  id: IDFilter
-  product: ProductWhereInput
-  customOptions: CustomizationOptionManyRelationFilter
-  createdAt: DateTimeNullableFilter
-  updatedAt: DateTimeNullableFilter
-}
-
-input CustomizationOptionManyRelationFilter {
-  every: CustomizationOptionWhereInput
-  some: CustomizationOptionWhereInput
-  none: CustomizationOptionWhereInput
-}
-
-input ProductCustomizationOrderByInput {
-  id: OrderDirection
-  createdAt: OrderDirection
-  updatedAt: OrderDirection
-}
-
-input ProductCustomizationUpdateInput {
-  product: ProductRelateToOneForUpdateInput
-  customOptions: CustomizationOptionRelateToManyForUpdateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CustomizationOptionRelateToManyForUpdateInput {
-  disconnect: [CustomizationOptionWhereUniqueInput!]
-  set: [CustomizationOptionWhereUniqueInput!]
-  create: [CustomizationOptionCreateInput!]
-  connect: [CustomizationOptionWhereUniqueInput!]
-}
-
-input ProductCustomizationUpdateArgs {
-  where: ProductCustomizationWhereUniqueInput!
-  data: ProductCustomizationUpdateInput!
-}
-
-input ProductCustomizationCreateInput {
-  product: ProductRelateToOneForCreateInput
-  customOptions: CustomizationOptionRelateToManyForCreateInput
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
-input CustomizationOptionRelateToManyForCreateInput {
-  create: [CustomizationOptionCreateInput!]
-  connect: [CustomizationOptionWhereUniqueInput!]
-}
-
 type CustomizationOption {
   id: ID!
-  productCustomization: ProductCustomization
+  product(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
+  productCount(where: ProductWhereInput! = {}): Int
   name: String
+  slug: String
   customValues(where: CustomizationOptionValueWhereInput! = {}, orderBy: [CustomizationOptionValueOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionValueWhereUniqueInput): [CustomizationOptionValue!]
   customValuesCount(where: CustomizationOptionValueWhereInput! = {}): Int
   createdAt: DateTime
@@ -1060,6 +1005,7 @@ type CustomizationOption {
 
 input CustomizationOptionWhereUniqueInput {
   id: ID
+  slug: String
 }
 
 input CustomizationOptionWhereInput {
@@ -1067,8 +1013,9 @@ input CustomizationOptionWhereInput {
   OR: [CustomizationOptionWhereInput!]
   NOT: [CustomizationOptionWhereInput!]
   id: IDFilter
-  productCustomization: ProductCustomizationWhereInput
+  product: ProductManyRelationFilter
   name: StringNullableFilter
+  slug: StringFilter
   customValues: CustomizationOptionValueManyRelationFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
@@ -1083,13 +1030,15 @@ input CustomizationOptionValueManyRelationFilter {
 input CustomizationOptionOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  slug: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
 
 input CustomizationOptionUpdateInput {
-  productCustomization: ProductCustomizationRelateToOneForUpdateInput
+  product: ProductRelateToManyForUpdateInput
   name: String
+  slug: String
   customValues: CustomizationOptionValueRelateToManyForUpdateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -1108,8 +1057,9 @@ input CustomizationOptionUpdateArgs {
 }
 
 input CustomizationOptionCreateInput {
-  productCustomization: ProductCustomizationRelateToOneForCreateInput
+  product: ProductRelateToManyForCreateInput
   name: String
+  slug: String
   customValues: CustomizationOptionValueRelateToManyForCreateInput
   createdAt: DateTime
   updatedAt: DateTime
@@ -2202,12 +2152,6 @@ type Mutation {
   updateCategories(data: [CategoryUpdateArgs!]!): [Category]
   deleteCategory(where: CategoryWhereUniqueInput!): Category
   deleteCategories(where: [CategoryWhereUniqueInput!]!): [Category]
-  createProductCustomization(data: ProductCustomizationCreateInput!): ProductCustomization
-  createProductCustomizations(data: [ProductCustomizationCreateInput!]!): [ProductCustomization]
-  updateProductCustomization(where: ProductCustomizationWhereUniqueInput!, data: ProductCustomizationUpdateInput!): ProductCustomization
-  updateProductCustomizations(data: [ProductCustomizationUpdateArgs!]!): [ProductCustomization]
-  deleteProductCustomization(where: ProductCustomizationWhereUniqueInput!): ProductCustomization
-  deleteProductCustomizations(where: [ProductCustomizationWhereUniqueInput!]!): [ProductCustomization]
   createCustomizationOption(data: CustomizationOptionCreateInput!): CustomizationOption
   createCustomizationOptions(data: [CustomizationOptionCreateInput!]!): [CustomizationOption]
   updateCustomizationOption(where: CustomizationOptionWhereUniqueInput!, data: CustomizationOptionUpdateInput!): CustomizationOption
@@ -2356,9 +2300,6 @@ type Query {
   category(where: CategoryWhereUniqueInput!): Category
   categories(where: CategoryWhereInput! = {}, orderBy: [CategoryOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CategoryWhereUniqueInput): [Category!]
   categoriesCount(where: CategoryWhereInput! = {}): Int
-  productCustomization(where: ProductCustomizationWhereUniqueInput!): ProductCustomization
-  productCustomizations(where: ProductCustomizationWhereInput! = {}, orderBy: [ProductCustomizationOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductCustomizationWhereUniqueInput): [ProductCustomization!]
-  productCustomizationsCount(where: ProductCustomizationWhereInput! = {}): Int
   customizationOption(where: CustomizationOptionWhereUniqueInput!): CustomizationOption
   customizationOptions(where: CustomizationOptionWhereInput! = {}, orderBy: [CustomizationOptionOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CustomizationOptionWhereUniqueInput): [CustomizationOption!]
   customizationOptionsCount(where: CustomizationOptionWhereInput! = {}): Int

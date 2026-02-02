@@ -1,15 +1,15 @@
 import { Context } from ".keystone/types";
-import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
 
 export const sendPasswordResetToken = async (
   root: any,
-  { phoneNumber }: { phoneNumber: string },
+  { email }: { email: string },
   context: Context
 ) => {
   const sudoContext = context.sudo();
 
   const user = await sudoContext.db.User.findOne({
-    where: { phoneNumber },
+    where: { email },
   });
 
   if (!user) {
@@ -18,7 +18,10 @@ export const sendPasswordResetToken = async (
     });
   }
 
-  const { token, issuedAt } = await issuePhoneNumberToken({ phoneNumber });
+  const { token, issuedAt } = await issueVerificationToken({
+    email,
+    type: "password-reset",
+  });
 
   await sudoContext.db.User.updateOne({
     where: { id: user.id },

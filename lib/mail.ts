@@ -1,77 +1,108 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+import { getSecret } from "./getSecret";
 dotenv.config();
 
+const templatePath = path.join(process.cwd(), "mail-template");
+let verificationHtml = fs.readFileSync(
+  `${templatePath}/verification.html`,
+  "utf-8"
+);
+let resetPasswordHtml = fs.readFileSync(
+  `${templatePath}/reset-password.html`,
+  "utf-8"
+);
+let orderNotificationHtml = fs.readFileSync(
+  `${templatePath}/order.html`,
+  "utf-8"
+);
+
+const yandexUserMail = getSecret("YANDEX_USER_MAIL");
+const yandexUserMailPass = getSecret("YANDEX_USER_MAIL_PASS");
+
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: process.env.YANDEX_USER_MAIL_HOST,
+  port: 465,
+  secure: true,
   auth: {
-    type: "OAuth2",
-    user: "azeezabioladev@gmail.com",
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+    user: yandexUserMail,
+    pass: yandexUserMailPass,
   },
 });
 
-function formatEmail(text: string) {
-  return `
-    <div styles="
-    border: 1px solid black;
-    padding: 20px;
-    font-family: sans-serif;
-    line-height: 2;
-    font-size: 20px;
-    ">
-    <h2>Hello there!</h2>
-    <p>${text}</p>
-    <p>Testing Area</p>
-    </div>
-    `;
+export async function sendUserVerificationToken({
+  to,
+  token,
+}: {
+  to: string;
+  token: string;
+}) {
+  try {
+    verificationHtml = verificationHtml.replace("{{ TOKEN }}", token);
+    await transporter.sendMail({
+      subject: "Верификации аккаунта",
+      from: {
+        name: "Ellcakes",
+        address: process.env.YANDEX_USER_MAIL,
+      },
+      replyTo: process.env.YANDEX_USER_MAIL,
+      to: to,
+      html: verificationHtml,
+    });
+  } catch (error) {
+    console.error("An error occur while trying to send email", error);
+  }
 }
 
-// export async function sendVerificationEmail({
-//   to,
-//   token,
-// }: {
-//   to: string;
-//   token: string;
-// }) {
-//   try {
-//     const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}&email=${to}`;
-//     await transporter.sendMail({
-//       subject: "Email Verification",
-//       from: "azeezabioladev@gmail.com",
-//       to: to,
-//       html: formatEmail(`
-//         Click on the link below to verify your email address. It expire in one hour.<b/>
-//         <a href="${verificationUrl}">Click Here To Verify</a>
-//         `),
-//     });
-//   } catch (error) {
-//     console.error("An error occur while trying to send email", error);
-//   }
-// }
+export async function sendResetPasswordToken({
+  to,
+  token,
+}: {
+  to: string;
+  token: string;
+}) {
+  try {
+    resetPasswordHtml = resetPasswordHtml.replace("{{ TOKEN }}", token);
+    await transporter.sendMail({
+      subject: "Ваш код подтверждения",
+      from: {
+        name: "Ellcakes",
+        address: process.env.YANDEX_USER_MAIL,
+      },
+      replyTo: process.env.YANDEX_USER_MAIL,
+      to: to,
+      html: resetPasswordHtml,
+    });
+  } catch (error) {
+    console.error("An error occur while trying to send email", error);
+  }
+}
 
-// export async function sendResetPasswordTokenEmail({
-//   to,
-//   token,
-// }: {
-//   to: string;
-//   token: string;
-// }) {
-//   try {
-//     const verificationUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${to}`;
-//     await transporter.sendMail({
-//       subject: "Password Reset Link",
-//       from: "azeezabioladev@gmail.com",
-//       to: to,
-//       html: formatEmail(`
-//         You requested for a password reset. Click the link below to reset your password.<b/>
-//         If you didn't make this request kindly ignore the email.<b/>
-//         <a href="${verificationUrl}">Click here to reset your password</a>
-//         `),
-//     });
-//   } catch (error) {
-//     console.error("An error occur while trying to send email", error);
-//   }
-// }
+export async function sendOrderNotification({
+  to,
+  orderNumber,
+}: {
+  to: string;
+  orderNumber: string;
+}) {
+  try {
+    orderNotificationHtml = orderNotificationHtml.replace(
+      "{{ ORDER_NUMBER }}",
+      orderNumber
+    );
+    await transporter.sendMail({
+      subject: "Ваш заказ принят",
+      from: {
+        name: "Ellcakes",
+        address: process.env.YANDEX_USER_MAIL,
+      },
+      replyTo: process.env.YANDEX_USER_MAIL,
+      to: to,
+      html: orderNotificationHtml,
+    });
+  } catch (error) {
+    console.error("An error occur while trying to send email", error);
+  }
+}

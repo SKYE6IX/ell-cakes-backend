@@ -9,7 +9,7 @@ import {
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
-import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
 
 const hiddenFieldConfig = {
   ui: {
@@ -46,13 +46,13 @@ export const User = list({
       defaultValue: null,
     }),
 
-    isPhoneNumberVerified: checkbox({ defaultValue: false }),
+    isUserVerified: checkbox({ defaultValue: false }),
 
-    phoneNumberToken: password(hiddenFieldConfig),
+    userVerificationToken: password(hiddenFieldConfig),
 
-    phoneNumberVerificationIssuedAt: timestamp(hiddenFieldConfig),
+    userVerificationTokenIssuedAt: timestamp(hiddenFieldConfig),
 
-    phoneNumberVerificationRedeemedAt: timestamp(hiddenFieldConfig),
+    userVerificationTokenRedeemedAt: timestamp(hiddenFieldConfig),
 
     role: select({
       options: [
@@ -174,40 +174,39 @@ export const User = list({
   hooks: {
     afterOperation: {
       create: async ({ item, context, inputData }) => {
-        const { token, issuedAt } = await issuePhoneNumberToken({
-          phoneNumber: inputData.phoneNumber,
+        const { token, issuedAt } = await issueVerificationToken({
+          email: inputData.email,
+          type: "user-verification",
         });
 
         await context.db.User.updateOne({
           where: { id: item.id.toString() },
           data: {
-            isPhoneNumberVerified: false,
-            phoneNumberToken: token,
-            phoneNumberVerificationIssuedAt: issuedAt,
-            phoneNumberVerificationRedeemedAt: null,
+            isUserVerified: false,
+            userVerificationToken: token,
+            userVerificationTokenIssuedAt: issuedAt,
+            userVerificationTokenRedeemedAt: null,
             updatedAt: issuedAt,
           },
         });
       },
 
       update: async ({ inputData, originalItem, context }) => {
-        // Check if USER passed in a new phone number
+        // Check if USER passed in a new email
         // and verify it isn't the same as the existing one they had
-        if (
-          inputData.phoneNumber &&
-          inputData.phoneNumber !== originalItem.phoneNumber
-        ) {
-          const { token, issuedAt } = await issuePhoneNumberToken({
-            phoneNumber: inputData.phoneNumber,
+        if (inputData.email && inputData.email !== originalItem.email) {
+          const { token, issuedAt } = await issueVerificationToken({
+            email: inputData.email,
+            type: "user-verification",
           });
 
           await context.db.User.updateOne({
             where: { id: originalItem.id.toString() },
             data: {
-              isPhoneNumberVerified: false,
-              phoneNumberToken: token,
-              phoneNumberVerificationIssuedAt: issuedAt,
-              phoneNumberVerificationRedeemedAt: null,
+              isUserVerified: false,
+              userVerificationToken: token,
+              userVerificationTokenIssuedAt: issuedAt,
+              userVerificationTokenRedeemedAt: null,
               updatedAt: issuedAt,
             },
           });

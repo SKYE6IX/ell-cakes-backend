@@ -7,10 +7,10 @@ type User {
   email: String
   password: PasswordState
   phoneNumber: String
-  isPhoneNumberVerified: Boolean
-  phoneNumberToken: PasswordState
-  phoneNumberVerificationIssuedAt: DateTime
-  phoneNumberVerificationRedeemedAt: DateTime
+  isUserVerified: Boolean
+  userVerificationToken: PasswordState
+  userVerificationTokenIssuedAt: DateTime
+  userVerificationTokenRedeemedAt: DateTime
   role: String
   passwordResetToken: PasswordState
   passwordResetIssuedAt: DateTime
@@ -49,10 +49,10 @@ input UserWhereInput {
   name: StringFilter
   email: StringFilter
   phoneNumber: StringFilter
-  isPhoneNumberVerified: BooleanFilter
-  phoneNumberToken: PasswordFilter
-  phoneNumberVerificationIssuedAt: DateTimeNullableFilter
-  phoneNumberVerificationRedeemedAt: DateTimeNullableFilter
+  isUserVerified: BooleanFilter
+  userVerificationToken: PasswordFilter
+  userVerificationTokenIssuedAt: DateTimeNullableFilter
+  userVerificationTokenRedeemedAt: DateTimeNullableFilter
   role: StringFilter
   passwordResetToken: PasswordFilter
   passwordResetIssuedAt: DateTimeNullableFilter
@@ -149,9 +149,9 @@ input UserOrderByInput {
   name: OrderDirection
   email: OrderDirection
   phoneNumber: OrderDirection
-  isPhoneNumberVerified: OrderDirection
-  phoneNumberVerificationIssuedAt: OrderDirection
-  phoneNumberVerificationRedeemedAt: OrderDirection
+  isUserVerified: OrderDirection
+  userVerificationTokenIssuedAt: OrderDirection
+  userVerificationTokenRedeemedAt: OrderDirection
   role: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
@@ -171,10 +171,10 @@ input UserUpdateInput {
   email: String
   password: String
   phoneNumber: String
-  isPhoneNumberVerified: Boolean
-  phoneNumberToken: String
-  phoneNumberVerificationIssuedAt: DateTime
-  phoneNumberVerificationRedeemedAt: DateTime
+  isUserVerified: Boolean
+  userVerificationToken: String
+  userVerificationTokenIssuedAt: DateTime
+  userVerificationTokenRedeemedAt: DateTime
   role: String
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
@@ -225,10 +225,10 @@ input UserCreateInput {
   email: String
   password: String
   phoneNumber: String
-  isPhoneNumberVerified: Boolean
-  phoneNumberToken: String
-  phoneNumberVerificationIssuedAt: DateTime
-  phoneNumberVerificationRedeemedAt: DateTime
+  isUserVerified: Boolean
+  userVerificationToken: String
+  userVerificationTokenIssuedAt: DateTime
+  userVerificationTokenRedeemedAt: DateTime
   role: String
   passwordResetToken: String
   passwordResetIssuedAt: DateTime
@@ -2256,10 +2256,10 @@ type Mutation {
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
   authorizedUser(email: String!, password: String!): User!
-  redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
-  resendPhoneNumberToken(phoneNumber: String!): String!
-  sendPasswordResetToken(phoneNumber: String!): String!
-  updatePassword(token: String!, phoneNumber: String!, newPassword: String!): User!
+  redeemUserVerificationToken(token: String!, email: String!): VerifyUserByPhoneNumberResponse!
+  resendUserVerificationToken(email: String!): String!
+  sendPasswordResetToken(email: String!): String!
+  updatePassword(token: String!, email: String!, newPassword: String!): User!
   addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
   increaseCartItem(cartItemId: String!): Cart!
   decreaseCartItem(cartItemId: String!): Cart
@@ -2361,7 +2361,7 @@ type Query {
   isEmailInUse(email: String!): Boolean!
   isPhoneNumberInUse(phoneNumber: String!): Boolean!
   queryAuthorizedUser: User
-  validatePasswordResetToken(token: String!, phoneNumber: String!): Boolean!
+  validatePasswordResetToken(token: String!, email: String!): Boolean!
   querySimilarProducts(productSlug: String!): [Product!]!
 }
 

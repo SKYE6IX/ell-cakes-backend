@@ -16,7 +16,7 @@ jest.mock("iuliia", () => ({
 }));
 
 jest.mock("../lib/mail.ts", () => ({
-  sendVerificationEmail: jest.fn(async () => Promise.resolve()),
+  sendUserVerificationToken: jest.fn(async () => Promise.resolve()),
 }));
 
 jest.mock("@hapi/iron");
@@ -72,6 +72,7 @@ describe("Order and OrderItem Model and", () => {
     });
 
     const sudoContext = context.sudo();
+
     const mockUser = await sudoContext.db.User.createOne({
       data: {
         name: "Jon",

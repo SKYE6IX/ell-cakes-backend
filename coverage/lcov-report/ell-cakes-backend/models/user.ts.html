@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/18</span>
+                <span class='fraction'>10/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>2/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/18</span>
+                <span class='fraction'>10/18</span>
             </div>
         
             
@@ -288,8 +288,7 @@
 <a name='L223'></a><a href='#L223'>223</a>
 <a name='L224'></a><a href='#L224'>224</a>
 <a name='L225'></a><a href='#L225'>225</a>
-<a name='L226'></a><a href='#L226'>226</a>
-<a name='L227'></a><a href='#L227'>227</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
+<a name='L226'></a><a href='#L226'>226</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -469,6 +468,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -484,15 +484,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -526,7 +524,7 @@ import {
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
-import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
 &nbsp;
 const hiddenFieldConfig = {
   ui: {
@@ -563,13 +561,13 @@ export const User = list({
       defaultValue: null,
     }),
 &nbsp;
-    isPhoneNumberVerified: checkbox({ defaultValue: false }),
+    isUserVerified: checkbox({ defaultValue: false }),
 &nbsp;
-    phoneNumberToken: password(hiddenFieldConfig),
+    userVerificationToken: password(hiddenFieldConfig),
 &nbsp;
-    phoneNumberVerificationIssuedAt: timestamp(hiddenFieldConfig),
+    userVerificationTokenIssuedAt: timestamp(hiddenFieldConfig),
 &nbsp;
-    phoneNumberVerificationRedeemedAt: timestamp(hiddenFieldConfig),
+    userVerificationTokenRedeemedAt: timestamp(hiddenFieldConfig),
 &nbsp;
     role: select({
       options: [
@@ -691,40 +689,39 @@ export const User = list({
   hooks: {
     afterOperation: {
       create: async ({ item, context, inputData }) =&gt; {
-        const { token, issuedAt } = await issuePhoneNumberToken({
-          phoneNumber: inputData.phoneNumber,
+        const { token, issuedAt } = await issueVerificationToken({
+          email: inputData.email,
+          type: "user-verification",
         });
 &nbsp;
         await context.db.User.updateOne({
           where: { id: item.id.toString() },
           data: {
-            isPhoneNumberVerified: false,
-            phoneNumberToken: token,
-            phoneNumberVerificationIssuedAt: issuedAt,
-            phoneNumberVerificationRedeemedAt: null,
+            isUserVerified: false,
+            userVerificationToken: token,
+            userVerificationTokenIssuedAt: issuedAt,
+            userVerificationTokenRedeemedAt: null,
             updatedAt: issuedAt,
           },
         });
       },
 &nbsp;
       update: async ({ inputData, originalItem, context }) =&gt; {
-        // Check if USER passed in a new phone number
+        // Check if USER passed in a new email
         // and verify it isn't the same as the existing one they had
-        if (
-          inputData.phoneNumber &amp;&amp;
-          inputData.phoneNumber !== originalItem.phoneNumber
-        ) {
-          const { token, issuedAt } = await issuePhoneNumberToken({
-            phoneNumber: inputData.phoneNumber,
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (inputData.email &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >inputData.email !== originalItem.email)</span> {
+          const { token, issuedAt } = <span class="cstat-no" title="statement not covered" >await issueVerificationToken({</span>
+            email: inputData.email,
+            type: "user-verification",
           });
 &nbsp;
-          await context.db.User.updateOne({
+<span class="cstat-no" title="statement not covered" >          await context.db.User.updateOne({</span>
             where: { id: originalItem.id.toString() },
             data: {
-              isPhoneNumberVerified: false,
-              phoneNumberToken: token,
-              phoneNumberVerificationIssuedAt: issuedAt,
-              phoneNumberVerificationRedeemedAt: null,
+              isUserVerified: false,
+              userVerificationToken: token,
+              userVerificationTokenIssuedAt: issuedAt,
+              userVerificationTokenRedeemedAt: null,
               updatedAt: issuedAt,
             },
           });
@@ -748,7 +745,7 @@ export const User = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-02T08:36:40.195Z
+                at 2026-02-02T16:43:02.417Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

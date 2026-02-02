@@ -7,7 +7,7 @@ import {
 import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
-import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
 import path from "path";
 import { Prisma } from ".prisma/client";
 
@@ -15,7 +15,7 @@ type User = Prisma.UserGetPayload<{}>;
 
 interface GraphQLResponse<T> {
   data: {
-    redeemPhoneNumberToken: T;
+    redeemUserVerificationToken: T;
   };
   errors?: any[];
 }
@@ -43,12 +43,12 @@ beforeEach(async () => {
   await resetDatabase(container.getConnectionUri(), prismaSchemaPath);
 });
 
-jest.mock("../lib/issuePhoneNumberToken");
+jest.mock("../lib/issueVerificationToken");
 
 describe("Verify user by phone number", () => {
   test("It send phone number token to user", async () => {
     // Arrange
-    (issuePhoneNumberToken as jest.Mock).mockResolvedValue({
+    (issueVerificationToken as jest.Mock).mockResolvedValue({
       token: "12345678",
       issuedAt: new Date(),
     });
@@ -63,18 +63,19 @@ describe("Verify user by phone number", () => {
       },
     })) as User;
 
-    expect(newUser.phoneNumberToken).toBeDefined();
+    expect(newUser.userVerificationToken).toBeDefined();
   });
 
   test("it redeem token from user", async () => {
     const token = "12345678";
     // Arrange
-    (issuePhoneNumberToken as jest.Mock).mockResolvedValue({
+    (issueVerificationToken as jest.Mock).mockResolvedValue({
       token,
       issuedAt: new Date(),
     });
 
     const sudoContext = context.sudo();
+
     const user = (await sudoContext.db.User.createOne({
       data: {
         name: "Jon",
@@ -94,22 +95,23 @@ describe("Verify user by phone number", () => {
       .withSession(mockSession)
       .graphql.raw({
         query: `
-      mutation RedeemPhoneNumberToken($token: String!, $phoneNumber: String!) {
-        redeemPhoneNumberToken(token: $token, phoneNumber: $phoneNumber) {
+      mutation RedeemUserVerificationToken($token: String!, $email: String!) {
+        redeemUserVerificationToken(token: $token, email: $email) {
            status
            message
         }
       }
       `,
-        variables: { token, phoneNumber: user.phoneNumber },
+        variables: { token, email: user.email },
       })) as GraphQLResponse<{ status: boolean }>;
-    expect(data.redeemPhoneNumberToken.status).toBeTruthy();
+
+    expect(data.redeemUserVerificationToken.status).toBeTruthy();
 
     const updatedUser = (await sudoContext.db.User.findOne({
       where: { id: user.id },
     })) as User;
 
-    expect(updatedUser.isPhoneNumberVerified).toBeTruthy();
-    expect(updatedUser.phoneNumberToken).toBeNull();
+    expect(updatedUser.isUserVerified).toBeTruthy();
+    expect(updatedUser.userVerificationToken).toBeNull();
   });
 });

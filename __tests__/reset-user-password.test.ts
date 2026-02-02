@@ -7,7 +7,7 @@ import {
 import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
-import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
 import path from "path";
 import { Prisma } from ".prisma/client";
 
@@ -66,16 +66,17 @@ afterAll(async () => {
 beforeEach(async () => {
   await resetDatabase(container.getConnectionUri(), prismaSchemaPath);
 });
-jest.mock("../lib/issuePhoneNumberToken");
+jest.mock("../lib/issueVerificationToken");
 
 describe("Resetting user password", () => {
   test("It send user a password reset token", async () => {
     // Arrange
     const token = "12345678";
-    (issuePhoneNumberToken as jest.Mock).mockResolvedValue({
+    (issueVerificationToken as jest.Mock).mockResolvedValue({
       token,
       issuedAt: new Date(),
     });
+
     const sudoContext = context.sudo();
     const user = (await sudoContext.db.User.createOne({
       data: {
@@ -88,11 +89,11 @@ describe("Resetting user password", () => {
 
     await context.graphql.raw({
       query: `
-        mutation SendPasswordResetToken($phoneNumber: String!) {
-          sendPasswordResetToken(phoneNumber: $phoneNumber)
+        mutation SendPasswordResetToken($email: String!) {
+          sendPasswordResetToken(email: $email)
         }
       `,
-      variables: { phoneNumber: user.phoneNumber },
+      variables: { email: user.email },
     });
 
     const updatedUser = (await sudoContext.db.User.findOne({
@@ -105,10 +106,11 @@ describe("Resetting user password", () => {
 
   test("it validated the token passed is a match", async () => {
     const token = "12345678";
-    (issuePhoneNumberToken as jest.Mock).mockResolvedValue({
+    (issueVerificationToken as jest.Mock).mockResolvedValue({
       token,
       issuedAt: new Date(),
     });
+
     const sudoContext = context.sudo();
     const user = (await sudoContext.db.User.createOne({
       data: {
@@ -121,20 +123,20 @@ describe("Resetting user password", () => {
 
     await context.graphql.raw({
       query: `
-        mutation SendPasswordResetToken($phoneNumber: String!) {
-          sendPasswordResetToken(phoneNumber: $phoneNumber)
+          mutation SendPasswordResetToken($email: String!) {
+          sendPasswordResetToken(email: $email)
         }
       `,
-      variables: { phoneNumber: user.phoneNumber },
+      variables: { email: user.email },
     });
 
     const { data, errors } = (await context.graphql.raw({
       query: `
-        query Query($token: String!, $phoneNumber: String!) {
-         validatePasswordResetToken(token: $token, phoneNumber: $phoneNumber)
+        query Query($token: String!, $email: String!) {
+         validatePasswordResetToken(token: $token, email: $email)
         }
       `,
-      variables: { token, phoneNumber: user.phoneNumber },
+      variables: { token, email: user.email },
     })) as GraphQLResponse<boolean>;
 
     expect(data.validatePasswordResetToken).toBeTruthy();
@@ -148,7 +150,7 @@ describe("Resetting user password", () => {
     const withRequest = await context.withRequest(req, res);
 
     const token = "12345678";
-    (issuePhoneNumberToken as jest.Mock).mockResolvedValue({
+    (issueVerificationToken as jest.Mock).mockResolvedValue({
       token,
       issuedAt: new Date(),
     });
@@ -165,24 +167,24 @@ describe("Resetting user password", () => {
 
     await context.graphql.raw({
       query: `
-        mutation SendPasswordResetToken($phoneNumber: String!) {
-          sendPasswordResetToken(phoneNumber: $phoneNumber) 
+        mutation SendPasswordResetToken($email: String!) {
+          sendPasswordResetToken(email: $email)
         }
       `,
-      variables: { phoneNumber: user.phoneNumber },
+      variables: { email: user.email },
     });
 
     const newPassword = "123456789";
 
     const { data, errors } = (await withRequest.graphql.raw({
       query: `
-      mutation UpdatePassword($token: String!, $phoneNumber: String!, $newPassword: String!) {
-       updatePassword(token: $token, phoneNumber: $phoneNumber, newPassword: $newPassword) {
+      mutation UpdatePassword($token: String!, $email: String!, $newPassword: String!) {
+       updatePassword(token: $token, email: $email, newPassword: $newPassword) {
            id
         }
        }
       `,
-      variables: { token, phoneNumber: user.phoneNumber, newPassword },
+      variables: { token, email: user.email, newPassword },
     })) as GraphQLResponse<User>;
 
     expect(data.updatePassword.id).toEqual(user.id);

@@ -6,15 +6,15 @@ interface ImportMetaEnv {
   readonly YC_S3_BUCKET: string;
   readonly YC_S3_REGION: string;
   readonly YC_S3_PRIVATE_ENDPOINT: string;
-  readonly GOOGLE_CLIENT_ID: string;
-  readonly GOOGLE_CLIENT_SECRET: string;
-  readonly GOOGLE_REFRESH_TOKEN: string;
   readonly FRONTEND_URL: string;
   readonly YOO_MONEY_SHOP_ID: string;
   readonly YOO_MONEY_SECRET_ID: string;
   readonly SMS_SENDER: string;
   readonly SMS_API_KEY: string;
   readonly REDIS_HOST: string;
+  readonly YANDEX_USER_MAIL_HOST: string;
+  readonly YANDEX_USER_MAIL: string;
+  readonly YANDEX_USER_MAIL_PASS: string;
 }
 declare global {
   namespace NodeJS {

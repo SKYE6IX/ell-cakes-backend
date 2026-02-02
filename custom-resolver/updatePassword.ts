@@ -5,15 +5,15 @@ export const updatePassword = async (
   root: any,
   {
     token,
-    phoneNumber,
+    email,
     newPassword,
-  }: { token: string; phoneNumber: string; newPassword: string },
+  }: { token: string; email: string; newPassword: string },
   context: Context
 ) => {
   const sudoContext = context.sudo();
 
   const user = await sudoContext.db.User.findOne({
-    where: { phoneNumber },
+    where: { email },
   });
 
   if (!user) {

@@ -46,6 +46,7 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.keystone .keystone
 COPY --from=builder /app/schema.prisma /app/schema.prisma
 COPY --from=builder /app/migrations /app/migrations
+COPY --from=builder /app/mail-template /app/mail-template
 
 RUN npm cache clean --force
 

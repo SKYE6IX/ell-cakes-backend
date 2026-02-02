@@ -2,9 +2,9 @@ import { Context } from ".keystone/types";
 import { v4 as uuidv4 } from "uuid";
 import { ICreateReceipt } from "@a2seven/yoo-checkout";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
-import { sendSms } from "../lib/sendSms";
 import { createOrder } from "./createOrder";
 import { PaymentStatus } from "./checkOut";
+import { sendOrderNotification } from "../lib/mail";
 
 interface ConfirmPaymentArgs {
   body: any;
@@ -74,12 +74,11 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         where: { id: newOrder?.userId },
       });
 
-      // Set up new order sms notification for user.
-      const newOrderMessage = `Заказ № ${newOrder?.orderNumber} принят. Сборка 1-5 дня. ELLCAKES`;
-      if (user) {
-        await sendSms({
-          phoneNumber: user.phoneNumber,
-          message: newOrderMessage,
+      // Set up new order email notification for user.
+      if (user && newOrder) {
+        await sendOrderNotification({
+          to: user.email,
+          orderNumber: newOrder.orderNumber,
         });
       }
 

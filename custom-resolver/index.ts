@@ -1,12 +1,12 @@
 import type { GraphQLSchema } from "graphql";
 import { mergeSchemas } from "@graphql-tools/schema";
-import { redeemPhoneNumberToken } from "./redeemPhoneNumberToken";
+import { redeemUserVerificationToken } from "./redeemUserVerificationToken";
+import { resendUserVerificationToken } from "./resendUserVerificationToken";
 import { addToCart } from "./addToCart";
 import { removeFromCart } from "./removeFromCart";
 import { checkOut } from "./checkOut";
 import { registerUser } from "./registerUser";
 import { authorizedUser } from "./authorizedUser";
-import { resendPhoneNumberToken } from "./resendPhoneNumberToken";
 import { uploadImageCustomization } from "./uploadImageCustomization";
 import { increaseCartItem } from "./increaseCartItem";
 import { decreaseCartItem } from "./decreaseCartItem";
@@ -53,17 +53,17 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       isEmailInUse(email: String!): Boolean!
       isPhoneNumberInUse(phoneNumber: String!): Boolean!
       queryAuthorizedUser: User
-      validatePasswordResetToken(token: String!, phoneNumber: String!): Boolean!
+      validatePasswordResetToken(token: String!, email: String!): Boolean!
       querySimilarProducts(productSlug: String!): [Product!]!
 
     }
 
     type Mutation {
         authorizedUser(email: String!, password: String!): User!
-        redeemPhoneNumberToken(token: String!, phoneNumber: String!): VerifyUserByPhoneNumberResponse!
-        resendPhoneNumberToken(phoneNumber: String!): String!
-        sendPasswordResetToken(phoneNumber: String!): String!
-        updatePassword(token: String!, phoneNumber: String!, newPassword: String!): User!
+        redeemUserVerificationToken(token: String!, email: String!): VerifyUserByPhoneNumberResponse!
+        resendUserVerificationToken(email: String!): String!
+        sendPasswordResetToken(email: String!): String!
+        updatePassword(token: String!, email: String!, newPassword: String!): User!
         addToCart(productId: String!, variantId: String!, customizations: [CustomizationInput!], compositionOptions: [CompositionOptionInput!], toppingOptionId: String): Cart!
         increaseCartItem(cartItemId: String!): Cart!
         decreaseCartItem(cartItemId: String!): Cart
@@ -77,8 +77,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
 
     resolvers: {
       Mutation: {
-        redeemPhoneNumberToken,
-        resendPhoneNumberToken,
+        redeemUserVerificationToken,
+        resendUserVerificationToken,
         increaseCartItem,
         addToCart,
         removeFromCart,

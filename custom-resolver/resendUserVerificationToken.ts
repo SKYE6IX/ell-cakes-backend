@@ -1,10 +1,10 @@
 import { Context } from ".keystone/types";
-import { issuePhoneNumberToken } from "../lib/issuePhoneNumberToken";
+import { issueVerificationToken } from "../lib/issueVerificationToken";
 import { Session } from "../access";
 
-export const resendPhoneNumberToken = async (
+export const resendUserVerificationToken = async (
   root: any,
-  { phoneNumber }: { phoneNumber: string },
+  { email }: { email: string },
   context: Context
 ) => {
   const loggedInUser = context.session as Session;
@@ -17,7 +17,7 @@ export const resendPhoneNumberToken = async (
 
   // We need to check if the phoneNumber has a user
   const user = await context.db.User.findOne({
-    where: { phoneNumber: phoneNumber },
+    where: { email: email },
   });
 
   if (!user) {
@@ -27,15 +27,18 @@ export const resendPhoneNumberToken = async (
   }
 
   // Generate a new token and send to user and update user!
-  const { token, issuedAt } = await issuePhoneNumberToken({ phoneNumber });
+  const { token, issuedAt } = await issueVerificationToken({
+    email,
+    type: "user-verification",
+  });
 
   await context.db.User.updateOne({
     where: { id: user.id },
     data: {
-      isPhoneNumberVerified: false,
-      phoneNumberToken: token,
-      phoneNumberVerificationIssuedAt: issuedAt,
-      phoneNumberVerificationRedeemedAt: null,
+      isUserVerified: false,
+      userVerificationToken: token,
+      userVerificationTokenIssuedAt: issuedAt,
+      userVerificationTokenRedeemedAt: null,
       updatedAt: issuedAt,
     },
   });

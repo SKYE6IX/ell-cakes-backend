@@ -32,6 +32,8 @@ jobs:
           push: true
           file: Dockerfile
           tags: ${{ vars.DOCKER_USERNAME }}/${{ github.event.repository.name }}:latest
+          build-args: |
+            PRISMA_CLI_BINARY_TARGETS_ARG=${{ vars.PRISMA_CLI_BINARY_TARGETS_ARG }}
 
   deploy:
     runs-on: ubuntu-latest

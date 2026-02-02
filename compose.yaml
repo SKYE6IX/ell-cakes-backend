@@ -5,6 +5,8 @@ services:
      platforms: 
       - linux/arm64
      dockerfile: Dockerfile 
+     args:
+      - PRISMA_CLI_BINARY_TARGETS_ARG=linux-musl-arm64-openssl-3.0.x 
     environment: 
         DATABASE_URL_FILE: /run/secrets/database_url
         YC_S3_KEY_ID_FILE: /run/secrets/yc_s3_key_id

@@ -8,8 +8,12 @@ RUN apk add --no-cache openssl
 
 WORKDIR /app
 
-ENV PRISMA_CLI_BINARY_TARGETS=linux-musl-arm64-openssl-3.0.x
+
+ARG PRISMA_CLI_BINARY_TARGETS_ARG
+
+ENV PRISMA_CLI_BINARY_TARGETS=${PRISMA_CLI_BINARY_TARGETS_ARG}
 ENV PRISMA_CLIENT_ENGINE_TYPE=binary
+
 
 COPY package.json package-lock.json*  ./
 

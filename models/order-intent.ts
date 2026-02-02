@@ -26,6 +26,7 @@ export const OrderIntent = list({
     paymentId: text(),
     cart: relationship({ ref: "Cart" }),
     user: relationship({ ref: "User" }),
+    deliveryOption: text(),
     deliveryAddress: relationship({ ref: "DelivaryAddress" }),
     note: text(),
     paymentStatus: select({
@@ -50,5 +51,8 @@ export const OrderIntent = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+  },
+  ui: {
+    isHidden: true,
   },
 });

@@ -45,7 +45,7 @@ export async function runWorkerSchedule(context: Context) {
       const imagesToDelete = await sudoContext.db.CustomizeImage.findMany({
         where: {
           createdAt: {
-            lt: sevenDaysAgo,
+            gt: sevenDaysAgo,
           },
         },
       });

@@ -59,6 +59,9 @@ export const Order = list({
       ref: "User.orders",
       many: false,
       ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
         itemView: {
           fieldMode: "read",
         },
@@ -226,8 +229,6 @@ export const Order = list({
         itemView: {
           fieldMode: "hidden",
         },
-        displayMode: "cards",
-        cardFields: ["product", "variant", "quantity", "unitPrice", "subTotal"],
       },
     }),
 
@@ -282,14 +283,28 @@ export const Order = list({
     payment: relationship({
       ref: "Payment.order",
       ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
         itemView: {
           fieldMode: "read",
         },
         displayMode: "cards",
         cardFields: ["status"],
       },
-
       label: "Статус платежа",
+    }),
+
+    deliveryOption: text({
+      ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
+        itemView: {
+          fieldMode: "read",
+        },
+      },
+      label: "Время доставки",
     }),
 
     deliveryAddress: relationship({

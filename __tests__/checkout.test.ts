@@ -156,8 +156,8 @@ describe("Order and OrderItem Model and", () => {
     const checkOut = await context
       .withSession(mockSession)
       .graphql.raw<{ checkOut: any }, {}>({
-        query: `mutation CheckOut($deliveryAddressId: String!, $shippingCost: Int!, $paymentMethod: String!) {
-              checkOut(shippingCost: $shippingCost, deliveryAddressId: $deliveryAddressId, paymentMethod: $paymentMethod) {
+        query: `mutation CheckOut($deliveryAddressId: String!, $shippingCost: Int!, $deliveryOption: String!, $paymentMethod: String!) {
+              checkOut(shippingCost: $shippingCost, deliveryAddressId: $deliveryAddressId, paymentMethod: $paymentMethod, deliveryOption: $deliveryOption) {
                id status amount redirectUrl method
               }
             }`,
@@ -165,6 +165,7 @@ describe("Order and OrderItem Model and", () => {
           deliveryAddressId: userAddress.id,
           shippingCost: 1000,
           paymentMethod: "bank_card",
+          deliveryOption: "between 10:00 to 17:00",
         },
       });
 

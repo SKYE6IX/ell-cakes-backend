@@ -69,7 +69,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         decreaseCartItem(cartItemId: String!): Cart
         removeFromCart(cartItemId: String!): Cart
         connectCartToUser(userId: String!): Cart
-        checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, customerNote: String): Payment!
+        checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, customerNote: String): Payment!
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
     }

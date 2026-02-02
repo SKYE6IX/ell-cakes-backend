@@ -21,7 +21,8 @@ const databaseShadowUrl = getSecret("DATABASE_SHADOW_URL");
 const ycS3KeyId = getSecret("YC_S3_KEY_ID");
 const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
 
-const isProduction = process.env.NODE_ENV == "production";
+// const isProduction = process.env.NODE_ENV == "production";
+const isProduction = true;
 
 initOtel();
 

@@ -15,6 +15,7 @@ const { withAuth } = createAuth({
 });
 
 const isProduction = process.env.NODE_ENV === "production";
+
 const secretKey = getSecret("SESSION_SECRET");
 
 const sessionMaxAge = 60 * 60 * 24 * 30;

@@ -68,6 +68,7 @@ export const createOrder = async ({
         subTotalAmount: cart?.subTotal,
         totalAmount: orderIntent.totalAmount,
         note: orderIntent.note ?? null,
+        deliveryOption: orderIntent.deliveryOption,
         orderIntent: { connect: { id: orderIntent.id } },
       },
     });
@@ -76,7 +77,6 @@ export const createOrder = async ({
     await sudoContext.db.Cart.deleteOne({
       where: { id: cart?.id },
     });
-
     return newOrder;
   } else {
     return null;

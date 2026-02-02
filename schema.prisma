@@ -247,6 +247,7 @@ model Order {
   status            String?          @default("PROCESSING")
   payment           Payment?         @relation("Order_payment", fields: [paymentId], references: [id])
   paymentId         String?          @unique @map("payment") @postgresql.Uuid
+  deliveryOption    String           @default("")
   deliveryAddress   DelivaryAddress? @relation("Order_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
   note              String           @default("")
@@ -338,6 +339,7 @@ model OrderIntent {
   cartId            String?          @map("cart") @postgresql.Uuid
   user              User?            @relation("OrderIntent_user", fields: [userId], references: [id])
   userId            String?          @map("user") @postgresql.Uuid
+  deliveryOption    String           @default("")
   deliveryAddress   DelivaryAddress? @relation("OrderIntent_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
   note              String           @default("")

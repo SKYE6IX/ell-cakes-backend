@@ -49,31 +49,33 @@ async function main() {
     const newCategory = await sudoContext.db.Category.createOne({
       data: { name: category.name },
     });
+
     topLevelCategories.push({ ...category, id: newCategory.id });
   }
 
   // Second Level Categories
-  // We used "Find" since at the moment
-  // we only have one category with sub-categories
-  const categoryWithSubCategories = topLevelCategories.find(
-    (cat) => cat.subcategories.length > 0
-  );
+  for (const topLevelCat of topLevelCategories) {
+    if (topLevelCat.subcategories.length > 0) {
+      for (const subCategory of topLevelCat.subcategories) {
+        const slug = getTransliterationSlug(subCategory.name);
+        // Check for existing..
+        const existingSubCategory = existingDbCategories.find(
+          (cat) => cat.slug === slug
+        );
 
-  for (const subCategory of categoryWithSubCategories.subcategories) {
-    const slug = getTransliterationSlug(subCategory.name);
-    const existingSubCategory = existingDbCategories.find(
-      (cat) => cat.slug === slug
-    );
-    if (existingSubCategory) {
-      console.log("Category already exist: ->", subCategory.name);
-      continue;
+        if (existingSubCategory) {
+          console.log("Category already exist: ->", subCategory.name);
+          continue;
+        }
+
+        await sudoContext.db.Category.createOne({
+          data: {
+            name: subCategory.name,
+            parent: { connect: { id: topLevelCat.id } },
+          },
+        });
+      }
     }
-    await sudoContext.db.Category.createOne({
-      data: {
-        name: subCategory.name,
-        parent: { connect: { id: categoryWithSubCategories.id } },
-      },
-    });
   }
 
   console.log("✅ Category seeded OR existed");

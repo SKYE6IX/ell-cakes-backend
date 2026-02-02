@@ -9,6 +9,7 @@ interface CheckOutArgs {
   deliveryAddressId: string;
   shippingCost: number;
   paymentMethod: "bank_card" | "sberbank" | "tinkoff_bank" | "sbp";
+  deliveryOption: string;
   customerNote?: string;
 }
 
@@ -25,10 +26,12 @@ export const checkOut = async (
     paymentMethod,
     customerNote,
     deliveryAddressId,
+    deliveryOption,
   }: CheckOutArgs,
   context: Context
 ) => {
   const MIN_DELIVERY_COST = 990;
+
   const loggedInUser = context.session as Session;
 
   // Reject with error if USER isn't in session
@@ -116,6 +119,7 @@ export const checkOut = async (
       yooMoneyId: processPayment.id,
       cart: { connect: { id: userCart.id } },
       user: { connect: { id: loggedInUser.itemId } },
+      deliveryOption: deliveryOption,
       deliveryAddress: { connect: { id: deliveryAddressId } },
       note: customerNote ?? undefined,
       totalAmount,

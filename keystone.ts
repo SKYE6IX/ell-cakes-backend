@@ -115,12 +115,6 @@ export default withAuth(
       cors: {
         origin: [FRONTEND_URL],
         credentials: true,
-        allowedHeaders: [
-          "Content-Type",
-          "Authorization",
-          "Apollo-Require-Preflight",
-          "x-apollo-operation-name",
-        ],
       },
       port: 8080,
 

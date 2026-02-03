@@ -16,7 +16,7 @@ export const issueVerificationToken = async ({
 
   if (type === "user-verification") {
     await sendUserVerificationToken({ to: email, token });
-  } else if (type) {
+  } else if (type === "password-reset") {
     await sendResetPasswordToken({ to: email, token });
   }
 

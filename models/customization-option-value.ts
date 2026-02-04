@@ -47,6 +47,11 @@ export const CustomizationOptionValue = list({
     }),
   },
   ui: {
-    isHidden: !permissions.canManageAll,
+    isHidden: ({ session }) => {
+      if (session.data.role === "ADMIN") {
+        return false;
+      }
+      return true;
+    },
   },
 });

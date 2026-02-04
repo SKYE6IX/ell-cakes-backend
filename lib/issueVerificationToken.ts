@@ -20,6 +20,7 @@ export const issueVerificationToken = async ({
     await sendResetPasswordToken({ to: email, token });
   }
 
+  console.log("Token return -> ", token);
   return {
     token,
     issuedAt,

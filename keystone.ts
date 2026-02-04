@@ -12,6 +12,7 @@ import { getSecret } from "./lib/getSecret";
 import { pinoLogger } from "./lib/logger";
 import { initOtel } from "./otel";
 import { runWorkerSchedule, initSchedulers } from "./lib/workerSchedule";
+import { permissions } from "./access";
 
 const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
   process.env;
@@ -147,6 +148,9 @@ export default withAuth(
           res.send("ok").status(200);
         });
       },
+    },
+    ui: {
+      isAccessAllowed: permissions.canManageProduct,
     },
   })
 );

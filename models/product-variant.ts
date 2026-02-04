@@ -58,7 +58,12 @@ export const ProductVariant = list({
     }),
   },
   ui: {
-    isHidden: !permissions.canManageAll,
+    isHidden: ({ session }) => {
+      if (session.data.role === "ADMIN") {
+        return false;
+      }
+      return true;
+    },
     labelField: "price",
     listView: {
       initialSort: { field: "price", direction: "ASC" },

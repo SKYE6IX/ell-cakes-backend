@@ -6,15 +6,15 @@ import { getSecret } from "./getSecret";
 dotenv.config();
 
 const templatePath = path.join(process.cwd(), "mail-template");
-let verificationHtml = fs.readFileSync(
+const verificationHtml = fs.readFileSync(
   `${templatePath}/verification.html`,
   "utf-8"
 );
-let resetPasswordHtml = fs.readFileSync(
+const resetPasswordHtml = fs.readFileSync(
   `${templatePath}/reset-password.html`,
   "utf-8"
 );
-let orderNotificationHtml = fs.readFileSync(
+const orderNotificationHtml = fs.readFileSync(
   `${templatePath}/order.html`,
   "utf-8"
 );
@@ -40,7 +40,7 @@ export async function sendUserVerificationToken({
   token: string;
 }) {
   try {
-    verificationHtml = verificationHtml.replace("{{ TOKEN }}", token);
+    const html = verificationHtml.replace("{{ TOKEN }}", token);
     await transporter.sendMail({
       subject: "Верификации аккаунта",
       from: {
@@ -49,7 +49,7 @@ export async function sendUserVerificationToken({
       },
       replyTo: process.env.YANDEX_USER_MAIL,
       to: to,
-      html: verificationHtml,
+      html,
     });
   } catch (error) {
     console.error("An error occur while trying to send email", error);
@@ -64,7 +64,7 @@ export async function sendResetPasswordToken({
   token: string;
 }) {
   try {
-    resetPasswordHtml = resetPasswordHtml.replace("{{ TOKEN }}", token);
+    const html = resetPasswordHtml.replace("{{ TOKEN }}", token);
     await transporter.sendMail({
       subject: "Ваш код подтверждения",
       from: {
@@ -73,7 +73,7 @@ export async function sendResetPasswordToken({
       },
       replyTo: process.env.YANDEX_USER_MAIL,
       to: to,
-      html: resetPasswordHtml,
+      html,
     });
   } catch (error) {
     console.error("An error occur while trying to send email", error);
@@ -88,7 +88,7 @@ export async function sendOrderNotification({
   orderNumber: string;
 }) {
   try {
-    orderNotificationHtml = orderNotificationHtml.replace(
+    const html = orderNotificationHtml.replace(
       "{{ ORDER_NUMBER }}",
       orderNumber
     );
@@ -100,7 +100,7 @@ export async function sendOrderNotification({
       },
       replyTo: process.env.YANDEX_USER_MAIL,
       to: to,
-      html: orderNotificationHtml,
+      html,
     });
   } catch (error) {
     console.error("An error occur while trying to send email", error);

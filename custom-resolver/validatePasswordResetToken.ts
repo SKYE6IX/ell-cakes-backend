@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { Context } from ".keystone/types";
 
 export const validatePasswordResetToken = async (
@@ -18,15 +17,14 @@ export const validatePasswordResetToken = async (
     });
   }
 
-  const match = await bcrypt.compare(token, user.passwordResetToken as string);
+  const match = token === user.passwordResetToken;
 
   if (!match) {
-    throw new Error("Invalid token!", { cause: "Failed on bcrypt" });
+    throw new Error("Invalid token!", { cause: "Failed to match!" });
   }
 
   const issuedAt = user.passwordResetIssuedAt;
-
-  const expiration = 30 * 60 * 1000;
+  const expiration = 10 * 60 * 1000;
 
   if (issuedAt && new Date(issuedAt).getTime() + expiration < Date.now()) {
     throw new Error("Token expired!");

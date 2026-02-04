@@ -1,4 +1,3 @@
-import bcrypt from "bcryptjs";
 import { Context } from ".keystone/types";
 
 export const updatePassword = async (
@@ -22,9 +21,9 @@ export const updatePassword = async (
     });
   }
 
-  const match = await bcrypt.compare(token, user.passwordResetToken as string);
+  const match = token === user.passwordResetToken;
   if (!match) {
-    throw new Error("Invalid token", { cause: "Failed on bcrypt" });
+    throw new Error("Invalid token", { cause: "Token Not Match!" });
   }
 
   // Check and compare the expiration since the token issued

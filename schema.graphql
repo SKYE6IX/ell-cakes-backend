@@ -8,11 +8,11 @@ type User {
   password: PasswordState
   phoneNumber: String
   isUserVerified: Boolean
-  userVerificationToken: PasswordState
+  userVerificationToken: String
   userVerificationTokenIssuedAt: DateTime
   userVerificationTokenRedeemedAt: DateTime
   role: String
-  passwordResetToken: PasswordState
+  passwordResetToken: String
   passwordResetIssuedAt: DateTime
   passwordResetRedeemedAt: DateTime
   firstOrderDiscountEligible: Boolean
@@ -50,11 +50,11 @@ input UserWhereInput {
   email: StringFilter
   phoneNumber: StringFilter
   isUserVerified: BooleanFilter
-  userVerificationToken: PasswordFilter
+  userVerificationToken: StringNullableFilter
   userVerificationTokenIssuedAt: DateTimeNullableFilter
   userVerificationTokenRedeemedAt: DateTimeNullableFilter
   role: StringFilter
-  passwordResetToken: PasswordFilter
+  passwordResetToken: StringNullableFilter
   passwordResetIssuedAt: DateTimeNullableFilter
   passwordResetRedeemedAt: DateTimeNullableFilter
   firstOrderDiscountEligible: BooleanFilter
@@ -117,8 +117,19 @@ input BooleanFilter {
   not: BooleanFilter
 }
 
-input PasswordFilter {
-  isSet: Boolean!
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
 }
 
 input DateTimeNullableFilter {
@@ -150,9 +161,11 @@ input UserOrderByInput {
   email: OrderDirection
   phoneNumber: OrderDirection
   isUserVerified: OrderDirection
+  userVerificationToken: OrderDirection
   userVerificationTokenIssuedAt: OrderDirection
   userVerificationTokenRedeemedAt: OrderDirection
   role: OrderDirection
+  passwordResetToken: OrderDirection
   passwordResetIssuedAt: OrderDirection
   passwordResetRedeemedAt: OrderDirection
   firstOrderDiscountEligible: OrderDirection
@@ -408,21 +421,6 @@ input ProductFillingManyRelationFilter {
   every: ProductFillingWhereInput
   some: ProductFillingWhereInput
   none: ProductFillingWhereInput
-}
-
-input StringNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  contains: String
-  startsWith: String
-  endsWith: String
-  mode: QueryMode
-  not: StringNullableFilter
 }
 
 input ProductImageManyRelationFilter {

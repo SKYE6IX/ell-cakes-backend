@@ -1,0 +1,69 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { max-width: 600px; margin: 20px auto; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+        .header { background-color: #2c3e50; color: #ffffff; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .order-summary { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .order-summary th { text-align: left; background: #f8f9fa; padding: 10px; border-bottom: 2px solid #eee; }
+        .order-summary td { padding: 10px; border-bottom: 1px solid #eee; }
+        .status-badge { display: inline-block; padding: 5px 10px; background: #e67e22; color: #fff; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .footer { background: #f8f9fa; padding: 15px; text-align: center; font-size: 12px; color: #777; }
+        .btn { display: inline-block; padding: 10px 20px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>New Order Received!</h1>
+            <p>Order Number: {{ ORDER_ID }}</p>
+        </div>
+        <div class="content">
+            <p>Hello Admin,</p>
+            <p>A new cake order has been placed on the store. Here are the details:</p>
+            
+            <h3>Customer Info</h3>
+            <p><strong>Name:</strong> {{CUSTOMER_NAME}}<br>
+               <strong>Email:</strong> {{CUSTOMER_EMAIL}}<br>
+               <strong>Delivery Date:</strong> {{DELIVERY_DATE}}</p>
+
+            <h3>Order Items</h3>
+            <table class="order-summary">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{CAKE_NAME}}</td>
+                        <td>{{QUANTITY}}</td>
+                        <td>${{PRICE}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" style="text-align:right"><strong>Total:</strong></td>
+                        <td><strong>${{TOTAL_AMOUNT}}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <p><strong>Payment Status:</strong> <span class="status-badge">{{PAYMENT_STATUS}}</span></p>
+            
+            <center>
+                <a href="{{CMS_ADMIN_URL}}" class="btn">View Order in CMS</a>
+            </center>
+        </div>
+        <div class="footer">
+            Sent automatically by your Cake Store CMS.
+        </div>
+    </div>
+</body>
+</html> -->

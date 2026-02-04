@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.75% </span>
+                <span class="strong">18.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/16</span>
+                <span class='fraction'>3/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.33% </span>
+                <span class="strong">13.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/15</span>
+                <span class='fraction'>2/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -162,15 +162,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,8 +186,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,15 +201,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -223,10 +220,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -242,18 +242,18 @@ interface CreateOrderArgs {
   orderIntent: Prisma.OrderIntentGetPayload&lt;{}&gt;;
 }
 &nbsp;
-export const createOrder = async ({
+export const createOrder = <span class="fstat-no" title="function not covered" >async </span>({
   context,
   orderIntent,
 }: CreateOrderArgs) =&gt; {
-  const sudoContext = context.sudo();
+  const sudoContext = <span class="cstat-no" title="statement not covered" >context.sudo();</span>
 &nbsp;
-  const alphabet = "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ";
-  const nanoid = customAlphabet(alphabet, 8);
-  const orderNumber = `ORD-${nanoid()}`;
+  const alphabet = <span class="cstat-no" title="statement not covered" >"0123456789ABCDEFGHJKLMNPQRSTUVWXYZ";</span>
+  const nanoid = <span class="cstat-no" title="statement not covered" >customAlphabet(alphabet, 8);</span>
+  const orderNumber = <span class="cstat-no" title="statement not covered" >`ORD-${nanoid()}`;</span>
 &nbsp;
-  const cart = await context.prisma.cart.findUnique({
-    where: { id: orderIntent.cartId || <span class="branch-1 cbranch-no" title="branch not covered" >"" </span>},
+  const cart = <span class="cstat-no" title="statement not covered" >await context.prisma.cart.findUnique({</span>
+    where: { id: orderIntent.cartId || "" },
     include: {
       cartItems: {
         select: {
@@ -272,8 +272,8 @@ export const createOrder = async ({
   });
 &nbsp;
   // Create a new order-items and order
-  const orderItems = cart?.cartItems.map((cartItem) =&gt; {
-    const item = {
+  const orderItems = <span class="cstat-no" title="statement not covered" >cart?.cartItems.map(<span class="fstat-no" title="function not covered" >(c</span>artItem) =&gt; {</span>
+    const item = <span class="cstat-no" title="statement not covered" >{</span>
       product: { connect: { id: cartItem.productId } },
       variant: { connect: { id: cartItem.variantId } },
       quantity: cartItem.quantity,
@@ -281,16 +281,16 @@ export const createOrder = async ({
       subTotal: cartItem.subTotal,
       compositions: cartItem.compositions as JSONValue,
       customizations: cartItem.customizations as JSONValue,
-      ...(cartItem.toppingOptionId &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{</span>
+      ...(cartItem.toppingOptionId &amp;&amp; {
         toppingOption: { connect: { id: cartItem.toppingOptionId } },
       }),
     };
-    return item;
+<span class="cstat-no" title="statement not covered" >    return item;</span>
   });
 &nbsp;
-  if (orderItems) {
+<span class="cstat-no" title="statement not covered" >  if (orderItems) {</span>
     // Create a new ORDER
-    const newOrder = await sudoContext.db.Order.createOne({
+    const newOrder = <span class="cstat-no" title="statement not covered" >await sudoContext.db.Order.createOne({</span>
       data: {
         payment: { connect: { id: orderIntent.paymentId } },
         user: { connect: { id: orderIntent.userId } },
@@ -300,18 +300,18 @@ export const createOrder = async ({
         shippingCost: orderIntent.shippingCost,
         subTotalAmount: cart?.subTotal,
         totalAmount: orderIntent.totalAmount,
-        note: orderIntent.note ?? <span class="branch-1 cbranch-no" title="branch not covered" >null,</span>
+        note: orderIntent.note ?? null,
         deliveryOption: orderIntent.deliveryOption,
         orderIntent: { connect: { id: orderIntent.id } },
       },
     });
 &nbsp;
     // Clean up the cart
-    await sudoContext.db.Cart.deleteOne({
+<span class="cstat-no" title="statement not covered" >    await sudoContext.db.Cart.deleteOne({</span>
       where: { id: cart?.id },
     });
-    return newOrder;
-  } else <span class="missing-if-branch" title="else path not taken" >E</span>{
+<span class="cstat-no" title="statement not covered" >    return newOrder;</span>
+  } else {
 <span class="cstat-no" title="statement not covered" >    return null;</span>
   }
 };
@@ -322,7 +322,7 @@ export const createOrder = async ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-02T21:20:12.052Z
+                at 2026-02-04T10:43:37.394Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

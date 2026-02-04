@@ -19,8 +19,6 @@ export const redeemUserVerificationToken = async (
     where: { email: email },
   });
 
-  console.log("Here is the token -> ", token);
-
   // Check if USER with this number exist!
   if (!user) {
     throw new Error("User with this phone number doesn't exist!", {
@@ -29,18 +27,17 @@ export const redeemUserVerificationToken = async (
   }
 
   // Compare the token with the harsh saved on database
-  const match = await bcrypt.compare(
-    token,
-    user.userVerificationToken as string
-  );
+  const match = token === user.userVerificationToken;
 
   if (!match) {
-    throw new Error("Invalid token", { cause: "Failed on bcrypt" });
+    throw new Error("Invalid token", { cause: "Failed on checking token!" });
   }
 
   // Check and compare the expiration since the token issued
   const issuedAt = user.userVerificationTokenIssuedAt;
-  const expiration = 30 * 60 * 1000;
+
+  const expiration = 10 * 60 * 1000;
+
   if (issuedAt && new Date(issuedAt).getTime() + expiration < Date.now()) {
     throw new Error("Token expired");
   }

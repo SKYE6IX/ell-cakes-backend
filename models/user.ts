@@ -48,7 +48,12 @@ export const User = list({
 
     isUserVerified: checkbox({ defaultValue: false }),
 
-    userVerificationToken: password(hiddenFieldConfig),
+    userVerificationToken: text({
+      ...hiddenFieldConfig,
+      db: {
+        isNullable: true,
+      },
+    }),
 
     userVerificationTokenIssuedAt: timestamp(hiddenFieldConfig),
 
@@ -65,9 +70,12 @@ export const User = list({
       ui: { displayMode: "select" },
     }),
 
-    passwordResetToken: password({
+    passwordResetToken: text({
       ...hiddenFieldConfig,
       access: () => false,
+      db: {
+        isNullable: true,
+      },
     }),
 
     passwordResetIssuedAt: timestamp({

@@ -18,7 +18,7 @@ import { isSignedIn as hasSession, permissions, rules } from "../access";
 // without bloating about 400 plus more variants.
 
 // 3. Notification setup for new order for store owner. Perhaps an email, or maybe connection with
-// CRM will enough?
+// CRM will enough? ✅
 
 const potentialCols = [
   { label: "Продукта", key: "product.name" },

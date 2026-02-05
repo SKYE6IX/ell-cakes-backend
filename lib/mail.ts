@@ -1,9 +1,26 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import Handlebars from "handlebars";
 import fs from "fs";
 import path from "path";
 import { getSecret } from "./getSecret";
 dotenv.config();
+
+type SellerNewOrderNotification = {
+  ordernumber: string;
+  orderitems: {
+    productname: string;
+    productfilling: string;
+    quantity: number;
+    unitprice: number;
+    subtotal: number;
+  }[];
+  totalamount: number;
+  deliveryaddress: string;
+  deliveryoption: string;
+  paymentmethod: string;
+  orderurl: string;
+};
 
 const templatePath = path.join(process.cwd(), "mail-template");
 const verificationHtml = fs.readFileSync(
@@ -16,6 +33,11 @@ const resetPasswordHtml = fs.readFileSync(
 );
 const orderNotificationHtml = fs.readFileSync(
   `${templatePath}/order.html`,
+  "utf-8"
+);
+
+const sellerNotificationSource = fs.readFileSync(
+  `${templatePath}/seller.html`,
   "utf-8"
 );
 
@@ -100,6 +122,29 @@ export async function sendOrderNotification({
       },
       replyTo: process.env.YANDEX_USER_MAIL,
       to: to,
+      html,
+    });
+  } catch (error) {
+    console.error("An error occur while trying to send email", error);
+  }
+}
+
+export async function sendNewOrderNotificationToSeller({
+  data,
+}: {
+  data: SellerNewOrderNotification;
+}) {
+  try {
+    const sellerTemplate = Handlebars.compile(sellerNotificationSource);
+    const html = sellerTemplate(data);
+    await transporter.sendMail({
+      subject: "Новый заказ получен",
+      from: {
+        name: "Ellcakes",
+        address: process.env.YANDEX_USER_MAIL,
+      },
+      replyTo: process.env.YANDEX_USER_MAIL,
+      to: process.env.SELLER_EMAIL,
       html,
     });
   } catch (error) {

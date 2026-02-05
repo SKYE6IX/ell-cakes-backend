@@ -25,6 +25,7 @@
     "cookie": "^1.1.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
+    "handlebars": "^4.7.8",
     "heic-convert": "^2.1.0",
     "ioredis": "^5.9.2",
     "iuliia": "^0.8.2",

@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { Context } from ".keystone/types";
 import type { JSONValue } from "@keystone-6/core/types";
-import type { CustomizationSnapshot } from "./addToCart";
 import { customAlphabet } from "nanoid";
 
 interface CreateOrderArgs {
@@ -19,8 +18,10 @@ export const createOrder = async ({
   const nanoid = customAlphabet(alphabet, 8);
   const orderNumber = `ORD-${nanoid()}`;
 
+  if (!orderIntent || !orderIntent.cartId) return null;
+
   const cart = await context.prisma.cart.findUnique({
-    where: { id: orderIntent.cartId || "" },
+    where: { id: orderIntent.cartId },
     include: {
       cartItems: {
         select: {

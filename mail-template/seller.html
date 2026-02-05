@@ -1,69 +1,2330 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }
-        .container { max-width: 600px; margin: 20px auto; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
-        .header { background-color: #2c3e50; color: #ffffff; padding: 20px; text-align: center; }
-        .content { padding: 20px; }
-        .order-summary { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        .order-summary th { text-align: left; background: #f8f9fa; padding: 10px; border-bottom: 2px solid #eee; }
-        .order-summary td { padding: 10px; border-bottom: 1px solid #eee; }
-        .status-badge { display: inline-block; padding: 5px 10px; background: #e67e22; color: #fff; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .footer { background: #f8f9fa; padding: 15px; text-align: center; font-size: 12px; color: #777; }
-        .btn { display: inline-block; padding: 10px 20px; background-color: #3498db; color: #ffffff; text-decoration: none; border-radius: 5px; margin-top: 10px; }
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  lang="ru"
+>
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--[if !mso]>-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<![endif]-->
+    <meta name="x-apple-disable-message-reformatting" content="" />
+    <meta content="target-densitydpi=device-dpi" name="viewport" />
+    <meta content="true" name="HandheldFriendly" />
+    <meta content="width=device-width" name="viewport" />
+    <meta
+      name="format-detection"
+      content="telephone=no, date=no, address=no, email=no, url=no"
+    />
+    <style type="text/css">
+      table {
+        border-collapse: separate;
+        table-layout: fixed;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+      table td {
+        border-collapse: collapse;
+      }
+      .ExternalClass {
+        width: 100%;
+      }
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+        line-height: 100%;
+      }
+      body,
+      a,
+      li,
+      p,
+      h1,
+      h2,
+      h3 {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+      }
+      html {
+        -webkit-text-size-adjust: none !important;
+      }
+      body {
+        min-width: 100%;
+        margin: 0px;
+        padding: 0px;
+      }
+      body,
+      #innerTable {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      #innerTable img + div {
+        display: none;
+        display: none !important;
+      }
+      img {
+        margin: 0;
+        padding: 0;
+        -ms-interpolation-mode: bicubic;
+      }
+      h1,
+      h2,
+      h3,
+      p,
+      a {
+        overflow-wrap: normal;
+        white-space: normal;
+        word-break: break-word;
+      }
+      a {
+        text-decoration: none;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        min-width: 100% !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: inline-block !important;
+        border: 0;
+        padding: 0;
+        margin: 0;
+      }
+      a[x-apple-data-detectors] {
+        color: inherit !important;
+        text-decoration: none !important;
+        font-size: inherit !important;
+        font-family: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+      }
+      u + #body a {
+        color: inherit;
+        text-decoration: none;
+        font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+      }
+      a[href^="mailto"],
+      a[href^="tel"],
+      a[href^="sms"] {
+        color: inherit;
+        text-decoration: none;
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>New Order Received!</h1>
-            <p>Order Number: {{ ORDER_ID }}</p>
-        </div>
-        <div class="content">
-            <p>Hello Admin,</p>
-            <p>A new cake order has been placed on the store. Here are the details:</p>
-            
-            <h3>Customer Info</h3>
-            <p><strong>Name:</strong> {{CUSTOMER_NAME}}<br>
-               <strong>Email:</strong> {{CUSTOMER_EMAIL}}<br>
-               <strong>Delivery Date:</strong> {{DELIVERY_DATE}}</p>
+    <style type="text/css">
+      @media (min-width: 481px) {
+        .hd {
+          display: none !important;
+        }
+      }
+    </style>
+    <style type="text/css">
+      @media (max-width: 480px) {
+        .hm {
+          display: none !important;
+        }
+      }
+    </style>
+    <style type="text/css">
+      @media (max-width: 480px) {
+        .t142,
+        .t25,
+        .t42,
+        .t59,
+        .t81 {
+          text-align: left !important;
+        }
+        .t123,
+        .t141,
+        .t20,
+        .t24,
+        .t37,
+        .t41,
+        .t54,
+        .t58,
+        .t76,
+        .t80 {
+          vertical-align: top !important;
+        }
+        .t156,
+        .t161 {
+          mso-line-height-alt: 0px !important;
+          line-height: 0 !important;
+          display: none !important;
+        }
+        .t122,
+        .t142,
+        .t143 {
+          display: block !important;
+        }
+        .t157 {
+          padding-left: 40px !important;
+          padding-top: 43px !important;
+          padding-right: 40px !important;
+          border: 0 !important;
+          border-radius: 0 !important;
+        }
+        .t146,
+        .t68 {
+          border-radius: 0 !important;
+        }
+        .t20,
+        .t37 {
+          width: 200px !important;
+        }
+        .t24 {
+          width: 562px !important;
+        }
+        .t21,
+        .t38,
+        .t55 {
+          line-height: 16px !important;
+          font-size: 14px !important;
+          mso-text-raise: 1px !important;
+        }
+        .t41,
+        .t58,
+        .t76,
+        .t80 {
+          width: 600px !important;
+        }
+        .t54 {
+          width: 243px !important;
+        }
+        .t122 {
+          mso-line-height-alt: 10px !important;
+          line-height: 10px !important;
+        }
+        .t123,
+        .t141 {
+          display: inline-block !important;
+          width: 100% !important;
+          max-width: 800px !important;
+        }
+        .t120 {
+          padding-bottom: 5px !important;
+          padding-right: 0 !important;
+        }
+        .t139 {
+          padding-left: 0 !important;
+        }
+        .t104 {
+          mso-line-height-alt: 15px !important;
+          line-height: 15px !important;
+        }
+        .t73,
+        .t77 {
+          line-height: 24px !important;
+          font-size: 18px !important;
+        }
+      }
+    </style>
+    <!--[if !mso]>-->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Inter+Tight:wght@500;600&amp;family=Albert+Sans:wght@400&amp;display=swap"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <!--<![endif]-->
+    <!--[if mso]>
+      <xml>
+        <o:OfficeDocumentSettings>
+          <o:AllowPNG />
+          <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+      </xml>
+    <![endif]-->
+  </head>
+  <body
+    id="body"
+    class="t164"
+    style="
+      min-width: 100%;
+      margin: 0px;
+      padding: 0px;
+      background-color: #f9f9f9;
+    "
+  >
+    <div class="t163" style="background-color: #f9f9f9">
+      <table
+        role="presentation"
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        align="center"
+      >
+        <tr>
+          <td
+            class="t162"
+            style="
+              font-size: 0;
+              line-height: 0;
+              mso-line-height-rule: exactly;
+              background-color: #f9f9f9;
+            "
+            valign="top"
+            align="center"
+          >
+            <!--[if mso]>
+              <v:background
+                xmlns:v="urn:schemas-microsoft-com:vml"
+                fill="true"
+                stroke="false"
+              >
+                <v:fill color="#F9F9F9" />
+              </v:background>
+            <![endif]-->
+            <table
+              role="presentation"
+              width="100%"
+              cellpadding="0"
+              cellspacing="0"
+              border="0"
+              align="center"
+              id="innerTable"
+            >
+              <tr>
+                <td>
+                  <div
+                    class="t156"
+                    style="
+                      mso-line-height-rule: exactly;
+                      mso-line-height-alt: 70px;
+                      line-height: 70px;
+                      font-size: 1px;
+                      display: block;
+                    "
+                  >
+                    &nbsp;&nbsp;
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td align="center">
+                  <table
+                    class="t160"
+                    role="presentation"
+                    cellpadding="0"
+                    cellspacing="0"
+                    style="margin-left: auto; margin-right: auto"
+                  >
+                    <tr>
+                      <td width="400" class="t159" style="width: 400px">
+                        <table
+                          class="t158"
+                          role="presentation"
+                          cellpadding="0"
+                          cellspacing="0"
+                          width="100%"
+                          style="width: 100%"
+                        >
+                          <tr>
+                            <td
+                              class="t157"
+                              style="
+                                border: 1px solid #cecece;
+                                overflow: hidden;
+                                background-color: #ffffff;
+                                padding: 50px 0 40px 0;
+                                border-radius: 20px 20px 20px 20px;
+                              "
+                            >
+                              <table
+                                role="presentation"
+                                width="100%"
+                                cellpadding="0"
+                                cellspacing="0"
+                                style="width: 100% !important"
+                              >
+                                <tr>
+                                  <td align="center">
+                                    <table
+                                      class="t4"
+                                      role="presentation"
+                                      cellpadding="0"
+                                      cellspacing="0"
+                                      style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                      "
+                                    >
+                                      <tr>
+                                        <td
+                                          width="60"
+                                          class="t3"
+                                          style="width: 60px"
+                                        >
+                                          <table
+                                            class="t2"
+                                            role="presentation"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            width="100%"
+                                            style="width: 100%"
+                                          >
+                                            <tr>
+                                              <td class="t1">
+                                                <a
+                                                  href="#"
+                                                  style="font-size: 0px"
+                                                  target="_blank"
+                                                  ><img
+                                                    class="t0"
+                                                    style="
+                                                      display: block;
+                                                      border: 0;
+                                                      height: auto;
+                                                      width: 100%;
+                                                      margin: 0;
+                                                      max-width: 100%;
+                                                    "
+                                                    width="60"
+                                                    height="60"
+                                                    alt=""
+                                                    src="https://storage.yandexcloud.net/ell-cake-image-prod/logo.png"
+                                                /></a>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <div
+                                      class="t5"
+                                      style="
+                                        mso-line-height-rule: exactly;
+                                        mso-line-height-alt: 40px;
+                                        line-height: 40px;
+                                        font-size: 1px;
+                                        display: block;
+                                      "
+                                    >
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="center">
+                                    <table
+                                      class="t10"
+                                      role="presentation"
+                                      cellpadding="0"
+                                      cellspacing="0"
+                                      style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                      "
+                                    >
+                                      <tr>
+                                        <td
+                                          width="339"
+                                          class="t9"
+                                          style="width: 339px"
+                                        >
+                                          <table
+                                            class="t8"
+                                            role="presentation"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            width="100%"
+                                            style="width: 100%"
+                                          >
+                                            <tr>
+                                              <td class="t7">
+                                                <h1
+                                                  class="t6"
+                                                  style="
+                                                    margin: 0;
+                                                    margin: 0;
+                                                    font-family: Inter,
+                                                      BlinkMacSystemFont,
+                                                      Segoe UI, Helvetica Neue,
+                                                      Arial, sans-serif;
+                                                    line-height: 28px;
+                                                    font-weight: 500;
+                                                    font-style: normal;
+                                                    font-size: 24px;
+                                                    text-decoration: none;
+                                                    text-transform: none;
+                                                    letter-spacing: -1.2px;
+                                                    direction: ltr;
+                                                    color: #111111;
+                                                    text-align: center;
+                                                    mso-line-height-rule: exactly;
+                                                    mso-text-raise: 1px;
+                                                  "
+                                                >
+                                                  Новый заказ получен!
+                                                </h1>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <div
+                                      class="t11"
+                                      style="
+                                        mso-line-height-rule: exactly;
+                                        mso-line-height-alt: 20px;
+                                        line-height: 20px;
+                                        font-size: 1px;
+                                        display: block;
+                                      "
+                                    >
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="center">
+                                    <table
+                                      class="t16"
+                                      role="presentation"
+                                      cellpadding="0"
+                                      cellspacing="0"
+                                      style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                      "
+                                    >
+                                      <tr>
+                                        <td
+                                          width="398"
+                                          class="t15"
+                                          style="width: 600px"
+                                        >
+                                          <table
+                                            class="t14"
+                                            role="presentation"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            width="100%"
+                                            style="width: 100%"
+                                          >
+                                            <tr>
+                                              <td class="t13">
+                                                <h1
+                                                  class="t12"
+                                                  style="
+                                                    margin: 0;
+                                                    margin: 0;
+                                                    font-family: Inter,
+                                                      BlinkMacSystemFont,
+                                                      Segoe UI, Helvetica Neue,
+                                                      Arial, sans-serif;
+                                                    line-height: 26px;
+                                                    font-weight: 500;
+                                                    font-style: normal;
+                                                    font-size: 18px;
+                                                    text-decoration: none;
+                                                    text-transform: none;
+                                                    direction: ltr;
+                                                    color: #333333;
+                                                    text-align: center;
+                                                    mso-line-height-rule: exactly;
+                                                    mso-text-raise: 2px;
+                                                  "
+                                                >
+                                                  Номер заказа: {{ordernumber}}.
+                                                </h1>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <div
+                                      class="t67"
+                                      style="
+                                        mso-line-height-rule: exactly;
+                                        mso-line-height-alt: 20px;
+                                        line-height: 20px;
+                                        font-size: 1px;
+                                        display: block;
+                                      "
+                                    >
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  </td>
+                                </tr>
 
-            <h3>Order Items</h3>
-            <table class="order-summary">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Qty</th>
-                        <th>Price</th>
+                                <!-- Starting block -->
+                                {{#each orderitems}}
+                                <tr>
+                                  <td align="center">
+                                    <table
+                                      class="t71"
+                                      role="presentation"
+                                      cellpadding="0"
+                                      cellspacing="0"
+                                      style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                        margin-bottom: 20px;
+                                      "
+                                    >
+                                      <tr>
+                                        <td
+                                          width="367"
+                                          class="t70"
+                                          style="width: 367px"
+                                        >
+                                          <table
+                                            class="t69"
+                                            role="presentation"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            width="100%"
+                                            style="width: 100%"
+                                          >
+                                            <tr>
+                                              <td
+                                                class="t68"
+                                                style="
+                                                  overflow: hidden;
+                                                  background-color: #f6f6f6;
+                                                  padding: 20px 10px 20px 10px;
+                                                  border-radius: 12px 12px 12px
+                                                    12px;
+                                                "
+                                              >
+                                                <table
+                                                  role="presentation"
+                                                  width="100%"
+                                                  cellpadding="0"
+                                                  cellspacing="0"
+                                                  style="width: 100% !important"
+                                                >
+                                                  <tr>
+                                                    <td align="center">
+                                                      <table
+                                                        class="t32"
+                                                        role="presentation"
+                                                        cellpadding="0"
+                                                        cellspacing="0"
+                                                        style="
+                                                          margin-left: auto;
+                                                          margin-right: auto;
+                                                        "
+                                                      >
+                                                        <tr>
+                                                          <td
+                                                            width="347"
+                                                            class="t31"
+                                                            style="width: 800px"
+                                                          >
+                                                            <table
+                                                              class="t30"
+                                                              role="presentation"
+                                                              cellpadding="0"
+                                                              cellspacing="0"
+                                                              width="100%"
+                                                              style="
+                                                                width: 100%;
+                                                              "
+                                                            >
+                                                              <tr>
+                                                                <td
+                                                                  class="t29"
+                                                                  style="
+                                                                    border-bottom: 1px
+                                                                      solid
+                                                                      #cecece;
+                                                                    padding: 0 0
+                                                                      5px 0;
+                                                                  "
+                                                                >
+                                                                  <div
+                                                                    class="t28"
+                                                                    style="
+                                                                      width: 100%;
+                                                                      text-align: left;
+                                                                    "
+                                                                  >
+                                                                    <div
+                                                                      class="t27"
+                                                                      style="
+                                                                        display: inline-block;
+                                                                      "
+                                                                    >
+                                                                      <table
+                                                                        class="t26"
+                                                                        role="presentation"
+                                                                        cellpadding="0"
+                                                                        cellspacing="0"
+                                                                        align="left"
+                                                                        valign="top"
+                                                                      >
+                                                                        <tr
+                                                                          class="t25"
+                                                                        >
+                                                                          <td></td>
+                                                                          <td
+                                                                            class="t20"
+                                                                            width="86.75"
+                                                                            valign="top"
+                                                                          >
+                                                                            <table
+                                                                              role="presentation"
+                                                                              width="100%"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              class="t19"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t18"
+                                                                                >
+                                                                                  <p
+                                                                                    class="t17"
+                                                                                    style="
+                                                                                      margin: 0;
+                                                                                      margin: 0;
+                                                                                      font-family: Inter
+                                                                                          Tight,
+                                                                                        BlinkMacSystemFont,
+                                                                                        Segoe
+                                                                                          UI,
+                                                                                        Helvetica
+                                                                                          Neue,
+                                                                                        Arial,
+                                                                                        sans-serif;
+                                                                                      line-height: 22px;
+                                                                                      font-weight: 600;
+                                                                                      font-style: normal;
+                                                                                      font-size: 16px;
+                                                                                      text-decoration: none;
+                                                                                      text-transform: none;
+                                                                                      direction: ltr;
+                                                                                      color: #333333;
+                                                                                      text-align: left;
+                                                                                      mso-line-height-rule: exactly;
+                                                                                      mso-text-raise: 2px;
+                                                                                    "
+                                                                                  >
+                                                                                    Продукта
+                                                                                  </p>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                          <td
+                                                                            class="t24"
+                                                                            width="260.25"
+                                                                            valign="top"
+                                                                          >
+                                                                            <table
+                                                                              role="presentation"
+                                                                              width="100%"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              class="t23"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t22"
+                                                                                >
+                                                                                  <p
+                                                                                    class="t21"
+                                                                                    style="
+                                                                                      margin: 0;
+                                                                                      margin: 0;
+                                                                                      font-family: Inter
+                                                                                          Tight,
+                                                                                        BlinkMacSystemFont,
+                                                                                        Segoe
+                                                                                          UI,
+                                                                                        Helvetica
+                                                                                          Neue,
+                                                                                        Arial,
+                                                                                        sans-serif;
+                                                                                      line-height: 22px;
+                                                                                      font-weight: 500;
+                                                                                      font-style: normal;
+                                                                                      font-size: 16px;
+                                                                                      text-decoration: none;
+                                                                                      text-transform: none;
+                                                                                      direction: ltr;
+                                                                                      color: #787878;
+                                                                                      text-align: right;
+                                                                                      mso-line-height-rule: exactly;
+                                                                                      mso-text-raise: 2px;
+                                                                                    "
+                                                                                  >
+                                                                                    {{productname}}
+                                                                                    ({{productfilling}})
+                                                                                  </p>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                          <td></td>
+                                                                        </tr>
+                                                                      </table>
+                                                                    </div>
+                                                                  </div>
+                                                                </td>
+                                                              </tr>
+                                                            </table>
+                                                          </td>
+                                                        </tr>
+                                                      </table>
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>
+                                                      <div
+                                                        class="t33"
+                                                        style="
+                                                          mso-line-height-rule: exactly;
+                                                          mso-line-height-alt: 10px;
+                                                          line-height: 10px;
+                                                          font-size: 1px;
+                                                          display: block;
+                                                        "
+                                                      >
+                                                        &nbsp;&nbsp;
+                                                      </div>
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td align="center">
+                                                      <table
+                                                        class="t49"
+                                                        role="presentation"
+                                                        cellpadding="0"
+                                                        cellspacing="0"
+                                                        style="
+                                                          margin-left: auto;
+                                                          margin-right: auto;
+                                                        "
+                                                      >
+                                                        <tr>
+                                                          <td
+                                                            width="347"
+                                                            class="t48"
+                                                            style="width: 800px"
+                                                          >
+                                                            <table
+                                                              class="t47"
+                                                              role="presentation"
+                                                              cellpadding="0"
+                                                              cellspacing="0"
+                                                              width="100%"
+                                                              style="
+                                                                width: 100%;
+                                                              "
+                                                            >
+                                                              <tr>
+                                                                <td
+                                                                  class="t46"
+                                                                  style="
+                                                                    border-bottom: 1px
+                                                                      solid
+                                                                      #cecece;
+                                                                    padding: 0 0
+                                                                      5px 0;
+                                                                  "
+                                                                >
+                                                                  <div
+                                                                    class="t45"
+                                                                    style="
+                                                                      width: 100%;
+                                                                      text-align: left;
+                                                                    "
+                                                                  >
+                                                                    <div
+                                                                      class="t44"
+                                                                      style="
+                                                                        display: inline-block;
+                                                                      "
+                                                                    >
+                                                                      <table
+                                                                        class="t43"
+                                                                        role="presentation"
+                                                                        cellpadding="0"
+                                                                        cellspacing="0"
+                                                                        align="left"
+                                                                        valign="top"
+                                                                      >
+                                                                        <tr
+                                                                          class="t42"
+                                                                        >
+                                                                          <td></td>
+                                                                          <td
+                                                                            class="t37"
+                                                                            width="86.75"
+                                                                            valign="top"
+                                                                          >
+                                                                            <table
+                                                                              role="presentation"
+                                                                              width="100%"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              class="t36"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t35"
+                                                                                >
+                                                                                  <p
+                                                                                    class="t34"
+                                                                                    style="
+                                                                                      margin: 0;
+                                                                                      margin: 0;
+                                                                                      font-family: Inter
+                                                                                          Tight,
+                                                                                        BlinkMacSystemFont,
+                                                                                        Segoe
+                                                                                          UI,
+                                                                                        Helvetica
+                                                                                          Neue,
+                                                                                        Arial,
+                                                                                        sans-serif;
+                                                                                      line-height: 22px;
+                                                                                      font-weight: 600;
+                                                                                      font-style: normal;
+                                                                                      font-size: 16px;
+                                                                                      text-decoration: none;
+                                                                                      text-transform: none;
+                                                                                      direction: ltr;
+                                                                                      color: #333333;
+                                                                                      text-align: left;
+                                                                                      mso-line-height-rule: exactly;
+                                                                                      mso-text-raise: 2px;
+                                                                                    "
+                                                                                  >
+                                                                                    Шт
+                                                                                  </p>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                          <td
+                                                                            class="t41"
+                                                                            width="260.25"
+                                                                            valign="top"
+                                                                          >
+                                                                            <table
+                                                                              role="presentation"
+                                                                              width="100%"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              class="t40"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t39"
+                                                                                >
+                                                                                  <p
+                                                                                    class="t38"
+                                                                                    style="
+                                                                                      margin: 0;
+                                                                                      margin: 0;
+                                                                                      font-family: Inter
+                                                                                          Tight,
+                                                                                        BlinkMacSystemFont,
+                                                                                        Segoe
+                                                                                          UI,
+                                                                                        Helvetica
+                                                                                          Neue,
+                                                                                        Arial,
+                                                                                        sans-serif;
+                                                                                      line-height: 22px;
+                                                                                      font-weight: 500;
+                                                                                      font-style: normal;
+                                                                                      font-size: 16px;
+                                                                                      text-decoration: none;
+                                                                                      text-transform: none;
+                                                                                      direction: ltr;
+                                                                                      color: #787878;
+                                                                                      text-align: right;
+                                                                                      mso-line-height-rule: exactly;
+                                                                                      mso-text-raise: 2px;
+                                                                                    "
+                                                                                  >
+                                                                                    {{quantity}}
+                                                                                    X
+                                                                                    {{unitprice}}руб
+                                                                                  </p>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                          <td></td>
+                                                                        </tr>
+                                                                      </table>
+                                                                    </div>
+                                                                  </div>
+                                                                </td>
+                                                              </tr>
+                                                            </table>
+                                                          </td>
+                                                        </tr>
+                                                      </table>
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td>
+                                                      <div
+                                                        class="t50"
+                                                        style="
+                                                          mso-line-height-rule: exactly;
+                                                          mso-line-height-alt: 10px;
+                                                          line-height: 10px;
+                                                          font-size: 1px;
+                                                          display: block;
+                                                        "
+                                                      >
+                                                        &nbsp;&nbsp;
+                                                      </div>
+                                                    </td>
+                                                  </tr>
+                                                  <tr>
+                                                    <td align="center">
+                                                      <table
+                                                        class="t66"
+                                                        role="presentation"
+                                                        cellpadding="0"
+                                                        cellspacing="0"
+                                                        style="
+                                                          margin-left: auto;
+                                                          margin-right: auto;
+                                                        "
+                                                      >
+                                                        <tr>
+                                                          <td
+                                                            width="347"
+                                                            class="t65"
+                                                            style="width: 800px"
+                                                          >
+                                                            <table
+                                                              class="t64"
+                                                              role="presentation"
+                                                              cellpadding="0"
+                                                              cellspacing="0"
+                                                              width="100%"
+                                                              style="
+                                                                width: 100%;
+                                                              "
+                                                            >
+                                                              <tr>
+                                                                <td class="t63">
+                                                                  <div
+                                                                    class="t62"
+                                                                    style="
+                                                                      width: 100%;
+                                                                      text-align: left;
+                                                                    "
+                                                                  >
+                                                                    <div
+                                                                      class="t61"
+                                                                      style="
+                                                                        display: inline-block;
+                                                                      "
+                                                                    >
+                                                                      <table
+                                                                        class="t60"
+                                                                        role="presentation"
+                                                                        cellpadding="0"
+                                                                        cellspacing="0"
+                                                                        align="left"
+                                                                        valign="top"
+                                                                      >
+                                                                        <tr
+                                                                          class="t59"
+                                                                        >
+                                                                          <td></td>
+                                                                          <td
+                                                                            class="t54"
+                                                                            width="86.75"
+                                                                            valign="top"
+                                                                          >
+                                                                            <table
+                                                                              role="presentation"
+                                                                              width="100%"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              class="t53"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t52"
+                                                                                >
+                                                                                  <p
+                                                                                    class="t51"
+                                                                                    style="
+                                                                                      margin: 0;
+                                                                                      margin: 0;
+                                                                                      font-family: Inter
+                                                                                          Tight,
+                                                                                        BlinkMacSystemFont,
+                                                                                        Segoe
+                                                                                          UI,
+                                                                                        Helvetica
+                                                                                          Neue,
+                                                                                        Arial,
+                                                                                        sans-serif;
+                                                                                      line-height: 22px;
+                                                                                      font-weight: 600;
+                                                                                      font-style: normal;
+                                                                                      font-size: 16px;
+                                                                                      text-decoration: none;
+                                                                                      text-transform: none;
+                                                                                      direction: ltr;
+                                                                                      color: #333333;
+                                                                                      text-align: left;
+                                                                                      mso-line-height-rule: exactly;
+                                                                                      mso-text-raise: 2px;
+                                                                                    "
+                                                                                  >
+                                                                                    Стоимость
+                                                                                  </p>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                          <td
+                                                                            class="t58"
+                                                                            width="260.25"
+                                                                            valign="top"
+                                                                          >
+                                                                            <table
+                                                                              role="presentation"
+                                                                              width="100%"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              class="t57"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t56"
+                                                                                >
+                                                                                  <p
+                                                                                    class="t55"
+                                                                                    style="
+                                                                                      margin: 0;
+                                                                                      margin: 0;
+                                                                                      font-family: Inter
+                                                                                          Tight,
+                                                                                        BlinkMacSystemFont,
+                                                                                        Segoe
+                                                                                          UI,
+                                                                                        Helvetica
+                                                                                          Neue,
+                                                                                        Arial,
+                                                                                        sans-serif;
+                                                                                      line-height: 22px;
+                                                                                      font-weight: 500;
+                                                                                      font-style: normal;
+                                                                                      font-size: 16px;
+                                                                                      text-decoration: none;
+                                                                                      text-transform: none;
+                                                                                      direction: ltr;
+                                                                                      color: #787878;
+                                                                                      text-align: right;
+                                                                                      mso-line-height-rule: exactly;
+                                                                                      mso-text-raise: 2px;
+                                                                                    "
+                                                                                  >
+                                                                                    {{subtotal}}руб
+                                                                                  </p>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                          <td></td>
+                                                                        </tr>
+                                                                      </table>
+                                                                    </div>
+                                                                  </div>
+                                                                </td>
+                                                              </tr>
+                                                            </table>
+                                                          </td>
+                                                        </tr>
+                                                      </table>
+                                                    </td>
+                                                  </tr>
+                                                </table>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                {{/each}}
+                                <!-- Ending block -->
+                                <tr>
+                                  <td>
+                                    <div
+                                      class="t72"
+                                      style="
+                                        mso-line-height-rule: exactly;
+                                        mso-line-height-alt: 15px;
+                                        line-height: 15px;
+                                        font-size: 1px;
+                                        display: block;
+                                      "
+                                    >
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="center">
+                                    <table
+                                      class="t88"
+                                      role="presentation"
+                                      cellpadding="0"
+                                      cellspacing="0"
+                                      style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                      "
+                                    >
+                                      <tr>
+                                        <td
+                                          width="367"
+                                          class="t87"
+                                          style="width: 367px"
+                                        >
+                                          <table
+                                            class="t86"
+                                            role="presentation"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            width="100%"
+                                            style="width: 100%"
+                                          >
+                                            <tr>
+                                              <td
+                                                class="t85"
+                                                style="padding: 10px 0 10px 0"
+                                              >
+                                                <div
+                                                  class="t84"
+                                                  style="
+                                                    width: 100%;
+                                                    text-align: left;
+                                                  "
+                                                >
+                                                  <div
+                                                    class="t83"
+                                                    style="
+                                                      display: inline-block;
+                                                    "
+                                                  >
+                                                    <table
+                                                      class="t82"
+                                                      role="presentation"
+                                                      cellpadding="0"
+                                                      cellspacing="0"
+                                                      align="left"
+                                                      valign="top"
+                                                    >
+                                                      <tr class="t81">
+                                                        <td></td>
+                                                        <td
+                                                          class="t76"
+                                                          width="183.5"
+                                                          valign="top"
+                                                        >
+                                                          <table
+                                                            role="presentation"
+                                                            width="100%"
+                                                            cellpadding="0"
+                                                            cellspacing="0"
+                                                            class="t75"
+                                                            style="width: 100%"
+                                                          >
+                                                            <tr>
+                                                              <td class="t74">
+                                                                <p
+                                                                  class="t73"
+                                                                  style="
+                                                                    margin: 0;
+                                                                    margin: 0;
+                                                                    font-family: Inter,
+                                                                      BlinkMacSystemFont,
+                                                                      Segoe UI,
+                                                                      Helvetica
+                                                                        Neue,
+                                                                      Arial,
+                                                                      sans-serif;
+                                                                    line-height: 32px;
+                                                                    font-weight: 500;
+                                                                    font-style: normal;
+                                                                    font-size: 24px;
+                                                                    text-decoration: none;
+                                                                    text-transform: none;
+                                                                    direction: ltr;
+                                                                    color: #222222;
+                                                                    text-align: left;
+                                                                    mso-line-height-rule: exactly;
+                                                                    mso-text-raise: 2px;
+                                                                  "
+                                                                >
+                                                                  Общая сумма
+                                                                </p>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </td>
+                                                        <td
+                                                          class="t80"
+                                                          width="183.5"
+                                                          valign="top"
+                                                        >
+                                                          <table
+                                                            role="presentation"
+                                                            width="100%"
+                                                            cellpadding="0"
+                                                            cellspacing="0"
+                                                            class="t79"
+                                                            style="width: 100%"
+                                                          >
+                                                            <tr>
+                                                              <td class="t78">
+                                                                <p
+                                                                  class="t77"
+                                                                  style="
+                                                                    margin: 0;
+                                                                    margin: 0;
+                                                                    font-family: Inter,
+                                                                      BlinkMacSystemFont,
+                                                                      Segoe UI,
+                                                                      Helvetica
+                                                                        Neue,
+                                                                      Arial,
+                                                                      sans-serif;
+                                                                    line-height: 32px;
+                                                                    font-weight: 500;
+                                                                    font-style: normal;
+                                                                    font-size: 24px;
+                                                                    text-decoration: none;
+                                                                    text-transform: none;
+                                                                    direction: ltr;
+                                                                    color: #222222;
+                                                                    text-align: right;
+                                                                    mso-line-height-rule: exactly;
+                                                                    mso-text-raise: 2px;
+                                                                  "
+                                                                >
+                                                                  {{totalamount}}руб
+                                                                </p>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </td>
+                                                        <td></td>
+                                                      </tr>
+                                                    </table>
+                                                  </div>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="center">
+                                    <table
+                                      class="t149"
+                                      role="presentation"
+                                      cellpadding="0"
+                                      cellspacing="0"
+                                      style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                      "
+                                    >
+                                      <tr>
+                                        <td
+                                          width="367"
+                                          class="t148"
+                                          style="width: 367px"
+                                        >
+                                          <table
+                                            class="t147"
+                                            role="presentation"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            width="100%"
+                                            style="width: 100%"
+                                          >
+                                            <tr>
+                                              <td
+                                                class="t146"
+                                                style="
+                                                  overflow: hidden;
+                                                  background-color: #f0f0f0;
+                                                  padding: 20px 10px 20px 10px;
+                                                  border-radius: 12px 12px 12px
+                                                    12px;
+                                                "
+                                              >
+                                                <div
+                                                  class="t145"
+                                                  style="
+                                                    width: 100%;
+                                                    text-align: left;
+                                                  "
+                                                >
+                                                  <div
+                                                    class="t144"
+                                                    style="
+                                                      display: inline-block;
+                                                    "
+                                                  >
+                                                    <table
+                                                      class="t143"
+                                                      role="presentation"
+                                                      cellpadding="0"
+                                                      cellspacing="0"
+                                                      align="left"
+                                                      valign="top"
+                                                    >
+                                                      <tr class="t142">
+                                                        <td></td>
+                                                        <td
+                                                          class="t123"
+                                                          width="173.5"
+                                                          valign="top"
+                                                        >
+                                                          <table
+                                                            role="presentation"
+                                                            width="100%"
+                                                            cellpadding="0"
+                                                            cellspacing="0"
+                                                            class="t121"
+                                                            style="width: 100%"
+                                                          >
+                                                            <tr>
+                                                              <td
+                                                                class="t120"
+                                                                style="
+                                                                  padding: 0 5px
+                                                                    0 0;
+                                                                "
+                                                              >
+                                                                <table
+                                                                  role="presentation"
+                                                                  width="100%"
+                                                                  cellpadding="0"
+                                                                  cellspacing="0"
+                                                                  style="
+                                                                    width: 100% !important;
+                                                                  "
+                                                                >
+                                                                  <tr>
+                                                                    <td
+                                                                      align="center"
+                                                                    >
+                                                                      <table
+                                                                        class="t103"
+                                                                        role="presentation"
+                                                                        cellpadding="0"
+                                                                        cellspacing="0"
+                                                                        style="
+                                                                          margin-left: auto;
+                                                                          margin-right: auto;
+                                                                        "
+                                                                      >
+                                                                        <tr>
+                                                                          <td
+                                                                            width="168.49999999999994"
+                                                                            class="t102"
+                                                                            style="
+                                                                              width: 800px;
+                                                                            "
+                                                                          >
+                                                                            <table
+                                                                              class="t101"
+                                                                              role="presentation"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              width="100%"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t100"
+                                                                                >
+                                                                                  <table
+                                                                                    role="presentation"
+                                                                                    width="100%"
+                                                                                    cellpadding="0"
+                                                                                    cellspacing="0"
+                                                                                    style="
+                                                                                      width: 100% !important;
+                                                                                    "
+                                                                                  >
+                                                                                    <tr>
+                                                                                      <td
+                                                                                        align="center"
+                                                                                      >
+                                                                                        <table
+                                                                                          class="t93"
+                                                                                          role="presentation"
+                                                                                          cellpadding="0"
+                                                                                          cellspacing="0"
+                                                                                          style="
+                                                                                            margin-left: auto;
+                                                                                            margin-right: auto;
+                                                                                          "
+                                                                                        >
+                                                                                          <tr>
+                                                                                            <td
+                                                                                              width="168.49999999999994"
+                                                                                              class="t92"
+                                                                                              style="
+                                                                                                width: 600px;
+                                                                                              "
+                                                                                            >
+                                                                                              <table
+                                                                                                class="t91"
+                                                                                                role="presentation"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                width="100%"
+                                                                                                style="
+                                                                                                  width: 100%;
+                                                                                                "
+                                                                                              >
+                                                                                                <tr>
+                                                                                                  <td
+                                                                                                    class="t90"
+                                                                                                  >
+                                                                                                    <h1
+                                                                                                      class="t89"
+                                                                                                      style="
+                                                                                                        margin: 0;
+                                                                                                        margin: 0;
+                                                                                                        font-family: Inter,
+                                                                                                          BlinkMacSystemFont,
+                                                                                                          Segoe
+                                                                                                            UI,
+                                                                                                          Helvetica
+                                                                                                            Neue,
+                                                                                                          Arial,
+                                                                                                          sans-serif;
+                                                                                                        line-height: 16px;
+                                                                                                        font-weight: 600;
+                                                                                                        font-style: normal;
+                                                                                                        font-size: 14px;
+                                                                                                        text-decoration: none;
+                                                                                                        text-transform: capitalize;
+                                                                                                        direction: ltr;
+                                                                                                        color: #1a1a1a;
+                                                                                                        text-align: left;
+                                                                                                        mso-line-height-rule: exactly;
+                                                                                                        mso-text-raise: 1px;
+                                                                                                      "
+                                                                                                    >
+                                                                                                      Адрес
+                                                                                                      доставки
+                                                                                                    </h1>
+                                                                                                  </td>
+                                                                                                </tr>
+                                                                                              </table>
+                                                                                            </td>
+                                                                                          </tr>
+                                                                                        </table>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                      <td>
+                                                                                        <div
+                                                                                          class="t94"
+                                                                                          style="
+                                                                                            mso-line-height-rule: exactly;
+                                                                                            mso-line-height-alt: 5px;
+                                                                                            line-height: 5px;
+                                                                                            font-size: 1px;
+                                                                                            display: block;
+                                                                                          "
+                                                                                        >
+                                                                                          &nbsp;&nbsp;
+                                                                                        </div>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                      <td
+                                                                                        align="center"
+                                                                                      >
+                                                                                        <table
+                                                                                          class="t99"
+                                                                                          role="presentation"
+                                                                                          cellpadding="0"
+                                                                                          cellspacing="0"
+                                                                                          style="
+                                                                                            margin-left: auto;
+                                                                                            margin-right: auto;
+                                                                                          "
+                                                                                        >
+                                                                                          <tr>
+                                                                                            <td
+                                                                                              width="168.49999999999994"
+                                                                                              class="t98"
+                                                                                              style="
+                                                                                                width: 600px;
+                                                                                              "
+                                                                                            >
+                                                                                              <table
+                                                                                                class="t97"
+                                                                                                role="presentation"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                width="100%"
+                                                                                                style="
+                                                                                                  width: 100%;
+                                                                                                "
+                                                                                              >
+                                                                                                <tr>
+                                                                                                  <td
+                                                                                                    class="t96"
+                                                                                                  >
+                                                                                                    <p
+                                                                                                      class="t95"
+                                                                                                      style="
+                                                                                                        margin: 0;
+                                                                                                        margin: 0;
+                                                                                                        font-family: Albert
+                                                                                                            Sans,
+                                                                                                          BlinkMacSystemFont,
+                                                                                                          Segoe
+                                                                                                            UI,
+                                                                                                          Helvetica
+                                                                                                            Neue,
+                                                                                                          Arial,
+                                                                                                          sans-serif;
+                                                                                                        line-height: 16px;
+                                                                                                        font-weight: 400;
+                                                                                                        font-style: normal;
+                                                                                                        font-size: 14px;
+                                                                                                        text-decoration: none;
+                                                                                                        text-transform: none;
+                                                                                                        letter-spacing: -0.56px;
+                                                                                                        direction: ltr;
+                                                                                                        color: #242424;
+                                                                                                        text-align: left;
+                                                                                                        mso-line-height-rule: exactly;
+                                                                                                        mso-text-raise: 1px;
+                                                                                                      "
+                                                                                                    >
+                                                                                                      {{deliveryaddress}}
+                                                                                                    </p>
+                                                                                                  </td>
+                                                                                                </tr>
+                                                                                              </table>
+                                                                                            </td>
+                                                                                          </tr>
+                                                                                        </table>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                  </table>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                        </tr>
+                                                                      </table>
+                                                                    </td>
+                                                                  </tr>
+                                                                  <tr>
+                                                                    <td>
+                                                                      <div
+                                                                        class="t104"
+                                                                        style="
+                                                                          mso-line-height-rule: exactly;
+                                                                          mso-line-height-alt: 5px;
+                                                                          line-height: 5px;
+                                                                          font-size: 1px;
+                                                                          display: block;
+                                                                        "
+                                                                      >
+                                                                        &nbsp;&nbsp;
+                                                                      </div>
+                                                                    </td>
+                                                                  </tr>
+                                                                  <tr>
+                                                                    <td
+                                                                      align="center"
+                                                                    >
+                                                                      <table
+                                                                        class="t119"
+                                                                        role="presentation"
+                                                                        cellpadding="0"
+                                                                        cellspacing="0"
+                                                                        style="
+                                                                          margin-left: auto;
+                                                                          margin-right: auto;
+                                                                        "
+                                                                      >
+                                                                        <tr>
+                                                                          <td
+                                                                            width="168.49999999999994"
+                                                                            class="t118"
+                                                                            style="
+                                                                              width: 800px;
+                                                                            "
+                                                                          >
+                                                                            <table
+                                                                              class="t117"
+                                                                              role="presentation"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              width="100%"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t116"
+                                                                                >
+                                                                                  <table
+                                                                                    role="presentation"
+                                                                                    width="100%"
+                                                                                    cellpadding="0"
+                                                                                    cellspacing="0"
+                                                                                    style="
+                                                                                      width: 100% !important;
+                                                                                    "
+                                                                                  >
+                                                                                    <tr>
+                                                                                      <td
+                                                                                        align="center"
+                                                                                      >
+                                                                                        <table
+                                                                                          class="t109"
+                                                                                          role="presentation"
+                                                                                          cellpadding="0"
+                                                                                          cellspacing="0"
+                                                                                          style="
+                                                                                            margin-left: auto;
+                                                                                            margin-right: auto;
+                                                                                          "
+                                                                                        >
+                                                                                          <tr>
+                                                                                            <td
+                                                                                              width="168.49999999999994"
+                                                                                              class="t108"
+                                                                                              style="
+                                                                                                width: 600px;
+                                                                                              "
+                                                                                            >
+                                                                                              <table
+                                                                                                class="t107"
+                                                                                                role="presentation"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                width="100%"
+                                                                                                style="
+                                                                                                  width: 100%;
+                                                                                                "
+                                                                                              >
+                                                                                                <tr>
+                                                                                                  <td
+                                                                                                    class="t106"
+                                                                                                  >
+                                                                                                    <h1
+                                                                                                      class="t105"
+                                                                                                      style="
+                                                                                                        margin: 0;
+                                                                                                        margin: 0;
+                                                                                                        font-family: Inter,
+                                                                                                          BlinkMacSystemFont,
+                                                                                                          Segoe
+                                                                                                            UI,
+                                                                                                          Helvetica
+                                                                                                            Neue,
+                                                                                                          Arial,
+                                                                                                          sans-serif;
+                                                                                                        line-height: 16px;
+                                                                                                        font-weight: 600;
+                                                                                                        font-style: normal;
+                                                                                                        font-size: 14px;
+                                                                                                        text-decoration: none;
+                                                                                                        text-transform: capitalize;
+                                                                                                        direction: ltr;
+                                                                                                        color: #1a1a1a;
+                                                                                                        text-align: left;
+                                                                                                        mso-line-height-rule: exactly;
+                                                                                                        mso-text-raise: 1px;
+                                                                                                      "
+                                                                                                    >
+                                                                                                      Способ
+                                                                                                      оплаты
+                                                                                                    </h1>
+                                                                                                  </td>
+                                                                                                </tr>
+                                                                                              </table>
+                                                                                            </td>
+                                                                                          </tr>
+                                                                                        </table>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                      <td>
+                                                                                        <div
+                                                                                          class="t110"
+                                                                                          style="
+                                                                                            mso-line-height-rule: exactly;
+                                                                                            mso-line-height-alt: 5px;
+                                                                                            line-height: 5px;
+                                                                                            font-size: 1px;
+                                                                                            display: block;
+                                                                                          "
+                                                                                        >
+                                                                                          &nbsp;&nbsp;
+                                                                                        </div>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                      <td
+                                                                                        align="center"
+                                                                                      >
+                                                                                        <table
+                                                                                          class="t115"
+                                                                                          role="presentation"
+                                                                                          cellpadding="0"
+                                                                                          cellspacing="0"
+                                                                                          style="
+                                                                                            margin-left: auto;
+                                                                                            margin-right: auto;
+                                                                                          "
+                                                                                        >
+                                                                                          <tr>
+                                                                                            <td
+                                                                                              width="168.49999999999994"
+                                                                                              class="t114"
+                                                                                              style="
+                                                                                                width: 600px;
+                                                                                              "
+                                                                                            >
+                                                                                              <table
+                                                                                                class="t113"
+                                                                                                role="presentation"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                width="100%"
+                                                                                                style="
+                                                                                                  width: 100%;
+                                                                                                "
+                                                                                              >
+                                                                                                <tr>
+                                                                                                  <td
+                                                                                                    class="t112"
+                                                                                                  >
+                                                                                                    <p
+                                                                                                      class="t111"
+                                                                                                      style="
+                                                                                                        margin: 0;
+                                                                                                        margin: 0;
+                                                                                                        font-family: Albert
+                                                                                                            Sans,
+                                                                                                          BlinkMacSystemFont,
+                                                                                                          Segoe
+                                                                                                            UI,
+                                                                                                          Helvetica
+                                                                                                            Neue,
+                                                                                                          Arial,
+                                                                                                          sans-serif;
+                                                                                                        line-height: 16px;
+                                                                                                        font-weight: 400;
+                                                                                                        font-style: normal;
+                                                                                                        font-size: 14px;
+                                                                                                        text-decoration: none;
+                                                                                                        text-transform: none;
+                                                                                                        letter-spacing: -0.56px;
+                                                                                                        direction: ltr;
+                                                                                                        color: #242424;
+                                                                                                        text-align: left;
+                                                                                                        mso-line-height-rule: exactly;
+                                                                                                        mso-text-raise: 1px;
+                                                                                                      "
+                                                                                                    >
+                                                                                                      {{paymentmethod}}
+                                                                                                    </p>
+                                                                                                  </td>
+                                                                                                </tr>
+                                                                                              </table>
+                                                                                            </td>
+                                                                                          </tr>
+                                                                                        </table>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                  </table>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                        </tr>
+                                                                      </table>
+                                                                    </td>
+                                                                  </tr>
+                                                                </table>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                          <!--[if !mso]>-->
+                                                          <div
+                                                            class="t122"
+                                                            style="
+                                                              mso-line-height-rule: exactly;
+                                                              font-size: 1px;
+                                                              display: none;
+                                                            "
+                                                          >
+                                                            &nbsp;&nbsp;
+                                                          </div>
+                                                          <!--<![endif]-->
+                                                        </td>
+                                                        <td
+                                                          class="t141"
+                                                          width="173.5"
+                                                          valign="top"
+                                                        >
+                                                          <table
+                                                            role="presentation"
+                                                            width="100%"
+                                                            cellpadding="0"
+                                                            cellspacing="0"
+                                                            class="t140"
+                                                            style="width: 100%"
+                                                          >
+                                                            <tr>
+                                                              <td
+                                                                class="t139"
+                                                                style="
+                                                                  padding: 0 0 0
+                                                                    5px;
+                                                                "
+                                                              >
+                                                                <table
+                                                                  role="presentation"
+                                                                  width="100%"
+                                                                  cellpadding="0"
+                                                                  cellspacing="0"
+                                                                  style="
+                                                                    width: 100% !important;
+                                                                  "
+                                                                >
+                                                                  <tr>
+                                                                    <td
+                                                                      align="center"
+                                                                    >
+                                                                      <table
+                                                                        class="t138"
+                                                                        role="presentation"
+                                                                        cellpadding="0"
+                                                                        cellspacing="0"
+                                                                        style="
+                                                                          margin-left: auto;
+                                                                          margin-right: auto;
+                                                                        "
+                                                                      >
+                                                                        <tr>
+                                                                          <td
+                                                                            width="168.49999999999994"
+                                                                            class="t137"
+                                                                            style="
+                                                                              width: 800px;
+                                                                            "
+                                                                          >
+                                                                            <table
+                                                                              class="t136"
+                                                                              role="presentation"
+                                                                              cellpadding="0"
+                                                                              cellspacing="0"
+                                                                              width="100%"
+                                                                              style="
+                                                                                width: 100%;
+                                                                              "
+                                                                            >
+                                                                              <tr>
+                                                                                <td
+                                                                                  class="t135"
+                                                                                >
+                                                                                  <table
+                                                                                    role="presentation"
+                                                                                    width="100%"
+                                                                                    cellpadding="0"
+                                                                                    cellspacing="0"
+                                                                                    style="
+                                                                                      width: 100% !important;
+                                                                                    "
+                                                                                  >
+                                                                                    <tr>
+                                                                                      <td
+                                                                                        align="center"
+                                                                                      >
+                                                                                        <table
+                                                                                          class="t128"
+                                                                                          role="presentation"
+                                                                                          cellpadding="0"
+                                                                                          cellspacing="0"
+                                                                                          style="
+                                                                                            margin-left: auto;
+                                                                                            margin-right: auto;
+                                                                                          "
+                                                                                        >
+                                                                                          <tr>
+                                                                                            <td
+                                                                                              width="168.49999999999994"
+                                                                                              class="t127"
+                                                                                              style="
+                                                                                                width: 600px;
+                                                                                              "
+                                                                                            >
+                                                                                              <table
+                                                                                                class="t126"
+                                                                                                role="presentation"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                width="100%"
+                                                                                                style="
+                                                                                                  width: 100%;
+                                                                                                "
+                                                                                              >
+                                                                                                <tr>
+                                                                                                  <td
+                                                                                                    class="t125"
+                                                                                                  >
+                                                                                                    <h1
+                                                                                                      class="t124"
+                                                                                                      style="
+                                                                                                        margin: 0;
+                                                                                                        margin: 0;
+                                                                                                        font-family: Inter,
+                                                                                                          BlinkMacSystemFont,
+                                                                                                          Segoe
+                                                                                                            UI,
+                                                                                                          Helvetica
+                                                                                                            Neue,
+                                                                                                          Arial,
+                                                                                                          sans-serif;
+                                                                                                        line-height: 16px;
+                                                                                                        font-weight: 600;
+                                                                                                        font-style: normal;
+                                                                                                        font-size: 14px;
+                                                                                                        text-decoration: none;
+                                                                                                        text-transform: capitalize;
+                                                                                                        direction: ltr;
+                                                                                                        color: #1a1a1a;
+                                                                                                        text-align: left;
+                                                                                                        mso-line-height-rule: exactly;
+                                                                                                        mso-text-raise: 1px;
+                                                                                                      "
+                                                                                                    >
+                                                                                                      Время
+                                                                                                      доставки
+                                                                                                    </h1>
+                                                                                                  </td>
+                                                                                                </tr>
+                                                                                              </table>
+                                                                                            </td>
+                                                                                          </tr>
+                                                                                        </table>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                      <td>
+                                                                                        <div
+                                                                                          class="t129"
+                                                                                          style="
+                                                                                            mso-line-height-rule: exactly;
+                                                                                            mso-line-height-alt: 5px;
+                                                                                            line-height: 5px;
+                                                                                            font-size: 1px;
+                                                                                            display: block;
+                                                                                          "
+                                                                                        >
+                                                                                          &nbsp;&nbsp;
+                                                                                        </div>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                      <td
+                                                                                        align="center"
+                                                                                      >
+                                                                                        <table
+                                                                                          class="t134"
+                                                                                          role="presentation"
+                                                                                          cellpadding="0"
+                                                                                          cellspacing="0"
+                                                                                          style="
+                                                                                            margin-left: auto;
+                                                                                            margin-right: auto;
+                                                                                          "
+                                                                                        >
+                                                                                          <tr>
+                                                                                            <td
+                                                                                              width="168.49999999999994"
+                                                                                              class="t133"
+                                                                                              style="
+                                                                                                width: 600px;
+                                                                                              "
+                                                                                            >
+                                                                                              <table
+                                                                                                class="t132"
+                                                                                                role="presentation"
+                                                                                                cellpadding="0"
+                                                                                                cellspacing="0"
+                                                                                                width="100%"
+                                                                                                style="
+                                                                                                  width: 100%;
+                                                                                                "
+                                                                                              >
+                                                                                                <tr>
+                                                                                                  <td
+                                                                                                    class="t131"
+                                                                                                  >
+                                                                                                    <p
+                                                                                                      class="t130"
+                                                                                                      style="
+                                                                                                        margin: 0;
+                                                                                                        margin: 0;
+                                                                                                        font-family: Inter,
+                                                                                                          BlinkMacSystemFont,
+                                                                                                          Segoe
+                                                                                                            UI,
+                                                                                                          Helvetica
+                                                                                                            Neue,
+                                                                                                          Arial,
+                                                                                                          sans-serif;
+                                                                                                        line-height: 16px;
+                                                                                                        font-weight: 400;
+                                                                                                        font-style: normal;
+                                                                                                        font-size: 14px;
+                                                                                                        text-decoration: none;
+                                                                                                        text-transform: none;
+                                                                                                        letter-spacing: -0.56px;
+                                                                                                        direction: ltr;
+                                                                                                        color: #242424;
+                                                                                                        text-align: left;
+                                                                                                        mso-line-height-rule: exactly;
+                                                                                                        mso-text-raise: 1px;
+                                                                                                      "
+                                                                                                    >
+                                                                                                      {{{deliveryoption}}}
+                                                                                                    </p>
+                                                                                                  </td>
+                                                                                                </tr>
+                                                                                              </table>
+                                                                                            </td>
+                                                                                          </tr>
+                                                                                        </table>
+                                                                                      </td>
+                                                                                    </tr>
+                                                                                  </table>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                                                          </td>
+                                                                        </tr>
+                                                                      </table>
+                                                                    </td>
+                                                                  </tr>
+                                                                </table>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </td>
+                                                        <td></td>
+                                                      </tr>
+                                                    </table>
+                                                  </div>
+                                                </div>
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <div
+                                      class="t151"
+                                      style="
+                                        mso-line-height-rule: exactly;
+                                        mso-line-height-alt: 40px;
+                                        line-height: 40px;
+                                        font-size: 1px;
+                                        display: block;
+                                      "
+                                    >
+                                      &nbsp;&nbsp;
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td align="center">
+                                    <table
+                                      class="t155"
+                                      role="presentation"
+                                      cellpadding="0"
+                                      cellspacing="0"
+                                      style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                      "
+                                    >
+                                      <tr>
+                                        <td
+                                          width="154"
+                                          class="t154"
+                                          style="width: 154px"
+                                        >
+                                          <table
+                                            class="t153"
+                                            role="presentation"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            width="100%"
+                                            style="width: 100%"
+                                          >
+                                            <tr>
+                                              <td
+                                                class="t152"
+                                                style="
+                                                  overflow: hidden;
+                                                  background-color: #0057ff;
+                                                  text-align: center;
+                                                  line-height: 40px;
+                                                  mso-line-height-rule: exactly;
+                                                  mso-text-raise: 8px;
+                                                  border-radius: 8px 8px 8px 8px;
+                                                "
+                                              >
+                                                <a
+                                                  class="t150"
+                                                  href="{{{orderurl}}}"
+                                                  style="
+                                                    display: block;
+                                                    margin: 0;
+                                                    margin: 0;
+                                                    font-family: Inter,
+                                                      BlinkMacSystemFont,
+                                                      Segoe UI, Helvetica Neue,
+                                                      Arial, sans-serif;
+                                                    line-height: 40px;
+                                                    font-weight: 700;
+                                                    font-style: normal;
+                                                    font-size: 15px;
+                                                    text-decoration: none;
+                                                    letter-spacing: -0.5px;
+                                                    direction: ltr;
+                                                    color: #ffffff;
+                                                    text-align: center;
+                                                    mso-line-height-rule: exactly;
+                                                    mso-text-raise: 8px;
+                                                  "
+                                                  target="_blank"
+                                                  >Посмотреть заказ</a
+                                                >
+                                              </td>
+                                            </tr>
+                                          </table>
+                                        </td>
+                                      </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{CAKE_NAME}}</td>
-                        <td>{{QUANTITY}}</td>
-                        <td>${{PRICE}}</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2" style="text-align:right"><strong>Total:</strong></td>
-                        <td><strong>${{TOTAL_AMOUNT}}</strong></td>
-                    </tr>
-                </tfoot>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div
+                    class="t161"
+                    style="
+                      mso-line-height-rule: exactly;
+                      mso-line-height-alt: 70px;
+                      line-height: 70px;
+                      font-size: 1px;
+                      display: block;
+                    "
+                  >
+                    &nbsp;&nbsp;
+                  </div>
+                </td>
+              </tr>
             </table>
-
-            <p><strong>Payment Status:</strong> <span class="status-badge">{{PAYMENT_STATUS}}</span></p>
-            
-            <center>
-                <a href="{{CMS_ADMIN_URL}}" class="btn">View Order in CMS</a>
-            </center>
-        </div>
-        <div class="footer">
-            Sent automatically by your Cake Store CMS.
-        </div>
+          </td>
+        </tr>
+      </table>
     </div>
-</body>
-</html> -->
+    <div
+      class="gmail-fix"
+      style="
+        display: none;
+        white-space: nowrap;
+        font: 15px courier;
+        line-height: 0;
+      "
+    >
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+      &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    </div>
+  </body>
+</html>

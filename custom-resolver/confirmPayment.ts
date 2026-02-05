@@ -4,12 +4,31 @@ import { ICreateReceipt } from "@a2seven/yoo-checkout";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
 import { createOrder } from "./createOrder";
 import { PaymentStatus } from "./checkOut";
-import { sendOrderNotification } from "../lib/mail";
+import {
+  sendOrderNotification,
+  sendNewOrderNotificationToSeller,
+} from "../lib/mail";
 
 interface ConfirmPaymentArgs {
   body: any;
   context: Context;
 }
+
+type SellerNewOrderNotification = {
+  ordernumber: string;
+  orderitems: {
+    productname: string;
+    productfilling: string;
+    quantity: number;
+    unitprice: number;
+    subtotal: number;
+  }[];
+  totalamount: number;
+  deliveryaddress: string;
+  deliveryoption: string;
+  paymentmethod: string;
+  orderurl: string;
+};
 
 export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
   const yooMoneyWebHookData = body;
@@ -55,13 +74,14 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       });
 
       // Update OrderIntent status success
-      const orderIntentUpdate = await sudoContext.db.OrderIntent.updateOne({
+      const orderIntentUpdate = await sudoContext.prisma.orderIntent.update({
         where: { yooMoneyId: payment.id },
         data: {
           paymentId: updatedPayment.id,
           paymentStatus: PaymentStatus.SUCCEEDED,
           updatedAt: new Date(),
         },
+        include: { deliveryAddress: true },
       });
 
       // Create a new order
@@ -70,6 +90,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         context,
       });
 
+      // Get the user
       const user = await sudoContext.db.User.findOne({
         where: { id: newOrder?.userId },
       });
@@ -80,6 +101,32 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           to: user.email,
           orderNumber: newOrder.orderNumber,
         });
+      }
+
+      // Setting up mail delivery for admin on new order notification
+      const orderItems = await sudoContext.prisma.orderItem.findMany({
+        where: { orderId: { equals: newOrder?.id } },
+        include: { product: true, variant: { include: { filling: true } } },
+      });
+
+      if (newOrder) {
+        const orderUrl = `https://api.ellcakes.ru/orders/${newOrder.id}`;
+        const newOrderForSellerData: SellerNewOrderNotification = {
+          ordernumber: newOrder.orderNumber,
+          orderitems: orderItems.map((oi) => ({
+            productname: oi.product!.name,
+            productfilling: oi.variant!.filling!.name,
+            quantity: oi.quantity as unknown as number,
+            unitprice: oi.unitPrice as unknown as number,
+            subtotal: oi.subTotal as unknown as number,
+          })),
+          totalamount: newOrder.totalAmount as unknown as number,
+          deliveryaddress: orderIntentUpdate.deliveryAddress!.address,
+          deliveryoption: newOrder.deliveryOption,
+          paymentmethod: updatedPayment.method,
+          orderurl: orderUrl,
+        };
+        await sendNewOrderNotificationToSeller({ data: newOrderForSellerData });
       }
 
       // Send a receipt to USER about their payment
@@ -120,11 +167,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
 
       // console.log(receipt);
 
-      // 1. Send receipt email to user after a successful payment(Through Yookassa set up)
-      // 2. Create an order for Merchant CRM using the values of all the order items.
-      // ::::: 1. We need to update the order model, so we can store the ID of CRM order ID
-      // :::::  we've just created.
-      // ::::: 2. Another option is to send order details to merchant email with the help of nodemailer.
+      // 1. Send receipt email to user after a successful payment(Through Yookassa set up)\
     }
   } catch (error) {
     console.error(

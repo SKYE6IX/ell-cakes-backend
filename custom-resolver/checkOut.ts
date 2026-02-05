@@ -64,7 +64,7 @@ export const checkOut = async (
 
   // Generate unique ID for each intent
   const alphabet = "0123456789abcdefghjklmnpqrstuvwxyz";
-  const nanoid = customAlphabet(alphabet, 8);
+  const nanoid = customAlphabet(alphabet, 16);
   const intentId = nanoid();
 
   // Get the cart that belong to the current signin USER

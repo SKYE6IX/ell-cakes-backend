@@ -20,6 +20,8 @@ type User {
   cart: Cart
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
+  orderBeneficiaries(where: OrderReceiverWhereInput! = {}, orderBy: [OrderReceiverOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderReceiverWhereUniqueInput): [OrderReceiver!]
+  orderBeneficiariesCount(where: OrderReceiverWhereInput! = {}): Int
   payments(where: PaymentWhereInput! = {}, orderBy: [PaymentOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PaymentWhereUniqueInput): [Payment!]
   paymentsCount(where: PaymentWhereInput! = {}): Int
   lastLogin: DateTime
@@ -61,6 +63,7 @@ input UserWhereInput {
   delivaryAddress: DelivaryAddressWhereInput
   cart: CartWhereInput
   orders: OrderManyRelationFilter
+  orderBeneficiaries: OrderReceiverManyRelationFilter
   payments: PaymentManyRelationFilter
   lastLogin: DateTimeNullableFilter
   createdAt: DateTimeNullableFilter
@@ -149,6 +152,12 @@ input OrderManyRelationFilter {
   none: OrderWhereInput
 }
 
+input OrderReceiverManyRelationFilter {
+  every: OrderReceiverWhereInput
+  some: OrderReceiverWhereInput
+  none: OrderReceiverWhereInput
+}
+
 input PaymentManyRelationFilter {
   every: PaymentWhereInput
   some: PaymentWhereInput
@@ -196,6 +205,7 @@ input UserUpdateInput {
   delivaryAddress: DelivaryAddressRelateToOneForUpdateInput
   cart: CartRelateToOneForUpdateInput
   orders: OrderRelateToManyForUpdateInput
+  orderBeneficiaries: OrderReceiverRelateToManyForUpdateInput
   payments: PaymentRelateToManyForUpdateInput
   lastLogin: DateTime
   createdAt: DateTime
@@ -219,6 +229,13 @@ input OrderRelateToManyForUpdateInput {
   set: [OrderWhereUniqueInput!]
   create: [OrderCreateInput!]
   connect: [OrderWhereUniqueInput!]
+}
+
+input OrderReceiverRelateToManyForUpdateInput {
+  disconnect: [OrderReceiverWhereUniqueInput!]
+  set: [OrderReceiverWhereUniqueInput!]
+  create: [OrderReceiverCreateInput!]
+  connect: [OrderReceiverWhereUniqueInput!]
 }
 
 input PaymentRelateToManyForUpdateInput {
@@ -250,6 +267,7 @@ input UserCreateInput {
   delivaryAddress: DelivaryAddressRelateToOneForCreateInput
   cart: CartRelateToOneForCreateInput
   orders: OrderRelateToManyForCreateInput
+  orderBeneficiaries: OrderReceiverRelateToManyForCreateInput
   payments: PaymentRelateToManyForCreateInput
   lastLogin: DateTime
   createdAt: DateTime
@@ -269,6 +287,11 @@ input CartRelateToOneForCreateInput {
 input OrderRelateToManyForCreateInput {
   create: [OrderCreateInput!]
   connect: [OrderWhereUniqueInput!]
+}
+
+input OrderReceiverRelateToManyForCreateInput {
+  create: [OrderReceiverCreateInput!]
+  connect: [OrderReceiverWhereUniqueInput!]
 }
 
 input PaymentRelateToManyForCreateInput {
@@ -1454,6 +1477,7 @@ type Order {
   id: ID!
   orderIntent: OrderIntent
   user: User
+  orderReceiver: OrderReceiver
   orderDetails: String
   orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   orderItemsCount(where: OrderItemWhereInput! = {}): Int
@@ -1473,6 +1497,7 @@ type Order {
 input OrderWhereUniqueInput {
   id: ID
   orderIntent: OrderIntentWhereUniqueInput
+  orderReceiver: OrderReceiverWhereUniqueInput
   orderNumber: String
   payment: PaymentWhereUniqueInput
 }
@@ -1484,6 +1509,7 @@ input OrderWhereInput {
   id: IDFilter
   orderIntent: OrderIntentWhereInput
   user: UserWhereInput
+  orderReceiver: OrderReceiverWhereInput
   orderItems: OrderItemManyRelationFilter
   orderNumber: StringFilter
   shippingCost: IntNullableFilter
@@ -1520,6 +1546,7 @@ input OrderOrderByInput {
 input OrderUpdateInput {
   orderIntent: OrderIntentRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
+  orderReceiver: OrderReceiverRelateToOneForUpdateInput
   orderItems: OrderItemRelateToManyForUpdateInput
   orderNumber: String
   shippingCost: Int
@@ -1537,6 +1564,12 @@ input OrderUpdateInput {
 input OrderIntentRelateToOneForUpdateInput {
   create: OrderIntentCreateInput
   connect: OrderIntentWhereUniqueInput
+  disconnect: Boolean
+}
+
+input OrderReceiverRelateToOneForUpdateInput {
+  create: OrderReceiverCreateInput
+  connect: OrderReceiverWhereUniqueInput
   disconnect: Boolean
 }
 
@@ -1561,6 +1594,7 @@ input OrderUpdateArgs {
 input OrderCreateInput {
   orderIntent: OrderIntentRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
+  orderReceiver: OrderReceiverRelateToOneForCreateInput
   orderItems: OrderItemRelateToManyForCreateInput
   orderNumber: String
   shippingCost: Int
@@ -1580,6 +1614,11 @@ input OrderIntentRelateToOneForCreateInput {
   connect: OrderIntentWhereUniqueInput
 }
 
+input OrderReceiverRelateToOneForCreateInput {
+  create: OrderReceiverCreateInput
+  connect: OrderReceiverWhereUniqueInput
+}
+
 input OrderItemRelateToManyForCreateInput {
   create: [OrderItemCreateInput!]
   connect: [OrderItemWhereUniqueInput!]
@@ -1588,6 +1627,76 @@ input OrderItemRelateToManyForCreateInput {
 input PaymentRelateToOneForCreateInput {
   create: PaymentCreateInput
   connect: PaymentWhereUniqueInput
+}
+
+type OrderReceiver {
+  id: ID!
+  benefactor: User
+  order: Order
+  name: String
+  phoneNumber: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderReceiverWhereUniqueInput {
+  id: ID
+  order: OrderWhereUniqueInput
+}
+
+input OrderReceiverWhereInput {
+  AND: [OrderReceiverWhereInput!]
+  OR: [OrderReceiverWhereInput!]
+  NOT: [OrderReceiverWhereInput!]
+  id: IDFilter
+  benefactor: UserWhereInput
+  order: OrderWhereInput
+  name: StringFilter
+  phoneNumber: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input OrderReceiverOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  phoneNumber: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input OrderReceiverUpdateInput {
+  benefactor: UserRelateToOneForUpdateInput
+  order: OrderRelateToOneForUpdateInput
+  name: String
+  phoneNumber: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderRelateToOneForUpdateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
+  disconnect: Boolean
+}
+
+input OrderReceiverUpdateArgs {
+  where: OrderReceiverWhereUniqueInput!
+  data: OrderReceiverUpdateInput!
+}
+
+input OrderReceiverCreateInput {
+  benefactor: UserRelateToOneForCreateInput
+  order: OrderRelateToOneForCreateInput
+  name: String
+  phoneNumber: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input OrderRelateToOneForCreateInput {
+  create: OrderCreateInput
+  connect: OrderWhereUniqueInput
 }
 
 type OrderItem {
@@ -1648,12 +1757,6 @@ input OrderItemUpdateInput {
   updatedAt: DateTime
 }
 
-input OrderRelateToOneForUpdateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
-  disconnect: Boolean
-}
-
 input OrderItemUpdateArgs {
   where: OrderItemWhereUniqueInput!
   data: OrderItemUpdateInput!
@@ -1671,11 +1774,6 @@ input OrderItemCreateInput {
   subTotal: Int
   createdAt: DateTime
   updatedAt: DateTime
-}
-
-input OrderRelateToOneForCreateInput {
-  create: OrderCreateInput
-  connect: OrderWhereUniqueInput
 }
 
 type Payment {
@@ -1912,8 +2010,9 @@ type OrderIntent {
   paymentId: String
   cart: Cart
   user: User
-  deliveryOption: String
+  orderReceiver: OrderReceiver
   deliveryAddress: DelivaryAddress
+  deliveryOption: String
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -1940,8 +2039,9 @@ input OrderIntentWhereInput {
   paymentId: StringFilter
   cart: CartWhereInput
   user: UserWhereInput
-  deliveryOption: StringFilter
+  orderReceiver: OrderReceiverWhereInput
   deliveryAddress: DelivaryAddressWhereInput
+  deliveryOption: StringFilter
   note: StringFilter
   paymentStatus: StringNullableFilter
   shippingCost: IntNullableFilter
@@ -1971,8 +2071,9 @@ input OrderIntentUpdateInput {
   paymentId: String
   cart: CartRelateToOneForUpdateInput
   user: UserRelateToOneForUpdateInput
-  deliveryOption: String
+  orderReceiver: OrderReceiverRelateToOneForUpdateInput
   deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
+  deliveryOption: String
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -1993,8 +2094,9 @@ input OrderIntentCreateInput {
   paymentId: String
   cart: CartRelateToOneForCreateInput
   user: UserRelateToOneForCreateInput
-  deliveryOption: String
+  orderReceiver: OrderReceiverRelateToOneForCreateInput
   deliveryAddress: DelivaryAddressRelateToOneForCreateInput
+  deliveryOption: String
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -2202,6 +2304,12 @@ type Mutation {
   updateOrders(data: [OrderUpdateArgs!]!): [Order]
   deleteOrder(where: OrderWhereUniqueInput!): Order
   deleteOrders(where: [OrderWhereUniqueInput!]!): [Order]
+  createOrderReceiver(data: OrderReceiverCreateInput!): OrderReceiver
+  createOrderReceivers(data: [OrderReceiverCreateInput!]!): [OrderReceiver]
+  updateOrderReceiver(where: OrderReceiverWhereUniqueInput!, data: OrderReceiverUpdateInput!): OrderReceiver
+  updateOrderReceivers(data: [OrderReceiverUpdateArgs!]!): [OrderReceiver]
+  deleteOrderReceiver(where: OrderReceiverWhereUniqueInput!): OrderReceiver
+  deleteOrderReceivers(where: [OrderReceiverWhereUniqueInput!]!): [OrderReceiver]
   createOrderItem(data: OrderItemCreateInput!): OrderItem
   createOrderItems(data: [OrderItemCreateInput!]!): [OrderItem]
   updateOrderItem(where: OrderItemWhereUniqueInput!, data: OrderItemUpdateInput!): OrderItem
@@ -2254,7 +2362,7 @@ type Mutation {
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
   authorizedUser(email: String!, password: String!): User!
-  redeemUserVerificationToken(token: String!, email: String!): VerifyUserByPhoneNumberResponse!
+  redeemUserVerificationToken(token: String!, email: String!): VerifyUserResponse!
   resendUserVerificationToken(email: String!): String!
   sendPasswordResetToken(email: String!): String!
   updatePassword(token: String!, email: String!, newPassword: String!): User!
@@ -2263,7 +2371,7 @@ type Mutation {
   decreaseCartItem(cartItemId: String!): Cart
   removeFromCart(cartItemId: String!): Cart
   connectCartToUser(userId: String!): Cart
-  checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, customerNote: String): Payment!
+  checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, customerNote: String, orderReceiver: OrderReceiverInput): Payment!
   registerUser(registerData: RegisterUserInput!): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
 }
@@ -2329,6 +2437,9 @@ type Query {
   order(where: OrderWhereUniqueInput!): Order
   orders(where: OrderWhereInput! = {}, orderBy: [OrderOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderWhereUniqueInput): [Order!]
   ordersCount(where: OrderWhereInput! = {}): Int
+  orderReceiver(where: OrderReceiverWhereUniqueInput!): OrderReceiver
+  orderReceivers(where: OrderReceiverWhereInput! = {}, orderBy: [OrderReceiverOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderReceiverWhereUniqueInput): [OrderReceiver!]
+  orderReceiversCount(where: OrderReceiverWhereInput! = {}): Int
   orderItem(where: OrderItemWhereUniqueInput!): OrderItem
   orderItems(where: OrderItemWhereInput! = {}, orderBy: [OrderItemOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: OrderItemWhereUniqueInput): [OrderItem!]
   orderItemsCount(where: OrderItemWhereInput! = {}): Int
@@ -2496,9 +2607,14 @@ enum KeystoneAdminUISortDirection {
   DESC
 }
 
-type VerifyUserByPhoneNumberResponse {
+type VerifyUserResponse {
   status: Boolean
   message: String
+}
+
+input OrderReceiverInput {
+  name: String!
+  phoneNumber: String!
 }
 
 input RegisterUserInput {

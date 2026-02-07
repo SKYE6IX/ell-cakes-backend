@@ -32,11 +32,12 @@ export const User = list({
     },
   },
   fields: {
-    name: text({ validation: { isRequired: true } }),
+    name: text({ validation: { isRequired: true }, label: "Имя" }),
 
     email: text({
       validation: { isRequired: true },
       isIndexed: "unique",
+      label: "Почта",
     }),
 
     password: password({ validation: { isRequired: true } }),
@@ -44,6 +45,7 @@ export const User = list({
     phoneNumber: text({
       isIndexed: "unique",
       defaultValue: null,
+      label: "Номер телефона",
     }),
 
     isUserVerified: checkbox({ defaultValue: false }),
@@ -132,6 +134,11 @@ export const User = list({
           fieldMode: "hidden",
         },
       },
+    }),
+
+    orderBeneficiaries: relationship({
+      ref: "OrderReceiver.benefactor",
+      many: true,
     }),
 
     payments: relationship({

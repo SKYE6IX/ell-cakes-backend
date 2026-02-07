@@ -24,9 +24,14 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
     schemas: [baseSchema],
     typeDefs: `
-    type VerifyUserByPhoneNumberResponse {
+    type VerifyUserResponse {
       status: Boolean
       message: String
+    }
+    
+    input OrderReceiverInput {
+      name: String!
+      phoneNumber: String!
     }
 
     input RegisterUserInput {
@@ -60,7 +65,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
 
     type Mutation {
         authorizedUser(email: String!, password: String!): User!
-        redeemUserVerificationToken(token: String!, email: String!): VerifyUserByPhoneNumberResponse!
+        redeemUserVerificationToken(token: String!, email: String!): VerifyUserResponse!
         resendUserVerificationToken(email: String!): String!
         sendPasswordResetToken(email: String!): String!
         updatePassword(token: String!, email: String!, newPassword: String!): User!
@@ -69,7 +74,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         decreaseCartItem(cartItemId: String!): Cart
         removeFromCart(cartItemId: String!): Cart
         connectCartToUser(userId: String!): Cart
-        checkOut(deliveryAddressId: String!, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, customerNote: String): Payment!
+        checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, customerNote: String, orderReceiver: OrderReceiverInput): Payment!
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
     }

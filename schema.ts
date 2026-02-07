@@ -12,6 +12,7 @@ import { ToppingOption } from "./models/topping-option";
 import { Cart } from "./models/cart";
 import { CartItem } from "./models/cart-item";
 import { Order } from "./models/order";
+import { OrderReceiver } from "./models/order-receiver";
 import { OrderItem } from "./models/order-item";
 import { Payment } from "./models/payment";
 import { ProductHomeBanner } from "./models/product-home-banner";
@@ -36,6 +37,7 @@ export const lists = {
   Cart,
   CartItem,
   Order,
+  OrderReceiver,
   OrderItem,
   Payment,
   ProductHomeBanner,

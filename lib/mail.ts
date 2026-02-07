@@ -16,7 +16,7 @@ type SellerNewOrderNotification = {
     subtotal: number;
   }[];
   totalamount: number;
-  deliveryaddress: string;
+  deliveryaddress?: string;
   deliveryoption: string;
   paymentmethod: string;
   orderurl: string;

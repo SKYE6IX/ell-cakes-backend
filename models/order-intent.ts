@@ -26,8 +26,9 @@ export const OrderIntent = list({
     paymentId: text(),
     cart: relationship({ ref: "Cart" }),
     user: relationship({ ref: "User" }),
-    deliveryOption: text(),
+    orderReceiver: relationship({ ref: "OrderReceiver" }),
     deliveryAddress: relationship({ ref: "DelivaryAddress" }),
+    deliveryOption: text(),
     note: text(),
     paymentStatus: select({
       options: [

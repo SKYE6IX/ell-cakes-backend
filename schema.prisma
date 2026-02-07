@@ -29,6 +29,7 @@ model User {
   delivaryAddress                 DelivaryAddress? @relation("DelivaryAddress_user")
   cart                            Cart?            @relation("Cart_user")
   orders                          Order[]          @relation("Order_user")
+  orderBeneficiaries              OrderReceiver[]  @relation("OrderReceiver_benefactor")
   payments                        Payment[]        @relation("Payment_user")
   lastLogin                       DateTime?
   createdAt                       DateTime?        @default(now())
@@ -239,6 +240,8 @@ model Order {
   orderIntentId     String?          @unique @map("orderIntent") @postgresql.Uuid
   user              User?            @relation("Order_user", fields: [userId], references: [id])
   userId            String?          @map("user") @postgresql.Uuid
+  orderReceiver     OrderReceiver?   @relation("Order_orderReceiver", fields: [orderReceiverId], references: [id])
+  orderReceiverId   String?          @unique @map("orderReceiver") @postgresql.Uuid
   orderItems        OrderItem[]      @relation("OrderItem_order")
   orderNumber       String           @unique @default("")
   shippingCost      Int?
@@ -256,6 +259,20 @@ model Order {
 
   @@index([userId])
   @@index([deliveryAddressId])
+}
+
+model OrderReceiver {
+  id                             String        @id @default(uuid()) @postgresql.Uuid
+  benefactor                     User?         @relation("OrderReceiver_benefactor", fields: [benefactorId], references: [id])
+  benefactorId                   String?       @map("benefactor") @postgresql.Uuid
+  order                          Order?        @relation("Order_orderReceiver")
+  name                           String        @default("")
+  phoneNumber                    String        @default("")
+  createdAt                      DateTime?     @default(now())
+  updatedAt                      DateTime?
+  from_OrderIntent_orderReceiver OrderIntent[] @relation("OrderIntent_orderReceiver")
+
+  @@index([benefactorId])
 }
 
 model OrderItem {
@@ -339,9 +356,11 @@ model OrderIntent {
   cartId            String?          @map("cart") @postgresql.Uuid
   user              User?            @relation("OrderIntent_user", fields: [userId], references: [id])
   userId            String?          @map("user") @postgresql.Uuid
-  deliveryOption    String           @default("")
+  orderReceiver     OrderReceiver?   @relation("OrderIntent_orderReceiver", fields: [orderReceiverId], references: [id])
+  orderReceiverId   String?          @map("orderReceiver") @postgresql.Uuid
   deliveryAddress   DelivaryAddress? @relation("OrderIntent_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
+  deliveryOption    String           @default("")
   note              String           @default("")
   paymentStatus     String?          @default("PENDING")
   shippingCost      Int?
@@ -352,6 +371,7 @@ model OrderIntent {
 
   @@index([cartId])
   @@index([userId])
+  @@index([orderReceiverId])
   @@index([deliveryAddressId])
 }
 

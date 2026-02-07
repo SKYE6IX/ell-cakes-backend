@@ -5,12 +5,18 @@ import { Context } from ".keystone/types";
 import yooMoneyPaymentGateway from "../lib/paymentGateway";
 import type { Session } from "../access";
 
+interface OrderReceiver {
+  name: string;
+  phoneNumber: string;
+}
+
 interface CheckOutArgs {
-  deliveryAddressId: string;
+  deliveryAddressId?: string;
+  customerNote?: string;
+  orderReceiver?: OrderReceiver;
   shippingCost: number;
   paymentMethod: "bank_card" | "sberbank" | "tinkoff_bank" | "sbp";
   deliveryOption: string;
-  customerNote?: string;
 }
 
 export enum PaymentStatus {
@@ -27,11 +33,10 @@ export const checkOut = async (
     customerNote,
     deliveryAddressId,
     deliveryOption,
+    orderReceiver,
   }: CheckOutArgs,
   context: Context
 ) => {
-  const MIN_DELIVERY_COST = 990;
-
   const loggedInUser = context.session as Session;
 
   // Reject with error if USER isn't in session
@@ -41,12 +46,7 @@ export const checkOut = async (
     });
   }
 
-  if (
-    !shippingCost ||
-    shippingCost < MIN_DELIVERY_COST ||
-    !paymentMethod ||
-    !deliveryAddressId
-  ) {
+  if (!paymentMethod || !deliveryOption) {
     throw new Error("Incomplete or wrong args passed!", {
       cause: "Bad Argument!",
     });
@@ -62,7 +62,7 @@ export const checkOut = async (
     });
   }
 
-  // Generate unique ID for each intent
+  // Generate unique ID for order intent
   const alphabet = "0123456789abcdefghjklmnpqrstuvwxyz";
   const nanoid = customAlphabet(alphabet, 16);
   const intentId = nanoid();
@@ -119,8 +119,18 @@ export const checkOut = async (
       yooMoneyId: processPayment.id,
       cart: { connect: { id: userCart.id } },
       user: { connect: { id: loggedInUser.itemId } },
+      ...(orderReceiver && {
+        orderReceiver: {
+          create: {
+            ...orderReceiver,
+            benefactor: { connect: { id: loggedInUser.itemId } },
+          },
+        },
+      }),
       deliveryOption: deliveryOption,
-      deliveryAddress: { connect: { id: deliveryAddressId } },
+      ...(deliveryAddressId && {
+        deliveryAddress: { connect: { id: deliveryAddressId } },
+      }),
       note: customerNote ?? undefined,
       totalAmount,
       shippingCost,

@@ -24,7 +24,7 @@ type SellerNewOrderNotification = {
     subtotal: number;
   }[];
   totalamount: number;
-  deliveryaddress: string;
+  deliveryaddress?: string;
   deliveryoption: string;
   paymentmethod: string;
   orderurl: string;
@@ -33,6 +33,7 @@ type SellerNewOrderNotification = {
 export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
   const yooMoneyWebHookData = body;
   const sudoContext = context.sudo();
+  const idempotence_key = uuidv4();
 
   if (yooMoneyWebHookData.object.status !== "succeeded") {
     return;
@@ -121,53 +122,53 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
             subtotal: oi.subTotal as unknown as number,
           })),
           totalamount: newOrder.totalAmount as unknown as number,
-          deliveryaddress: orderIntentUpdate.deliveryAddress!.address,
+          ...(orderIntentUpdate.deliveryAddress?.address && {
+            deliveryaddress: orderIntentUpdate.deliveryAddress!.address,
+          }),
           deliveryoption: newOrder.deliveryOption,
           paymentmethod: updatedPayment.method,
           orderurl: orderUrl,
         };
+
         await sendNewOrderNotificationToSeller({ data: newOrderForSellerData });
       }
 
       // Send a receipt to USER about their payment
-      // const idempotence_key = uuidv4();
-      // const receiptPayload: ICreateReceipt = {
-      //   customer: {
-      //     full_name: order.user?.name,
-      //     email: order.user?.email,
-      //     phone: order.user?.phoneNumber,
-      //   },
-      //   payment_id: payment.id,
-      //   type: "payment",
-      //   send: true,
-      //   items: order.orderItems.map((orderItem) => {
-      //     return {
-      //       description: orderItem.product?.name || "",
-      //       quantity: String(orderItem.quantity),
-      //       amount: {
-      //         value: String(orderItem.subTotal),
-      //         currency: "RUB",
-      //       },
-      //       vat_code: 2,
-      //       payment_mode: "full_payment",
-      //       payment_subject: "commodity",
-      //     };
-      //   }),
-      //   settlements: [
-      //     {
-      //       type: "cashless",
-      //       amount: { value: String(order.totalAmount), currency: "RUB" },
-      //     },
-      //   ],
-      // };
+      const receiptPayload: ICreateReceipt = {
+        customer: {
+          full_name: user?.name,
+          email: user?.email,
+          phone: user?.phoneNumber,
+        },
+        payment_id: payment.id,
+        type: "payment",
+        send: true,
+        items: orderItems.map((orderItem) => {
+          return {
+            description: orderItem.product?.name || "",
+            quantity: String(orderItem.quantity),
+            amount: {
+              value: String(orderItem.subTotal),
+              currency: "RUB",
+            },
+            vat_code: 2,
+            payment_mode: "full_payment",
+            payment_subject: "commodity",
+          };
+        }),
+        settlements: [
+          {
+            type: "cashless",
+            amount: { value: String(newOrder?.totalAmount), currency: "RUB" },
+          },
+        ],
+      };
+
       // const receipt = await yooMoney.createReceipt(
       //   receiptPayload,
       //   idempotence_key
       // );
-
-      // console.log(receipt);
-
-      // 1. Send receipt email to user after a successful payment(Through Yookassa set up)\
+      // console.log("Here is the receipt sent to user -> ", receipt);
     }
   } catch (error) {
     console.error(

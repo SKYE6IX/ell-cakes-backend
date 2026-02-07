@@ -1,10 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  text,
-  relationship,
-  timestamp,
-  decimal,
-} from "@keystone-6/core/fields";
+import { text, relationship, timestamp } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, rules } from "../access";
 

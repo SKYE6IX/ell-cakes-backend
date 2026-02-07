@@ -62,7 +62,12 @@ export const createOrder = async ({
       data: {
         payment: { connect: { id: orderIntent.paymentId } },
         user: { connect: { id: orderIntent.userId } },
-        deliveryAddress: { connect: { id: orderIntent.deliveryAddressId } },
+        ...(orderIntent.orderReceiverId && {
+          orderReceiver: { connect: { id: orderIntent.orderReceiverId } },
+        }),
+        ...(orderIntent.deliveryAddressId && {
+          deliveryAddress: { connect: { id: orderIntent.deliveryAddressId } },
+        }),
         orderItems: { create: orderItems },
         orderNumber,
         shippingCost: orderIntent.shippingCost,

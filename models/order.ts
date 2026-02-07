@@ -9,15 +9,15 @@ import {
 } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
+import type { Lists } from ".keystone/types";
+
+type Order = Lists.Order.TypeInfo["item"];
 
 // TODO:
 // 1. Set up a field where we render a formated string to display all about order details
 // that isn't included on this fields.✅
 
-// 2. Intregration with CRM, we need to come up with a soluton on how we cant integrate with CRM
-// without bloating about 400 plus more variants.
-
-// 3. Notification setup for new order for store owner. Perhaps an email, or maybe connection with
+// 2. Notification setup for new order for store owner. Perhaps an email, or maybe connection with
 // CRM will enough? ✅
 
 const potentialCols = [
@@ -69,6 +69,29 @@ export const Order = list({
         cardFields: ["name", "email", "phoneNumber"],
       },
       label: "Клиент",
+    }),
+
+    orderReceiver: relationship({
+      ref: "OrderReceiver.order",
+      many: false,
+      ui: {
+        createView: {
+          fieldMode: "hidden",
+        },
+        itemView: {
+          fieldMode: ({ session, context, item }) => {
+            const order = item as Order;
+            if (order.orderReceiverId) {
+              return "read";
+            }
+            return "hidden";
+          },
+        },
+
+        displayMode: "cards",
+        cardFields: ["name", "phoneNumber"],
+      },
+      label: "Получатель заказа",
     }),
 
     orderDetails: virtual({
@@ -245,7 +268,13 @@ export const Order = list({
     shippingCost: integer({
       ui: {
         itemView: {
-          fieldMode: "read",
+          fieldMode: ({ session, context, item }) => {
+            const order = item as Order;
+            if (order.shippingCost === 0) {
+              return "hidden";
+            }
+            return "read";
+          },
         },
       },
       label: "Стоимость доставки",

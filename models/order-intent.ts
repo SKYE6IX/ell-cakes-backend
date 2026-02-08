@@ -29,6 +29,15 @@ export const OrderIntent = list({
     orderReceiver: relationship({ ref: "OrderReceiver" }),
     deliveryAddress: relationship({ ref: "DelivaryAddress" }),
     deliveryOption: text(),
+    deliveryDate: timestamp({
+      ui: {
+        itemView: {
+          fieldMode: "read",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+      label: "Дата доставки",
+    }),
     note: text(),
     paymentStatus: select({
       options: [

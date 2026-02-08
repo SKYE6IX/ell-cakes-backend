@@ -24,6 +24,8 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
     schemas: [baseSchema],
     typeDefs: `
+    scalar DateTime
+
     type VerifyUserResponse {
       status: Boolean
       message: String
@@ -74,7 +76,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         decreaseCartItem(cartItemId: String!): Cart
         removeFromCart(cartItemId: String!): Cart
         connectCartToUser(userId: String!): Cart
-        checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, customerNote: String, orderReceiver: OrderReceiverInput): Payment!
+        checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, deliveryDate: DateTime!,  customerNote: String, orderReceiver: OrderReceiverInput): Payment!
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
     }

@@ -1493,6 +1493,8 @@ type Order {
   status: String
   payment: Payment
   deliveryOption: String
+  virtualDeliveryDate: String
+  deliveryDate: DateTime
   deliveryAddress: DelivaryAddress
   note: String
   createdAt: DateTime
@@ -1523,6 +1525,7 @@ input OrderWhereInput {
   status: StringNullableFilter
   payment: PaymentWhereInput
   deliveryOption: StringFilter
+  deliveryDate: DateTimeNullableFilter
   deliveryAddress: DelivaryAddressWhereInput
   note: StringFilter
   createdAt: DateTimeNullableFilter
@@ -1543,6 +1546,7 @@ input OrderOrderByInput {
   totalAmount: OrderDirection
   status: OrderDirection
   deliveryOption: OrderDirection
+  deliveryDate: OrderDirection
   note: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
@@ -1560,6 +1564,7 @@ input OrderUpdateInput {
   status: String
   payment: PaymentRelateToOneForUpdateInput
   deliveryOption: String
+  deliveryDate: DateTime
   deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
   note: String
   createdAt: DateTime
@@ -1608,6 +1613,7 @@ input OrderCreateInput {
   status: String
   payment: PaymentRelateToOneForCreateInput
   deliveryOption: String
+  deliveryDate: DateTime
   deliveryAddress: DelivaryAddressRelateToOneForCreateInput
   note: String
   createdAt: DateTime
@@ -2018,6 +2024,7 @@ type OrderIntent {
   orderReceiver: OrderReceiver
   deliveryAddress: DelivaryAddress
   deliveryOption: String
+  deliveryDate: DateTime
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -2047,6 +2054,7 @@ input OrderIntentWhereInput {
   orderReceiver: OrderReceiverWhereInput
   deliveryAddress: DelivaryAddressWhereInput
   deliveryOption: StringFilter
+  deliveryDate: DateTimeNullableFilter
   note: StringFilter
   paymentStatus: StringNullableFilter
   shippingCost: IntNullableFilter
@@ -2062,6 +2070,7 @@ input OrderIntentOrderByInput {
   yooMoneyId: OrderDirection
   paymentId: OrderDirection
   deliveryOption: OrderDirection
+  deliveryDate: OrderDirection
   note: OrderDirection
   paymentStatus: OrderDirection
   shippingCost: OrderDirection
@@ -2079,6 +2088,7 @@ input OrderIntentUpdateInput {
   orderReceiver: OrderReceiverRelateToOneForUpdateInput
   deliveryAddress: DelivaryAddressRelateToOneForUpdateInput
   deliveryOption: String
+  deliveryDate: DateTime
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -2102,6 +2112,7 @@ input OrderIntentCreateInput {
   orderReceiver: OrderReceiverRelateToOneForCreateInput
   deliveryAddress: DelivaryAddressRelateToOneForCreateInput
   deliveryOption: String
+  deliveryDate: DateTime
   note: String
   paymentStatus: String
   shippingCost: Int
@@ -2376,7 +2387,7 @@ type Mutation {
   decreaseCartItem(cartItemId: String!): Cart
   removeFromCart(cartItemId: String!): Cart
   connectCartToUser(userId: String!): Cart
-  checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, customerNote: String, orderReceiver: OrderReceiverInput): Payment!
+  checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, deliveryDate: DateTime!, customerNote: String, orderReceiver: OrderReceiverInput): Payment!
   registerUser(registerData: RegisterUserInput!): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
 }

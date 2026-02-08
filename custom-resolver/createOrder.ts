@@ -68,6 +68,7 @@ export const createOrder = async ({
         ...(orderIntent.deliveryAddressId && {
           deliveryAddress: { connect: { id: orderIntent.deliveryAddressId } },
         }),
+        deliveryDate: orderIntent.deliveryDate,
         orderItems: { create: orderItems },
         orderNumber,
         shippingCost: orderIntent.shippingCost,

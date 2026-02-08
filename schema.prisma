@@ -252,6 +252,7 @@ model Order {
   payment           Payment?         @relation("Order_payment", fields: [paymentId], references: [id])
   paymentId         String?          @unique @map("payment") @postgresql.Uuid
   deliveryOption    String           @default("")
+  deliveryDate      DateTime?
   deliveryAddress   DelivaryAddress? @relation("Order_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
   note              String           @default("")
@@ -362,6 +363,7 @@ model OrderIntent {
   deliveryAddress   DelivaryAddress? @relation("OrderIntent_deliveryAddress", fields: [deliveryAddressId], references: [id])
   deliveryAddressId String?          @map("deliveryAddress") @postgresql.Uuid
   deliveryOption    String           @default("")
+  deliveryDate      DateTime?
   note              String           @default("")
   paymentStatus     String?          @default("PENDING")
   shippingCost      Int?

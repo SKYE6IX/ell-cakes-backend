@@ -14,6 +14,7 @@ interface CheckOutArgs {
   deliveryAddressId?: string;
   customerNote?: string;
   orderReceiver?: OrderReceiver;
+  deliveryDate: string;
   shippingCost: number;
   paymentMethod: "bank_card" | "sberbank" | "tinkoff_bank" | "sbp";
   deliveryOption: string;
@@ -32,6 +33,7 @@ export const checkOut = async (
     paymentMethod,
     customerNote,
     deliveryAddressId,
+    deliveryDate,
     deliveryOption,
     orderReceiver,
   }: CheckOutArgs,
@@ -128,6 +130,7 @@ export const checkOut = async (
         },
       }),
       deliveryOption: deliveryOption,
+      deliveryDate: deliveryDate,
       ...(deliveryAddressId && {
         deliveryAddress: { connect: { id: deliveryAddressId } },
       }),

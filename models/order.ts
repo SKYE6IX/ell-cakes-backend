@@ -336,6 +336,29 @@ export const Order = list({
       label: "Время доставки",
     }),
 
+    virtualDeliveryDate: virtual({
+      field: graphql.field({
+        type: graphql.String,
+        async resolve(item) {
+          // @ts-expect-error ITEM type isn't available here
+          const deliveryDate = item.deliveryDate;
+          const event = new Date(deliveryDate);
+          const toString = event.toLocaleDateString("ru-RU");
+          return toString;
+        },
+      }),
+      label: "Дата доставки",
+    }),
+
+    deliveryDate: timestamp({
+      ui: {
+        itemView: {
+          fieldMode: "hidden",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+    }),
+
     deliveryAddress: relationship({
       ref: "DelivaryAddress.orders",
       ui: {

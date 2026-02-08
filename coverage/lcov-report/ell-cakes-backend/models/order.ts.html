@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.32% </span>
+                <span class="strong">10.52% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/53</span>
+                <span class='fraction'>6/57</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>0/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.76% </span>
+                <span class="strong">10.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/51</span>
+                <span class='fraction'>6/55</span>
             </div>
         
             
@@ -458,7 +458,27 @@
 <a name='L393'></a><a href='#L393'>393</a>
 <a name='L394'></a><a href='#L394'>394</a>
 <a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a>
+<a name='L400'></a><a href='#L400'>400</a>
+<a name='L401'></a><a href='#L401'>401</a>
+<a name='L402'></a><a href='#L402'>402</a>
+<a name='L403'></a><a href='#L403'>403</a>
+<a name='L404'></a><a href='#L404'>404</a>
+<a name='L405'></a><a href='#L405'>405</a>
+<a name='L406'></a><a href='#L406'>406</a>
+<a name='L407'></a><a href='#L407'>407</a>
+<a name='L408'></a><a href='#L408'>408</a>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -480,9 +500,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -785,6 +802,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -872,10 +912,7 @@ type Order = Lists.Order.TypeInfo["item"];
 // 1. Set up a field where we render a formated string to display all about order details
 // that isn't included on this fields.✅
 &nbsp;
-// 2. Intregration with CRM, we need to come up with a soluton on how we cant integrate with CRM
-// without bloating about 400 plus more variants.
-&nbsp;
-// 3. Notification setup for new order for store owner. Perhaps an email, or maybe connection with
+// 2. Notification setup for new order for store owner. Perhaps an email, or maybe connection with
 // CRM will enough? ✅
 &nbsp;
 const potentialCols = [
@@ -1194,6 +1231,29 @@ export const Order = list({
       label: "Время доставки",
     }),
 &nbsp;
+    virtualDeliveryDate: virtual({
+      field: graphql.field({
+        type: graphql.String,
+<span class="fstat-no" title="function not covered" >        async </span>resolve(item) {
+          // @ts-expect-error ITEM type isn't available here
+          const deliveryDate = <span class="cstat-no" title="statement not covered" >item.deliveryDate;</span>
+          const event = <span class="cstat-no" title="statement not covered" >new Date(deliveryDate);</span>
+          const toString = <span class="cstat-no" title="statement not covered" >event.toLocaleDateString("ru-RU");</span>
+<span class="cstat-no" title="statement not covered" >          return toString;</span>
+        },
+      }),
+      label: "Дата доставки",
+    }),
+&nbsp;
+    deliveryDate: timestamp({
+      ui: {
+        itemView: {
+          fieldMode: "hidden",
+        },
+        createView: { fieldMode: "hidden" },
+      },
+    }),
+&nbsp;
     deliveryAddress: relationship({
       ref: "DelivaryAddress.orders",
       ui: {
@@ -1255,7 +1315,7 @@ export const Order = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-07T13:01:57.927Z
+                at 2026-02-08T17:16:56.581Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

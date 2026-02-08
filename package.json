@@ -8,6 +8,7 @@
     "start": "keystone start --with-migrations",
     "build": "keystone build",
     "seed": "tsx ./script",
+    "update-data": "tsx ./script/update.ts",
     "test": "jest"
   },
   "dependencies": {

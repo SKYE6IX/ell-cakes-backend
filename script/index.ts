@@ -317,6 +317,7 @@ async function main() {
   console.log(`✅ Seed Data Inserted`);
   process.exit();
 }
+
 main();
 
 async function getImageData(imagePath: string, fileName: string) {

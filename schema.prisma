@@ -61,6 +61,7 @@ model Product {
   variantType                     String
   fillings                        ProductFilling[]      @relation("Product_fillings")
   mixBoxProduct                   MixBoxProduct?        @relation("MixBoxProduct_product")
+  preparationDays                 Int?
   isAvailable                     Boolean               @default(true)
   badge                           String?
   images                          ProductImage[]        @relation("ProductImage_product")

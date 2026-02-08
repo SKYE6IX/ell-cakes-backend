@@ -392,6 +392,7 @@ type Product {
   fillings(where: ProductFillingWhereInput! = {}, orderBy: [ProductFillingOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductFillingWhereUniqueInput): [ProductFilling!]
   fillingsCount(where: ProductFillingWhereInput! = {}): Int
   mixBoxProduct: MixBoxProduct
+  preparationDays: Int
   isAvailable: Boolean
   badge: String
   images(where: ProductImageWhereInput! = {}, orderBy: [ProductImageOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductImageWhereUniqueInput): [ProductImage!]
@@ -424,6 +425,7 @@ input ProductWhereInput {
   variantType: StringFilter
   fillings: ProductFillingManyRelationFilter
   mixBoxProduct: MixBoxProductWhereInput
+  preparationDays: IntNullableFilter
   isAvailable: BooleanFilter
   badge: StringNullableFilter
   images: ProductImageManyRelationFilter
@@ -446,6 +448,17 @@ input ProductFillingManyRelationFilter {
   none: ProductFillingWhereInput
 }
 
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
 input ProductImageManyRelationFilter {
   every: ProductImageWhereInput
   some: ProductImageWhereInput
@@ -465,6 +478,7 @@ input ProductOrderByInput {
   baseDescription: OrderDirection
   type: OrderDirection
   variantType: OrderDirection
+  preparationDays: OrderDirection
   isAvailable: OrderDirection
   badge: OrderDirection
   createdAt: OrderDirection
@@ -480,6 +494,7 @@ input ProductUpdateInput {
   variantType: String
   fillings: ProductFillingRelateToManyForUpdateInput
   mixBoxProduct: MixBoxProductRelateToOneForUpdateInput
+  preparationDays: Int
   isAvailable: Boolean
   badge: String
   images: ProductImageRelateToManyForUpdateInput
@@ -550,6 +565,7 @@ input ProductCreateInput {
   variantType: String
   fillings: ProductFillingRelateToManyForCreateInput
   mixBoxProduct: MixBoxProductRelateToOneForCreateInput
+  preparationDays: Int
   isAvailable: Boolean
   badge: String
   images: ProductImageRelateToManyForCreateInput
@@ -863,17 +879,6 @@ input ProductVariantWhereInput {
   serving: IntNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
-}
-
-input IntNullableFilter {
-  equals: Int
-  in: [Int!]
-  notIn: [Int!]
-  lt: Int
-  lte: Int
-  gt: Int
-  gte: Int
-  not: IntNullableFilter
 }
 
 input IntFilter {

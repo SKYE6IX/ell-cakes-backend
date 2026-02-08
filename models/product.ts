@@ -5,6 +5,7 @@ import {
   checkbox,
   select,
   timestamp,
+  integer,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
@@ -134,6 +135,8 @@ export const Product = list({
       },
     }),
 
+    preparationDays: integer({ label: "Подготовительные дни" }),
+
     isAvailable: checkbox({ defaultValue: true, label: "Доступен" }),
 
     badge: select({
@@ -234,3 +237,6 @@ export const Product = list({
     },
   },
 });
+
+// productionDays
+//

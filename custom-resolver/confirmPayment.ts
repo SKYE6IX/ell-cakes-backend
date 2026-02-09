@@ -7,28 +7,13 @@ import { PaymentStatus } from "./checkOut";
 import {
   sendOrderNotification,
   sendNewOrderNotificationToSeller,
+  SellerNewOrderNotification,
 } from "../lib/mail";
 
 interface ConfirmPaymentArgs {
   body: any;
   context: Context;
 }
-
-type SellerNewOrderNotification = {
-  ordernumber: string;
-  orderitems: {
-    productname: string;
-    productfilling: string;
-    quantity: number;
-    unitprice: number;
-    subtotal: number;
-  }[];
-  totalamount: number;
-  deliveryaddress?: string;
-  deliveryoption: string;
-  paymentmethod: string;
-  orderurl: string;
-};
 
 export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
   const yooMoneyWebHookData = body;
@@ -112,6 +97,11 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
 
       if (newOrder) {
         const orderUrl = `https://api.ellcakes.ru/orders/${newOrder.id}`;
+        const chooseDateForDelivery = newOrder.deliveryDate?.toString() ?? "";
+        const deliveryDate = new Date(chooseDateForDelivery).toLocaleDateString(
+          "ru-RU"
+        );
+
         const newOrderForSellerData: SellerNewOrderNotification = {
           ordernumber: newOrder.orderNumber,
           orderitems: orderItems.map((oi) => ({
@@ -126,6 +116,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
             deliveryaddress: orderIntentUpdate.deliveryAddress!.address,
           }),
           deliveryoption: newOrder.deliveryOption,
+          deliverydate: deliveryDate,
           paymentmethod: updatedPayment.method,
           orderurl: orderUrl,
         };

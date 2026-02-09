@@ -6,7 +6,7 @@ import path from "path";
 import { getSecret } from "./getSecret";
 dotenv.config();
 
-type SellerNewOrderNotification = {
+export type SellerNewOrderNotification = {
   ordernumber: string;
   orderitems: {
     productname: string;
@@ -18,6 +18,7 @@ type SellerNewOrderNotification = {
   totalamount: number;
   deliveryaddress?: string;
   deliveryoption: string;
+  deliverydate: string;
   paymentmethod: string;
   orderurl: string;
 };

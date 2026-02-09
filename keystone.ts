@@ -14,8 +14,13 @@ import { initOtel } from "./otel";
 import { runWorkerSchedule, initSchedulers } from "./lib/workerSchedule";
 import { permissions } from "./access";
 
-const { YC_S3_BUCKET, YC_S3_REGION, YC_S3_PRIVATE_ENDPOINT, FRONTEND_URL } =
-  process.env;
+const {
+  YC_S3_BUCKET,
+  YC_S3_REGION,
+  YC_S3_PRIVATE_ENDPOINT,
+  FRONTEND_URL_PRIMARY,
+  FRONTEND_URL_SECONDARY,
+} = process.env;
 
 const databaseUrl = getSecret("DATABASE_URL");
 const databaseShadowUrl = getSecret("DATABASE_SHADOW_URL");
@@ -114,7 +119,7 @@ export default withAuth(
     },
     server: {
       cors: {
-        origin: [FRONTEND_URL],
+        origin: [FRONTEND_URL_PRIMARY, FRONTEND_URL_SECONDARY],
         credentials: true,
       },
       port: 8080,

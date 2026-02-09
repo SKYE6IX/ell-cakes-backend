@@ -6,7 +6,8 @@ interface ImportMetaEnv {
   readonly YC_S3_BUCKET: string;
   readonly YC_S3_REGION: string;
   readonly YC_S3_PRIVATE_ENDPOINT: string;
-  readonly FRONTEND_URL: string;
+  readonly FRONTEND_URL_PRIMARY: string;
+  readonly FRONTEND_URL_SECONDARY: string;
   readonly YOO_MONEY_SHOP_ID: string;
   readonly YOO_MONEY_SECRET_ID: string;
   readonly SMS_SENDER: string;

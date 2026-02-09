@@ -2390,6 +2390,7 @@ type Mutation {
   checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, deliveryDate: DateTime!, customerNote: String, orderReceiver: OrderReceiverInput): Payment!
   registerUser(registerData: RegisterUserInput!): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
+  requestCall(phoneNumber: String!): String!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure

@@ -37,6 +37,11 @@ const orderNotificationHtml = fs.readFileSync(
   "utf-8"
 );
 
+const requestCallHtml = fs.readFileSync(
+  `${templatePath}/request-call.html`,
+  "utf-8"
+);
+
 const sellerNotificationSource = fs.readFileSync(
   `${templatePath}/seller.html`,
   "utf-8"
@@ -145,6 +150,27 @@ export async function sendNewOrderNotificationToSeller({
         address: process.env.YANDEX_USER_MAIL,
       },
       replyTo: process.env.YANDEX_USER_MAIL,
+      to: process.env.SELLER_EMAIL,
+      html,
+    });
+  } catch (error) {
+    console.error("An error occur while trying to send email", error);
+  }
+}
+
+export async function sendRequestCall({
+  phoneNumber,
+}: {
+  phoneNumber: string;
+}) {
+  try {
+    const html = requestCallHtml.replace("{{ PHONE_NUMBER }}", phoneNumber);
+    await transporter.sendMail({
+      subject: "Новый запрос на звонок",
+      from: {
+        name: "Ellcakes",
+        address: process.env.YANDEX_USER_MAIL,
+      },
       to: process.env.SELLER_EMAIL,
       html,
     });

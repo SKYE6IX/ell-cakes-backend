@@ -19,6 +19,7 @@ import { sendPasswordResetToken } from "./sendPasswordResetToken";
 import { validatePasswordResetToken } from "./validatePasswordResetToken";
 import { updatePassword } from "./updatePassword";
 import { querySimilarProducts } from "./querySimilarProducts";
+import { requestCall } from "./requestCall";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -62,7 +63,6 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       queryAuthorizedUser: User
       validatePasswordResetToken(token: String!, email: String!): Boolean!
       querySimilarProducts(productSlug: String!): [Product!]!
-
     }
 
     type Mutation {
@@ -79,6 +79,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, deliveryDate: DateTime!,  customerNote: String, orderReceiver: OrderReceiverInput): Payment!
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
+        requestCall(phoneNumber: String!): String!
     }
     `,
 
@@ -97,6 +98,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         connectCartToUser,
         sendPasswordResetToken,
         updatePassword,
+        requestCall,
       },
 
       Query: {

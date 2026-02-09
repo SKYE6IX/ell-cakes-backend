@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.42% </span>
+                <span class="strong">17.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/38</span>
+                <span class='fraction'>7/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.21% </span>
+                <span class="strong">15.38% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/37</span>
+                <span class='fraction'>6/39</span>
             </div>
         
             
@@ -234,37 +234,13 @@
 <a name='L169'></a><a href='#L169'>169</a>
 <a name='L170'></a><a href='#L170'>170</a>
 <a name='L171'></a><a href='#L171'>171</a>
-<a name='L172'></a><a href='#L172'>172</a>
-<a name='L173'></a><a href='#L173'>173</a>
-<a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L172'></a><a href='#L172'>172</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -358,8 +334,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -432,28 +414,13 @@ import { PaymentStatus } from "./checkOut";
 import {
   sendOrderNotification,
   sendNewOrderNotificationToSeller,
+  SellerNewOrderNotification,
 } from "../lib/mail";
 &nbsp;
 interface ConfirmPaymentArgs {
   body: any;
   context: Context;
 }
-&nbsp;
-type SellerNewOrderNotification = {
-  ordernumber: string;
-  orderitems: {
-    productname: string;
-    productfilling: string;
-    quantity: number;
-    unitprice: number;
-    subtotal: number;
-  }[];
-  totalamount: number;
-  deliveryaddress?: string;
-  deliveryoption: string;
-  paymentmethod: string;
-  orderurl: string;
-};
 &nbsp;
 export const confirmPayment = <span class="fstat-no" title="function not covered" >async </span>({ body, context }: ConfirmPaymentArgs) =&gt; {
   const yooMoneyWebHookData = <span class="cstat-no" title="statement not covered" >body;</span>
@@ -537,6 +504,11 @@ export const confirmPayment = <span class="fstat-no" title="function not covered
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (newOrder) {</span>
         const orderUrl = <span class="cstat-no" title="statement not covered" >`https://api.ellcakes.ru/orders/${newOrder.id}`;</span>
+        const chooseDateForDelivery = <span class="cstat-no" title="statement not covered" >newOrder.deliveryDate?.toString() ?? "";</span>
+        const deliveryDate = <span class="cstat-no" title="statement not covered" >new Date(chooseDateForDelivery).toLocaleDateString(</span>
+          "ru-RU"
+        );
+&nbsp;
         const newOrderForSellerData: SellerNewOrderNotification = <span class="cstat-no" title="statement not covered" >{</span>
           ordernumber: newOrder.orderNumber,
           orderitems: orderItems.map(<span class="fstat-no" title="function not covered" >(o</span>i) =&gt; (<span class="cstat-no" title="statement not covered" >{</span>
@@ -551,6 +523,7 @@ export const confirmPayment = <span class="fstat-no" title="function not covered
             deliveryaddress: orderIntentUpdate.deliveryAddress!.address,
           }),
           deliveryoption: newOrder.deliveryOption,
+          deliverydate: deliveryDate,
           paymentmethod: updatedPayment.method,
           orderurl: orderUrl,
         };
@@ -610,7 +583,7 @@ export const confirmPayment = <span class="fstat-no" title="function not covered
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-08T17:16:56.581Z
+                at 2026-02-09T12:47:56.143Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

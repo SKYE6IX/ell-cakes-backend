@@ -86,7 +86,7 @@ export const checkOut = async (
   const totalAmount = Number(userCart.subTotal) + shippingCost;
 
   // Create confirmation URL
-  const paymentConfirmationUrl = `${process.env.FRONTEND_URL}/order/order-status?iid=${intentId}`;
+  const paymentConfirmationUrl = `${process.env.FRONTEND_URL_PRIMARY}/order/order-status?iid=${intentId}`;
 
   const createPayLoad: ICreatePayment = {
     amount: {

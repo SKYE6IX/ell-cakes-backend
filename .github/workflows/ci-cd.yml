@@ -55,9 +55,9 @@ jobs:
             --username "${{ vars.DOCKER_USERNAME }}" \
             --password-stdin
 
-          docker compose pull server
+          docker compose -f ellcakes-compose.yaml pull server
 
-          docker compose up server  -d
+          docker compose -f ellcakes-compose.yaml up server  -d
 
           docker image prune -f
           EOF

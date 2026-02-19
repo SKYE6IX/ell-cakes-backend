@@ -172,7 +172,7 @@ export async function sendRequestCall({
         name: "Ellcakes",
         address: process.env.YANDEX_USER_MAIL,
       },
-      to: process.env.SELLER_EMAIL,
+      to: process.env.SUPPORT_EMAIL,
       html,
     });
   } catch (error) {

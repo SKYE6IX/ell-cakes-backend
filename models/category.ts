@@ -4,11 +4,14 @@ import {
   relationship,
   timestamp,
   checkbox,
+  integer,
 } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
 import { permissions } from "../access";
 
+// TODO:
+// set up a priority field so as to able to sort them with it.
 export const Category = list({
   access: {
     operation: {
@@ -46,6 +49,8 @@ export const Category = list({
         createView: { fieldMode: "hidden" },
       },
     }),
+
+    priority: integer({ defaultValue: undefined, label: "Приоритет" }),
 
     createdAt: timestamp({
       defaultValue: { kind: "now" },

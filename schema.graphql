@@ -949,6 +949,7 @@ type Category {
   isAvailable: Boolean
   products(where: ProductWhereInput! = {}, orderBy: [ProductOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductWhereUniqueInput): [Product!]
   productsCount(where: ProductWhereInput! = {}): Int
+  priority: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -968,6 +969,7 @@ input CategoryWhereInput {
   parent: CategoryWhereInput
   isAvailable: BooleanFilter
   products: ProductManyRelationFilter
+  priority: IntNullableFilter
   createdAt: DateTimeNullableFilter
   updatedAt: DateTimeNullableFilter
 }
@@ -977,6 +979,7 @@ input CategoryOrderByInput {
   name: OrderDirection
   slug: OrderDirection
   isAvailable: OrderDirection
+  priority: OrderDirection
   createdAt: OrderDirection
   updatedAt: OrderDirection
 }
@@ -987,6 +990,7 @@ input CategoryUpdateInput {
   parent: CategoryRelateToOneForUpdateInput
   isAvailable: Boolean
   products: ProductRelateToManyForUpdateInput
+  priority: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -1008,6 +1012,7 @@ input CategoryCreateInput {
   parent: CategoryRelateToOneForCreateInput
   isAvailable: Boolean
   products: ProductRelateToManyForCreateInput
+  priority: Int
   createdAt: DateTime
   updatedAt: DateTime
 }

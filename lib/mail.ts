@@ -143,6 +143,7 @@ export async function sendNewOrderNotificationToSeller({
   try {
     const sellerTemplate = Handlebars.compile(sellerNotificationSource);
     const html = sellerTemplate(data);
+
     await transporter.sendMail({
       subject: "Новый заказ получен",
       from: {

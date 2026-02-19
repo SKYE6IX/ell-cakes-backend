@@ -96,8 +96,10 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
       });
 
       if (newOrder) {
-        const orderUrl = `https://api.ellcakes.ru/orders/${newOrder.id}`;
+        const orderUrl = `${process.env.ADMIN_PANEL_URL}/orders/${newOrder.id}`;
+
         const chooseDateForDelivery = newOrder.deliveryDate?.toString() ?? "";
+
         const deliveryDate = new Date(chooseDateForDelivery).toLocaleDateString(
           "ru-RU"
         );
@@ -155,17 +157,16 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         ],
       };
 
-      // const receipt = await yooMoney.createReceipt(
-      //   receiptPayload,
-      //   idempotence_key
-      // );
-      // console.log("Here is the receipt sent to user -> ", receipt);
+      const receipt = await yooMoney.createReceipt(
+        receiptPayload,
+        idempotence_key
+      );
+      console.log("Here is the receipt sent to user -> ", receipt);
     }
   } catch (error) {
     console.error(
       "An error occur inside the payment notification web-hook -> ",
       error
     );
-    throw error;
   }
 };

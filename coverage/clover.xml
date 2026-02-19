@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1770641276184" clover="3.2.0">
-  <project timestamp="1770641276184" name="All files">
-    <metrics statements="822" coveredstatements="472" conditionals="323" coveredconditionals="111" methods="123" coveredmethods="36" elements="1268" coveredelements="619" complexity="0" loc="822" ncloc="822" packages="4" files="59" classes="59"/>
+<coverage generated="1771494424326" clover="3.2.0">
+  <project timestamp="1771494424326" name="All files">
+    <metrics statements="823" coveredstatements="472" conditionals="323" coveredconditionals="111" methods="123" coveredmethods="36" elements="1269" coveredelements="619" complexity="0" loc="823" ncloc="823" packages="4" files="59" classes="59"/>
     <package name="ell-cakes-backend">
       <metrics statements="102" coveredstatements="72" conditionals="46" coveredconditionals="15" methods="17" coveredmethods="5"/>
       <file name="access.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/access.ts">
@@ -123,7 +123,7 @@
       </file>
     </package>
     <package name="ell-cakes-backend.custom-resolver">
-      <metrics statements="357" coveredstatements="186" conditionals="178" coveredconditionals="78" methods="42" coveredmethods="15"/>
+      <metrics statements="358" coveredstatements="186" conditionals="178" coveredconditionals="78" methods="42" coveredmethods="15"/>
       <file name="addToCart.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/addToCart.ts">
         <metrics statements="44" coveredstatements="41" conditionals="46" coveredconditionals="35" methods="7" coveredmethods="5"/>
         <line num="3" count="7" type="stmt"/>
@@ -218,7 +218,7 @@
         <line num="157" count="1" type="stmt"/>
       </file>
       <file name="confirmPayment.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/confirmPayment.ts">
-        <metrics statements="39" coveredstatements="6" conditionals="20" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <metrics statements="40" coveredstatements="6" conditionals="20" coveredconditionals="0" methods="3" coveredmethods="0"/>
         <line num="2" count="7" type="stmt"/>
         <line num="4" count="7" type="stmt"/>
         <line num="5" count="7" type="stmt"/>
@@ -249,15 +249,16 @@
         <line num="93" count="0" type="stmt"/>
         <line num="98" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="99" count="0" type="stmt"/>
-        <line num="100" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="101" count="0" type="stmt"/>
-        <line num="105" count="0" type="stmt"/>
+        <line num="101" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="103" count="0" type="stmt"/>
         <line num="107" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
-        <line num="128" count="0" type="stmt"/>
-        <line num="138" count="0" type="stmt"/>
-        <line num="165" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
+        <line num="160" count="0" type="stmt"/>
+        <line num="164" count="0" type="stmt"/>
+        <line num="167" count="0" type="stmt"/>
       </file>
       <file name="connectCartToUser.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/custom-resolver/connectCartToUser.ts">
         <metrics statements="19" coveredstatements="2" conditionals="8" coveredconditionals="0" methods="2" coveredmethods="0"/>
@@ -650,13 +651,13 @@
         <line num="143" count="0" type="stmt"/>
         <line num="144" count="0" type="stmt"/>
         <line num="145" count="0" type="stmt"/>
-        <line num="146" count="0" type="stmt"/>
-        <line num="157" count="0" type="stmt"/>
-        <line num="161" count="8" type="stmt"/>
-        <line num="166" count="0" type="stmt"/>
+        <line num="147" count="0" type="stmt"/>
+        <line num="158" count="0" type="stmt"/>
+        <line num="162" count="8" type="stmt"/>
         <line num="167" count="0" type="stmt"/>
         <line num="168" count="0" type="stmt"/>
-        <line num="178" count="0" type="stmt"/>
+        <line num="169" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
       </file>
       <file name="paymentGateway.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/lib/paymentGateway.ts">
         <metrics statements="8" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -724,15 +725,15 @@
         <metrics statements="11" coveredstatements="10" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
         <line num="1" count="7" type="stmt"/>
         <line num="2" count="7" type="stmt"/>
-        <line num="8" count="7" type="stmt"/>
         <line num="9" count="7" type="stmt"/>
         <line num="10" count="7" type="stmt"/>
-        <line num="12" count="7" type="stmt"/>
-        <line num="72" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="73" count="6" type="stmt"/>
-        <line num="74" count="6" type="cond" truecount="1" falsecount="1"/>
-        <line num="75" count="6" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
+        <line num="11" count="7" type="stmt"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="75" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="76" count="6" type="stmt"/>
+        <line num="77" count="6" type="cond" truecount="1" falsecount="1"/>
+        <line num="78" count="6" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
       </file>
       <file name="customization-option-value.ts" path="/Users/azeezabiola/Documents/Development Folder/ell-cakes-backend/models/customization-option-value.ts">
         <metrics statements="8" coveredstatements="5" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>

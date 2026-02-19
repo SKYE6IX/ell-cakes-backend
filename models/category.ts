@@ -10,8 +10,6 @@ import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
 import { permissions } from "../access";
 
-// TODO:
-// set up a priority field so as to able to sort them with it.
 export const Category = list({
   access: {
     operation: {

@@ -17,6 +17,7 @@ interface ImportMetaEnv {
   readonly YANDEX_USER_MAIL: string;
   readonly YANDEX_USER_MAIL_PASS: string;
   readonly SELLER_EMAIL: string;
+  readonly ADMIN_PANEL_URL: string;
 }
 declare global {
   namespace NodeJS {

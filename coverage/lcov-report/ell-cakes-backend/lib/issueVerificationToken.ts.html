@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.61% </span>
+                <span class="strong">30.76% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/13</span>
+                <span class='fraction'>4/13</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/4</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">25% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>1/4</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/12</span>
+                <span class='fraction'>3/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -101,20 +101,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -122,27 +122,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { customAlphabet } from "nanoid";
 import { sendUserVerificationToken, sendResetPasswordToken } from "./mail";
 &nbsp;
-export const issueVerificationToken = async ({
+export const issueVerificationToken = <span class="fstat-no" title="function not covered" >async </span>({
   email,
   type,
 }: {
   email: string;
   type: "user-verification" | "password-reset";
 }) =&gt; {
-  const nanoid = customAlphabet("0123456789", 6);
+  const nanoid = <span class="cstat-no" title="statement not covered" >customAlphabet("0123456789", 6);</span>
 &nbsp;
-  const token = nanoid();
+  const token = <span class="cstat-no" title="statement not covered" >nanoid();</span>
 &nbsp;
-  const issuedAt = new Date();
+  const issuedAt = <span class="cstat-no" title="statement not covered" >new Date();</span>
 &nbsp;
-  if (type === "user-verification") {
-    await sendUserVerificationToken({ to: email, token });
-  } else <span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="else path not taken" >E</span>if (type === "password-reset") {</span>
+<span class="cstat-no" title="statement not covered" >  if (type === "user-verification") {</span>
+<span class="cstat-no" title="statement not covered" >    await sendUserVerificationToken({ to: email, token });</span>
+  } else <span class="cstat-no" title="statement not covered" >if (type === "password-reset") {</span>
 <span class="cstat-no" title="statement not covered" >    await sendResetPasswordToken({ to: email, token });</span>
   }
 &nbsp;
-  console.log("Token return -&gt; ", token);
-  return {
+<span class="cstat-no" title="statement not covered" >  console.log("Token return -&gt; ", token);</span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
     token,
     issuedAt,
   };
@@ -154,7 +154,7 @@ export const issueVerificationToken = async ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T09:47:04.282Z
+                at 2026-06-24T09:38:32.987Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

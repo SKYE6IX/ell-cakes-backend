@@ -18,6 +18,7 @@ interface ConfirmPaymentArgs {
 export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
   const yooMoneyWebHookData = body;
   const sudoContext = context.sudo();
+
   const idempotence_key = uuidv4();
 
   if (yooMoneyWebHookData.object.status !== "succeeded") {
@@ -46,7 +47,6 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
           updatedAt: new Date(),
         },
       });
-
       return;
     } else if (payment.status === "succeeded") {
       // Update the payment status to succeeded
@@ -100,9 +100,7 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
 
         const chooseDateForDelivery = newOrder.deliveryDate?.toString() ?? "";
 
-        const deliveryDate = new Date(chooseDateForDelivery).toLocaleDateString(
-          "ru-RU"
-        );
+        const deliveryDate = new Date(chooseDateForDelivery).toLocaleDateString("ru-RU");
 
         const newOrderForSellerData: SellerNewOrderNotification = {
           ordernumber: newOrder.orderNumber,
@@ -157,16 +155,11 @@ export const confirmPayment = async ({ body, context }: ConfirmPaymentArgs) => {
         ],
       };
 
-      const receipt = await yooMoney.createReceipt(
-        receiptPayload,
-        idempotence_key
-      );
+      const receipt = await yooMoney.createReceipt(receiptPayload, idempotence_key);
+
       console.log("Here is the receipt sent to user -> ", receipt);
     }
   } catch (error) {
-    console.error(
-      "An error occur inside the payment notification web-hook -> ",
-      error
-    );
+    console.error("An error occur inside the payment notification web-hook -> ", error);
   }
 };

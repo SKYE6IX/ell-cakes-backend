@@ -1,12 +1,5 @@
 import { list, graphql } from "@keystone-6/core";
-import {
-  relationship,
-  timestamp,
-  text,
-  select,
-  integer,
-  virtual,
-} from "@keystone-6/core/fields";
+import { relationship, timestamp, text, select, integer, virtual } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 import type { Lists } from ".keystone/types";
@@ -97,6 +90,7 @@ export const Order = list({
     orderDetails: virtual({
       field: graphql.field({
         type: graphql.String,
+
         async resolve(item, args, context) {
           const orderItems = await context.query.OrderItem.findMany({
             // @ts-expect-error Type of ITEM isn't available
@@ -114,7 +108,7 @@ export const Order = list({
             orderItems.some((oi) => {
               const val = getValue(oi, col.key);
               return val !== null && val !== undefined && val !== "";
-            })
+            }),
           );
 
           const customizeImages = await context.query.CustomizeImage.findMany({
@@ -128,10 +122,7 @@ export const Order = list({
                 <thead>
                   <tr style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
                     ${activeCols
-                      .map(
-                        (c) =>
-                          `<th style="padding: 5px; text-align: left;">${c.label}</th>`
-                      )
+                      .map((c) => `<th style="padding: 5px; text-align: left;">${c?.label}</th>`)
                       .join("")}
                   </tr>
                 </thead>
@@ -145,24 +136,18 @@ export const Order = list({
                         .map((c) => {
                           if (c.key === "toppingOption.weight") {
                             return `<td style="padding: 8px;">
-                            ${oi.product.topping.name} (${getValue(
-                              oi,
-                              c.key
-                            )}кг)
+                            ${oi.product?.topping?.name} (${getValue(oi, c.key)}кг)
                           </td>`;
                           } else if (c.key === "customizations") {
                             return `<td style="padding: 8px;">   
                             ${oi.customizations
                               .map((cus: any) => {
-                                const { value, inscriptionText, imagesId } =
-                                  cus.customValue;
+                                const { value, inscriptionText, imagesId } = cus.customValue;
 
                                 const imagesUrl: string[] = [];
                                 if (imagesId && imagesId.length >= 1) {
                                   imagesId?.forEach((id: string) => {
-                                    const imageItem = customizeImages.find(
-                                      (img) => img.id === id
-                                    );
+                                    const imageItem = customizeImages.find((img) => img.id === id);
                                     if (imageItem) {
                                       imagesUrl.push(imageItem.image.url);
                                     }
@@ -171,12 +156,8 @@ export const Order = list({
 
                                 return `
                                 <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 2px">
-                                 <span>Тип: ${cus.name}</span><br/>
-                                 ${
-                                   value
-                                     ? `<span>Количество: ${value}</span><br/>`
-                                     : ""
-                                 }
+                                 <span>Тип: ${cus?.name}</span><br/>
+                                 ${value ? `<span>Количество: ${value}</span><br/>` : ""}
                                     ${
                                       inscriptionText
                                         ? `<span>Надпись: ${inscriptionText}</span>`
@@ -186,8 +167,7 @@ export const Order = list({
                                     imagesUrl.length
                                       ? `Фотоссылка: ${imagesUrl
                                           ?.map(
-                                            (url) =>
-                                              `<a href="${url}" target="_blank">Сылки</a>`
+                                            (url) => `<a href="${url}" target="_blank">Сылки</a>`,
                                           )
                                           .join(",")}`
                                       : ""
@@ -199,32 +179,25 @@ export const Order = list({
                               </td>`;
                           } else if (c.key === "compositions") {
                             const compositionData = oi.compositions?.map(
-                              (compos: {
-                                productId: string;
-                                quantity: number;
-                              }) => {
-                                const product = products.find(
-                                  (pro) => pro.id === compos.productId
-                                );
+                              (compos: { productId: string; quantity: number }) => {
+                                const product = products.find((pro) => pro.id === compos.productId);
                                 return {
-                                  name: product.name,
+                                  name: product?.name,
                                   qty: compos.quantity,
                                 };
-                              }
+                              },
                             );
                             return `<td style="padding: 8px; width: 300px;">
                             ${compositionData
-                              .map((data: any) => `${data.name}: (${data.qty})`)
+                              .map((data: any) => `${data?.name}: (${data.qty})`)
                               .join("<br/>")}
                             </td>`;
                           } else if (c.key === "product.name") {
                             return `<td style="padding: 8px; width: 300px;">
-                            ${getValue(oi, c.key)} (${oi.variant.filling.name})
+                            ${getValue(oi, c.key)} (${oi.variant.filling?.name})
                             </td>`;
                           } else {
-                            return `<td style="padding: 8px;">${
-                              getValue(oi, c.key) || "-"
-                            }</td>`;
+                            return `<td style="padding: 8px;">${getValue(oi, c.key) || "-"}</td>`;
                           }
                         })
                         .join("")}
@@ -402,13 +375,7 @@ export const Order = list({
 
   ui: {
     listView: {
-      initialColumns: [
-        "orderNumber",
-        "totalAmount",
-        "status",
-        "payment",
-        "createdAt",
-      ],
+      initialColumns: ["orderNumber", "totalAmount", "status", "payment", "createdAt"],
       initialSort: { field: "createdAt", direction: "DESC" },
     },
   },

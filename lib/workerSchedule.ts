@@ -39,9 +39,11 @@ export async function runWorkerSchedule(context: Context) {
 
     async (job) => {
       const sevenDaysAgo = new Date();
+
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
       const sudoContext = context.sudo();
+
       const imagesToDelete = await sudoContext.db.CustomizeImage.findMany({
         where: {
           createdAt: {

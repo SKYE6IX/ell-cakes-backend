@@ -90,7 +90,7 @@ export const checkOut = async (
 
   const createPayLoad: ICreatePayment = {
     amount: {
-      value: `${totalAmount}`,
+      value: `${totalAmount.toFixed(2)}`,
       currency: "RUB",
     },
     payment_method_data: {

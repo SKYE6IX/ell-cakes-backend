@@ -1,12 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  text,
-  password,
-  timestamp,
-  relationship,
-  select,
-  checkbox,
-} from "@keystone-6/core/fields";
+import { text, password, timestamp, relationship, select, checkbox } from "@keystone-6/core/fields";
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 import { issueVerificationToken } from "../lib/issueVerificationToken";

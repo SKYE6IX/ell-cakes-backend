@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.47% </span>
+                <span class="strong">11.76% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/17</span>
+                <span class='fraction'>2/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/10</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">6.25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/16</span>
+                <span class='fraction'>1/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -132,42 +132,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -178,7 +178,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,47 +187,47 @@
 import { Context } from ".keystone/types";
 import { Session } from "../access";
 &nbsp;
-export const redeemUserVerificationToken = async (
+export const redeemUserVerificationToken = <span class="fstat-no" title="function not covered" >async </span>(
   root: any,
   { token, email }: { token: string; email: string },
   context: Context
 ) =&gt; {
-  const loggedInUser = context.session as Session;
+  const loggedInUser = <span class="cstat-no" title="statement not covered" >context.session as Session;</span>
 &nbsp;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!loggedInUser) {
+<span class="cstat-no" title="statement not covered" >  if (!loggedInUser) {</span>
 <span class="cstat-no" title="statement not covered" >    throw new Error("Only Authorized user can perform this action!", {</span>
       cause: "Authorization",
     });
   }
 &nbsp;
-  const user = await context.db.User.findOne({
+  const user = <span class="cstat-no" title="statement not covered" >await context.db.User.findOne({</span>
     where: { email: email },
   });
 &nbsp;
   // Check if USER with this number exist!
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!user) {
+<span class="cstat-no" title="statement not covered" >  if (!user) {</span>
 <span class="cstat-no" title="statement not covered" >    throw new Error("User with this phone number doesn't exist!", {</span>
       cause: "Invalid data passed!",
     });
   }
 &nbsp;
   // Compare the token with the harsh saved on database
-  const match = token === user.userVerificationToken;
+  const match = <span class="cstat-no" title="statement not covered" >token === user.userVerificationToken;</span>
 &nbsp;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (!match) {
+<span class="cstat-no" title="statement not covered" >  if (!match) {</span>
 <span class="cstat-no" title="statement not covered" >    throw new Error("Invalid token", { cause: "Failed on checking token!" });</span>
   }
 &nbsp;
   // Check and compare the expiration since the token issued
-  const issuedAt = user.userVerificationTokenIssuedAt;
+  const issuedAt = <span class="cstat-no" title="statement not covered" >user.userVerificationTokenIssuedAt;</span>
 &nbsp;
-  const expiration = 10 * 60 * 1000;
+  const expiration = <span class="cstat-no" title="statement not covered" >10 * 60 * 1000;</span>
 &nbsp;
-  <span class="missing-if-branch" title="if path not taken" >I</span>if (issuedAt &amp;&amp; new Date(issuedAt).getTime() + expiration &lt; Date.now()) {
+<span class="cstat-no" title="statement not covered" >  if (issuedAt &amp;&amp; new Date(issuedAt).getTime() + expiration &lt; Date.now()) {</span>
 <span class="cstat-no" title="statement not covered" >    throw new Error("Token expired");</span>
   }
 &nbsp;
-  await context.db.User.updateOne({
+<span class="cstat-no" title="statement not covered" >  await context.db.User.updateOne({</span>
     where: { id: user.id },
     data: {
       isUserVerified: true,
@@ -238,7 +238,7 @@ export const redeemUserVerificationToken = async (
     },
   });
 &nbsp;
-  return {
+<span class="cstat-no" title="statement not covered" >  return {</span>
     status: true,
     message: "Successfully verified user",
   };
@@ -250,7 +250,7 @@ export const redeemUserVerificationToken = async (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T09:47:04.282Z
+                at 2026-06-24T09:38:32.987Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

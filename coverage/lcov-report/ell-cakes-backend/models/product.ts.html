@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/18</span>
+                <span class='fraction'>6/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/8</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/18</span>
+                <span class='fraction'>6/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -335,7 +335,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -354,12 +354,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -526,16 +526,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -576,8 +576,8 @@ export const Product = list({
       many: true,
       hooks: {
         validate: {
-          create: async ({ resolvedData, fieldKey, addValidationError }) =&gt; {
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (!resolvedData[fieldKey] || !resolvedData[fieldKey].connect) {
+          create: <span class="fstat-no" title="function not covered" >async </span>({ resolvedData, fieldKey, addValidationError }) =&gt; {
+<span class="cstat-no" title="statement not covered" >            if (!resolvedData[fieldKey] || !resolvedData[fieldKey].connect) {</span>
 <span class="cstat-no" title="statement not covered" >              addValidationError(</span>
                 `The ${fieldKey} field must be set to a valid Category.`
               );
@@ -595,13 +595,13 @@ export const Product = list({
 &nbsp;
     slug: text({
       hooks: {
-        resolveInput: ({ resolvedData, fieldKey, operation }) =&gt; {
-          if (operation === "create") {
-            const { name } = resolvedData;
-            resolvedData.slug = getTransliterationSlug(name);
-            return resolvedData[fieldKey];
+        resolveInput: <span class="fstat-no" title="function not covered" >({</span> resolvedData, fieldKey, operation }) =&gt; {
+<span class="cstat-no" title="statement not covered" >          if (operation === "create") {</span>
+            const { name } = <span class="cstat-no" title="statement not covered" >resolvedData;</span>
+<span class="cstat-no" title="statement not covered" >            resolvedData.slug = getTransliterationSlug(name);</span>
+<span class="cstat-no" title="statement not covered" >            return resolvedData[fieldKey];</span>
           }
-          return resolvedData[fieldKey];
+<span class="cstat-no" title="statement not covered" >          return resolvedData[fieldKey];</span>
         },
       },
       isIndexed: "unique",
@@ -767,17 +767,17 @@ export const Product = list({
 &nbsp;
   hooks: {
     beforeOperation: {
-      delete: async ({ context, item }) =&gt; {
-        const product = await context.query.Product.findOne({
+      delete: <span class="fstat-no" title="function not covered" >async </span>({ context, item }) =&gt; {
+        const product = <span class="cstat-no" title="statement not covered" >await context.query.Product.findOne({</span>
           where: { id: item.id.toString() },
           query: "id images { id } video { id }",
         });
 &nbsp;
-        await context.db.ProductImage.deleteMany({
-          where: product.images.map((v: { id: any }) =&gt; ({ id: v.id })),
+<span class="cstat-no" title="statement not covered" >        await context.db.ProductImage.deleteMany({</span>
+          where: product.images.map(<span class="fstat-no" title="function not covered" >(v</span>: { id: any }) =&gt; (<span class="cstat-no" title="statement not covered" >{ id: v.id })</span>),
         });
 &nbsp;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (product.video) {
+<span class="cstat-no" title="statement not covered" >        if (product.video) {</span>
 <span class="cstat-no" title="statement not covered" >          await context.db.ProductVideo.deleteOne({</span>
             where: { id: product.video.id },
           });
@@ -796,7 +796,7 @@ export const Product = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-19T09:47:04.282Z
+                at 2026-06-24T09:38:32.987Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

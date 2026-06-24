@@ -122,7 +122,7 @@ export const Order = list({
                 <thead>
                   <tr style="background: #f1f5f9; border-bottom: 1px solid #e2e8f0;">
                     ${activeCols
-                      .map((c) => `<th style="padding: 5px; text-align: left;">${c?.label}</th>`)
+                      .map((c) => `<th style="padding: 5px; text-align: left;">${c.label}</th>`)
                       .join("")}
                   </tr>
                 </thead>
@@ -136,25 +136,28 @@ export const Order = list({
                         .map((c) => {
                           if (c.key === "toppingOption.weight") {
                             return `<td style="padding: 8px;">
-                            ${oi.product?.topping?.name} (${getValue(oi, c.key)}кг)
+                            ${!oi.product.topping ? "-" : oi.product.topping.name + "(" + getValue(oi, c.key) + ")кг"}
                           </td>`;
                           } else if (c.key === "customizations") {
-                            return `<td style="padding: 8px;">   
-                            ${oi.customizations
-                              .map((cus: any) => {
-                                const { value, inscriptionText, imagesId } = cus.customValue;
-
-                                const imagesUrl: string[] = [];
-                                if (imagesId && imagesId.length >= 1) {
-                                  imagesId?.forEach((id: string) => {
-                                    const imageItem = customizeImages.find((img) => img.id === id);
-                                    if (imageItem) {
-                                      imagesUrl.push(imageItem.image.url);
-                                    }
-                                  });
-                                }
-
-                                return `
+                            return `<td style="padding: 8px;">
+                            ${
+                              !oi.customizations
+                                ? "-"
+                                : oi.customizations
+                                    .map((cus: any) => {
+                                      const { value, inscriptionText, imagesId } = cus.customValue;
+                                      const imagesUrl: string[] = [];
+                                      if (imagesId && imagesId.length >= 1) {
+                                        imagesId?.forEach((id: string) => {
+                                          const imageItem = customizeImages.find(
+                                            (img) => img.id === id,
+                                          );
+                                          if (imageItem) {
+                                            imagesUrl.push(imageItem.image.url);
+                                          }
+                                        });
+                                      }
+                                      return `
                                 <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 2px">
                                  <span>Тип: ${cus?.name}</span><br/>
                                  ${value ? `<span>Количество: ${value}</span><br/>` : ""}
@@ -171,11 +174,12 @@ export const Order = list({
                                           )
                                           .join(",")}`
                                       : ""
-                                  }  
+                                  }
                                 </div>
                                 `;
-                              })
-                              .join("")} 
+                                    })
+                                    .join("")
+                            }
                               </td>`;
                           } else if (c.key === "compositions") {
                             const compositionData = oi.compositions?.map(
@@ -189,7 +193,7 @@ export const Order = list({
                             );
                             return `<td style="padding: 8px; width: 300px;">
                             ${compositionData
-                              .map((data: any) => `${data?.name}: (${data.qty})`)
+                              .map((data: any) => `${data.name}: (${data.qty})`)
                               .join("<br/>")}
                             </td>`;
                           } else if (c.key === "product.name") {

@@ -13,7 +13,6 @@ export const OrderReceiver = list({
       delete: permissions.canManageOrder,
     },
   },
-
   fields: {
     benefactor: relationship({ ref: "User.orderBeneficiaries", many: false }),
     order: relationship({ ref: "Order.orderReceiver", many: false }),

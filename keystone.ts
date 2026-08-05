@@ -46,9 +46,7 @@ export default withAuth(
         kind: "s3",
         type: "image",
         // Always check this before seeding
-        bucketName: `${YC_S3_BUCKET}-image-${
-          isProduction ? "prod" : "develop"
-        }`,
+        bucketName: `${YC_S3_BUCKET}-image-${isProduction ? "prod" : "develop"}`,
         region: YC_S3_REGION,
         accessKeyId: ycS3KeyId,
         secretAccessKey: ycS3SecretId,
@@ -59,9 +57,7 @@ export default withAuth(
         kind: "s3",
         type: "file",
         // Always check this before seeding
-        bucketName: `${YC_S3_BUCKET}-files-${
-          isProduction ? "prod" : "develop"
-        }`,
+        bucketName: `${YC_S3_BUCKET}-files-${isProduction ? "prod" : "develop"}`,
         region: YC_S3_REGION,
         accessKeyId: ycS3KeyId,
         secretAccessKey: ycS3SecretId,
@@ -108,7 +104,7 @@ export default withAuth(
                           })) || undefined,
                       },
                     },
-                    "graphql query completed"
+                    "graphql query completed",
                   );
                 },
               };
@@ -157,5 +153,5 @@ export default withAuth(
     ui: {
       isAccessAllowed: permissions.canManageProduct,
     },
-  })
+  }),
 );

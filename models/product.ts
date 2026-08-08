@@ -1,12 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  text,
-  relationship,
-  checkbox,
-  select,
-  timestamp,
-  integer,
-} from "@keystone-6/core/fields";
+import { text, relationship, checkbox, select, timestamp, integer } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
 import { permissions } from "../access";
@@ -29,9 +22,7 @@ export const Product = list({
         validate: {
           create: async ({ resolvedData, fieldKey, addValidationError }) => {
             if (!resolvedData[fieldKey] || !resolvedData[fieldKey].connect) {
-              addValidationError(
-                `The ${fieldKey} field must be set to a valid Category.`
-              );
+              addValidationError(`The ${fieldKey} field must be set to a valid Category.`);
             }
           },
         },
@@ -237,6 +228,3 @@ export const Product = list({
     },
   },
 });
-
-// productionDays
-//

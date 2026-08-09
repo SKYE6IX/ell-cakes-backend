@@ -6,13 +6,6 @@ import type { Lists } from ".keystone/types";
 
 type Order = Lists.Order.TypeInfo["item"];
 
-// TODO:
-// 1. Set up a field where we render a formated string to display all about order details
-// that isn't included on this fields.✅
-
-// 2. Notification setup for new order for store owner. Perhaps an email, or maybe connection with
-// CRM will enough? ✅
-
 const potentialCols = [
   { label: "Продукта", key: "product.name" },
   { label: "Количество", key: "quantity" },
@@ -116,7 +109,6 @@ export const Order = list({
           });
 
           const products = await context.db.Product.findMany();
-
           return `
               <table style="width:70vw; border-collapse: collapse; font-family: sans-serif; font-size: 14px;">
                 <thead>
@@ -221,7 +213,6 @@ export const Order = list({
       },
       label: "Детали заказа",
     }),
-
     orderItems: relationship({
       ref: "OrderItem.order",
       many: true,

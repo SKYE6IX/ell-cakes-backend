@@ -1,10 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  relationship,
-  integer,
-  timestamp,
-  decimal,
-} from "@keystone-6/core/fields";
+import { relationship, integer, timestamp, decimal } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
@@ -58,12 +53,7 @@ export const ProductVariant = list({
     }),
   },
   ui: {
-    isHidden: ({ session }) => {
-      if (session.data.role === "ADMIN") {
-        return false;
-      }
-      return true;
-    },
+    isHidden: true,
     labelField: "price",
     listView: {
       initialSort: { field: "price", direction: "ASC" },

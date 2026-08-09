@@ -1,10 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  text,
-  timestamp,
-  integer,
-  relationship,
-} from "@keystone-6/core/fields";
+import { text, timestamp, integer, relationship } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { permissions } from "../access";
 
@@ -47,11 +42,6 @@ export const CustomizationOptionValue = list({
     }),
   },
   ui: {
-    isHidden: ({ session }) => {
-      if (session.data.role === "ADMIN") {
-        return false;
-      }
-      return true;
-    },
+    isHidden: true,
   },
 });

@@ -9,7 +9,9 @@ export const OrderIntent = list({
       ...allOperations(hasSession),
     },
     filter: {
-      query: rules.canReadOrder,
+      query: () => {
+        return { paymentStatus: { equals: "PENDING" } };
+      },
       update: permissions.canManageOrder,
       delete: permissions.canManageOrder,
     },
@@ -57,6 +59,15 @@ export const OrderIntent = list({
     }),
   },
   ui: {
-    isHidden: true,
+    isHidden: ({ session }) => {
+      if (session.data.role === "ADMIN") {
+        return false;
+      }
+      return true;
+    },
+    listView: {
+      defaultFieldMode: "read",
+      initialColumns: ["user", "paymentStatus", "totalAmount", "createdAt"],
+    },
   },
 });

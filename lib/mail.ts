@@ -24,34 +24,19 @@ export type SellerNewOrderNotification = {
 };
 
 const templatePath = path.join(process.cwd(), "mail-template");
-const verificationHtml = fs.readFileSync(
-  `${templatePath}/verification.html`,
-  "utf-8"
-);
-const resetPasswordHtml = fs.readFileSync(
-  `${templatePath}/reset-password.html`,
-  "utf-8"
-);
-const orderNotificationHtml = fs.readFileSync(
-  `${templatePath}/order.html`,
-  "utf-8"
-);
+const verificationHtml = fs.readFileSync(`${templatePath}/verification.html`, "utf-8");
+const resetPasswordHtml = fs.readFileSync(`${templatePath}/reset-password.html`, "utf-8");
+const orderNotificationHtml = fs.readFileSync(`${templatePath}/order.html`, "utf-8");
 
-const requestCallHtml = fs.readFileSync(
-  `${templatePath}/request-call.html`,
-  "utf-8"
-);
+const requestCallHtml = fs.readFileSync(`${templatePath}/request-call.html`, "utf-8");
 
-const sellerNotificationSource = fs.readFileSync(
-  `${templatePath}/seller.html`,
-  "utf-8"
-);
+const sellerNotificationSource = fs.readFileSync(`${templatePath}/seller.html`, "utf-8");
 
 const yandexUserMail = getSecret("YANDEX_USER_MAIL");
 const yandexUserMailPass = getSecret("YANDEX_USER_MAIL_PASS");
 
 const transporter = nodemailer.createTransport({
-  host: process.env.YANDEX_USER_MAIL_HOST,
+  host: "smtp.yandex.ru",
   port: 465,
   secure: true,
   auth: {
@@ -60,13 +45,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendUserVerificationToken({
-  to,
-  token,
-}: {
-  to: string;
-  token: string;
-}) {
+export async function verifyNodeMailTransport() {
+  try {
+    const isVerified = await transporter.verify();
+    return isVerified;
+  } catch (error) {
+    console.log("Error occur in verification => ", error);
+    return false;
+  }
+}
+
+export async function sendUserVerificationToken({ to, token }: { to: string; token: string }) {
   try {
     const html = verificationHtml.replace("{{ TOKEN }}", token);
     await transporter.sendMail({
@@ -79,18 +68,14 @@ export async function sendUserVerificationToken({
       to: to,
       html,
     });
+    return true;
   } catch (error) {
-    console.error("An error occur while trying to send email", error);
+    console.error("An error occur while trying to send email=> ", error);
+    return false;
   }
 }
 
-export async function sendResetPasswordToken({
-  to,
-  token,
-}: {
-  to: string;
-  token: string;
-}) {
+export async function sendResetPasswordToken({ to, token }: { to: string; token: string }) {
   try {
     const html = resetPasswordHtml.replace("{{ TOKEN }}", token);
     await transporter.sendMail({
@@ -116,10 +101,7 @@ export async function sendOrderNotification({
   orderNumber: string;
 }) {
   try {
-    const html = orderNotificationHtml.replace(
-      "{{ ORDER_NUMBER }}",
-      orderNumber
-    );
+    const html = orderNotificationHtml.replace("{{ ORDER_NUMBER }}", orderNumber);
     await transporter.sendMail({
       subject: "Ваш заказ принят",
       from: {
@@ -159,11 +141,7 @@ export async function sendNewOrderNotificationToSeller({
   }
 }
 
-export async function sendRequestCall({
-  phoneNumber,
-}: {
-  phoneNumber: string;
-}) {
+export async function sendRequestCall({ phoneNumber }: { phoneNumber: string }) {
   try {
     const html = requestCallHtml.replace("{{ PHONE_NUMBER }}", phoneNumber);
     await transporter.sendMail({

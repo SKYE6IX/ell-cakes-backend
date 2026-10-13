@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.88% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/18</span>
+                <span class='fraction'>10/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>2/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>2/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.88% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/18</span>
+                <span class='fraction'>10/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -480,17 +480,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -500,7 +495,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -712,13 +712,13 @@ export const User = list({
 &nbsp;
   hooks: {
     afterOperation: {
-      create: <span class="fstat-no" title="function not covered" >async </span>({ item, context, inputData }) =&gt; {
-        const { token, issuedAt } = <span class="cstat-no" title="statement not covered" >await issueVerificationToken({</span>
+      create: async ({ item, context, inputData }) =&gt; {
+        const { token, issuedAt } = await issueVerificationToken({
           email: inputData.email,
           type: "user-verification",
         });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        await context.db.User.updateOne({</span>
+        await context.db.User.updateOne({
           where: { id: item.id.toString() },
           data: {
             isUserVerified: false,
@@ -730,10 +730,10 @@ export const User = list({
         });
       },
 &nbsp;
-      update: <span class="fstat-no" title="function not covered" >async </span>({ inputData, originalItem, context }) =&gt; {
+      update: async ({ inputData, originalItem, context }) =&gt; {
         // Check if USER passed in a new email
         // and verify it isn't the same as the existing one they had
-<span class="cstat-no" title="statement not covered" >        if (inputData.email &amp;&amp; inputData.email !== originalItem.email) {</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (inputData.email &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >inputData.email !== originalItem.email)</span> {
           const { token, issuedAt } = <span class="cstat-no" title="statement not covered" >await issueVerificationToken({</span>
             email: inputData.email,
             type: "user-verification",
@@ -769,7 +769,7 @@ export const User = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-24T09:38:32.987Z
+                at 2026-08-09T11:51:01.875Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

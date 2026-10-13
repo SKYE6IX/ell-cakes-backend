@@ -119,7 +119,6 @@ export default withAuth(
         credentials: true,
       },
       port: 8080,
-
       extendExpressApp: (app, commonContext) => {
         // Run worker schedule!
         initSchedulers();
@@ -150,6 +149,7 @@ export default withAuth(
         });
       },
     },
+
     ui: {
       isAccessAllowed: permissions.canManageProduct,
     },

@@ -3,6 +3,7 @@ import { text, password, timestamp, relationship, select, checkbox } from "@keys
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 import { issueVerificationToken } from "../lib/issueVerificationToken";
+import { verifyNodeMailTransport } from "../lib/mail";
 
 const hiddenFieldConfig = {
   ui: {
@@ -180,13 +181,20 @@ export const User = list({
   },
 
   hooks: {
+    beforeOperation: {
+      create: async () => {
+        const isNodemailerVerified = await verifyNodeMailTransport();
+        if (!isNodemailerVerified) {
+          throw new Error("Email service is unavailable. Please try again later.");
+        }
+      },
+    },
     afterOperation: {
       create: async ({ item, context, inputData }) => {
         const { token, issuedAt } = await issueVerificationToken({
           email: inputData.email,
           type: "user-verification",
         });
-
         await context.db.User.updateOne({
           where: { id: item.id.toString() },
           data: {
@@ -198,7 +206,6 @@ export const User = list({
           },
         });
       },
-
       update: async ({ inputData, originalItem, context }) => {
         // Check if USER passed in a new email
         // and verify it isn't the same as the existing one they had
@@ -207,7 +214,6 @@ export const User = list({
             email: inputData.email,
             type: "user-verification",
           });
-
           await context.db.User.updateOne({
             where: { id: originalItem.id.toString() },
             data: {
@@ -222,6 +228,7 @@ export const User = list({
       },
     },
   },
+
   ui: {
     isHidden: ({ session }) => {
       if (session.data.role === "ADMIN") {

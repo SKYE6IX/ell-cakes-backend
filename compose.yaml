@@ -19,7 +19,6 @@ services:
         YOO_MONEY_SHOP_ID_FILE: /run/secrets/yoo_money_shop_id
         YOO_MONEY_SECRET_ID_FILE: /run/secrets/yoo_money_secret_id
         REDIS_HOST: "host.docker.internal"
-
     secrets: 
       - database_url
       - yc_s3_key_id
@@ -30,7 +29,6 @@ services:
 
     ports:
     - 8080:8080  
-
 secrets: 
   database_url: 
     file: ./secrets/database_url.txt

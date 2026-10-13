@@ -214,6 +214,7 @@ export const User = list({
             email: inputData.email,
             type: "user-verification",
           });
+
           await context.db.User.updateOne({
             where: { id: originalItem.id.toString() },
             data: {

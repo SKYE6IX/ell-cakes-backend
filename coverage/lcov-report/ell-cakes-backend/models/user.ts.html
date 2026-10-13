@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">59.09% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/18</span>
+                <span class='fraction'>13/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">37.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>3/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>3/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">59.09% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/18</span>
+                <span class='fraction'>13/22</span>
             </div>
         
             
@@ -296,7 +296,16 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
@@ -481,12 +490,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -522,6 +537,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -534,6 +550,7 @@ import { text, password, timestamp, relationship, select, checkbox } from "@keys
 import { allOperations } from "@keystone-6/core/access";
 import { isSignedIn as hasSession, permissions, rules } from "../access";
 import { issueVerificationToken } from "../lib/issueVerificationToken";
+import { verifyNodeMailTransport } from "../lib/mail";
 &nbsp;
 const hiddenFieldConfig = {
   ui: {
@@ -711,13 +728,20 @@ export const User = list({
   },
 &nbsp;
   hooks: {
+    beforeOperation: {
+      create: async () =&gt; {
+        const isNodemailerVerified = await verifyNodeMailTransport();
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!isNodemailerVerified) {
+<span class="cstat-no" title="statement not covered" >          throw new Error("Email service is unavailable. Please try again later.");</span>
+        }
+      },
+    },
     afterOperation: {
       create: async ({ item, context, inputData }) =&gt; {
         const { token, issuedAt } = await issueVerificationToken({
           email: inputData.email,
           type: "user-verification",
         });
-&nbsp;
         await context.db.User.updateOne({
           where: { id: item.id.toString() },
           data: {
@@ -729,7 +753,6 @@ export const User = list({
           },
         });
       },
-&nbsp;
       update: async ({ inputData, originalItem, context }) =&gt; {
         // Check if USER passed in a new email
         // and verify it isn't the same as the existing one they had
@@ -753,6 +776,7 @@ export const User = list({
       },
     },
   },
+&nbsp;
   ui: {
     isHidden: <span class="fstat-no" title="function not covered" >({</span> session }) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (session.data.role === "ADMIN") {</span>
@@ -769,7 +793,7 @@ export const User = list({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-08-09T11:51:01.875Z
+                at 2026-10-13T09:40:52.455Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

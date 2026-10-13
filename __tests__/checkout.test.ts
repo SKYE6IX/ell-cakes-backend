@@ -1,10 +1,7 @@
 import { getContext } from "@keystone-6/core/context";
 import { KeystoneContext } from "@keystone-6/core/types";
 import * as cookie from "cookie";
-import {
-  PostgreSqlContainer,
-  StartedPostgreSqlContainer,
-} from "@testcontainers/postgresql";
+import { PostgreSqlContainer, StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import { resetDatabase } from "@keystone-6/core/testing";
 import * as PrismaModule from ".prisma/client";
 import baseConfig from "../keystone";
@@ -17,6 +14,7 @@ jest.mock("iuliia", () => ({
 
 jest.mock("../lib/mail.ts", () => ({
   sendUserVerificationToken: jest.fn(async () => Promise.resolve()),
+  verifyNodeMailTransport: jest.fn(async () => Promise.resolve(true)),
 }));
 
 jest.mock("@hapi/iron");
@@ -88,41 +86,39 @@ describe("Order and OrderItem Model and", () => {
       data: { role: "ADMIN" },
     };
 
-    const newProduct = await context
-      .withSession(mockSession)
-      .query.Product.createOne({
-        data: {
-          categories: { create: [{ name: "cakes" }] },
-          images: { create: { altText: "test" } },
-          name: "Fluffy Cake",
-          baseDescription: "The best cake to ever grace this earth",
-          type: "cake",
-          variantType: "weight",
-          fillings: {
-            create: {
-              name: "Fluffy",
-              description: "fluffy description",
-              ingredients: "made with everything fluffy",
-              variants: {
-                create: { weight: "2.5", price: 3000, serving: 5 },
-              },
+    const newProduct = await context.withSession(mockSession).query.Product.createOne({
+      data: {
+        categories: { create: [{ name: "cakes" }] },
+        images: { create: { altText: "test" } },
+        name: "Fluffy Cake",
+        baseDescription: "The best cake to ever grace this earth",
+        type: "cake",
+        variantType: "weight",
+        fillings: {
+          create: {
+            name: "Fluffy",
+            description: "fluffy description",
+            ingredients: "made with everything fluffy",
+            variants: {
+              create: { weight: "2.5", price: 3000, serving: 5 },
             },
           },
-          customizations: {
-            create: {
-              name: "CANDLE",
-              customValues: {
-                create: {
-                  value: "5",
-                  extraPrice: 100,
-                },
+        },
+        customizations: {
+          create: {
+            name: "CANDLE",
+            customValues: {
+              create: {
+                value: "5",
+                extraPrice: 100,
               },
             },
           },
         },
-        query:
-          "id name type variantType fillings { id name variants { id weight price serving } } customizations { id customValues { id } }",
-      });
+      },
+      query:
+        "id name type variantType fillings { id name variants { id weight price serving } } customizations { id customValues { id } }",
+    });
 
     await context.withSession(mockSession).graphql.raw({
       query: `mutation AddToCart($productId: String!, $variantId: String!, $customizations: [CustomizationInput!]) {
@@ -145,31 +141,27 @@ describe("Order and OrderItem Model and", () => {
       },
     });
 
-    const userAddress = await context
-      .withSession(mockSession)
-      .db.DelivaryAddress.createOne({
-        data: {
-          address: "No 16, mock address",
-          user: { connect: { id: mockSession.itemId } },
-        },
-      });
+    const userAddress = await context.withSession(mockSession).db.DelivaryAddress.createOne({
+      data: {
+        address: "No 16, mock address",
+        user: { connect: { id: mockSession.itemId } },
+      },
+    });
 
-    const checkOut = await context
-      .withSession(mockSession)
-      .graphql.raw<{ checkOut: any }, {}>({
-        query: `mutation CheckOut($deliveryAddressId: String!, $shippingCost: Int!, $deliveryOption: String!, $deliveryDate: DateTime!, $paymentMethod: String!) {
+    const checkOut = await context.withSession(mockSession).graphql.raw<{ checkOut: any }, {}>({
+      query: `mutation CheckOut($deliveryAddressId: String!, $shippingCost: Int!, $deliveryOption: String!, $deliveryDate: DateTime!, $paymentMethod: String!) {
               checkOut(shippingCost: $shippingCost, deliveryAddressId: $deliveryAddressId, deliveryDate: $deliveryDate, paymentMethod: $paymentMethod, deliveryOption: $deliveryOption) {
                id status amount redirectUrl method
               }
             }`,
-        variables: {
-          deliveryAddressId: userAddress.id,
-          shippingCost: 1000,
-          paymentMethod: "bank_card",
-          deliveryOption: "between 10:00 to 17:00",
-          deliveryDate: new Date().toISOString(),
-        },
-      });
+      variables: {
+        deliveryAddressId: userAddress.id,
+        shippingCost: 1000,
+        paymentMethod: "bank_card",
+        deliveryOption: "between 10:00 to 17:00",
+        deliveryDate: new Date().toISOString(),
+      },
+    });
 
     expect(checkOut.data?.checkOut.status).toEqual("PENDING");
     expect(checkOut.data?.checkOut.method).toEqual("bank_card");

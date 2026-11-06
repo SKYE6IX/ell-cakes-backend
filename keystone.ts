@@ -130,7 +130,6 @@ export default withAuth(
         app.use("/api/graphql", async (req, res, next) => {
           if (!req.cookies["ell-cake-cart-id"]) {
             const cartId = randomUUID();
-
             res.cookie("ell-cake-cart-id", cartId, {
               httpOnly: true,
               sameSite: isProduction ? "none" : "lax",
@@ -149,7 +148,6 @@ export default withAuth(
         });
       },
     },
-
     ui: {
       isAccessAllowed: permissions.canManageProduct,
     },

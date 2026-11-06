@@ -29,8 +29,7 @@ export const rules = {
   canReadUser: ({ session }: AccessArgs) => {
     if (!session) return false;
     // Admin can read all profile
-    if (session.data.role === "ADMIN" || session.data.role === "EDITOR")
-      return true;
+    if (session.data.role === "ADMIN" || session.data.role === "EDITOR") return true;
     // Other roles are only allow to read their own profile
     return { id: { equals: session.itemId } };
   },
@@ -46,8 +45,7 @@ export const rules = {
   canManageDeliveryAddress: ({ session }: AccessArgs) => {
     if (!session) return false;
     // Admin or Editor can manage all delivery address
-    if (session.data.role === "ADMIN" || session.data.role === "EDITOR")
-      return true;
+    if (session.data.role === "ADMIN" || session.data.role === "EDITOR") return true;
     // Customer should only manage their own delivery address
     return { user: { id: { equals: session.itemId } } };
   },
@@ -56,8 +54,7 @@ export const rules = {
     if (!session) return false;
 
     // Admin or Editor can read all order history
-    if (session.data.role === "ADMIN" || session.data.role === "EDITOR")
-      return true;
+    if (session.data.role === "ADMIN" || session.data.role === "EDITOR") return true;
 
     // Customer should able to read order history
     return { user: { id: { equals: session.itemId } } };

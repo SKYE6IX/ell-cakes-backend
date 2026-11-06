@@ -38,9 +38,7 @@ async function main() {
   const topLevelCategories = [];
   for (const category of categories) {
     const slug = getTransliterationSlug(category.name);
-    const existingCategory = existingDbCategories.find(
-      (cat) => cat.slug === slug
-    );
+    const existingCategory = existingDbCategories.find((cat) => cat.slug === slug);
     if (existingCategory) {
       console.log("Category already exist: ->", category.name);
       topLevelCategories.push({ ...category, id: existingCategory.id });
@@ -59,9 +57,7 @@ async function main() {
       for (const subCategory of topLevelCat.subcategories) {
         const slug = getTransliterationSlug(subCategory.name);
         // Check for existing..
-        const existingSubCategory = existingDbCategories.find(
-          (cat) => cat.slug === slug
-        );
+        const existingSubCategory = existingDbCategories.find((cat) => cat.slug === slug);
 
         if (existingSubCategory) {
           console.log("Category already exist: ->", subCategory.name);
@@ -113,24 +109,22 @@ async function main() {
       if (existingProductFilling) {
         console.log(
           "This product filling has been created and can be reused! -> ",
-          existingProductFilling.name
+          existingProductFilling.name,
         );
         connectProductFillingIds.push({ id: existingProductFilling.id });
       } else {
         // If the filling doesn't exisit, we can go on and create a new one and then return
         // it's ID, NAME, and SLUG for later used.
-        const newProductFilling = await sudoContext.db.ProductFilling.createOne(
-          {
-            data: {
-              ...productFilling,
-              variants: {
-                create: productFilling.variants.map((variant: any) => ({
-                  ...variant,
-                })),
-              },
+        const newProductFilling = await sudoContext.db.ProductFilling.createOne({
+          data: {
+            ...productFilling,
+            variants: {
+              create: productFilling.variants.map((variant: any) => ({
+                ...variant,
+              })),
             },
-          }
-        );
+          },
+        });
 
         // First add to the "existingProductFillings" Array
         productFillingMap.set(newProductFilling.slug, newProductFilling);
@@ -144,9 +138,7 @@ async function main() {
     // Check if the product exist and skip the product
     const productSlug = getTransliterationSlug(product.name);
 
-    const existingProduct = existingProducts.find(
-      (ep) => ep.slug === productSlug
-    );
+    const existingProduct = existingProducts.find((ep) => ep.slug === productSlug);
 
     if (existingProduct) {
       console.log(`${product.name} already existed...`);
@@ -155,9 +147,7 @@ async function main() {
 
     // If product doesn't exist, we start the creation of a new product.
     const productCategories = product.categories.map((productCat: string) => {
-      const category = dbCategories.find(
-        (cat) => cat.slug === getTransliterationSlug(productCat)
-      );
+      const category = dbCategories.find((cat) => cat.slug === getTransliterationSlug(productCat));
       return category;
     });
 
@@ -194,12 +184,11 @@ async function main() {
     // We check for if a product has a customization
     let customizationsId: string[] = [];
     if (product.customizations) {
-      const dbCusomizations =
-        await sudoContext.db.CustomizationOption.findMany();
+      const dbCusomizations = await sudoContext.db.CustomizationOption.findMany();
 
       product.customizations.forEach(async (productCus: any) => {
         const existingCustomization = dbCusomizations.find(
-          (cus) => cus.slug === productCus.customizationName.toLowerCase()
+          (cus) => cus.slug === productCus.customizationName.toLowerCase(),
         );
 
         if (existingCustomization) {
@@ -207,17 +196,16 @@ async function main() {
           customizationsId.push(existingCustomization.id);
         } else {
           console.log("Creating a new customization...");
-          const newCustomization =
-            await sudoContext.db.CustomizationOption.createOne({
-              data: {
-                name: productCus.customizationName.toUpperCase(),
-                customValues: {
-                  create: productCus.valueOptions.map((val: any) => ({
-                    ...val,
-                  })),
-                },
+          const newCustomization = await sudoContext.db.CustomizationOption.createOne({
+            data: {
+              name: productCus.customizationName.toUpperCase(),
+              customValues: {
+                create: productCus.valueOptions.map((val: any) => ({
+                  ...val,
+                })),
               },
-            });
+            },
+          });
           customizationsId.push(newCustomization.id);
         }
       });
@@ -257,7 +245,7 @@ async function main() {
       "data",
       "products-media",
       product.imagesFolder,
-      "images"
+      "images",
     );
     const imageFiles = readdirSync(imagesFolder);
 
@@ -282,7 +270,7 @@ async function main() {
       "data",
       "products-media",
       product.imagesFolder,
-      "video"
+      "video",
     );
 
     const videoFile = readdirSync(videoFolder)[0];

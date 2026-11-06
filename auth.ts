@@ -2,19 +2,19 @@ import { createAuth } from "@keystone-6/auth";
 import { statelessSessions } from "@keystone-6/core/session";
 import { getSecret } from "./lib/getSecret";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const { withAuth } = createAuth({
   listKey: "User",
   identityField: "email",
   secretField: "password",
   sessionData: "role",
-  ...(process.env.NODE_ENV !== "production" && {
+  ...(!isProduction && {
     initFirstItem: {
       fields: ["name", "email", "password", "role"],
     },
   }),
 });
-
-const isProduction = process.env.NODE_ENV === "production";
 
 const secretKey = getSecret("SESSION_SECRET");
 

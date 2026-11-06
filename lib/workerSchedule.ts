@@ -29,7 +29,7 @@ export async function initSchedulers() {
       opts: {
         attempts: 5,
       },
-    }
+    },
   );
 }
 
@@ -60,8 +60,9 @@ export async function runWorkerSchedule(context: Context) {
     },
     {
       connection,
-    }
+    },
   );
+
   worker.on("completed", (job) => {
     console.log(`${job.id} has completed!`);
   });
@@ -69,5 +70,6 @@ export async function runWorkerSchedule(context: Context) {
   worker.on("failed", (job, err) => {
     console.log(`${job?.id} has failed with ${err.message}`);
   });
+
   console.log("Worker started!");
 }

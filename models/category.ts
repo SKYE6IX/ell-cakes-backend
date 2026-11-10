@@ -1,11 +1,5 @@
 import { list } from "@keystone-6/core";
-import {
-  text,
-  relationship,
-  timestamp,
-  checkbox,
-  integer,
-} from "@keystone-6/core/fields";
+import { text, relationship, timestamp, checkbox, integer } from "@keystone-6/core/fields";
 import { allowAll } from "@keystone-6/core/access";
 import { getTransliterationSlug } from "../lib/getTransliteration";
 import { permissions } from "../access";
@@ -22,7 +16,6 @@ export const Category = list({
 
   fields: {
     name: text({ validation: { isRequired: true }, label: "Название" }),
-
     slug: text({
       isIndexed: "unique",
       ui: {

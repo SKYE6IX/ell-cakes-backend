@@ -24,12 +24,11 @@ export type SellerNewOrderNotification = {
 };
 
 const templatePath = path.join(process.cwd(), "mail-template");
+
 const verificationHtml = fs.readFileSync(`${templatePath}/verification.html`, "utf-8");
 const resetPasswordHtml = fs.readFileSync(`${templatePath}/reset-password.html`, "utf-8");
 const orderNotificationHtml = fs.readFileSync(`${templatePath}/order.html`, "utf-8");
-
 const requestCallHtml = fs.readFileSync(`${templatePath}/request-call.html`, "utf-8");
-
 const sellerNotificationSource = fs.readFileSync(`${templatePath}/seller.html`, "utf-8");
 
 const yandexUserMail = getSecret("YANDEX_USER_MAIL");
@@ -141,9 +140,25 @@ export async function sendNewOrderNotificationToSeller({
   }
 }
 
-export async function sendRequestCall({ phoneNumber }: { phoneNumber: string }) {
+export interface RequestCallFields {
+  email: string;
+  company: string;
+  message: string;
+  phoneNumber: string;
+}
+
+export async function sendRequestCall({
+  requestCallInput,
+}: {
+  requestCallInput: RequestCallFields;
+}) {
   try {
-    const html = requestCallHtml.replace("{{ PHONE_NUMBER }}", phoneNumber);
+    const html = requestCallHtml
+      .replace("{{ EMAIL }}", requestCallInput.email)
+      .replace("{{ COMPANY }}", requestCallInput.company)
+      .replace("{{ MESSAGE }}", requestCallInput.message)
+      .replace("{{ PHONE_NUMBER }}", requestCallInput.phoneNumber);
+
     await transporter.sendMail({
       subject: "Новый запрос на звонок",
       from: {

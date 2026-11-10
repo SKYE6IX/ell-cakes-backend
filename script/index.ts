@@ -312,7 +312,6 @@ async function getImageData(imagePath: string, fileName: string) {
   const mimeType = (await sharp(imagePath).metadata()).format;
   if (mimeType === "heif") {
     const inputBuffer = await promisify(readFile)(imagePath);
-
     const convertedFile = await heicConvert({
       buffer: inputBuffer as unknown as ArrayBufferLike,
       format: "JPEG",

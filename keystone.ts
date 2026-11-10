@@ -148,6 +148,7 @@ export default withAuth(
         });
       },
     },
+
     ui: {
       isAccessAllowed: permissions.canManageProduct,
     },

@@ -44,6 +44,13 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
      phoneNumber: String!
     }
 
+    input RequestCallInput {
+     email: String!
+     company: String!
+     message: String!
+     phoneNumber: String!
+    }
+
     input CustomizationInput {
       optionId: String!
       valueId: String!
@@ -79,7 +86,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         checkOut(deliveryAddressId: String, shippingCost: Int!, paymentMethod: String!, deliveryOption: String!, deliveryDate: DateTime!,  customerNote: String, orderReceiver: OrderReceiverInput): Payment!
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
-        requestCall(phoneNumber: String!): String!
+        requestCall(requestCallInput: RequestCallInput!): String!
     }
     `,
 

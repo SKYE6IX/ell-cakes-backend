@@ -1,12 +1,11 @@
 import { Context } from ".keystone/types";
-import { sendRequestCall } from "../lib/mail";
+import { sendRequestCall, RequestCallFields } from "../lib/mail";
 
 export const requestCall = async (
   root: any,
-  { phoneNumber }: { phoneNumber: string },
-  context: Context
+  { requestCallInput }: { requestCallInput: RequestCallFields },
+  context: Context,
 ) => {
-  await sendRequestCall({ phoneNumber });
-
+  await sendRequestCall({ requestCallInput });
   return "Request Sent!";
 };

@@ -21,6 +21,7 @@ import { FeaturedProduct } from "./models/featured-product";
 import { OrderIntent } from "./models/order-intent";
 import { MixBoxProduct } from "./models/mix-box-product";
 import { ProductVideo } from "./models/product-video";
+import { Review } from "./models/review";
 
 export const lists = {
   User,
@@ -46,4 +47,5 @@ export const lists = {
   OrderIntent,
   MixBoxProduct,
   ProductVideo,
+  Review,
 };

@@ -2235,6 +2235,59 @@ input ProductVideoCreateInput {
   updatedAt: DateTime
 }
 
+type Review {
+  id: ID!
+  user: String
+  description: String
+  image: ImageFieldOutput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ReviewWhereUniqueInput {
+  id: ID
+}
+
+input ReviewWhereInput {
+  AND: [ReviewWhereInput!]
+  OR: [ReviewWhereInput!]
+  NOT: [ReviewWhereInput!]
+  id: IDFilter
+  user: StringFilter
+  description: StringFilter
+  createdAt: DateTimeNullableFilter
+  updatedAt: DateTimeNullableFilter
+}
+
+input ReviewOrderByInput {
+  id: OrderDirection
+  user: OrderDirection
+  description: OrderDirection
+  createdAt: OrderDirection
+  updatedAt: OrderDirection
+}
+
+input ReviewUpdateInput {
+  user: String
+  description: String
+  image: ImageFieldInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input ReviewUpdateArgs {
+  where: ReviewWhereUniqueInput!
+  data: ReviewUpdateInput!
+}
+
+input ReviewCreateInput {
+  user: String
+  description: String
+  image: ImageFieldInput
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -2379,6 +2432,12 @@ type Mutation {
   updateProductVideos(data: [ProductVideoUpdateArgs!]!): [ProductVideo]
   deleteProductVideo(where: ProductVideoWhereUniqueInput!): ProductVideo
   deleteProductVideos(where: [ProductVideoWhereUniqueInput!]!): [ProductVideo]
+  createReview(data: ReviewCreateInput!): Review
+  createReviews(data: [ReviewCreateInput!]!): [Review]
+  updateReview(where: ReviewWhereUniqueInput!, data: ReviewUpdateInput!): Review
+  updateReviews(data: [ReviewUpdateArgs!]!): [Review]
+  deleteReview(where: ReviewWhereUniqueInput!): Review
+  deleteReviews(where: [ReviewWhereUniqueInput!]!): [Review]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
   createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
@@ -2486,6 +2545,9 @@ type Query {
   productVideo(where: ProductVideoWhereUniqueInput!): ProductVideo
   productVideos(where: ProductVideoWhereInput! = {}, orderBy: [ProductVideoOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ProductVideoWhereUniqueInput): [ProductVideo!]
   productVideosCount(where: ProductVideoWhereInput! = {}): Int
+  review(where: ReviewWhereUniqueInput!): Review
+  reviews(where: ReviewWhereInput! = {}, orderBy: [ReviewOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: ReviewWhereUniqueInput): [Review!]
+  reviewsCount(where: ReviewWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
   queryCart: Cart

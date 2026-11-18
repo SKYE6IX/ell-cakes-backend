@@ -28,7 +28,7 @@ services:
       - yoo_money_secret_id
 
     ports:
-    - 8080:8080  
+    - 8081:8080
 secrets: 
   database_url: 
     file: ./secrets/database_url.txt

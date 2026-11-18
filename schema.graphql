@@ -2455,6 +2455,7 @@ type Mutation {
   registerUser(registerData: RegisterUserInput!): User!
   uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
   requestCall(requestCallInput: RequestCallInput!): String!
+  requestForCustomCake(requestForCustomCakeInput: RequestForCustomCakeInput!): String!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -2713,6 +2714,23 @@ input RequestCallInput {
   company: String!
   message: String!
   phoneNumber: String!
+}
+
+input RequestForCustomCakeInput {
+  shape: String!
+  filling: String!
+  stackLevel: String!
+  guestNum: String!
+  colorPallete: String!
+  allergies: String!
+  textDescription: String!
+  decorations: String!
+  refPhoto: [Upload!]
+  eventDate: String!
+  occassion: String!
+  name: String!
+  phoneNumber: String!
+  address: String!
 }
 
 input CustomizationInput {

@@ -20,6 +20,7 @@ import { validatePasswordResetToken } from "./validatePasswordResetToken";
 import { updatePassword } from "./updatePassword";
 import { querySimilarProducts } from "./querySimilarProducts";
 import { requestCall } from "./requestCall";
+import { requestForCustomCake } from "./requestForCustomCake";
 
 export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
   return mergeSchemas({
@@ -49,6 +50,23 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
      company: String!
      message: String!
      phoneNumber: String!
+    }
+
+    input RequestForCustomCakeInput {
+      shape: String!
+      filling: String!
+      stackLevel: String!
+      guestNum: String!
+      colorPallete: String!
+      allergies: String!
+      textDescription: String!
+      decorations: String!
+      refPhoto: [Upload!]
+      eventDate: String!
+      occassion: String!
+      name: String!
+      phoneNumber: String!
+      address: String!
     }
 
     input CustomizationInput {
@@ -87,6 +105,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
         requestCall(requestCallInput: RequestCallInput!): String!
+        requestForCustomCake(requestForCustomCakeInput: RequestForCustomCakeInput!): String!
     }
     `,
 
@@ -106,6 +125,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         sendPasswordResetToken,
         updatePassword,
         requestCall,
+        requestForCustomCake,
       },
 
       Query: {

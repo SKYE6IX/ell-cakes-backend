@@ -68,6 +68,10 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
       phoneNumber: String!
       address: String!
     }
+    
+    type RequestForCustomCakeRespone {
+      status: String
+    }
 
     input CustomizationInput {
       optionId: String!
@@ -105,7 +109,7 @@ export const customExtendResolvers = (baseSchema: GraphQLSchema) => {
         registerUser(registerData: RegisterUserInput!): User!
         uploadImageCustomization(files: [Upload!]!): [CustomizeImage!]!
         requestCall(requestCallInput: RequestCallInput!): String!
-        requestForCustomCake(requestForCustomCakeInput: RequestForCustomCakeInput!): String!
+        requestForCustomCake(requestForCustomCakeInput: RequestForCustomCakeInput!): RequestForCustomCakeRespone! 
     }
     `,
 

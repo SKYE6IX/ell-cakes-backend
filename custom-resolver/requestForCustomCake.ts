@@ -32,7 +32,6 @@ interface GraphQLResponse {
   errors?: any[];
 }
 
-// TODO: retrun an object for success. Could be "OK"
 export const requestForCustomCake = async (
   root: any,
   { requestForCustomCakeInput }: { requestForCustomCakeInput: RequestForCustomCakeInput },
@@ -77,20 +76,24 @@ export const requestForCustomCake = async (
       throw new Error("Uploading image failed!");
     }
 
-    sendCustomCakeRequest({
+    await sendCustomCakeRequest({
       requestInput: {
         ...requestForCustomCakeInput,
         refPhoto: uploadedImage.data.customizeImage.image.url,
       },
     });
+
+    return { status: "ok" };
   } else {
-    sendCustomCakeRequest({
+    await sendCustomCakeRequest({
       requestInput: {
         ...requestForCustomCakeInput,
         refPhoto: null,
       },
     });
-  }
 
-  return "";
+    return {
+      status: "ok",
+    };
+  }
 };

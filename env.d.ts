@@ -19,6 +19,7 @@ interface ImportMetaEnv {
   readonly SELLER_EMAIL: string;
   readonly ADMIN_PANEL_URL: string;
   readonly SUPPORT_EMAIL: string;
+  readonly ALLOW_DOMAIN: string;
 }
 declare global {
   namespace NodeJS {

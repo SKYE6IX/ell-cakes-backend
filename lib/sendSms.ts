@@ -1,12 +1,4 @@
-//
-
-export async function sendSms({
-  phoneNumber,
-  message,
-}: {
-  phoneNumber: string;
-  message: string;
-}) {
+export async function sendSms({ phoneNumber, message }: { phoneNumber: string; message: string }) {
   const smsBody = {
     number: process.env.SMS_SENDER,
     destination: phoneNumber,

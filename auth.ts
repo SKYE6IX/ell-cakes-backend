@@ -2,6 +2,7 @@ import { createAuth } from "@keystone-6/auth";
 import { statelessSessions } from "@keystone-6/core/session";
 import { getSecret } from "./lib/getSecret";
 
+const isStaging = process.env.NODE_ENV === "staging";
 const isProduction = process.env.NODE_ENV === "production";
 
 const { withAuth } = createAuth({
@@ -9,7 +10,7 @@ const { withAuth } = createAuth({
   identityField: "email",
   secretField: "password",
   sessionData: "role",
-  ...(!isProduction && {
+  ...((!isProduction || !isStaging) && {
     initFirstItem: {
       fields: ["name", "email", "password", "role"],
     },
@@ -17,14 +18,15 @@ const { withAuth } = createAuth({
 });
 
 const secretKey = getSecret("SESSION_SECRET");
+
 const sessionMaxAge = 60 * 60 * 24 * 30;
 
 const session = statelessSessions({
   maxAge: sessionMaxAge,
   secret: secretKey,
-  secure: isProduction,
-  sameSite: isProduction ? "none" : "lax",
-  domain: isProduction ? process.env.ALLOW_DOMAIN : "",
+  secure: isProduction || isStaging,
+  sameSite: isProduction || isStaging ? "none" : "lax",
+  domain: isProduction || isStaging ? process.env.ALLOW_DOMAIN : "",
 });
 
 export { withAuth, session };

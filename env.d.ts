@@ -1,4 +1,5 @@
 interface ImportMetaEnv {
+  readonly PORT: string;
   readonly DATABASE_URL: string;
   readonly DATABASE_SHADOW_URL: string;
   readonly YC_S3_KEY_ID: string;

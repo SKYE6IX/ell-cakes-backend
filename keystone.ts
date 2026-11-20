@@ -14,20 +14,23 @@ import { initOtel } from "./otel";
 import { runWorkerSchedule, initSchedulers } from "./lib/workerSchedule";
 import { permissions } from "./access";
 
+const isStaging = process.env.NODE_ENV === "staging";
+const isProduction = process.env.NODE_ENV == "production";
+
 const {
   YC_S3_BUCKET,
   YC_S3_REGION,
   YC_S3_PRIVATE_ENDPOINT,
   FRONTEND_URL_PRIMARY,
   FRONTEND_URL_SECONDARY,
+  ALLOW_DOMAIN,
+  PORT,
 } = process.env;
 
 const databaseUrl = getSecret("DATABASE_URL");
 const databaseShadowUrl = getSecret("DATABASE_SHADOW_URL");
 const ycS3KeyId = getSecret("YC_S3_KEY_ID");
 const ycS3SecretId = getSecret("YC_S3_SECRET_KEY");
-
-const isProduction = process.env.NODE_ENV == "production";
 
 initOtel();
 
@@ -128,7 +131,7 @@ export default withAuth(
         origin: [FRONTEND_URL_PRIMARY, FRONTEND_URL_SECONDARY],
         credentials: true,
       },
-      port: 8080,
+      port: Number(PORT),
       extendExpressApp: (app, commonContext) => {
         // Run worker schedule!
         initSchedulers();
@@ -142,10 +145,10 @@ export default withAuth(
             const cartId = randomUUID();
             res.cookie("ell-cake-cart-id", cartId, {
               httpOnly: true,
-              sameSite: isProduction ? "none" : "lax",
+              sameSite: isProduction || isStaging ? "none" : "lax",
               maxAge: 1000 * 60 * 60 * 24 * 30,
-              secure: isProduction,
-              domain: isProduction ? ".ellcakes.ru" : "",
+              secure: isProduction || isStaging,
+              domain: isProduction || isStaging ? ALLOW_DOMAIN : "",
             });
           }
           next();
@@ -158,7 +161,6 @@ export default withAuth(
         });
       },
     },
-
     ui: {
       isAccessAllowed: permissions.canManageProduct,
     },

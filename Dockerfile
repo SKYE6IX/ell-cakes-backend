@@ -33,10 +33,6 @@ RUN rm -rf ~/.npm
 
 FROM base AS runner
 
-ARG APP_ENV=production
-
-ENV NODE_ENV=${APP_ENV}
-
 RUN apk add --no-cache openssl
 
 WORKDIR /app
